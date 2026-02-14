@@ -1,0 +1,98 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentsec"
+version = "0.3.0"
+description = "Security scanner and hardener for agentic AI installations — OpenClaw, MCP servers, and AI agent skill ecosystems"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+authors = [
+    { name = "Debu Sinha", email = "debusinha2009@gmail.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: System :: Systems Administration",
+    "Typing :: Typed",
+]
+keywords = [
+    "security",
+    "agentic-ai",
+    "openclaw",
+    "mcp",
+    "model-context-protocol",
+    "vulnerability-scanner",
+    "owasp",
+    "ai-security",
+]
+dependencies = [
+    "click>=8.1",
+    "rich>=13.0",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "tomli>=2.0; python_version < '3.11'",
+    "pathspec>=0.12",
+    "jinja2>=3.1",
+]
+
+[project.optional-dependencies]
+yara = ["yara-python>=4.5"]
+full = [
+    "yara-python>=4.5",
+    "keyring>=25.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+]
+
+[project.scripts]
+agentsec = "agentsec.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/debu-sinha/agentsec"
+Documentation = "https://github.com/debu-sinha/agentsec#readme"
+Repository = "https://github.com/debu-sinha/agentsec"
+Issues = "https://github.com/debu-sinha/agentsec/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentsec"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "S", "B", "A", "C4", "SIM", "TCH"]
+ignore = ["S101", "S603", "S607"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["agentsec"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+packages = ["agentsec"]
+mypy_path = "src"
