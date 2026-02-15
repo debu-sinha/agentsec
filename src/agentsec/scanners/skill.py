@@ -823,9 +823,12 @@ class SkillAnalyzer(BaseScanner):
         if isinstance(node.func, ast.Attribute):
             attr = node.func.attr
             # Skip re.compile() and similar -- not the dangerous builtin compile()
-            if attr == "compile" and isinstance(node.func.value, ast.Name):
-                if node.func.value.id in SkillAnalyzer._SAFE_COMPILE_MODULES:
-                    return None
+            if (
+                attr == "compile"
+                and isinstance(node.func.value, ast.Name)
+                and node.func.value.id in SkillAnalyzer._SAFE_COMPILE_MODULES
+            ):
+                return None
             return attr
         return None
 
