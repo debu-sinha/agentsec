@@ -2,6 +2,37 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.3.1] - 2026-02-15
+
+### Scoring & Hardening
+
+- Context-sensitive severity escalation (open group + disabled auth -> CRITICAL)
+- Score floor of 5.0 to distinguish minimal controls from zero security
+- Doom combo detection (open DM + full tools + no sandbox caps score at 20)
+- Expanded workstation hardening profile with auth bypass flags and group policy
+
+### Packaging & CI
+
+- Pinned dependency upper bounds to prevent future breakage
+- Fixed action.yml shell injection via env var indirection
+- CI self-scan now fails on high severity (was silently ignored)
+- Added pip-audit to CI security job
+- Separated test/dev optional dependency groups
+- Removed unused deps (pyyaml, pathspec, jinja2)
+- Fixed README content-type for PyPI rendering
+
+### Bug Fixes
+
+- Fixed watcher always reporting score=0.0 (wrong dict key)
+- Fixed stale fallback version in SARIF output (0.2.0 -> 0.3.1)
+- Fixed config docstring listing "html" instead of "sarif"
+- Removed dead code (unused _findings attribute, empty hardeners package)
+- Exported SarifReporter from reporters package
+
+### Stats
+
+- 170 tests, 8 new OWASP scorer tests (doom combo, severity escalation, score caps)
+
 ## [0.3.0] - 2026-02-14
 
 ### Security Coverage
