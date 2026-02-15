@@ -2,14 +2,14 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-187%20passed-brightgreen.svg)](#)
+[![Tests](https://img.shields.io/badge/tests-190%20passed-brightgreen.svg)](#)
 [![PyPI](https://img.shields.io/pypi/v/agentsec-ai.svg)](https://pypi.org/project/agentsec-ai/)
 [![Downloads](https://img.shields.io/pypi/dm/agentsec-ai.svg)](https://pypi.org/project/agentsec-ai/)
 [![OWASP](https://img.shields.io/badge/OWASP-ASI01--ASI10-orange.svg)](https://genai.owasp.org/)
 
 **Immunize your OpenClaw installation.** One command. Full security posture. Actionable hardening.
 
-agentsec is a security scanner and hardener for agentic AI installations. It scans [OpenClaw](https://github.com/openclaw/openclaw) (formerly Clawdbot/Moltbot), MCP servers, and AI agent skill ecosystems for security vulnerabilities, mapping every finding to the [OWASP Top 10 for Agentic Applications (2026)](https://genai.owasp.org/).
+agentsec is a security posture scanner and hardener for agentic AI installations. It currently supports [OpenClaw](https://github.com/openclaw/openclaw) (formerly Clawdbot/Moltbot) and Claude Code, scanning installation configs, MCP servers, skill ecosystems, and credentials for security vulnerabilities. Every finding maps to the [OWASP Top 10 for Agentic Applications (2026)](https://genai.owasp.org/).
 
 ## Why agentsec?
 
@@ -85,6 +85,8 @@ agentsec implements 35+ security checks across 10 categories:
 | CVE-2026-25475 | Path traversal via MEDIA: file extraction | 2026.1.30 |
 
 ## How It Compares
+
+*Based on public documentation as of February 2026. Capabilities may have changed.*
 
 | Capability | agentsec | Snyk agent-scan | Cisco Skill Scanner | Agentic Radar |
 |-----------|----------|----------------|-------------------|---------------|
@@ -227,7 +229,7 @@ FAIL
 
 ╭──────────── Fix First ────────────╮
 │ 1. [CRIT] Gateway exposed → agentsec harden -p workstation --apply │
-│ 2. [CRIT] Plaintext API key → agentsec harden --vault              │
+│ 2. [CRIT] Plaintext API key → Move to OS keychain / env var        │
 ╰───────────────────────────────────╯
 
 8 findings · 4 scanners · 0.08s · 50 files
@@ -481,6 +483,21 @@ The credential scanner uses Shannon entropy to detect unknown secret formats. If
 # Run without the credential scanner
 agentsec scan -s installation,skill,mcp
 ```
+
+## Validation Kit
+
+Use these templates to publish reproducible benchmarks and case studies:
+
+- Benchmark methodology: `docs/benchmarks/METHODOLOGY.md`
+- Benchmark fixture matrix: `docs/benchmarks/FIXTURE_MATRIX.md`
+- Benchmark results template: `docs/benchmarks/results/RESULTS_TEMPLATE.md`
+- Case study template: `docs/case-studies/TEMPLATE.md`
+- Evidence tracker (EB-1A ready): `docs/evidence/EVIDENCE_TRACKER.md`
+
+Recommended launch minimum:
+- 1 benchmark report with reproducible command + fixture set
+- 3 case studies with before/after risk deltas
+- 1 evidence index linking external mentions, adoption metrics, and impact proofs
 
 ## Development
 

@@ -40,6 +40,8 @@ Thumbs.db
 
 # Reports (generated output)
 reports/
+*.sarif
+agentsec_report.*
 
 # Claude Code
 CLAUDE.md

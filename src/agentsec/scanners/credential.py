@@ -300,8 +300,8 @@ class CredentialScanner(BaseScanner):
                                 "Store in OS keychain or environment variable",
                                 "Add file to .gitignore if not already excluded",
                             ],
-                            automated=True,
-                            command="agentsec harden --vault",
+                            automated=False,
+                            command="agentsec harden -p workstation --apply",
                         ),
                         owasp_ids=["ASI05"],
                     )

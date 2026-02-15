@@ -77,6 +77,16 @@ def test_blocklist_clean_package():
     assert _check_blocklist("pip", "requests") is False
 
 
+def test_blocklist_catches_known_bad_npm():
+    assert _check_blocklist("npm", "event-stream") is True
+    assert _check_blocklist("npm", "crossenv") is True
+
+
+def test_blocklist_catches_known_bad_pip():
+    assert _check_blocklist("pip", "noblesse") is True
+    assert _check_blocklist("pip", "colourama") is True
+
+
 # -----------------------------------------------------------------------
 # npm install hooks detection
 # -----------------------------------------------------------------------

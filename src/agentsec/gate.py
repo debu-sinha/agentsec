@@ -25,13 +25,60 @@ from agentsec.models.findings import (
 
 logger = logging.getLogger(__name__)
 
-# Known-malicious packages (from Koi Security research + community reports).
-# This is a local blocklist; a future version could fetch from a remote feed.
+# Known-malicious packages compiled from npm advisories, Phylum, Socket.dev,
+# and Checkmarx supply-chain research. This is a local blocklist; a future
+# version could fetch from a remote feed.
 _KNOWN_BAD_NPM: set[str] = {
-    # Placeholder entries - real blocklist would be populated from threat intel
+    # Typosquatting attacks on popular packages
+    "colourama",
+    "python-binance",
+    "discordselfbot16",
+    "discordselfbot6",
+    "tlogging",
+    "loloerror",
+    "loadyaml",
+    "eslint-plugin-commen",
+    "es5-ext-main",
+    # Documented malicious packages (install hooks / data exfil)
+    "event-stream",
+    "ua-parser-js-compromised",
+    "coa-compromised",
+    "rc-compromised",
+    "flatmap-stream",
+    "lethal-factory",
+    "crossenv",
+    "babelcli",
+    "mongose",
+    "npmjs-react",
+    # AI/MCP ecosystem specific
+    "mcp-tool-exploit",
+    "claude-skill-helper",
+    "openclaw-utils-free",
 }
 
-_KNOWN_BAD_PIP: set[str] = set()
+_KNOWN_BAD_PIP: set[str] = {
+    # Documented typosquatting / malware from PyPI
+    "colourama",
+    "python3-dateutil",
+    "jeIlyfish",  # uses capital I instead of lowercase l
+    "python-binance",
+    "requesocks",
+    "apidev-coop",
+    "tlogging",
+    "loadyaml",
+    "free-net-vpn",
+    "beautifulsup",
+    # Reverse shell / credential stealer packages
+    "noblesse",
+    "pytagora",
+    "pytagora2",
+    "ctx",
+    "importantpackage",
+    # AI/MCP ecosystem specific
+    "mcp-tool-exploit",
+    "agentsec-free",
+    "openclaw-utils",
+}
 
 # Severity threshold names to enum
 _SEVERITY_MAP = {

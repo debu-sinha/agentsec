@@ -460,13 +460,13 @@ class InstallationScanner(BaseScanner):
                                 remediation=Remediation(
                                     summary=f"Move {secret_type} to OS keychain or secrets manager",
                                     steps=[
-                                        "Use 'agentsec harden --vault' to migrate secrets",
-                                        "Or manually move to OS keychain / environment variables",
+                                        "Move secrets to OS keychain or environment variables",
+                                        "Run 'agentsec harden -p workstation --apply'",
                                         "Rotate the exposed credential immediately",
                                         f"Remove plaintext value from {name}",
                                     ],
-                                    automated=True,
-                                    command="agentsec harden --vault",
+                                    automated=False,
+                                    command="agentsec harden -p workstation --apply",
                                     references=[
                                         "https://docs.openclaw.ai/gateway/security",
                                     ],

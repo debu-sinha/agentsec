@@ -221,7 +221,7 @@ class McpScanner(BaseScanner):
         """Check MCP server command for dangerous patterns."""
         findings: list[Finding] = []
 
-        # Check for remote/network-based servers
+        # CMCP-002: Check for remote/network-based servers
         if re.search(r"https?://", full_command):
             findings.append(
                 Finding(
@@ -250,7 +250,7 @@ class McpScanner(BaseScanner):
                 )
             )
 
-        # Check for npx/npm with unverified packages
+        # CMCP-003: Check for npx/npm with unverified packages
         if re.search(r"npx\s+(?!@(?:anthropic|modelcontextprotocol)/)", full_command):
             pkg_match = re.search(r"npx\s+(\S+)", full_command)
             pkg_name = pkg_match.group(1) if pkg_match else "unknown"
@@ -292,7 +292,7 @@ class McpScanner(BaseScanner):
         """Check MCP server authentication configuration."""
         findings: list[Finding] = []
 
-        # Check for URL-based servers without auth
+        # CMCP-002: Check for URL-based servers without auth
         url = server_config.get("url", "")
         if url and not server_config.get("auth") and not server_config.get("headers"):
             findings.append(
@@ -382,7 +382,7 @@ class McpScanner(BaseScanner):
         findings: list[Finding] = []
         tool_name = tool.get("name", "unknown")
 
-        # Check description for tool poisoning
+        # CMCP-001: Check description for tool poisoning
         description = tool.get("description", "")
         for pattern_name, pattern, severity in _TOOL_POISONING_PATTERNS:
             if pattern.search(description):
@@ -413,7 +413,7 @@ class McpScanner(BaseScanner):
                     )
                 )
 
-        # Check input schema for dangerous parameter names
+        # CMCP-001: Check input schema for dangerous parameter names
         input_schema = tool.get("inputSchema", tool.get("input_schema", {}))
         if isinstance(input_schema, dict):
             properties = input_schema.get("properties", {})
