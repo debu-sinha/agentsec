@@ -1,0 +1,73 @@
+name: 'agentsec - AI Agent Security Scanner'
+description: 'Scan agentic AI installations for security misconfigurations. Maps findings to OWASP Top 10 for Agentic Applications.'
+author: 'Debu Sinha'
+
+branding:
+  icon: 'shield'
+  color: 'orange'
+
+inputs:
+  target:
+    description: 'Path to scan'
+    required: false
+    default: '.'
+  fail-on:
+    description: 'Minimum severity to fail the build (critical, high, medium, low, info, none)'
+    required: false
+    default: 'high'
+  output:
+    description: 'Output format (terminal, json, sarif)'
+    required: false
+    default: 'sarif'
+  output-file:
+    description: 'File path for scan results'
+    required: false
+    default: 'results.sarif'
+  scanners:
+    description: 'Comma-separated scanner list (installation, skill, mcp, credential). Default: all'
+    required: false
+    default: ''
+  python-version:
+    description: 'Python version to use'
+    required: false
+    default: '3.12'
+  upload-sarif:
+    description: 'Upload SARIF results to GitHub Code Scanning'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install agentsec
+      shell: bash
+      run: pip install agentsec-ai
+
+    - name: Run security scan
+      id: scan
+      shell: bash
+      run: |
+        ARGS="${{ inputs.target }}"
+        ARGS="$ARGS -o ${{ inputs.output }}"
+        ARGS="$ARGS --fail-on ${{ inputs.fail-on }}"
+
+        if [ -n "${{ inputs.output-file }}" ]; then
+          ARGS="$ARGS -f ${{ inputs.output-file }}"
+        fi
+
+        if [ -n "${{ inputs.scanners }}" ]; then
+          ARGS="$ARGS -s ${{ inputs.scanners }}"
+        fi
+
+        agentsec scan $ARGS
+
+    - name: Upload SARIF to GitHub Code Scanning
+      if: ${{ always() && inputs.upload-sarif == 'true' && inputs.output == 'sarif' }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ inputs.output-file }}

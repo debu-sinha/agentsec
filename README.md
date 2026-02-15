@@ -242,7 +242,19 @@ flowchart TB
 
 ## CI/CD Integration
 
-### GitHub Actions
+### GitHub Action
+
+The fastest way to add agentsec to your CI pipeline:
+
+```yaml
+- uses: debu-sinha/agentsec@v0.3.1
+  with:
+    fail-on: high
+```
+
+This installs agentsec, runs a full scan, and uploads SARIF results to GitHub Code Scanning automatically.
+
+**Full example with all options:**
 
 ```yaml
 name: Security Scan
@@ -256,20 +268,24 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: debu-sinha/agentsec@v0.3.1
         with:
-          python-version: '3.12'
-      - run: pip install agentsec-ai
-
-      - name: Run security scan
-        run: agentsec scan -o sarif -f results.sarif --fail-on high
-
-      - name: Upload to GitHub Code Scanning
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: results.sarif
+          target: '.'
+          fail-on: high
+          output: sarif
+          scanners: 'installation,skill,mcp,credential'
+          upload-sarif: 'true'
 ```
+
+| Input | Default | Description |
+|-------|---------|-------------|
+| `target` | `.` | Path to scan |
+| `fail-on` | `high` | Minimum severity to fail the build (critical, high, medium, low, info, none) |
+| `output` | `sarif` | Output format (terminal, json, sarif) |
+| `output-file` | `results.sarif` | File path for scan results |
+| `scanners` | all | Comma-separated list (installation, skill, mcp, credential) |
+| `python-version` | `3.12` | Python version to use |
+| `upload-sarif` | `true` | Upload SARIF results to GitHub Code Scanning |
 
 ### Pre-commit Hook
 
