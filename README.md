@@ -504,6 +504,7 @@ agentsec scan -s installation,skill,mcp
 - [Case study: public bot hardening on VPS](docs/case-studies/002-public-bot-vps-hardening.md) - 5.0 to 49.0 score with public-bot profile
 - [Case study: pre-install gate blocked malicious package](docs/case-studies/003-preinstall-gate-blocked-malicious-package.md) - sub-ms blocklist verdicts on supply-chain threats
 - [Case study: malicious skill detection and block](docs/case-studies/004-malicious-skill-detection-and-block.md) - 26 findings on 2 malicious skills, 0 FPs on clean skill
+- [Top-50 MCP security study](docs/benchmarks/2026-02-top50-mcp-security-study.md) - 352 findings across 49 popular MCP servers
 
 ## Development
 

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/debu-sinha/agentsec/docs/benchmarks/top50/schema/top50_finding.schema.json",
+  "title": "Top50Finding",
+  "type": "object",
+  "required": [
+    "study_id",
+    "target_id",
+    "source_type",
+    "snapshot_ref",
+    "scanner",
+    "finding_id",
+    "severity",
+    "category",
+    "title",
+    "confidence",
+    "timestamp_utc"
+  ],
+  "properties": {
+    "study_id": { "type": "string", "minLength": 1 },
+    "target_id": { "type": "string", "minLength": 1 },
+    "source_type": {
+      "type": "string",
+      "enum": ["github", "npm", "pypi", "other"]
+    },
+    "snapshot_ref": { "type": "string", "minLength": 1 },
+    "scanner": {
+      "type": "string",
+      "enum": ["agentsec", "semgrep", "gitleaks", "other"]
+    },
+    "finding_id": { "type": "string", "minLength": 1 },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"]
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "auth",
+        "supply_chain",
+        "secret",
+        "tool_poisoning",
+        "exec_risk",
+        "config",
+        "other"
+      ]
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "evidence": { "type": ["string", "null"] },
+    "location": { "type": ["string", "null"] },
+    "confidence": {
+      "type": "string",
+      "enum": ["confirmed", "likely", "needs_review"]
+    },
+    "remediation": { "type": ["string", "null"] },
+    "timestamp_utc": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
