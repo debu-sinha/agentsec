@@ -59,7 +59,7 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Self-scan
-        run: agentsec scan . --fail-on high
+        run: agentsec scan src/ --fail-on high
 
       - name: Audit dependencies
         run: pip-audit

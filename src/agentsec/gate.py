@@ -124,10 +124,7 @@ def gate_check(
     ]
     threshold_idx = severity_order.index(threshold)
 
-    has_blocking = any(
-        severity_order.index(f.severity) <= threshold_idx
-        for f in all_findings
-    )
+    has_blocking = any(severity_order.index(f.severity) <= threshold_idx for f in all_findings)
 
     allowed = force or not has_blocking
 
@@ -247,8 +244,14 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
     try:
         result = subprocess.run(
             [
-                "pip", "download", "--no-deps", "--no-binary", ":all:",
-                "-d", temp_dir, package_name,
+                "pip",
+                "download",
+                "--no-deps",
+                "--no-binary",
+                ":all:",
+                "-d",
+                temp_dir,
+                package_name,
             ],
             capture_output=True,
             text=True,

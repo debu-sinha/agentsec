@@ -289,13 +289,9 @@ class OwaspScorer:
         titles_lower = {f.title.lower() for f in findings}
         categories = {f.category for f in findings}
 
-        has_open_dm = any(
-            "dm" in t and ("open" in t or "unrestricted" in t)
-            for t in titles_lower
-        )
+        has_open_dm = any("dm" in t and ("open" in t or "unrestricted" in t) for t in titles_lower)
         has_full_tools = any(
-            "tool" in t and ("full" in t or "unrestricted" in t)
-            for t in titles_lower
+            "tool" in t and ("full" in t or "unrestricted" in t) for t in titles_lower
         )
         has_no_sandbox = any(
             "sandbox" in t and ("disabled" in t or "missing" in t or "off" in t)
@@ -348,11 +344,7 @@ class OwaspScorer:
                 finding.severity = FindingSeverity.CRITICAL
 
             # Risky tool groups + open inbound = unauthenticated code exec
-            if (
-                "tool group" in title_lower
-                and "open access" in title_lower
-                and open_inbound
-            ):
+            if "tool group" in title_lower and "open access" in title_lower and open_inbound:
                 finding.severity = FindingSeverity.CRITICAL
 
     @staticmethod

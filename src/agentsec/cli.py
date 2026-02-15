@@ -361,8 +361,7 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
             post_config = AgentsecConfig(
                 targets=[ScanTarget(path=target_path)],
                 scanners={
-                    n: ScannerConfig()
-                    for n in ["installation", "skill", "mcp", "credential"]
+                    n: ScannerConfig() for n in ["installation", "skill", "mcp", "credential"]
                 },
             )
             post_report = run_scan(post_config)
@@ -683,7 +682,11 @@ pip3() { _agentsec_post_install pip3 "$@"; }
 @click.option("--dry-run", is_flag=True, help="Scan only, don't run install")
 @click.pass_context
 def gate(
-    ctx: click.Context, command: tuple[str, ...], fail_on: str, force: bool, dry_run: bool,
+    ctx: click.Context,
+    command: tuple[str, ...],
+    fail_on: str,
+    force: bool,
+    dry_run: bool,
 ) -> None:
     """Pre-install security gate. Scans packages BEFORE installation.
 

@@ -102,8 +102,7 @@ def test_multiple_findings_produce_multiple_mappings(scorer):
 def test_score_floor_never_below_five(scorer):
     """Many findings should still produce a minimum score of 5."""
     findings = [
-        _make_finding(FindingCategory.PLAINTEXT_SECRET, FindingSeverity.CRITICAL)
-        for _ in range(20)
+        _make_finding(FindingCategory.PLAINTEXT_SECRET, FindingSeverity.CRITICAL) for _ in range(20)
     ]
     posture = scorer.compute_posture_score(findings)
     assert posture["overall_score"] == 5.0
