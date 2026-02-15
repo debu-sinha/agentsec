@@ -29,7 +29,7 @@ Key decisions:
 ### 2) Wrapper around mcp-scan + ClawSec
 - Pros: Faster initial development, leverages community work
 - Cons: Dependent on external tools, fragmented detection quality, can't customize deeply
-- Rejected: Need full control over detection quality for EB-1A-quality contribution
+- Rejected: Need full control over detection quality and deep customization
 
 ### 3) YARA-only detection engine
 - Pros: Industry standard, large rule community

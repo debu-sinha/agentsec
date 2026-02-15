@@ -95,7 +95,7 @@ console.print(
 )
 
 html = console.export_html(inline_styles=True)
-with open("/tmp/agentsec_report.html", "w") as f:
-    f.write(html)
+output_path = Path.cwd() / "agentsec_report.html"
+output_path.write_text(html, encoding="utf-8")
 
-print("\nReport saved to /tmp/agentsec_report.html")
+print(f"\nReport saved to {output_path}")

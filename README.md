@@ -2,12 +2,12 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-190%20passed-brightgreen.svg)](#)
+[![Tests](https://img.shields.io/badge/tests-CI-brightgreen.svg)](https://github.com/debu-sinha/agentsec/actions)
 [![PyPI](https://img.shields.io/pypi/v/agentsec-ai.svg)](https://pypi.org/project/agentsec-ai/)
 [![Downloads](https://img.shields.io/pypi/dm/agentsec-ai.svg)](https://pypi.org/project/agentsec-ai/)
 [![OWASP](https://img.shields.io/badge/OWASP-ASI01--ASI10-orange.svg)](https://genai.owasp.org/)
 
-**Immunize your OpenClaw installation.** One command. Full security posture. Actionable hardening.
+**Immunize your OpenClaw installation.** One command to assess posture, plus actionable hardening.
 
 agentsec is a security posture scanner and hardener for agentic AI installations. It currently supports [OpenClaw](https://github.com/openclaw/openclaw) (formerly Clawdbot/Moltbot) and Claude Code, scanning installation configs, MCP servers, skill ecosystems, and credentials for security vulnerabilities. Every finding maps to the [OWASP Top 10 for Agentic Applications (2026)](https://genai.owasp.org/).
 
@@ -15,10 +15,10 @@ agentsec is a security posture scanner and hardener for agentic AI installations
 
 - **135,000+** OpenClaw instances exposed to the internet ([Bitdefender](https://www.bitdefender.com/en-us/blog/hotforsecurity/135k-openclaw-ai-agents-exposed-online))
 - **36.82%** of ClawHub skills contain vulnerabilities ([Snyk ToxicSkills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/))
-- **5 active CVEs** affecting OpenClaw installations pre-v2026.2.12
+- **5 known CVEs** detected for pre-patch OpenClaw versions (see CVE table below)
 - **32%** of MCP servers have critical vulnerabilities ([Enkrypt AI](https://www.enkryptai.com/blog/we-scanned-1-000-mcp-servers-33-had-critical-vulnerabilities))
 
-agentsec catches these issues before attackers do.
+agentsec helps surface these issues early so they can be remediated before deployment.
 
 ## Quick Start
 
@@ -132,6 +132,19 @@ agentsec scan --quiet --fail-on high
 
 # List available scanners
 agentsec list-scanners
+```
+
+## Automation Commands
+
+```bash
+# Watch for changes and auto-scan (polling)
+agentsec watch ~/.openclaw -i 2
+
+# Show all settings a hardening profile would change
+agentsec show-profile workstation
+
+# Generate shell hook wrappers for npm/pip installs
+agentsec hook --shell zsh
 ```
 
 ## Hardening
@@ -433,9 +446,9 @@ cd ~/.openclaw && agentsec scan
 agentsec scan ~/.openclaw
 ```
 
-If the agent type isn't detected, specify it:
+If detection looks wrong, run with verbose output and pass the path explicitly:
 ```bash
-agentsec scan --agent-type openclaw ~/.openclaw
+agentsec scan ~/.openclaw --verbose
 ```
 
 ### Permission errors on Linux/macOS
@@ -484,20 +497,10 @@ The credential scanner uses Shannon entropy to detect unknown secret formats. If
 agentsec scan -s installation,skill,mcp
 ```
 
-## Validation Kit
+## Benchmarks and Case Studies
 
-Use these templates to publish reproducible benchmarks and case studies:
-
-- Benchmark methodology: `docs/benchmarks/METHODOLOGY.md`
-- Benchmark fixture matrix: `docs/benchmarks/FIXTURE_MATRIX.md`
-- Benchmark results template: `docs/benchmarks/results/RESULTS_TEMPLATE.md`
-- Case study template: `docs/case-studies/TEMPLATE.md`
-- Evidence tracker (EB-1A ready): `docs/evidence/EVIDENCE_TRACKER.md`
-
-Recommended launch minimum:
-- 1 benchmark report with reproducible command + fixture set
-- 3 case studies with before/after risk deltas
-- 1 evidence index linking external mentions, adoption metrics, and impact proofs
+- [Benchmark results (v0.4.0)](docs/benchmarks/results/2026-02-15-v0.4.0.md) - precision/recall/F1 on 20-fixture test matrix
+- [Case study: insecure workstation remediation](docs/case-studies/001-insecure-openclaw-workstation.md) - before/after scan with hardening
 
 ## Development
 
