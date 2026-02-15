@@ -53,7 +53,6 @@ class BaseScanner(ABC):
 
     def __init__(self, config: ScannerConfig | None = None):
         self.config = config or ScannerConfig()
-        self._findings: list[Finding] = []
 
     @property
     @abstractmethod

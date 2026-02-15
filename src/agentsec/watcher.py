@@ -180,7 +180,7 @@ def watch_and_scan(
                 ),
                 high_count=sum(1 for f in report.findings if f.severity == FindingSeverity.HIGH),
                 grade=posture.get("grade", "?"),
-                score=posture.get("score", 0.0),
+                score=posture.get("overall_score", 0.0),
             )
         )
 
@@ -214,7 +214,7 @@ def watch_and_scan(
                 ),
                 high_count=sum(1 for f in report.findings if f.severity == FindingSeverity.HIGH),
                 grade=posture.get("grade", "?"),
-                score=posture.get("score", 0.0),
+                score=posture.get("overall_score", 0.0),
             )
             if on_result:
                 on_result(result)

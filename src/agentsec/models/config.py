@@ -43,7 +43,7 @@ class AgentsecConfig(BaseModel):
     )
     output_format: str = Field(
         default="terminal",
-        description="Output format: terminal, json, html",
+        description="Output format: terminal, json, sarif",
     )
     output_path: Path | None = Field(
         default=None,

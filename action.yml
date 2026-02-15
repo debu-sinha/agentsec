@@ -51,17 +51,23 @@ runs:
     - name: Run security scan
       id: scan
       shell: bash
+      env:
+        INPUT_TARGET: ${{ inputs.target }}
+        INPUT_OUTPUT: ${{ inputs.output }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_OUTPUT_FILE: ${{ inputs.output-file }}
+        INPUT_SCANNERS: ${{ inputs.scanners }}
       run: |
-        ARGS="${{ inputs.target }}"
-        ARGS="$ARGS -o ${{ inputs.output }}"
-        ARGS="$ARGS --fail-on ${{ inputs.fail-on }}"
+        ARGS="$INPUT_TARGET"
+        ARGS="$ARGS -o $INPUT_OUTPUT"
+        ARGS="$ARGS --fail-on $INPUT_FAIL_ON"
 
-        if [ -n "${{ inputs.output-file }}" ]; then
-          ARGS="$ARGS -f ${{ inputs.output-file }}"
+        if [ -n "$INPUT_OUTPUT_FILE" ]; then
+          ARGS="$ARGS -f $INPUT_OUTPUT_FILE"
         fi
 
-        if [ -n "${{ inputs.scanners }}" ]; then
-          ARGS="$ARGS -s ${{ inputs.scanners }}"
+        if [ -n "$INPUT_SCANNERS" ]; then
+          ARGS="$ARGS -s $INPUT_SCANNERS"
         fi
 
         agentsec scan $ARGS
