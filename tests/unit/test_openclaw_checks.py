@@ -423,13 +423,16 @@ def test_hardener_already_hardened(tmp_path):
                 "discovery": {"mdns": {"mode": "minimal"}},
                 "tools": {"profile": "messaging"},
                 "session": {"dmScope": "per-channel-peer"},
+                "dangerouslyDisableDeviceAuth": False,
+                "dangerouslyDisableAuth": False,
+                "groupPolicy": "allowlist",
             }
         )
     )
 
     result = harden(tmp_path, "workstation", dry_run=True)
     assert len(result.applied) == 0
-    assert len(result.skipped) == 5
+    assert len(result.skipped) == 8
 
 
 def test_hardener_no_config(tmp_path):

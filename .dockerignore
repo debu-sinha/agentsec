@@ -1,0 +1,9 @@
+.tmp
+.git
+__pycache__
+*.pyc
+.pytest_cache
+*.egg-info
+dist
+build
+agentsec_report.html

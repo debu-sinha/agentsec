@@ -15,6 +15,7 @@ from pathlib import Path
 
 import click
 from rich.console import Console
+from rich.panel import Panel
 from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
@@ -305,6 +306,20 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
         f"{'[yellow]DRY RUN[/yellow]' if is_dry_run else '[bold green]APPLYING[/bold green]'}\n"
     )
 
+    # Run a pre-hardening scan to show impact preview
+    pre_report = None
+    pre_posture = None
+    try:
+        pre_config = AgentsecConfig(
+            targets=[ScanTarget(path=target_path)],
+            scanners={n: ScannerConfig() for n in ["installation", "skill", "mcp", "credential"]},
+        )
+        pre_report = run_scan(pre_config)
+        scorer = OwaspScorer()
+        pre_posture = scorer.compute_posture_score(pre_report.findings)
+    except Exception:
+        logger.debug("Pre-hardening scan failed, skipping preview")
+
     result = do_harden(target_path, profile, dry_run=is_dry_run)
 
     if result.errors:
@@ -327,6 +342,9 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
         console.print(f"\n[dim]{len(result.skipped)} settings already at target value.[/dim]")
 
     if is_dry_run and result.applied:
+        # Show impact preview
+        if pre_posture:
+            _render_harden_preview(pre_report, pre_posture, result)
         console.print(
             f"\n[yellow]Dry run complete.[/yellow] "
             f"Use [cyan]agentsec harden -p {profile} --apply[/cyan] to write changes.\n"
@@ -336,6 +354,145 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
             f"\n[green]Hardening applied.[/green] Config: {result.config_path}\n"
             f"[dim]Backup saved as {result.config_path}.bak[/dim]\n"
         )
+
+        # Auto-rescan after apply and show delta
+        try:
+            post_config = AgentsecConfig(
+                targets=[ScanTarget(path=target_path)],
+                scanners={
+                    n: ScannerConfig()
+                    for n in ["installation", "skill", "mcp", "credential"]
+                },
+            )
+            post_report = run_scan(post_config)
+            scorer = OwaspScorer()
+            post_posture = scorer.compute_posture_score(post_report.findings)
+
+            if pre_posture and pre_report:
+                _render_harden_delta(pre_report, pre_posture, post_report, post_posture)
+            else:
+                console.print(
+                    f"  Post-hardening: grade [bold]{post_posture['grade']}[/bold] "
+                    f"({post_posture['overall_score']}/100), "
+                    f"{len(post_report.findings)} findings\n"
+                )
+        except Exception:
+            console.print("[dim]Re-scan after hardening skipped.[/dim]\n")
+
+
+def _render_harden_preview(
+    pre_report: object,
+    pre_posture: dict,
+    result: object,
+) -> None:
+    """Show projected impact of hardening before applying."""
+    pre_grade = pre_posture.get("grade", "?")
+    pre_score = pre_posture.get("overall_score", 0)
+    pre_summary = pre_report.summary
+
+    config_fixable = len(result.applied)
+
+    console.print()
+    console.print(
+        Panel(
+            f"  [bold]Current:[/bold]  grade [bold]{pre_grade}[/bold] ({pre_score}/100) "
+            f"- {pre_summary.critical} critical, {pre_summary.high} high, "
+            f"{pre_summary.medium} medium\n"
+            f"  [bold]Will fix:[/bold] {config_fixable} config settings "
+            f"({len(result.skipped)} already at target)\n"
+            "  [bold yellow]Note:[/bold yellow]  Hardening fixes configuration only. "
+            "Credentials, CVEs, and\n"
+            "          malicious skills require separate remediation.",
+            title="[bold]Impact Preview[/bold]",
+            border_style="blue",
+            padding=(0, 1),
+        )
+    )
+
+
+def _render_harden_delta(
+    pre_report: object,
+    pre_posture: dict,
+    post_report: object,
+    post_posture: dict,
+) -> None:
+    """Show before/after delta after hardening is applied."""
+    pre_grade = pre_posture.get("grade", "?")
+    pre_score = pre_posture.get("overall_score", 0)
+    post_grade = post_posture.get("grade", "?")
+    post_score = post_posture.get("overall_score", 0)
+
+    pre_s = pre_report.summary
+    post_s = post_report.summary
+
+    score_delta = post_score - pre_score
+    delta_str = f"+{score_delta:.1f}" if score_delta > 0 else f"{score_delta:.1f}"
+    delta_style = "green" if score_delta > 0 else ("red" if score_delta < 0 else "dim")
+
+    fixed_count = pre_s.total_findings - post_s.total_findings
+    fixed_str = f"-{fixed_count} fixed" if fixed_count > 0 else "no change"
+
+    lines = [
+        f"  [bold]Before:[/bold]  {pre_grade} ({pre_score}/100) "
+        f"- {pre_s.critical} crit, {pre_s.high} high, {pre_s.medium} med",
+        f"  [bold]After:[/bold]   {post_grade} ({post_score}/100) "
+        f"- {post_s.critical} crit, {post_s.high} high, {post_s.medium} med"
+        f"  [{delta_style}]({delta_str} pts, {fixed_str})[/{delta_style}]",
+    ]
+
+    # Show remaining critical/high as next steps
+    if post_s.critical > 0:
+        lines.append("")
+        lines.append(
+            f"  [bold red]{post_s.critical} critical[/bold red] "
+            f"and [dark_orange]{post_s.high} high[/dark_orange] findings remain."
+        )
+        lines.append(
+            "  [dim]Run [cyan]agentsec scan -v[/cyan] to see details and next steps.[/dim]"
+        )
+
+    console.print(
+        Panel(
+            "\n".join(lines),
+            title="[bold]Hardening Results[/bold]",
+            border_style="green" if score_delta > 0 else "yellow",
+            padding=(0, 1),
+        )
+    )
+    console.print()
+
+
+@main.command("show-profile")
+@click.argument("profile", type=click.Choice(["workstation", "vps", "public-bot"]))
+def show_profile(profile: str) -> None:
+    """Show what a hardening profile will change.
+
+    Displays each setting, its target value, and the security rationale
+    without modifying anything.
+    """
+    from agentsec.hardener import get_profile_actions
+
+    actions = get_profile_actions(profile)
+
+    table = Table(title=f"Hardening Profile: {profile}", show_lines=True)
+    table.add_column("Setting", style="cyan", width=30)
+    table.add_column("New Value", width=16)
+    table.add_column("Reason", min_width=40)
+
+    for action in actions:
+        sev_style = "bold red" if action.severity == "critical" else ""
+        table.add_row(
+            action.key,
+            f"[{sev_style}]{action.value}[/{sev_style}]" if sev_style else str(action.value),
+            action.reason,
+        )
+
+    console.print("\n")
+    console.print(table)
+    console.print(
+        "\n[dim]This profile modifies configuration only. "
+        "Credentials, CVEs, and skills require separate fixes.[/dim]\n"
+    )
 
 
 @main.command()

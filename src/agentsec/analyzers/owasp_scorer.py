@@ -164,6 +164,10 @@ class OwaspScorer:
         - overall_score: 0-100 (higher = more secure)
         - category_scores: per-OWASP-category breakdown
         - grade: A-F letter grade
+
+        Scoring uses fixed penalty thresholds so that adding low-severity
+        findings never inflates the score. Critical findings cap the
+        maximum achievable grade.
         """
         if not findings:
             return {
@@ -171,6 +175,19 @@ class OwaspScorer:
                 "category_scores": {},
                 "grade": "A",
             }
+
+        # Apply context-sensitive severity escalation before scoring
+        self._escalate_severities(findings)
+
+        # Count by severity
+        severity_counts = dict.fromkeys(FindingSeverity, 0)
+        for f in findings:
+            severity_counts[f.severity] += 1
+
+        critical = severity_counts[FindingSeverity.CRITICAL]
+        high = severity_counts[FindingSeverity.HIGH]
+        medium = severity_counts[FindingSeverity.MEDIUM]
+        low = severity_counts[FindingSeverity.LOW]
 
         # Compute per-category penalty
         category_penalties: dict[OwaspAgenticCategory, float] = dict.fromkeys(
@@ -192,11 +209,28 @@ class OwaspScorer:
             score = max(10.0 - normalized, 0.0)
             category_scores[f"{cat.value}: {cat.title}"] = round(score, 1)
 
-        # Overall score is weighted average (penalize more for CRITICAL findings)
-        total_penalty = sum(_SEVERITY_WEIGHT[f.severity] for f in findings)
-        # Max possible penalty scales with number of findings
-        max_total = len(findings) * 10.0
-        overall = max(100.0 - (total_penalty / max(max_total, 1.0) * 100.0), 0.0)
+        # Doom combo: open DM + full tools + no sandbox = catastrophic
+        doom_combo = self._check_doom_combo(findings)
+
+        # Fixed-threshold scoring: critical findings cap the max grade.
+        # Each severity level subtracts fixed points from 100.
+        overall = 100.0
+        overall -= critical * 15.0
+        overall -= high * 7.0
+        overall -= medium * 3.0
+        overall -= low * 1.0
+
+        # Clamp to 5-100. Floor of 5 distinguishes "has some controls"
+        # from a hypothetical system with zero security whatsoever.
+        overall = max(min(overall, 100.0), 5.0)
+
+        # Critical findings cap the maximum achievable score
+        if critical >= 3 or doom_combo:
+            overall = min(overall, 20.0)
+        elif critical >= 1:
+            overall = min(overall, 55.0)
+        elif high >= 5:
+            overall = min(overall, 65.0)
 
         grade = self._score_to_grade(overall)
 
@@ -244,6 +278,82 @@ class OwaspScorer:
             f"Finding '{finding.title}' ({finding.severity.value}) maps to "
             f"{cat_names}. Category: {finding.category.value}."
         )
+
+    @staticmethod
+    def _check_doom_combo(findings: list[Finding]) -> bool:
+        """Detect catastrophic finding combinations.
+
+        When open DM policy + full tool access + no sandbox are all present,
+        any message can execute arbitrary code -- equivalent to unauthenticated RCE.
+        """
+        titles_lower = {f.title.lower() for f in findings}
+        categories = {f.category for f in findings}
+
+        has_open_dm = any(
+            "dm" in t and ("open" in t or "unrestricted" in t)
+            for t in titles_lower
+        )
+        has_full_tools = any(
+            "tool" in t and ("full" in t or "unrestricted" in t)
+            for t in titles_lower
+        )
+        has_no_sandbox = any(
+            "sandbox" in t and ("disabled" in t or "missing" in t or "off" in t)
+            for t in titles_lower
+        )
+
+        # Also check by finding category for broader matching
+        has_excessive_agency = (
+            FindingCategory.INSECURE_DEFAULT in categories
+            and FindingCategory.MISSING_AUTH in categories
+        )
+
+        return (has_open_dm and has_full_tools and has_no_sandbox) or (
+            has_open_dm and has_full_tools and has_excessive_agency
+        )
+
+    @staticmethod
+    def _escalate_severities(findings: list[Finding]) -> None:
+        """Apply context-sensitive severity escalation.
+
+        Some findings are HIGH in isolation but become CRITICAL when
+        combined with other findings. For example, open group policy is
+        HIGH alone but CRITICAL when auth is also disabled -- together
+        they allow unauthenticated prompt injection into any group.
+        """
+        categories = {f.category for f in findings}
+        titles_lower = {f.title.lower() for f in findings}
+
+        auth_disabled = FindingCategory.MISSING_AUTH in categories
+        open_inbound = any(
+            ("dm" in t or "group" in t) and ("open" in t or "unrestricted" in t)
+            for t in titles_lower
+        )
+
+        if not (auth_disabled or open_inbound):
+            return
+
+        for finding in findings:
+            if finding.severity != FindingSeverity.HIGH:
+                continue
+
+            title_lower = finding.title.lower()
+
+            # Open group/DM policy + disabled auth = unauthenticated access
+            if (
+                ("group" in title_lower or "dm" in title_lower)
+                and ("open" in title_lower or "wildcard" in title_lower)
+                and auth_disabled
+            ):
+                finding.severity = FindingSeverity.CRITICAL
+
+            # Risky tool groups + open inbound = unauthenticated code exec
+            if (
+                "tool group" in title_lower
+                and "open access" in title_lower
+                and open_inbound
+            ):
+                finding.severity = FindingSeverity.CRITICAL
 
     @staticmethod
     def _score_to_grade(score: float) -> str:

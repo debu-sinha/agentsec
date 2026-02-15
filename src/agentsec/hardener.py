@@ -73,6 +73,23 @@ _PROFILES: dict[str, list[HardenAction]] = {
             value="per-channel-peer",
             reason="Isolate DM sessions per channel peer",
         ),
+        HardenAction(
+            key="dangerouslyDisableDeviceAuth",
+            value=False,
+            reason="Never disable device auth, even on a workstation",
+            severity="critical",
+        ),
+        HardenAction(
+            key="dangerouslyDisableAuth",
+            value=False,
+            reason="Never disable auth — re-enable immediately",
+            severity="critical",
+        ),
+        HardenAction(
+            key="groupPolicy",
+            value="allowlist",
+            reason="Restrict to explicitly allowed groups only",
+        ),
     ],
     "vps": [
         HardenAction(
@@ -174,6 +191,23 @@ _PROFILES: dict[str, list[HardenAction]] = {
 def get_profiles() -> list[str]:
     """Return available hardening profile names."""
     return list(_PROFILES.keys())
+
+
+def get_profile_details(profile: str) -> list[dict[str, str]]:
+    """Return human-readable details for a profile's actions.
+
+    Each entry has: key, value, reason, severity.
+    """
+    actions = get_profile_actions(profile)
+    return [
+        {
+            "key": a.key,
+            "value": str(a.value),
+            "reason": a.reason,
+            "severity": a.severity,
+        }
+        for a in actions
+    ]
 
 
 def get_profile_actions(profile: str) -> list[HardenAction]:
