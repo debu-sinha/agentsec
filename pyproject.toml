@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentsec-ai"
-version = "0.3.0"
+version = "0.3.1"
 description = "Security scanner and hardener for agentic AI installations — OpenClaw, MCP servers, and AI agent skill ecosystems"
 readme = "README.md"
 license = "Apache-2.0"

@@ -95,7 +95,7 @@ def test_version_flag():
     runner = CliRunner()
     result = runner.invoke(main, ["--version"])
     assert result.exit_code == 0
-    assert "0.3.0" in result.output
+    assert "0.3.1" in result.output
 
 
 def test_hook_zsh():

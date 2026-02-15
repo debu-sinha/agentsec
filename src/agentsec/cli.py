@@ -15,6 +15,7 @@ from pathlib import Path
 
 import click
 from rich.console import Console
+from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
 from agentsec import __version__
@@ -129,9 +130,6 @@ def scan(
 
     target_path = Path(target).expanduser().resolve()
 
-    if not quiet:
-        console.print(f"\n[bold]agentsec[/bold] v{__version__} -- scanning {target_path}\n")
-
     # Build config
     scanner_configs: dict[str, ScannerConfig] = {}
     if scanners:
@@ -150,8 +148,33 @@ def scan(
         fail_on_severity=fail_on if fail_on != "none" else None,
     )
 
-    # Run the scan
-    report = run_scan(config)
+    # Run the scan with progress animation
+    is_tty = console.is_terminal and not quiet and output == "terminal"
+
+    if is_tty:
+        with Progress(
+            SpinnerColumn("dots"),
+            TextColumn("[deep_sky_blue1]{task.description}[/deep_sky_blue1]"),
+            BarColumn(bar_width=30),
+            TextColumn("[grey70]{task.fields[status]}[/grey70]"),
+            console=console,
+            transient=True,
+        ) as progress:
+            scan_task = progress.add_task("Scanning...", total=4, status="starting")
+            for i, phase in enumerate(
+                ["configuration", "skills", "MCP servers", "credentials"]
+            ):
+                progress.update(
+                    scan_task, description=f"Scanning {phase}...", status=phase
+                )
+                if i == 0:
+                    report = run_scan(config)
+                progress.update(scan_task, advance=1)
+            progress.update(
+                scan_task, description="Calculating posture...", status="scoring"
+            )
+    else:
+        report = run_scan(config)
 
     # Score posture
     scorer = OwaspScorer()
@@ -183,7 +206,7 @@ def scan(
                 console.print(f"[green]SARIF report written to {config.output_path}[/green]")
         else:
             if not quiet:
-                terminal_reporter = TerminalReporter(console=console)
+                terminal_reporter = TerminalReporter(console=console, verbose=verbose)
                 terminal_reporter.render(report, posture=posture)
 
     # Exit code based on fail_on threshold

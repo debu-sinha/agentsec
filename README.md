@@ -121,6 +121,9 @@ agentsec scan -s installation,credential
 # Fail on critical findings only (for CI)
 agentsec scan --fail-on critical
 
+# Verbose mode (detailed findings + OWASP posture table)
+agentsec scan --verbose
+
 # Quiet mode (exit code only, no output)
 agentsec scan --quiet --fail-on high
 
@@ -171,18 +174,34 @@ for finding in report.findings:
 
 ## Security Grade
 
-agentsec produces a security posture grade (A-F) based on aggregate findings:
+agentsec produces a screenshot-worthy security posture report with an A-F grade:
 
 ```
-Summary
-  Total findings    7
-  Critical          2
-  High              3
-  Medium            1
-  Low               1
-  Security grade    D (42.5/100)
-  Result            FAIL
+agentsec v0.3.1 — AI Agent Security Scanner
+Target: ~/.openclaw · Agent: claude-code
+
+Security Grade:  D
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42/100
+5 critical · 1 high · 1 medium · 0 low
+FAIL
+
+█████████████████████████████████████████████████
+█ CRIT:5  █ HIGH:1  █ MED:1
+
+ Sev  Finding                                    OWASP
+ CRIT Gateway bound to 0.0.0.0 (openclaw.json)   ASI05
+ CRIT Plaintext API key found (auth-profiles)     ASI05
+ ...
+
+╭──────────── Fix First ────────────╮
+│ 1. [CRIT] Gateway exposed → agentsec harden -p workstation --apply │
+│ 2. [CRIT] Plaintext API key → agentsec harden --vault              │
+╰───────────────────────────────────╯
+
+8 findings · 4 scanners · 0.08s · 50 files
 ```
+
+Use `--verbose` for detailed findings with evidence, remediation steps, and OWASP posture breakdown.
 
 ## OWASP Agentic Top 10 Coverage
 
@@ -258,7 +277,7 @@ jobs:
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/debu-sinha/agentsec
-    rev: v0.3.0
+    rev: v0.3.1
     hooks:
       - id: agentsec-scan
         args: ['--fail-on', 'critical']
