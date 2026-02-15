@@ -42,6 +42,16 @@ def test_extract_npm_version_stripped():
     assert names == ["some-pkg"]
 
 
+def test_extract_npm_scoped_package():
+    names = _extract_package_names("npm", ["install", "@scope/my-pkg"])
+    assert names == ["@scope/my-pkg"]
+
+
+def test_extract_npm_scoped_package_version_stripped():
+    names = _extract_package_names("npm", ["install", "@scope/my-pkg@2.1.0"])
+    assert names == ["@scope/my-pkg"]
+
+
 def test_extract_pip_install():
     names = _extract_package_names("pip", ["install", "requests"])
     assert names == ["requests"]

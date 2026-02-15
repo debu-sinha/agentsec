@@ -200,11 +200,30 @@ def _extract_package_names(pm: str, args: list[str]) -> list[str]:
             continue
         if found_install and not arg.startswith("-"):
             # Strip version specifiers for name matching
-            name = arg.split("@")[0] if pm == "npm" else arg.split("==")[0].split(">=")[0]
+            if pm == "npm":
+                name = _strip_npm_version_spec(arg)
+            else:
+                name = arg.split("==")[0].split(">=")[0]
             if name:
                 packages.append(name)
 
     return packages
+
+
+def _strip_npm_version_spec(spec: str) -> str:
+    """Return package name from an npm install spec.
+
+    Handles both unscoped and scoped packages:
+    - package@1.2.3 -> package
+    - @scope/package -> @scope/package
+    - @scope/package@1.2.3 -> @scope/package
+    """
+    if spec.startswith("@"):
+        parts = spec.rsplit("@", 1)
+        if len(parts) == 2 and "/" in parts[0]:
+            return parts[0]
+        return spec
+    return spec.split("@", 1)[0]
 
 
 def _check_blocklist(pm: str, package_name: str) -> bool:
