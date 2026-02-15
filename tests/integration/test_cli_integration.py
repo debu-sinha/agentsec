@@ -56,9 +56,7 @@ def _create_mcp_config(tmp_path: Path) -> Path:
     """Create a directory with MCP server config."""
     oc_dir = tmp_path / ".openclaw"
     oc_dir.mkdir()
-    (oc_dir / "openclaw.json").write_text(
-        json.dumps({"gatewayHostname": "127.0.0.1"})
-    )
+    (oc_dir / "openclaw.json").write_text(json.dumps({"gatewayHostname": "127.0.0.1"}))
     approvals = {"defaultApproval": "ask", "rules": []}
     (oc_dir / "exec-approvals.json").write_text(json.dumps(approvals))
 
@@ -117,9 +115,7 @@ def test_scan_insecure_fail_on_critical(tmp_path):
     """--fail-on critical should exit nonzero when criticals exist."""
     target = _create_insecure_openclaw_dir(tmp_path)
     runner = CliRunner()
-    result = runner.invoke(
-        main, ["scan", str(target), "--fail-on", "critical", "-q"]
-    )
+    result = runner.invoke(main, ["scan", str(target), "--fail-on", "critical", "-q"])
 
     assert result.exit_code != 0
 
@@ -128,9 +124,7 @@ def test_scan_clean_fail_on_critical(tmp_path):
     """--fail-on critical should exit zero on a clean config."""
     target = _create_openclaw_dir(tmp_path)
     runner = CliRunner()
-    result = runner.invoke(
-        main, ["scan", str(target), "--fail-on", "critical", "-q"]
-    )
+    result = runner.invoke(main, ["scan", str(target), "--fail-on", "critical", "-q"])
 
     assert result.exit_code == 0
 
@@ -255,9 +249,7 @@ def test_harden_dry_run(tmp_path):
     original_content = config_file.read_text()
 
     runner = CliRunner()
-    result = runner.invoke(
-        main, ["harden", str(target), "-p", "workstation", "--dry-run"]
-    )
+    result = runner.invoke(main, ["harden", str(target), "-p", "workstation", "--dry-run"])
 
     assert result.exit_code == 0
     assert config_file.read_text() == original_content
