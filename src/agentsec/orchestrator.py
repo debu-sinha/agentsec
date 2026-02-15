@@ -30,10 +30,7 @@ def run_scan(config: AgentsecConfig) -> ScanReport:
     Uses the first target in config.targets (or CWD if none specified).
     """
     # Resolve target
-    if config.targets:
-        target = config.targets[0]
-    else:
-        target = ScanTarget(path=Path.cwd())
+    target = config.targets[0] if config.targets else ScanTarget(path=Path.cwd())
 
     target_path = target.path.expanduser().resolve()
 

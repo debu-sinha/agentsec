@@ -362,7 +362,9 @@ class SkillAnalyzer(BaseScanner):
                                     scanner=self.name,
                                     category=FindingCategory.PROMPT_INJECTION_VECTOR,
                                     severity=FindingSeverity.CRITICAL,
-                                    title=f"Prompt injection in skill '{skill_name}' tool description",
+                                    title=(
+                                        f"Prompt injection in skill '{skill_name}' tool description"
+                                    ),
                                     description=(
                                         f"The tool '{tool_name}' in skill '{skill_name}' contains "
                                         f"a prompt injection pattern ({pattern_name}) in its "
@@ -372,7 +374,9 @@ class SkillAnalyzer(BaseScanner):
                                     evidence=f"Pattern: {pattern_name} in tool '{tool_name}'",
                                     file_path=manifest_path,
                                     remediation=Remediation(
-                                        summary=f"Remove or sanitize tool description in '{skill_name}'",
+                                        summary=(
+                                            f"Remove or sanitize tool description in '{skill_name}'"
+                                        ),
                                         steps=[
                                             f"Review the tool description for '{tool_name}'",
                                             "Remove any instruction-like content from descriptions",
@@ -458,7 +462,7 @@ class SkillAnalyzer(BaseScanner):
                     )
 
             # Check for dangerous imports
-            if isinstance(node, (ast.Import, ast.ImportFrom)):
+            if isinstance(node, ast.Import | ast.ImportFrom):
                 imported_names = self._get_import_names(node)
                 for imp_name in imported_names:
                     for dangerous_mod, (severity, desc) in _DANGEROUS_IMPORTS.items():
@@ -478,7 +482,8 @@ class SkillAnalyzer(BaseScanner):
                                     remediation=Remediation(
                                         summary=f"Review whether '{imp_name}' is necessary",
                                         steps=[
-                                            "Check if the skill's functionality requires this import",
+                                            "Check if the skill's functionality "
+                                            "requires this import",
                                             "Consider sandboxing the skill if the import is needed",
                                         ],
                                     ),
@@ -775,7 +780,10 @@ class SkillAnalyzer(BaseScanner):
                             scanner=self.name,
                             category=FindingCategory.DANGEROUS_PATTERN,
                             severity=FindingSeverity.MEDIUM,
-                            title=f"Skill '{skill_name}' has dangerous caps without disable-model-invocation",
+                            title=(
+                                f"Skill '{skill_name}' has dangerous caps "
+                                f"without disable-model-invocation"
+                            ),
                             description=(
                                 f"Skill '{skill_name}' requests dangerous capabilities "
                                 f"({', '.join(requested_caps)}) but does not set "
@@ -788,7 +796,8 @@ class SkillAnalyzer(BaseScanner):
                             remediation=Remediation(
                                 summary="Add disable-model-invocation: true to skill frontmatter",
                                 steps=[
-                                    "Add 'disable-model-invocation: true' to the skill's YAML frontmatter",
+                                    "Add 'disable-model-invocation: true' "
+                                    "to the skill's YAML frontmatter",
                                     "Or review whether the skill truly needs these capabilities",
                                 ],
                                 references=["https://docs.openclaw.ai/tools/skills"],

@@ -161,18 +161,12 @@ def scan(
             transient=True,
         ) as progress:
             scan_task = progress.add_task("Scanning...", total=4, status="starting")
-            for i, phase in enumerate(
-                ["configuration", "skills", "MCP servers", "credentials"]
-            ):
-                progress.update(
-                    scan_task, description=f"Scanning {phase}...", status=phase
-                )
+            for i, phase in enumerate(["configuration", "skills", "MCP servers", "credentials"]):
+                progress.update(scan_task, description=f"Scanning {phase}...", status=phase)
                 if i == 0:
                     report = run_scan(config)
                 progress.update(scan_task, advance=1)
-            progress.update(
-                scan_task, description="Calculating posture...", status="scoring"
-            )
+            progress.update(scan_task, description="Calculating posture...", status="scoring")
     else:
         report = run_scan(config)
 

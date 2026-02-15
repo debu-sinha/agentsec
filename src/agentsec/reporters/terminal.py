@@ -92,8 +92,7 @@ class TerminalReporter:
             f" [{_DIM}]— AI Agent Security Scanner[/{_DIM}]"
         )
         self.console.print(
-            f"[{_DIM}]Target: {report.target_path} · "
-            f"Agent: {report.agent_type}[/{_DIM}]"
+            f"[{_DIM}]Target: {report.target_path} · Agent: {report.agent_type}[/{_DIM}]"
         )
         self.console.print()
 
@@ -244,7 +243,7 @@ class TerminalReporter:
         """Verbose: full finding details with remediation steps."""
         sorted_findings = sorted(report.findings, key=lambda f: f.severity_rank)
 
-        self.console.print(f"\n[bold]Detailed Findings[/bold]\n")
+        self.console.print("\n[bold]Detailed Findings[/bold]\n")
         for i, finding in enumerate(sorted_findings, 1):
             sev_color = _SEVERITY_COLORS[finding.severity]
             self.console.print(
@@ -265,9 +264,7 @@ class TerminalReporter:
                 for step in finding.remediation.steps[:3]:
                     self.console.print(f"     - {step}")
                 if finding.remediation.automated:
-                    self.console.print(
-                        f"   Auto-fix: [cyan]{finding.remediation.command}[/cyan]"
-                    )
+                    self.console.print(f"   Auto-fix: [cyan]{finding.remediation.command}[/cyan]")
             self.console.print()
 
     def _render_posture(self, posture: dict[str, Any]) -> None:
@@ -317,11 +314,10 @@ class TerminalReporter:
 
         if summary.critical > 0:
             self.console.print(
-                f"[bold red]Fix critical issues now.[/bold red] "
-                f"Re-run: [cyan]agentsec scan[/cyan]"
+                "[bold red]Fix critical issues now.[/bold red] Re-run: [cyan]agentsec scan[/cyan]"
             )
         elif summary.high > 0:
             self.console.print(
-                f"[dark_orange]Address high-severity issues before deploying.[/dark_orange]"
+                "[dark_orange]Address high-severity issues before deploying.[/dark_orange]"
             )
         self.console.print()

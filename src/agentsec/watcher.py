@@ -12,6 +12,7 @@ Usage:
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import time
 from collections.abc import Callable
@@ -105,10 +106,8 @@ def _build_snapshot(paths: list[Path]) -> dict[Path, float]:
     snapshot: dict[Path, float] = {}
     for p in paths:
         if p.is_file():
-            try:
+            with contextlib.suppress(OSError):
                 snapshot[p] = p.stat().st_mtime
-            except OSError:
-                pass
         elif p.is_dir():
             try:
                 for child in p.rglob("*"):

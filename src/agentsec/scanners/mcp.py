@@ -417,7 +417,7 @@ class McpScanner(BaseScanner):
         input_schema = tool.get("inputSchema", tool.get("input_schema", {}))
         if isinstance(input_schema, dict):
             properties = input_schema.get("properties", {})
-            for prop_name, prop_def in properties.items():
+            for prop_name, _prop_def in properties.items():
                 prop_lower = prop_name.lower()
                 for dangerous_name, desc, severity in _DANGEROUS_SCHEMA_PATTERNS:
                     if dangerous_name in prop_lower:
@@ -426,7 +426,10 @@ class McpScanner(BaseScanner):
                                 scanner=self.name,
                                 category=FindingCategory.MCP_EXCESSIVE_PERMISSIONS,
                                 severity=severity,
-                                title=f"Dangerous parameter '{prop_name}' in '{server_name}/{tool_name}'",
+                                title=(
+                                    f"Dangerous parameter '{prop_name}' "
+                                    f"in '{server_name}/{tool_name}'"
+                                ),
                                 description=(
                                     f"{desc}. The tool '{tool_name}' accepts a parameter "
                                     f"'{prop_name}' that could be used for arbitrary "
@@ -436,7 +439,8 @@ class McpScanner(BaseScanner):
                                 remediation=Remediation(
                                     summary=f"Validate and restrict '{prop_name}' input",
                                     steps=[
-                                        "Add input validation with an allowlist of permitted values",
+                                        "Add input validation with an allowlist "
+                                        "of permitted values",
                                         "Implement sandboxing for command/code execution",
                                         "Add rate limiting and audit logging for this tool",
                                     ],

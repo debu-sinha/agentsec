@@ -607,26 +607,25 @@ class InstallationScanner(BaseScanner):
 
         # CORS / origin validation
         cors_config = ws_config.get("cors", ws_config.get("allowed_origins"))
-        if cors_config is None or cors_config == "*":
-            if host or bind_mode != "loopback":
-                findings.append(
-                    Finding(
-                        scanner=self.name,
-                        category=FindingCategory.MISSING_AUTH,
-                        severity=FindingSeverity.HIGH,
-                        title="No WebSocket origin validation configured",
-                        description=(
-                            "The WebSocket server does not validate the Origin header. "
-                            "This enables Cross-Site WebSocket Hijacking from malicious webpages."
-                        ),
-                        file_path=config_path,
-                        remediation=Remediation(
-                            summary="Configure allowed origins",
-                            steps=["Set 'allowed_origins' to specific trusted domains"],
-                        ),
-                        owasp_ids=["ASI05", "ASI01"],
-                    )
+        if (cors_config is None or cors_config == "*") and (host or bind_mode != "loopback"):
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.MISSING_AUTH,
+                    severity=FindingSeverity.HIGH,
+                    title="No WebSocket origin validation configured",
+                    description=(
+                        "The WebSocket server does not validate the Origin header. "
+                        "This enables Cross-Site WebSocket Hijacking from malicious webpages."
+                    ),
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary="Configure allowed origins",
+                        steps=["Set 'allowed_origins' to specific trusted domains"],
+                    ),
+                    owasp_ids=["ASI05", "ASI01"],
                 )
+            )
 
         # --- CGW-002: Gateway auth missing ---
         gw_auth = gateway.get("auth", gateway.get("authentication", {}))
@@ -707,27 +706,28 @@ class InstallationScanner(BaseScanner):
                 )
 
         # --- CGW-004: Reverse proxy without trustedProxies ---
-        if gateway.get("reverseProxy") or gateway.get("proxy"):
-            if not gateway.get("trustedProxies"):
-                findings.append(
-                    Finding(
-                        scanner=self.name,
-                        category=FindingCategory.INSECURE_CONFIG,
-                        severity=FindingSeverity.MEDIUM,
-                        title="Reverse proxy configured without trustedProxies",
-                        description=(
-                            "A reverse proxy is configured but trustedProxies is not set. "
-                            "Without this, proxy headers can be spoofed to bypass IP-based "
-                            "access controls."
-                        ),
-                        file_path=config_path,
-                        remediation=Remediation(
-                            summary="Set gateway.trustedProxies to your proxy IPs",
-                            steps=["Add trustedProxies array with proxy CIDR ranges"],
-                        ),
-                        owasp_ids=["ASI05"],
-                    )
+        if (gateway.get("reverseProxy") or gateway.get("proxy")) and not gateway.get(
+            "trustedProxies"
+        ):
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.INSECURE_CONFIG,
+                    severity=FindingSeverity.MEDIUM,
+                    title="Reverse proxy without trustedProxies",
+                    description=(
+                        "A reverse proxy is configured but trustedProxies is not set. "
+                        "Without this, proxy headers can be spoofed to bypass IP-based "
+                        "access controls."
+                    ),
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary="Set gateway.trustedProxies to your proxy IPs",
+                        steps=["Add trustedProxies array with proxy CIDR ranges"],
+                    ),
+                    owasp_ids=["ASI05"],
                 )
+            )
 
         return findings
 
@@ -899,14 +899,16 @@ class InstallationScanner(BaseScanner):
         allow_list = tools_config.get("allow", [])
         if isinstance(allow_list, list):
             runtime_groups = {"group:runtime", "group:all"}
-            enabled_risky = runtime_groups & set(str(x) for x in allow_list)
+            enabled_risky = runtime_groups & {str(x) for x in allow_list}
             if enabled_risky and is_exposed:
                 findings.append(
                     Finding(
                         scanner=self.name,
                         category=FindingCategory.INSECURE_DEFAULT,
                         severity=FindingSeverity.HIGH,
-                        title=f"Risky tool group enabled with open access: {', '.join(enabled_risky)}",
+                        title=(
+                            f"Risky tool group enabled with open access: {', '.join(enabled_risky)}"
+                        ),
                         description=(
                             f"Tool groups {enabled_risky} expand to exec/bash/process "
                             f"capabilities. With open DM or group policy, untrusted users "
@@ -1046,7 +1048,8 @@ class InstallationScanner(BaseScanner):
                         severity=FindingSeverity.MEDIUM,
                         title="Exec safeBins expanded with custom binaries",
                         description=(
-                            f"The safeBins list has been expanded with: {', '.join(sorted(custom_bins))}. "
+                            f"The safeBins list has been expanded with: "
+                            f"{', '.join(sorted(custom_bins))}. "
                             f"These binaries bypass exec approval checks and run without "
                             f"user confirmation."
                         ),
@@ -1096,7 +1099,10 @@ class InstallationScanner(BaseScanner):
                             "but sandboxing is not enabled. Without container isolation, "
                             "compromised tool calls run directly on the host."
                         ),
-                        evidence=f"sandbox.mode={sandbox_mode or 'unset'}, tools.profile={profile or 'unset'}",
+                        evidence=(
+                            f"sandbox.mode={sandbox_mode or 'unset'}, "
+                            f"tools.profile={profile or 'unset'}"
+                        ),
                         file_path=config_path,
                         remediation=Remediation(
                             summary="Enable sandboxing for untrusted-input agents",

@@ -235,16 +235,14 @@ class CredentialScanner(BaseScanner):
                 if not item.is_file():
                     continue
 
-                # Check extension
-                if item.suffix.lower() not in _SCANNABLE_EXTENSIONS:
-                    # Also check extensionless files like .env
-                    if item.name not in {
-                        ".env",
-                        ".env.local",
-                        ".env.production",
-                        ".env.development",
-                    }:
-                        continue
+                # Check extension (also allow extensionless .env files)
+                if item.suffix.lower() not in _SCANNABLE_EXTENSIONS and item.name not in {
+                    ".env",
+                    ".env.local",
+                    ".env.production",
+                    ".env.development",
+                }:
+                    continue
 
                 # Check size
                 try:
@@ -458,6 +456,4 @@ class CredentialScanner(BaseScanner):
         if len(set(value)) <= 2:
             return True
         # Check if it's a common pattern like "xxx...xxx"
-        if re.match(r"^[x\*\.]+$", value, re.I):
-            return True
-        return False
+        return bool(re.match(r"^[x\*\.]+$", value, re.I))
