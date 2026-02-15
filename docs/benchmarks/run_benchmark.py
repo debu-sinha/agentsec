@@ -516,11 +516,14 @@ def finding_matches_expected(finding_title: str, expected_pattern: str) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# Known Windows FPs: file permission checks always fire on Windows
-# because os.stat doesn't enforce Unix permission bits
+# File permission findings (CFS-001/CFS-002) are excluded from benchmark
+# metrics on all platforms. On Windows, os.stat doesn't enforce Unix
+# permission bits so they always fire. On Linux/macOS, benchmark fixtures
+# are created in temp dirs with default umask, so permission findings are
+# artifacts of the test environment rather than detection accuracy issues.
 # ---------------------------------------------------------------------------
 
-WINDOWS_FP_PATTERNS = [
+PERMISSION_FP_PATTERNS = [
     "world-readable sensitive file",
     "group-readable sensitive file",
     "agent config directory world-accessible",
@@ -528,12 +531,10 @@ WINDOWS_FP_PATTERNS = [
     "sensitive path world-accessible",
 ]
 
-def is_windows_permission_fp(title: str) -> bool:
-    """Check if a finding is a known Windows false positive from permission checks."""
-    if os.name != "nt":
-        return False
+def is_permission_finding(title: str) -> bool:
+    """Check if a finding is a file permission check (excluded from benchmark metrics)."""
     title_lower = title.lower()
-    return any(p in title_lower for p in WINDOWS_FP_PATTERNS)
+    return any(p in title_lower for p in PERMISSION_FP_PATTERNS)
 
 
 # ---------------------------------------------------------------------------
@@ -551,7 +552,7 @@ class FixtureResult:
     fn: int = 0
     runtime_ms: float = 0.0
     findings_json: list[dict] = field(default_factory=list)
-    windows_fps: int = 0
+    perm_excluded: int = 0
     # For tracking specific matches
     matched_expected: list[str] = field(default_factory=list)
     unmatched_expected: list[str] = field(default_factory=list)
@@ -599,18 +600,18 @@ def run_scan_fixture(fixture_dir: Path, fixture_id: str, module: str,
     # fixture) are noise, not true false positives for the module being tested.
     module_titles = [f.title for f in report.findings if f.scanner == module]
 
-    # Count Windows permission FPs separately
+    # Exclude file permission findings (CFS-001/CFS-002) from metrics
     non_fp_titles = []
     for t in module_titles:
-        if is_windows_permission_fp(t):
-            result.windows_fps += 1
+        if is_permission_finding(t):
+            result.perm_excluded += 1
         else:
             non_fp_titles.append(t)
 
     # Also count Windows FPs from other scanners (for the total count)
     for f in report.findings:
-        if f.scanner != module and is_windows_permission_fp(f.title):
-            result.windows_fps += 1
+        if f.scanner != module and is_permission_finding(f.title):
+            result.perm_excluded += 1
 
     # Match expected patterns against actual findings (excluding Windows FPs)
     matched = set()
@@ -827,7 +828,7 @@ def main():
             status = "PASS" if result.fn == 0 and result.fp == 0 else "WARN"
             if result.fn > 0:
                 status = "MISS"
-            win_note = f" (+{result.windows_fps} win-perm-FP)" if result.windows_fps > 0 else ""
+            win_note = f" (+{result.perm_excluded} perm-excl)" if result.perm_excluded > 0 else ""
             print(f"{status}  TP={result.tp} FP={result.fp} FN={result.fn} "
                   f"({result.runtime_ms:.0f}ms){win_note}")
 
@@ -869,7 +870,7 @@ def main():
         total_tp = sum(r.tp for r in all_results)
         total_fp = sum(r.fp for r in all_results)
         total_fn = sum(r.fn for r in all_results)
-        total_windows_fps = sum(r.windows_fps for r in all_results)
+        total_perm_excluded = sum(r.perm_excluded for r in all_results)
 
         precision = total_tp / (total_tp + total_fp) if (total_tp + total_fp) > 0 else 0
         recall = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else 0
@@ -889,7 +890,7 @@ def main():
                else runtimes[0] if runtimes else 0)
 
         print(f"  Total TP: {total_tp}")
-        print(f"  Total FP: {total_fp} (+ {total_windows_fps} Windows permission FPs)")
+        print(f"  Total FP: {total_fp} (+ {total_perm_excluded} permission findings excluded)")
         print(f"  Total FN: {total_fn}")
         print(f"  Precision:       {precision:.4f}")
         print(f"  Recall:          {recall:.4f}")
@@ -969,7 +970,7 @@ def main():
                 "total_tp": total_tp,
                 "total_fp": total_fp,
                 "total_fn": total_fn,
-                "total_windows_fps": total_windows_fps,
+                "total_perm_excluded": total_perm_excluded,
                 "precision": round(precision, 4),
                 "recall": round(recall, 4),
                 "f1": round(f1, 4),
@@ -989,7 +990,7 @@ def main():
                     "tp": r.tp,
                     "fp": r.fp,
                     "fn": r.fn,
-                    "windows_fps": r.windows_fps,
+                    "perm_excluded": r.perm_excluded,
                     "runtime_ms": round(r.runtime_ms, 1),
                     "expected": list(r.expected_patterns),
                     "matched": r.matched_expected,
