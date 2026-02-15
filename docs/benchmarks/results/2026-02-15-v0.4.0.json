@@ -4,16 +4,16 @@
   "platform": "Windows 11",
   "python": "3.14.2",
   "aggregate": {
-    "total_tp": 27,
-    "total_fp": 9,
-    "total_fn": 1,
+    "total_tp": 28,
+    "total_fp": 6,
+    "total_fn": 0,
     "total_windows_fps": 38,
-    "precision": 0.75,
-    "recall": 0.9643,
-    "f1": 0.8437,
-    "critical_recall": 0.9524,
-    "runtime_p50_ms": 4.6,
-    "runtime_p95_ms": 13.6
+    "precision": 0.8235,
+    "recall": 1.0,
+    "f1": 0.9032,
+    "critical_recall": 1.0,
+    "runtime_p50_ms": 5.8,
+    "runtime_p95_ms": 22.2
   },
   "module_metrics": {
     "installation": {
@@ -44,13 +44,13 @@
       "fn": 0
     },
     "credential": {
-      "precision": 0.4,
-      "recall": 0.6667,
-      "f1": 0.5,
-      "critical_recall": 0.6667,
-      "tp": 2,
-      "fp": 3,
-      "fn": 1
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "critical_recall": 1.0,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
     },
     "gate": {
       "precision": 1.0,
@@ -70,7 +70,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 3,
-      "runtime_ms": 13.6,
+      "runtime_ms": 16.9,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -109,14 +109,14 @@
       "fp": 2,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 4.8,
+      "runtime_ms": 4.9,
       "expected": [
-        "Gateway bound to non-loopback interface",
-        "Gateway auth missing on non-loopback interface"
+        "Gateway auth missing on non-loopback interface",
+        "Gateway bound to non-loopback interface"
       ],
       "matched": [
-        "Gateway bound to non-loopback interface",
-        "Gateway auth missing on non-loopback interface"
+        "Gateway auth missing on non-loopback interface",
+        "Gateway bound to non-loopback interface"
       ],
       "missed": [],
       "false_positives": [
@@ -175,15 +175,15 @@
       "fp": 2,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 4.1,
+      "runtime_ms": 4.9,
       "expected": [
-        "Full tool profile with open inbound access",
         "Sandboxing disabled with full tool access and open input",
+        "Full tool profile with open inbound access",
         "DM policy set to 'open'"
       ],
       "matched": [
-        "Full tool profile with open inbound access",
         "Sandboxing disabled with full tool access and open input",
+        "Full tool profile with open inbound access",
         "DM policy set to 'open'"
       ],
       "missed": [],
@@ -249,7 +249,7 @@
       "fp": 2,
       "fn": 0,
       "windows_fps": 3,
-      "runtime_ms": 5.6,
+      "runtime_ms": 5.4,
       "expected": [
         "Exec approvals defaults.security set to 'full'"
       ],
@@ -313,20 +313,20 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 3,
-      "runtime_ms": 4.3,
+      "runtime_ms": 7.3,
       "expected": [
-        "CVE-2026-25253",
         "CVE-2026-25157",
+        "CVE-2026-25253",
         "CVE-2026-24763",
-        "CVE-2026-25475",
-        "CVE-2026-25593"
+        "CVE-2026-25593",
+        "CVE-2026-25475"
       ],
       "matched": [
-        "CVE-2026-24763",
-        "CVE-2026-25475",
-        "CVE-2026-25593",
         "CVE-2026-25157",
-        "CVE-2026-25253"
+        "CVE-2026-25253",
+        "CVE-2026-25593",
+        "CVE-2026-25475",
+        "CVE-2026-24763"
       ],
       "missed": [],
       "false_positives": [],
@@ -388,7 +388,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 11.9,
+      "runtime_ms": 17.7,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -421,7 +421,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 11.5,
+      "runtime_ms": 16.8,
       "expected": [
         "Remote pipe to shell"
       ],
@@ -464,7 +464,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 10.2,
+      "runtime_ms": 17.8,
       "expected": [
         "Credential path targeting"
       ],
@@ -519,7 +519,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 12.0,
+      "runtime_ms": 16.3,
       "expected": [
         "Base64 encoded payload"
       ],
@@ -562,16 +562,16 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 11.2,
+      "runtime_ms": 22.2,
       "expected": [
         "Dangerous call 'exec()'",
-        "Dangerous import 'subprocess'",
-        "Dangerous call 'eval()'"
+        "Dangerous call 'eval()'",
+        "Dangerous import 'subprocess'"
       ],
       "matched": [
         "Dangerous call 'exec()'",
-        "Dangerous import 'subprocess'",
-        "Dangerous call 'eval()'"
+        "Dangerous call 'eval()'",
+        "Dangerous import 'subprocess'"
       ],
       "missed": [],
       "false_positives": [],
@@ -621,7 +621,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 4.6,
+      "runtime_ms": 5.4,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -654,7 +654,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 4.1,
+      "runtime_ms": 8.4,
       "expected": [
         "MCP server 'remote-api' has no authentication",
         "Remote MCP server"
@@ -705,16 +705,16 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 4.6,
+      "runtime_ms": 6.0,
       "expected": [
-        "Dangerous parameter 'shell_command'",
+        "Dangerous parameter 'file_path'",
         "Tool poisoning",
-        "Dangerous parameter 'file_path'"
+        "Dangerous parameter 'shell_command'"
       ],
       "matched": [
-        "Dangerous parameter 'shell_command'",
+        "Dangerous parameter 'file_path'",
         "Tool poisoning",
-        "Dangerous parameter 'file_path'"
+        "Dangerous parameter 'shell_command'"
       ],
       "missed": [],
       "false_positives": [],
@@ -764,7 +764,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 5.0,
+      "runtime_ms": 5.6,
       "expected": [
         "npx with unverified package"
       ],
@@ -807,7 +807,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 3.9,
+      "runtime_ms": 5.3,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -836,28 +836,23 @@
     {
       "id": "F-016",
       "module": "credential",
-      "tp": 2,
-      "fp": 3,
-      "fn": 1,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
       "windows_fps": 3,
-      "runtime_ms": 4.4,
+      "runtime_ms": 6.2,
       "expected": [
-        "AWS Access Key",
         "GitHub Personal Access Token",
-        "OpenAI API Key"
+        "OpenAI API Key",
+        "AWS Access Key"
       ],
       "matched": [
         "GitHub Personal Access Token",
-        "OpenAI API Key"
-      ],
-      "missed": [
+        "OpenAI API Key",
         "AWS Access Key"
       ],
-      "false_positives": [
-        "Plaintext OpenAI Key in config.json",
-        "Plaintext AWS Key in config.json",
-        "Plaintext GitHub Token in config.json"
-      ],
+      "missed": [],
+      "false_positives": [],
       "all_findings": [
         {
           "title": "World-readable sensitive file: config.json",
@@ -908,6 +903,12 @@
           "scanner": "credential"
         },
         {
+          "title": "AWS Access Key found in config.json",
+          "severity": "critical",
+          "category": "exposed_token",
+          "scanner": "credential"
+        },
+        {
           "title": "GitHub Personal Access Token found in config.json",
           "severity": "critical",
           "category": "exposed_token",
@@ -922,7 +923,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 2,
-      "runtime_ms": 3.9,
+      "runtime_ms": 5.0,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -955,7 +956,7 @@
       "fp": 0,
       "fn": 0,
       "windows_fps": 0,
-      "runtime_ms": 1.4,
+      "runtime_ms": 1.6,
       "expected": [
         "npm install hook"
       ],
@@ -966,13 +967,13 @@
       "false_positives": [],
       "all_findings": [
         {
-          "title": "npm install hook: preinstall",
+          "title": "npm install hook: postinstall",
           "severity": "high",
           "category": "supply_chain",
           "scanner": "gate"
         },
         {
-          "title": "npm install hook: postinstall",
+          "title": "npm install hook: preinstall",
           "severity": "high",
           "category": "supply_chain",
           "scanner": "gate"
@@ -1077,24 +1078,7 @@
     {
       "fixture": "F-004",
       "title": "No SSRF protection configured for URL-based inputs"
-    },
-    {
-      "fixture": "F-016",
-      "title": "Plaintext OpenAI Key in config.json"
-    },
-    {
-      "fixture": "F-016",
-      "title": "Plaintext AWS Key in config.json"
-    },
-    {
-      "fixture": "F-016",
-      "title": "Plaintext GitHub Token in config.json"
     }
   ],
-  "false_negatives": [
-    {
-      "fixture": "F-016",
-      "expected": "AWS Access Key"
-    }
-  ]
+  "false_negatives": []
 }

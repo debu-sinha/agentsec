@@ -433,25 +433,38 @@ class CredentialScanner(BaseScanner):
     @staticmethod
     def _is_placeholder(value: str) -> bool:
         """Check if a value looks like a placeholder rather than a real secret."""
-        placeholders = {
+        # Long phrases that indicate placeholder intent (match as substrings)
+        phrase_placeholders = {
             "your_api_key",
             "your-api-key",
             "your_token",
             "your-token",
-            "sk-xxx",
-            "sk-your",
             "replace_me",
             "changeme",
             "placeholder",
-            "example",
-            "test",
-            "dummy",
-            "fake",
-            "sample",
+            "sk-your",
         }
+        # Short words that only count when the value is short or starts with them.
+        # Avoids false-flagging a 40-char key that happens to contain "test".
+        word_placeholders = {"example", "test", "dummy", "fake", "sample", "sk-xxx"}
+
         lower = value.lower()
-        if any(p in lower for p in placeholders):
+
+        # Strip known prefixes before checking (e.g. "sk-", "ghp_", "AKIA")
+        stripped = re.sub(r"^(?:sk-(?:ant-)?|ghp_|gho_|gh[us]_|AKIA|hf_|dapi)", "", value).lower()
+
+        if any(p in lower for p in phrase_placeholders):
             return True
+
+        for word in word_placeholders:
+            if word in lower:
+                # Only flag if the word dominates the value (>40% of stripped length)
+                if len(word) >= len(stripped) * 0.4:
+                    return True
+                # Or if it appears at a word boundary at the start
+                if stripped.startswith(word):
+                    return True
+
         # Check if it's all the same character
         if len(set(value)) <= 2:
             return True

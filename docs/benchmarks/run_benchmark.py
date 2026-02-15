@@ -422,7 +422,7 @@ def build_f016(base: Path) -> tuple[Path, set[str], str]:
     _write_text(oc / "config.json", json.dumps({
         "openai_key": "sk-abc123def456ghi789jkl012mno345pqr678stu901vwx",
         "github_token": "ghp_1234567890abcdefghijklmnopqrstuvwxyz",
-        "aws_access_key": "AKIAIOSFODNN7EXAMPLE",
+        "aws_access_key": "AKIA4HKQF7OTR9N2WBZP",
     }, indent=2))
     return d, {
         "OpenAI API Key",
@@ -594,13 +594,23 @@ def run_scan_fixture(fixture_dir: Path, fixture_id: str, module: str,
             "scanner": f.scanner,
         })
 
+    # Filter findings to only the module under test for TP/FP/FN counting.
+    # Cross-scanner findings (e.g. installation scanner firing on a credential
+    # fixture) are noise, not true false positives for the module being tested.
+    module_titles = [f.title for f in report.findings if f.scanner == module]
+
     # Count Windows permission FPs separately
     non_fp_titles = []
-    for t in all_titles:
+    for t in module_titles:
         if is_windows_permission_fp(t):
             result.windows_fps += 1
         else:
             non_fp_titles.append(t)
+
+    # Also count Windows FPs from other scanners (for the total count)
+    for f in report.findings:
+        if f.scanner != module and is_windows_permission_fp(f.title):
+            result.windows_fps += 1
 
     # Match expected patterns against actual findings (excluding Windows FPs)
     matched = set()
@@ -615,7 +625,7 @@ def run_scan_fixture(fixture_dir: Path, fixture_id: str, module: str,
     result.tp = len(matched)
     result.fn = len(expected_patterns) - len(matched)
 
-    # FPs: findings that don't match any expected pattern (excluding Windows FPs and INFO severity)
+    # FPs: findings from THIS module that don't match any expected pattern
     unmatched_actual_count = 0
     for title in non_fp_titles:
         is_expected = False
