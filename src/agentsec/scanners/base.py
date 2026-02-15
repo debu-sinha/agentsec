@@ -6,6 +6,7 @@ this interface so the orchestrator can run them uniformly.
 
 from __future__ import annotations
 
+import json
 import logging
 import time
 from abc import ABC, abstractmethod
@@ -89,8 +90,14 @@ class BaseScanner(ABC):
 
         try:
             findings = self.scan(context)
+        except (OSError, PermissionError, ValueError, json.JSONDecodeError) as e:
+            logger.warning("Scanner '%s' skipped: %s: %s", self.name, type(e).__name__, e)
+            return []
         except Exception as e:
-            logger.error("Scanner '%s' failed: %s", self.name, type(e).__name__)
+            logger.error(
+                "Scanner '%s' failed unexpectedly: %s: %s",
+                self.name, type(e).__name__, e,
+            )
             logger.debug("Scanner '%s' traceback:", self.name, exc_info=True)
             return []
 

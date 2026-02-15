@@ -808,13 +808,25 @@ class SkillAnalyzer(BaseScanner):
 
         return findings
 
+    # Modules whose .compile() method is safe (not the builtin compile())
+    _SAFE_COMPILE_MODULES = {"re", "regex", "pattern", "sre_compile"}
+
     @staticmethod
     def _get_call_name(node: ast.Call) -> str | None:
-        """Extract function name from an AST Call node."""
+        """Extract function name from an AST Call node.
+
+        Returns None for known-safe method calls like re.compile()
+        to avoid false positives on the builtin compile() check.
+        """
         if isinstance(node.func, ast.Name):
             return node.func.id
         if isinstance(node.func, ast.Attribute):
-            return node.func.attr
+            attr = node.func.attr
+            # Skip re.compile() and similar -- not the dangerous builtin compile()
+            if attr == "compile" and isinstance(node.func.value, ast.Name):
+                if node.func.value.id in SkillAnalyzer._SAFE_COMPILE_MODULES:
+                    return None
+            return attr
         return None
 
     @staticmethod
