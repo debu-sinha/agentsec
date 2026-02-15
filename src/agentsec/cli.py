@@ -9,6 +9,7 @@ Usage:
 from __future__ import annotations
 
 import logging
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -668,6 +669,125 @@ npm() { _agentsec_post_install npm "$@"; }
 pip() { _agentsec_post_install pip "$@"; }
 pip3() { _agentsec_post_install pip3 "$@"; }
 """
+
+
+@main.command(context_settings={"ignore_unknown_options": True, "allow_extra_args": True})
+@click.argument("command", nargs=-1, type=click.UNPROCESSED)
+@click.option(
+    "--fail-on",
+    type=click.Choice(["critical", "high", "medium", "low", "info"]),
+    default="critical",
+    help="Block install at this severity or above (default: critical)",
+)
+@click.option("--force", is_flag=True, help="Allow install despite findings")
+@click.option("--dry-run", is_flag=True, help="Scan only, don't run install")
+@click.pass_context
+def gate(
+    ctx: click.Context, command: tuple[str, ...], fail_on: str, force: bool, dry_run: bool,
+) -> None:
+    """Pre-install security gate. Scans packages BEFORE installation.
+
+    Downloads the package, runs security checks, and blocks install
+    if critical issues are found. Only proceeds with the real install
+    after the package passes.
+
+    \b
+    Examples:
+        agentsec gate npm install some-skill
+        agentsec gate pip install some-mcp-server
+        agentsec gate --fail-on high npm install risky-package
+        agentsec gate --dry-run npm install untrusted-package
+    """
+    from agentsec.gate import gate_check
+
+    if not command:
+        console.print("[red]Usage: agentsec gate <npm|pip> install <package>[/red]")
+        raise SystemExit(1)
+
+    pm = command[0]
+    if pm not in ("npm", "pip", "pip3"):
+        console.print(f"[red]Unsupported package manager: {pm}[/red]")
+        console.print("Supported: npm, pip, pip3")
+        raise SystemExit(1)
+
+    args = list(command[1:])
+    pkg_manager = "pip" if pm in ("pip", "pip3") else "npm"
+
+    console.print()
+    console.print("[bold]agentsec gate[/bold] - pre-install security check")
+    console.print(f"  Package manager: [cyan]{pm}[/cyan]")
+    console.print(f"  Command: [dim]{pm} {' '.join(args)}[/dim]")
+    console.print(f"  Fail threshold: [yellow]{fail_on}[/yellow]")
+    console.print()
+
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Downloading and scanning...", total=None)
+        result = gate_check(pkg_manager, args, fail_on=fail_on, force=force)
+        progress.update(task, completed=True)
+
+    if result.findings:
+        # Show findings
+        severity_colors = {
+            "CRITICAL": "red bold",
+            "HIGH": "red",
+            "MEDIUM": "yellow",
+            "LOW": "blue",
+            "INFO": "dim",
+        }
+        console.print(f"[bold]Found {len(result.findings)} issue(s):[/bold]")
+        console.print()
+        for f in result.findings:
+            color = severity_colors.get(f.severity.value, "white")
+            console.print(f"  [{color}]{f.severity.value:>8}[/{color}]  {f.title}")
+            if f.evidence:
+                console.print(f"           [dim]{f.evidence[:120]}[/dim]")
+        console.print()
+
+    if result.blocklist_hit:
+        console.print(
+            Panel(
+                "[red bold]BLOCKED[/red bold]: Package is on the agentsec blocklist of "
+                "known-malicious packages. Installation prevented.",
+                border_style="red",
+            )
+        )
+        raise SystemExit(1)
+
+    if not result.allowed:
+        console.print(
+            Panel(
+                f"[red bold]BLOCKED[/red bold]: Pre-install scan found issues at "
+                f"[bold]{fail_on}[/bold] severity or above.\n\n"
+                f"Use [cyan]--force[/cyan] to install anyway, or "
+                f"[cyan]--dry-run[/cyan] to inspect without installing.",
+                border_style="red",
+            )
+        )
+        raise SystemExit(1)
+
+    if result.findings and result.allowed:
+        console.print(
+            "[yellow]Findings detected but below threshold. Proceeding with install.[/yellow]"
+        )
+        console.print()
+
+    if not result.findings:
+        console.print("[green]No issues found. Package looks clean.[/green]")
+        console.print()
+
+    if dry_run:
+        console.print("[dim]Dry run - skipping actual installation.[/dim]")
+        return
+
+    # Run the actual install command
+    console.print(f"[bold]Running:[/bold] {pm} {' '.join(args)}")
+    console.print()
+    exit_code = subprocess.run([pm, *args]).returncode
+    raise SystemExit(exit_code)
 
 
 if __name__ == "__main__":
