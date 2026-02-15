@@ -110,8 +110,8 @@ EOF
 
 cat > /tmp/test-vps/.openclaw/env.json << 'EOF'
 {
-  "openai_api_key": "sk-proj-abc123def456ghi789jklmnopqrstuvwxyz012345",
-  "slack_token": "xoxb-123456789012-1234567890123-AbCdEfGhIjKlMnOpQrStUvWx"
+  "openai_api_key": "<OPENAI_TOKEN_REDACTED>",
+  "slack_token": "<SLACK_TOKEN_REDACTED>"
 }
 EOF
 
