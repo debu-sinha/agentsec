@@ -1,0 +1,1100 @@
+{
+  "version": "0.4.0",
+  "date": "2026-02-15",
+  "platform": "Windows 11",
+  "python": "3.14.2",
+  "aggregate": {
+    "total_tp": 27,
+    "total_fp": 9,
+    "total_fn": 1,
+    "total_windows_fps": 38,
+    "precision": 0.75,
+    "recall": 0.9643,
+    "f1": 0.8437,
+    "critical_recall": 0.9524,
+    "runtime_p50_ms": 4.6,
+    "runtime_p95_ms": 13.6
+  },
+  "module_metrics": {
+    "installation": {
+      "precision": 0.6471,
+      "recall": 1.0,
+      "f1": 0.7857,
+      "critical_recall": 1.0,
+      "tp": 11,
+      "fp": 6,
+      "fn": 0
+    },
+    "skill": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "critical_recall": 1.0,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0
+    },
+    "mcp": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "critical_recall": 1.0,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0
+    },
+    "credential": {
+      "precision": 0.4,
+      "recall": 0.6667,
+      "f1": 0.5,
+      "critical_recall": 0.6667,
+      "tp": 2,
+      "fp": 3,
+      "fn": 1
+    },
+    "gate": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "critical_recall": 1.0,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "fixtures": [
+    {
+      "id": "F-001",
+      "module": "installation",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 3,
+      "runtime_ms": 13.6,
+      "expected": [],
+      "matched": [],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: exec-approvals.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-002",
+      "module": "installation",
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 4.8,
+      "expected": [
+        "Gateway bound to non-loopback interface",
+        "Gateway auth missing on non-loopback interface"
+      ],
+      "matched": [
+        "Gateway bound to non-loopback interface",
+        "Gateway auth missing on non-loopback interface"
+      ],
+      "missed": [],
+      "false_positives": [
+        "No WebSocket origin validation configured",
+        "Authentication disabled on non-loopback agent"
+      ],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Gateway bound to non-loopback interface",
+          "severity": "critical",
+          "category": "network_exposure",
+          "scanner": "installation"
+        },
+        {
+          "title": "No WebSocket origin validation configured",
+          "severity": "high",
+          "category": "missing_auth",
+          "scanner": "installation"
+        },
+        {
+          "title": "Gateway auth missing on non-loopback interface",
+          "severity": "critical",
+          "category": "missing_auth",
+          "scanner": "installation"
+        },
+        {
+          "title": "Authentication disabled on non-loopback agent",
+          "severity": "critical",
+          "category": "missing_auth",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-003",
+      "module": "installation",
+      "tp": 3,
+      "fp": 2,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 4.1,
+      "expected": [
+        "Full tool profile with open inbound access",
+        "Sandboxing disabled with full tool access and open input",
+        "DM policy set to 'open'"
+      ],
+      "matched": [
+        "Full tool profile with open inbound access",
+        "Sandboxing disabled with full tool access and open input",
+        "DM policy set to 'open'"
+      ],
+      "missed": [],
+      "false_positives": [
+        "Exec approvals file missing \u2014 host execution uncontrolled",
+        "No SSRF protection configured for URL-based inputs"
+      ],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "DM policy set to 'open' \u2014 anyone can message the agent",
+          "severity": "critical",
+          "category": "insecure_config",
+          "scanner": "installation"
+        },
+        {
+          "title": "Full tool profile with open inbound access",
+          "severity": "critical",
+          "category": "insecure_default",
+          "scanner": "installation"
+        },
+        {
+          "title": "Exec approvals file missing \u2014 host execution uncontrolled",
+          "severity": "high",
+          "category": "insecure_default",
+          "scanner": "installation"
+        },
+        {
+          "title": "Sandboxing disabled with full tool access and open input",
+          "severity": "high",
+          "category": "insecure_default",
+          "scanner": "installation"
+        },
+        {
+          "title": "No SSRF protection configured for URL-based inputs",
+          "severity": "high",
+          "category": "insecure_default",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "module": "installation",
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "windows_fps": 3,
+      "runtime_ms": 5.6,
+      "expected": [
+        "Exec approvals defaults.security set to 'full'"
+      ],
+      "matched": [
+        "Exec approvals defaults.security set to 'full'"
+      ],
+      "missed": [],
+      "false_positives": [
+        "Exec approvals askFallback set to 'full'",
+        "No SSRF protection configured for URL-based inputs"
+      ],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: exec-approvals.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Exec approvals defaults.security set to 'full'",
+          "severity": "high",
+          "category": "insecure_default",
+          "scanner": "installation"
+        },
+        {
+          "title": "Exec approvals askFallback set to 'full'",
+          "severity": "medium",
+          "category": "insecure_default",
+          "scanner": "installation"
+        },
+        {
+          "title": "No SSRF protection configured for URL-based inputs",
+          "severity": "high",
+          "category": "insecure_default",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-005",
+      "module": "installation",
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 3,
+      "runtime_ms": 4.3,
+      "expected": [
+        "CVE-2026-25253",
+        "CVE-2026-25157",
+        "CVE-2026-24763",
+        "CVE-2026-25475",
+        "CVE-2026-25593"
+      ],
+      "matched": [
+        "CVE-2026-24763",
+        "CVE-2026-25475",
+        "CVE-2026-25593",
+        "CVE-2026-25157",
+        "CVE-2026-25253"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: exec-approvals.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "CVE-2026-25253: One-click RCE via WebSocket hijacking",
+          "severity": "high",
+          "category": "cve_match",
+          "scanner": "installation"
+        },
+        {
+          "title": "CVE-2026-24763: Command injection in Docker sandbox via PATH variable",
+          "severity": "high",
+          "category": "cve_match",
+          "scanner": "installation"
+        },
+        {
+          "title": "CVE-2026-25157: SSH command injection via sshNodeCommand",
+          "severity": "high",
+          "category": "cve_match",
+          "scanner": "installation"
+        },
+        {
+          "title": "CVE-2026-25593: Unauthenticated local RCE via WebSocket API",
+          "severity": "critical",
+          "category": "cve_match",
+          "scanner": "installation"
+        },
+        {
+          "title": "CVE-2026-25475: Path traversal via MEDIA: file extraction",
+          "severity": "high",
+          "category": "cve_match",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-006",
+      "module": "skill",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 11.9,
+      "expected": [],
+      "matched": [],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-007",
+      "module": "skill",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 11.5,
+      "expected": [
+        "Remote pipe to shell"
+      ],
+      "matched": [
+        "Remote pipe to shell"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Remote pipe to shell in skill 'evil-installer'",
+          "severity": "critical",
+          "category": "malicious_skill",
+          "scanner": "skill"
+        }
+      ]
+    },
+    {
+      "id": "F-008",
+      "module": "skill",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 10.2,
+      "expected": [
+        "Credential path targeting"
+      ],
+      "matched": [
+        "Credential path targeting"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Credential path targeting in skill 'sneaky-reader'",
+          "severity": "high",
+          "category": "malicious_skill",
+          "scanner": "skill"
+        },
+        {
+          "title": "Credential path targeting in skill 'sneaky-reader'",
+          "severity": "high",
+          "category": "malicious_skill",
+          "scanner": "skill"
+        },
+        {
+          "title": "Credential path targeting in skill 'sneaky-reader'",
+          "severity": "high",
+          "category": "malicious_skill",
+          "scanner": "skill"
+        }
+      ]
+    },
+    {
+      "id": "F-009",
+      "module": "skill",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 12.0,
+      "expected": [
+        "Base64 encoded payload"
+      ],
+      "matched": [
+        "Base64 encoded payload"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Base64 encoded payload in skill 'decoder-ring'",
+          "severity": "medium",
+          "category": "data_exfiltration_risk",
+          "scanner": "skill"
+        }
+      ]
+    },
+    {
+      "id": "F-010",
+      "module": "skill",
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 11.2,
+      "expected": [
+        "Dangerous call 'exec()'",
+        "Dangerous import 'subprocess'",
+        "Dangerous call 'eval()'"
+      ],
+      "matched": [
+        "Dangerous call 'exec()'",
+        "Dangerous import 'subprocess'",
+        "Dangerous call 'eval()'"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Dangerous import 'subprocess' in skill 'dynamic-runner'",
+          "severity": "high",
+          "category": "dangerous_pattern",
+          "scanner": "skill"
+        },
+        {
+          "title": "Dangerous call 'eval()' in skill 'dynamic-runner'",
+          "severity": "critical",
+          "category": "dangerous_pattern",
+          "scanner": "skill"
+        },
+        {
+          "title": "Dangerous call 'exec()' in skill 'dynamic-runner'",
+          "severity": "critical",
+          "category": "dangerous_pattern",
+          "scanner": "skill"
+        }
+      ]
+    },
+    {
+      "id": "F-011",
+      "module": "mcp",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 4.6,
+      "expected": [],
+      "matched": [],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-012",
+      "module": "mcp",
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 4.1,
+      "expected": [
+        "MCP server 'remote-api' has no authentication",
+        "Remote MCP server"
+      ],
+      "matched": [
+        "MCP server 'remote-api' has no authentication",
+        "Remote MCP server"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Remote MCP server 'remote-api' connects to external URL",
+          "severity": "high",
+          "category": "mcp_cross_origin",
+          "scanner": "mcp"
+        },
+        {
+          "title": "MCP server 'remote-api' has no authentication configured",
+          "severity": "high",
+          "category": "mcp_no_auth",
+          "scanner": "mcp"
+        }
+      ]
+    },
+    {
+      "id": "F-013",
+      "module": "mcp",
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 4.6,
+      "expected": [
+        "Dangerous parameter 'shell_command'",
+        "Tool poisoning",
+        "Dangerous parameter 'file_path'"
+      ],
+      "matched": [
+        "Dangerous parameter 'shell_command'",
+        "Tool poisoning",
+        "Dangerous parameter 'file_path'"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "Tool poisoning in 'power-tools/run_shell'",
+          "severity": "high",
+          "category": "mcp_tool_poisoning",
+          "scanner": "mcp"
+        },
+        {
+          "title": "Dangerous parameter 'shell_command' in 'power-tools/run_shell'",
+          "severity": "critical",
+          "category": "mcp_excessive_permissions",
+          "scanner": "mcp"
+        },
+        {
+          "title": "Dangerous parameter 'file_path' in 'power-tools/read_file'",
+          "severity": "high",
+          "category": "mcp_excessive_permissions",
+          "scanner": "mcp"
+        }
+      ]
+    },
+    {
+      "id": "F-014",
+      "module": "mcp",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 5.0,
+      "expected": [
+        "npx with unverified package"
+      ],
+      "matched": [
+        "npx with unverified package"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "MCP server 'community-server' uses npx with unverified package",
+          "severity": "medium",
+          "category": "supply_chain",
+          "scanner": "mcp"
+        }
+      ]
+    },
+    {
+      "id": "F-015",
+      "module": "credential",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 3.9,
+      "expected": [],
+      "matched": [],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-016",
+      "module": "credential",
+      "tp": 2,
+      "fp": 3,
+      "fn": 1,
+      "windows_fps": 3,
+      "runtime_ms": 4.4,
+      "expected": [
+        "AWS Access Key",
+        "GitHub Personal Access Token",
+        "OpenAI API Key"
+      ],
+      "matched": [
+        "GitHub Personal Access Token",
+        "OpenAI API Key"
+      ],
+      "missed": [
+        "AWS Access Key"
+      ],
+      "false_positives": [
+        "Plaintext OpenAI Key in config.json",
+        "Plaintext AWS Key in config.json",
+        "Plaintext GitHub Token in config.json"
+      ],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: config.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Plaintext OpenAI Key in config.json",
+          "severity": "critical",
+          "category": "plaintext_secret",
+          "scanner": "installation"
+        },
+        {
+          "title": "Plaintext AWS Key in config.json",
+          "severity": "critical",
+          "category": "plaintext_secret",
+          "scanner": "installation"
+        },
+        {
+          "title": "Plaintext GitHub Token in config.json",
+          "severity": "critical",
+          "category": "plaintext_secret",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        },
+        {
+          "title": "OpenAI API Key found in config.json",
+          "severity": "critical",
+          "category": "exposed_token",
+          "scanner": "credential"
+        },
+        {
+          "title": "GitHub Personal Access Token found in config.json",
+          "severity": "critical",
+          "category": "exposed_token",
+          "scanner": "credential"
+        }
+      ]
+    },
+    {
+      "id": "F-017",
+      "module": "credential",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 2,
+      "runtime_ms": 3.9,
+      "expected": [],
+      "matched": [],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "World-readable sensitive file: openclaw.json",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Agent config directory world-accessible: .openclaw",
+          "severity": "high",
+          "category": "insecure_permissions",
+          "scanner": "installation"
+        },
+        {
+          "title": "Could not determine agent version",
+          "severity": "info",
+          "category": "outdated_version",
+          "scanner": "installation"
+        }
+      ]
+    },
+    {
+      "id": "F-018",
+      "module": "gate",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 0,
+      "runtime_ms": 1.4,
+      "expected": [
+        "npm install hook"
+      ],
+      "matched": [
+        "npm install hook"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": [
+        {
+          "title": "npm install hook: preinstall",
+          "severity": "high",
+          "category": "supply_chain",
+          "scanner": "gate"
+        },
+        {
+          "title": "npm install hook: postinstall",
+          "severity": "high",
+          "category": "supply_chain",
+          "scanner": "gate"
+        }
+      ]
+    },
+    {
+      "id": "F-019",
+      "module": "gate",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 0,
+      "runtime_ms": 0.0,
+      "expected": [
+        "blocklist"
+      ],
+      "matched": [
+        "blocklist"
+      ],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": []
+    },
+    {
+      "id": "F-020",
+      "module": "gate",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "windows_fps": 0,
+      "runtime_ms": 0.0,
+      "expected": [],
+      "matched": [],
+      "missed": [],
+      "false_positives": [],
+      "all_findings": []
+    }
+  ],
+  "hardening": {
+    "workstation": {
+      "before_score": 5.0,
+      "after_score": 86.0,
+      "delta": 81.0,
+      "before_findings": 14,
+      "after_findings": 3,
+      "findings_fixed": 11,
+      "before_grade": "F",
+      "after_grade": "B",
+      "remaining_critical": 0,
+      "remaining_high": 2,
+      "actions_applied": 8
+    },
+    "vps": {
+      "before_score": 5.0,
+      "after_score": 55.0,
+      "delta": 50.0,
+      "before_findings": 14,
+      "after_findings": 4,
+      "findings_fixed": 10,
+      "before_grade": "F",
+      "after_grade": "F",
+      "remaining_critical": 1,
+      "remaining_high": 2,
+      "actions_applied": 7
+    },
+    "public-bot": {
+      "before_score": 5.0,
+      "after_score": 86.0,
+      "delta": 81.0,
+      "before_findings": 14,
+      "after_findings": 3,
+      "findings_fixed": 11,
+      "before_grade": "F",
+      "after_grade": "B",
+      "remaining_critical": 0,
+      "remaining_high": 2,
+      "actions_applied": 10
+    }
+  },
+  "false_positives": [
+    {
+      "fixture": "F-002",
+      "title": "No WebSocket origin validation configured"
+    },
+    {
+      "fixture": "F-002",
+      "title": "Authentication disabled on non-loopback agent"
+    },
+    {
+      "fixture": "F-003",
+      "title": "Exec approvals file missing \u2014 host execution uncontrolled"
+    },
+    {
+      "fixture": "F-003",
+      "title": "No SSRF protection configured for URL-based inputs"
+    },
+    {
+      "fixture": "F-004",
+      "title": "Exec approvals askFallback set to 'full'"
+    },
+    {
+      "fixture": "F-004",
+      "title": "No SSRF protection configured for URL-based inputs"
+    },
+    {
+      "fixture": "F-016",
+      "title": "Plaintext OpenAI Key in config.json"
+    },
+    {
+      "fixture": "F-016",
+      "title": "Plaintext AWS Key in config.json"
+    },
+    {
+      "fixture": "F-016",
+      "title": "Plaintext GitHub Token in config.json"
+    }
+  ],
+  "false_negatives": [
+    {
+      "fixture": "F-016",
+      "expected": "AWS Access Key"
+    }
+  ]
+}
