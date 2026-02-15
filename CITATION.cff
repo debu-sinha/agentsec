@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use agentsec in your research or work, please cite it as below."
+title: "agentsec"
+type: software
+authors:
+  - family-names: Sinha
+    given-names: Debu
+    email: debusinha2009@gmail.com
+repository-code: "https://github.com/debu-sinha/agentsec"
+url: "https://pypi.org/project/agentsec-ai/"
+license: Apache-2.0
+version: "0.3.1"
+date-released: "2026-02-01"
+keywords:
+  - security
+  - ai-agents
+  - owasp
+  - mcp
+  - openclaw
+  - claude-code
+  - scanner
+  - hardening
+abstract: >-
+  Security scanner and hardener for agentic AI installations.
+  Maps findings to the OWASP Top 10 for Agentic Applications (2026).

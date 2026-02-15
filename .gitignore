@@ -40,3 +40,6 @@ Thumbs.db
 
 # Reports (generated output)
 reports/
+
+# Claude Code
+CLAUDE.md
