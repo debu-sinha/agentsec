@@ -338,6 +338,15 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
     except Exception:
         logger.debug("Pre-hardening scan failed, skipping preview")
 
+    # Confirmation prompt for destructive --apply (skip in non-interactive)
+    if do_apply and console.is_terminal:
+        if not click.confirm(
+            f"Apply {profile} hardening to {target_path}? A backup will be saved.",
+            default=False,
+        ):
+            console.print("[yellow]Aborted.[/yellow]")
+            return
+
     result = do_harden(target_path, profile, dry_run=is_dry_run)
 
     if result.errors:
