@@ -1,35 +1,39 @@
-﻿{
-    "study_id":  "mcp-top50-2026-02",
-    "snapshot_date":  "2026-02-15",
-    "targets_scanned":  50,
-    "targets_cloned_successfully":  49,
-    "targets_with_critical_or_high":  48,
-    "critical_findings":  71,
-    "high_findings":  172,
-    "medium_findings":  53,
-    "low_findings":  8,
-    "info_findings":  48,
-    "avg_findings_per_target":  7.18,
-    "runtime_median_seconds":  1.06,
-    "runtime_p95_seconds":  22.53,
-    "false_positive_rate_sampled":  null,
-    "top_categories":  [
-                           {
-                               "category":  "other",
-                               "count":  217
-                           },
-                           {
-                               "category":  "exec_risk",
-                               "count":  129
-                           },
-                           {
-                               "category":  "tool_poisoning",
-                               "count":  6
-                           }
-                       ],
-    "notes":  [
-                  "agentsec 0.4.0 scan only (semgrep/gitleaks not run in this snapshot).",
-                  "Confidence field set to needs_review pending manual triage.",
-                  "false_positive_rate_sampled not measured in this run."
-              ]
+{
+  "study_id": "mcp-top50-2026-02",
+  "snapshot_date": "2026-02-15",
+  "targets_scanned": 50,
+  "targets_cloned_successfully": 49,
+  "targets_with_critical_or_high": 49,
+  "critical_findings": 71,
+  "high_findings": 724,
+  "medium_findings": 70,
+  "low_findings": 8,
+  "info_findings": 48,
+  "avg_findings_per_target": 18.8,
+  "runtime_median_seconds": 8.19,
+  "runtime_p95_seconds": 39.38,
+  "false_positive_rate_sampled": null,
+  "top_categories": [
+    {
+      "category": "secret",
+      "count": 410
+    },
+    {
+      "category": "other",
+      "count": 376
+    },
+    {
+      "category": "exec_risk",
+      "count": 129
+    },
+    {
+      "category": "tool_poisoning",
+      "count": 6
+    }
+  ],
+  "notes": [
+    "Merged scanner run: agentsec + semgrep + gitleaks.",
+    "Confidence field set to needs_review pending manual triage.",
+    "false_positive_rate_sampled not measured in this run."
+  ]
 }

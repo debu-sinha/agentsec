@@ -1,0 +1,9 @@
+- id: agentsec-scan
+  name: agentsec security scan
+  description: Scan for agentic AI security vulnerabilities
+  entry: agentsec scan
+  language: python
+  pass_filenames: false
+  always_run: true
+  stages: [pre-commit]
+  args: ['--fail-on', 'critical', '--quiet']

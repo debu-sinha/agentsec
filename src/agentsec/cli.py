@@ -133,13 +133,22 @@ def scan(
     target_path = Path(target).expanduser().resolve()
 
     # Build config
+    valid_scanner_names = {"installation", "skill", "mcp", "credential"}
     scanner_configs: dict[str, ScannerConfig] = {}
     if scanners:
         enabled_names = {s.strip() for s in scanners.split(",")}
-        for name in ["installation", "skill", "mcp", "credential"]:
+        unknown = enabled_names - valid_scanner_names
+        if unknown:
+            console.print(
+                f"[bold red]Error:[/bold red] Unknown scanner(s): {', '.join(sorted(unknown))}\n"
+                f"Available scanners: {', '.join(sorted(valid_scanner_names))}\n"
+                "Run [cyan]agentsec list-scanners[/cyan] for descriptions."
+            )
+            sys.exit(2)
+        for name in valid_scanner_names:
             scanner_configs[name] = ScannerConfig(enabled=(name in enabled_names))
     else:
-        for name in ["installation", "skill", "mcp", "credential"]:
+        for name in valid_scanner_names:
             scanner_configs[name] = ScannerConfig()
 
     config = AgentsecConfig(
@@ -153,24 +162,32 @@ def scan(
     # Run the scan with progress animation
     is_tty = console.is_terminal and not quiet and output == "terminal"
 
-    if is_tty:
-        with Progress(
-            SpinnerColumn("dots"),
-            TextColumn("[deep_sky_blue1]{task.description}[/deep_sky_blue1]"),
-            BarColumn(bar_width=30),
-            TextColumn("[grey70]{task.fields[status]}[/grey70]"),
-            console=console,
-            transient=True,
-        ) as progress:
-            scan_task = progress.add_task("Scanning...", total=4, status="starting")
-            for i, phase in enumerate(["configuration", "skills", "MCP servers", "credentials"]):
-                progress.update(scan_task, description=f"Scanning {phase}...", status=phase)
-                if i == 0:
-                    report = run_scan(config)
-                progress.update(scan_task, advance=1)
-            progress.update(scan_task, description="Calculating posture...", status="scoring")
-    else:
-        report = run_scan(config)
+    try:
+        if is_tty:
+            with Progress(
+                SpinnerColumn("dots"),
+                TextColumn("[deep_sky_blue1]{task.description}[/deep_sky_blue1]"),
+                BarColumn(bar_width=30),
+                TextColumn("[grey70]{task.fields[status]}[/grey70]"),
+                console=console,
+                transient=True,
+            ) as progress:
+                scan_task = progress.add_task("Scanning...", total=4, status="starting")
+                for i, phase in enumerate(["configuration", "skills", "MCP servers", "credentials"]):
+                    progress.update(scan_task, description=f"Scanning {phase}...", status=phase)
+                    if i == 0:
+                        report = run_scan(config)
+                    progress.update(scan_task, advance=1)
+                progress.update(scan_task, description="Calculating posture...", status="scoring")
+        else:
+            report = run_scan(config)
+    except (OSError, PermissionError) as e:
+        console.print(f"[bold red]Error:[/bold red] Scan failed: {e}")
+        sys.exit(2)
+    except Exception as e:
+        logger.debug("Scan error traceback:", exc_info=True)
+        console.print(f"[bold red]Error:[/bold red] Scan failed unexpectedly: {type(e).__name__}: {e}")
+        sys.exit(2)
 
     # Score posture
     scorer = OwaspScorer()

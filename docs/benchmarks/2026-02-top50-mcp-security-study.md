@@ -5,12 +5,12 @@
 - Author(s): Debu Sinha
 - Tool versions:
   - `agentsec`: `0.4.0`
-  - `semgrep`: not run (future iteration)
-  - `gitleaks`: not run (future iteration)
+  - `semgrep`: `1.151.0`
+  - `gitleaks`: `8.24.2`
 
 ## Goal
 
-Measure real-world security posture across the 50 most popular MCP servers using reproducible static analysis with agentsec.
+Measure real-world security posture across the 50 most popular MCP servers using reproducible static analysis with a merged scanner pipeline (`agentsec` + `semgrep` + `gitleaks`).
 
 ## Scope
 
@@ -49,8 +49,10 @@ Full selection: `docs/benchmarks/top50/data/top50_selection_20260215.csv`
 
 1. Resolved each target to a shallow clone at HEAD with commit SHA recorded.
 2. Ran `agentsec scan <target> -o json --fail-on none` on each clone.
-3. Normalized all findings into JSONL per the `top50_finding.schema.json` schema.
-4. Computed aggregate metrics.
+3. Ran `semgrep scan --config scripts/semgrep-top50-rules.yml --json`.
+4. Ran `gitleaks detect --report-format json`.
+5. Normalized all findings into JSONL per the `top50_finding.schema.json` schema.
+6. Computed aggregate metrics.
 
 Scan script: `scripts/run_top50_study.py`
 
@@ -60,69 +62,65 @@ Scan script: `scripts/run_top50_study.py`
 |---|---:|
 | Targets in selection | 50 |
 | Targets cloned successfully | 49 |
-| Targets with critical or high findings | 48 (98%) |
+| Targets with critical or high findings | 49 (100% of cloned targets) |
 | Critical findings | 71 |
-| High findings | 172 |
-| Medium findings | 53 |
+| High findings | 724 |
+| Medium findings | 70 |
 | Low findings | 8 |
 | Info findings | 48 |
-| Total findings | 352 |
-| Avg findings/target | 7.18 |
-| Median scan time | 1.06 s |
-| P95 scan time | 22.53 s |
+| Total findings | 921 |
+| Avg findings/target | 18.80 |
+| Median scan time | 8.19 s |
+| P95 scan time | 39.38 s |
 
 ## Top Recurring Findings
 
 | Category | Count | Description |
 |---|---:|---|
-| Exec approvals missing | 48 | No exec-approvals.json - expected since these are standalone MCP servers, not OpenClaw installations |
-| Version detection | 48 | Could not determine agent version (info-level, cosmetic) |
-| Dangerous `compile()` calls | 99 | Regex compilation in Python skills flagged as dynamic code. Mostly false positives from `re.compile()` usage |
-| Potential secrets | 111 | Token-like findings (76) + high-entropy strings (35) in docs, tests, and config examples |
-| Prompt injection patterns | 5 | Instruction override or remote script references in skill descriptions |
-| `getattr()` usage | 16 | Dynamic attribute access in plugin code |
+| `secret` category findings | 410 | Dominated by gitleaks detections (for example `generic-api-key`, `curl-auth-header`) and requires manual triage |
+| `other` category findings | 376 | Mixed scanner output, including semgrep findings not mapped to a narrower category |
+| `exec_risk` category findings | 129 | Dynamic execution and command-execution risk patterns |
+| Dangerous `compile()` calls | 99 | Still present and still mostly `re.compile()` false positives from skill scanning |
+| Semgrep `mcp-js-child-process-exec` | 93 | Frequent use of `exec`/`execSync` style APIs in Node/TS projects |
+| `curl-auth-header` secret rule | 79 | Potential credential-bearing HTTP headers in code/config strings |
 
 ## Analysis
 
 **Expected noise (not actionable):**
-- "Exec approvals file missing" fires on every non-OpenClaw repo (48/49). This is by design - the installation scanner checks for OpenClaw-specific config. In a real deployment, this check is meaningful.
-- "Could not determine agent version" is info-level and cosmetic.
-- `compile()` findings are regex compilation (`re.compile()`), not `compile()` for code execution. This is a known precision gap in the skill scanner's AST check that should be fixed in a future release.
+- "Exec approvals file missing" and "Could not determine agent version" still appear for most non-OpenClaw repos (48 each). These are environment/context checks, not direct code vulnerabilities.
+- `compile()` findings are largely regex compilation (`re.compile()`), not Python code compilation. This remains a precision gap in the skill scanner.
+- A non-trivial subset of gitleaks findings are likely test fixtures, sample keys, or intentionally fake values. Manual validation is required before labeling as incidents.
 
 **Actionable findings:**
-- **Potential secrets in documentation and test files** (111 findings): Connection strings, API keys, and high-entropy tokens in README files and test data. Some are intentional examples, others may be real credentials committed accidentally.
-- **Prompt injection patterns** (5 findings): Skill descriptions containing instruction override patterns or references to remote scripts. These are the highest-signal findings from a security perspective.
-- **IBM/mcp-context-forge** (186 findings): This monorepo contains many bundled skills with Python code, triggering the skill scanner extensively. Most findings are `compile()` FPs.
+- **Potential secret exposure surface is broad** (410 secret-category findings): this is the highest-priority triage stream, especially for repositories with production integration code.
+- **Command execution primitives are common** (for example semgrep `mcp-js-child-process-exec`: 93): these need context-aware review for user-input reachability and sanitization.
+- **High-concentration repositories** include `IBM/mcp-context-forge` (310 findings), `awslabs/mcp` (157), and `mindsdb/mindsdb` (117), making them strong candidates for detailed case-study triage.
 
 **Precision considerations:**
-- The `compile()` false positive is the single biggest precision issue. A fix to distinguish `re.compile()` from the builtin `compile()` would eliminate 99 findings.
-- Excluding `compile()` and the two expected-noise categories, 157 findings remain. Manual triage is required to determine true actionable count.
+- The `compile()` false positive remains the single biggest agentsec precision issue. A fix that distinguishes `re.compile()` from builtin `compile()` would immediately reduce noise by ~99 findings in this dataset.
+- `false_positive_rate_sampled` is intentionally `null` in summary because no statistically valid manual sampling pass was completed yet.
 
 ## Targets by Finding Count (Top 10)
 
 | Target | Findings | Stars | Notes |
 |---|---:|---:|---|
-| IBM/mcp-context-forge | 186 | 3,278 | Monorepo with many bundled skills |
-| awslabs/mcp | 24 | 8,153 | Multi-server AWS MCP package |
-| mindsdb/mindsdb | 21 | 38,478 | Large codebase, federated query engine |
-| bytebase/dbhub | 17 | 2,117 | Database MCP server |
-| BeehiveInnovations/pal-mcp-server | 9 | 11,065 | Multi-model MCP server |
-| jlowin/fastmcp | 4 | 22,850 | FastMCP Python framework |
-| steipete/Peekaboo | 4 | 2,110 | macOS screenshot MCP |
-| microsoft/playwright-mcp | 3 | 27,181 | Browser automation MCP |
-| wonderwhy-er/DesktopCommanderMCP | 3 | 5,466 | Desktop automation |
-| aipotheosis-labs/aci | 3 | 4,713 | Tool-calling platform |
-
-## Clean Target
-
-- **AmoyLab/Unla**: 0 findings (MCP gateway, minimal code surface)
+| IBM/mcp-context-forge | 310 | 3,278 | Monorepo with many bundled skills and broad scan surface |
+| awslabs/mcp | 157 | 8,153 | Multi-server AWS MCP package |
+| mindsdb/mindsdb | 117 | 38,478 | Large codebase, federated query engine |
+| wonderwhy-er/DesktopCommanderMCP | 36 | 5,467 | Desktop automation server |
+| jlowin/fastmcp | 31 | 22,850 | FastMCP Python framework |
+| steipete/Peekaboo | 31 | 2,110 | macOS screenshot MCP |
+| opensumi/core | 29 | 3,600 | Monorepo with mixed tooling |
+| bytebase/dbhub | 25 | 2,117 | Database MCP server |
+| hangwin/mcp-chrome | 17 | 10,395 | Browser automation integration |
+| BeehiveInnovations/pal-mcp-server | 11 | 11,065 | Multi-model MCP server |
 
 ## Limitations
 
 - Single snapshot in time; MCP ecosystem changes rapidly.
 - Static analysis only - no runtime or behavioral checks.
-- `compile()` false positives inflate exec_risk counts significantly.
-- agentsec-only scan; semgrep and gitleaks would catch additional patterns (planned for next iteration).
+- `compile()` false positives inflate exec-risk counts significantly.
+- This merged run increases coverage but also increases noise; manual sampling is needed to estimate true positive rate by scanner/rule.
 - Star count is a rough popularity proxy; download/install metrics would be better.
 - One target (activepieces/activepieces) failed to clone due to path encoding issues.
 
@@ -136,8 +134,8 @@ Scan script: `scripts/run_top50_study.py`
 ## Next Steps
 
 1. Fix `compile()` FP: distinguish `re.compile()` from builtin `compile()` in skill scanner AST analysis.
-2. Run semgrep + gitleaks as supplementary scanners for broader coverage.
-3. Manual triage of the 157 post-noise findings (especially secrets + prompt injection).
+2. Run a stratified manual triage sample (by scanner + rule family) and publish measured precision/false-positive rate.
+3. Split and publish scanner-specific breakdowns (agentsec/semgrep/gitleaks) for transparent comparability.
 4. Re-run study quarterly to track ecosystem security posture over time.
 5. Add weighted ranking formula (stars + recency + adoption signals).
 

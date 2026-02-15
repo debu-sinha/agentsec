@@ -38,10 +38,9 @@ jobs:
 
       - name: Type check with mypy
         run: mypy src/agentsec/ --ignore-missing-imports
-        continue-on-error: true
 
       - name: Run tests
-        run: pytest tests/ -v --tb=short
+        run: pytest tests/ -v --tb=short --cov=src/agentsec --cov-report=term-missing --cov-fail-under=75
 
   security:
     runs-on: ubuntu-latest
