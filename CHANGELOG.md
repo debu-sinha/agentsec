@@ -2,6 +2,47 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.4.0] - 2026-02-15
+
+### New Features
+
+- `agentsec gate` - pre-install security gate that scans npm/pip packages BEFORE installation
+  - Downloads package to temp dir, runs skill + MCP scanners on contents
+  - Detects npm install hooks (preinstall/postinstall scripts)
+  - Known-malicious package blocklist (extensible)
+  - Supports --force, --dry-run, --fail-on flags
+  - Blocks install if findings exceed severity threshold
+
+### Documentation
+
+- Added pre-install gate usage guide to README
+- Added output format examples (JSON and SARIF) to README
+- Added troubleshooting section covering common issues
+- 3 new Architecture Decision Records (ADR-0002 through ADR-0004)
+
+### Improvements
+
+- Pinned dependency upper bounds to prevent future breakage
+- Removed 3 unused dependencies (pyyaml, pathspec, jinja2)
+- CI self-scan now fails on high severity (was silently ignored)
+- Added pip-audit to CI for dependency vulnerability scanning
+- Separated test/dev optional dependency groups
+- Fixed action.yml shell injection via env var indirection
+- Exported SarifReporter from reporters package
+
+### Bug Fixes
+
+- Fixed watcher always reporting score=0.0 (wrong dict key)
+- Fixed stale fallback version in SARIF output
+- Fixed config docstring listing "html" instead of "sarif"
+- Removed dead code (unused _findings attribute, empty hardeners package)
+
+### Stats
+
+- 187 tests across 17 test files
+- 5 scanner modules (installation, skill, mcp, credential, gate)
+- 4 ADRs documenting key architectural decisions
+
 ## [0.3.1] - 2026-02-15
 
 ### Scoring & Hardening

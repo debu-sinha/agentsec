@@ -98,6 +98,7 @@ agentsec implements 35+ security checks across 10 categories:
 | SARIF output for GitHub | Yes | No | Yes | No |
 | Fully offline / no cloud dependency | Yes | Partial | No | Partial |
 | Pre-commit hook | Yes | No | No | No |
+| Pre-install security gate | Yes | No | No | No |
 | CVE detection (5 known) | Yes | No | No | No |
 
 ## Usage
@@ -157,6 +158,37 @@ agentsec harden -p public-bot --apply
 | `vps` | Remote/cloud hosting | Loopback + proxy, strong auth, mDNS off, tool restrictions |
 | `public-bot` | Untrusted input | Sandbox all, minimal tools, deny exec/browser/web, strict auth |
 
+## Pre-Install Security Gate
+
+Scan packages BEFORE installation. agentsec downloads the package to a temp directory, runs security checks, and blocks the install if critical issues are found.
+
+```bash
+# Gate an npm install (scans before installing)
+agentsec gate npm install some-skill
+
+# Gate a pip install
+agentsec gate pip install some-mcp-server
+
+# Block on high severity or above
+agentsec gate --fail-on high npm install untrusted-pkg
+
+# Dry run -- scan only, don't install
+agentsec gate --dry-run npm install suspicious-pkg
+
+# Force install despite findings
+agentsec gate --force npm install risky-but-needed
+```
+
+What gets checked pre-install:
+- Known-malicious package blocklist
+- npm install hooks (preinstall/postinstall scripts)
+- Dangerous code patterns (eval, exec, subprocess, reverse shells)
+- Obfuscation and data exfiltration patterns
+- Prompt injection in tool descriptions
+- MCP tool poisoning signatures
+
+If the package is clean, the real install proceeds automatically. If issues are found above your threshold, installation is blocked with a detailed report.
+
 ## Programmatic Usage
 
 ```python
@@ -177,7 +209,7 @@ for finding in report.findings:
 agentsec produces a screenshot-worthy security posture report with an A-F grade:
 
 ```
-agentsec v0.3.1 — AI Agent Security Scanner
+agentsec v0.4.0 — AI Agent Security Scanner
 Target: ~/.openclaw · Agent: claude-code
 
 Security Grade:  D
@@ -247,7 +279,7 @@ flowchart TB
 The fastest way to add agentsec to your CI pipeline:
 
 ```yaml
-- uses: debu-sinha/agentsec@v0.3.1
+- uses: debu-sinha/agentsec@v0.4.0
   with:
     fail-on: high
 ```
@@ -268,7 +300,7 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-      - uses: debu-sinha/agentsec@v0.3.1
+      - uses: debu-sinha/agentsec@v0.4.0
         with:
           target: '.'
           fail-on: high
@@ -293,7 +325,7 @@ jobs:
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/debu-sinha/agentsec
-    rev: v0.3.1
+    rev: v0.4.0
     hooks:
       - id: agentsec-scan
         args: ['--fail-on', 'critical']
@@ -306,6 +338,149 @@ repos:
 | Terminal | `-o terminal` (default) | Interactive use, color-coded with Rich |
 | JSON | `-o json` | CI pipelines, programmatic consumption |
 | SARIF | `-o sarif` | GitHub Code Scanning, VS Code, IDE integration |
+
+## Output Examples
+
+### JSON Output
+
+```bash
+agentsec scan -o json -f report.json
+```
+
+```json
+{
+  "scan_id": "a1b2c3d4",
+  "target_path": "/home/user/.openclaw",
+  "agent_type": "openclaw",
+  "findings": [
+    {
+      "id": "f-abc123",
+      "scanner": "installation",
+      "category": "NETWORK_EXPOSURE",
+      "severity": "CRITICAL",
+      "title": "Gateway bound to non-loopback address",
+      "description": "openclaw.json gateway.bind is set to 'lan'",
+      "owasp_ids": ["ASI05"],
+      "remediation": {
+        "summary": "Bind gateway to loopback",
+        "steps": ["Set gateway.bind to 'loopback' in openclaw.json"],
+        "automated": true,
+        "command": "agentsec harden -p workstation --apply"
+      }
+    }
+  ],
+  "summary": {
+    "total_findings": 5,
+    "critical": 2,
+    "high": 1,
+    "medium": 2
+  }
+}
+```
+
+### SARIF Output
+
+```bash
+agentsec scan -o sarif -f results.sarif
+```
+
+SARIF output integrates with GitHub Code Scanning, VS Code, and other IDE tools. Findings appear as inline annotations on your code:
+
+```json
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [{
+    "tool": {
+      "driver": {
+        "name": "agentsec",
+        "semanticVersion": "0.4.0",
+        "rules": [{
+          "id": "CGW-001",
+          "name": "GatewayNonLoopback",
+          "shortDescription": {"text": "Gateway bound to non-loopback address"},
+          "properties": {"security-severity": "9.5"}
+        }]
+      }
+    },
+    "results": [{
+      "ruleId": "CGW-001",
+      "level": "error",
+      "message": {"text": "Gateway bound to non-loopback address"},
+      "locations": [{
+        "physicalLocation": {
+          "artifactLocation": {"uri": "openclaw.json"}
+        }
+      }]
+    }]
+  }]
+}
+```
+
+## Troubleshooting
+
+### "0 findings" on a known-vulnerable installation
+
+agentsec needs to find agent config files to scan. Make sure you're running from the right directory:
+
+```bash
+# Run from the directory containing openclaw.json
+cd ~/.openclaw && agentsec scan
+
+# Or pass the path explicitly
+agentsec scan ~/.openclaw
+```
+
+If the agent type isn't detected, specify it:
+```bash
+agentsec scan --agent-type openclaw ~/.openclaw
+```
+
+### Permission errors on Linux/macOS
+
+The credential scanner needs read access to config files. If you see permission errors:
+```bash
+# Run with the user that owns the installation
+agentsec scan ~/.openclaw
+
+# Or check file permissions
+ls -la ~/.openclaw/
+```
+
+### Docker scan issues
+
+When running agentsec inside Docker, mount the agent directory:
+```bash
+docker run -v ~/.openclaw:/scan agentsec-ai scan /scan
+```
+
+### Gate command can't find npm/pip
+
+The `agentsec gate` command needs npm or pip on your PATH:
+```bash
+# Verify npm is available
+which npm
+
+# Verify pip is available
+which pip
+```
+
+### SARIF upload fails in GitHub Actions
+
+Make sure your workflow has the right permissions:
+```yaml
+permissions:
+  contents: read
+  security-events: write  # Required for SARIF upload
+```
+
+### High-entropy false positives in credential scanner
+
+The credential scanner uses Shannon entropy to detect unknown secret formats. If you get false positives on base64-encoded non-secrets:
+```bash
+# Run without the credential scanner
+agentsec scan -s installation,skill,mcp
+```
 
 ## Development
 
