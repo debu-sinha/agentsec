@@ -432,6 +432,75 @@ SARIF output integrates with GitHub Code Scanning, VS Code, and other IDE tools.
 }
 ```
 
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | Scan succeeded, no findings above threshold |
+| 1-127 | Number of findings at or above `--fail-on` severity (capped at 127) |
+| 2 | Scan error (invalid arguments, permission denied, scanner crash) |
+
+## CI/CD Integration (Other Platforms)
+
+### GitLab CI
+
+```yaml
+# .gitlab-ci.yml
+agentsec:
+  image: python:3.12-slim
+  stage: test
+  script:
+    - pip install agentsec-ai
+    - agentsec scan --fail-on high -o sarif -f results.sarif
+  artifacts:
+    reports:
+      sast: results.sarif
+```
+
+### Jenkins
+
+```groovy
+// Jenkinsfile
+pipeline {
+    agent { docker { image 'python:3.12-slim' } }
+    stages {
+        stage('Security Scan') {
+            steps {
+                sh 'pip install agentsec-ai'
+                sh 'agentsec scan --fail-on high -o sarif -f results.sarif'
+            }
+            post {
+                always {
+                    recordIssues tool: sarif(pattern: 'results.sarif')
+                }
+            }
+        }
+    }
+}
+```
+
+### CircleCI
+
+```yaml
+# .circleci/config.yml
+jobs:
+  security:
+    docker:
+      - image: python:3.12-slim
+    steps:
+      - checkout
+      - run: pip install agentsec-ai
+      - run: agentsec scan --fail-on high -o json -f report.json
+      - store_artifacts:
+          path: report.json
+```
+
+### Docker (any CI)
+
+```bash
+docker run -v $(pwd):/scan ghcr.io/debu-sinha/agentsec:latest scan /scan --fail-on high
+```
+
 ## Troubleshooting
 
 ### "0 findings" on a known-vulnerable installation
