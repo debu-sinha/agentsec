@@ -501,6 +501,9 @@ agentsec scan -s installation,skill,mcp
 
 - [Benchmark results (v0.4.0)](docs/benchmarks/results/2026-02-15-v0.4.0.md) - precision/recall/F1 on 20-fixture test matrix
 - [Case study: insecure workstation remediation](docs/case-studies/001-insecure-openclaw-workstation.md) - before/after scan with hardening
+- [Case study: public bot hardening on VPS](docs/case-studies/002-public-bot-vps-hardening.md) - template for strict internet-facing deployments
+- [Case study: pre-install gate blocked malicious package](docs/case-studies/003-preinstall-gate-blocked-malicious-package.md) - template for supply-chain prevention
+- [Case study: malicious skill detection and block](docs/case-studies/004-malicious-skill-detection-and-block.md) - template for skill ecosystem defense
 
 ## Development
 
