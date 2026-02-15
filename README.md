@@ -2,7 +2,8 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-114%20passed-brightgreen.svg)](#)
+[![Tests](https://img.shields.io/badge/tests-163%20passed-brightgreen.svg)](#)
+[![PyPI](https://img.shields.io/pypi/v/agentsec-ai.svg)](https://pypi.org/project/agentsec-ai/)
 [![OWASP](https://img.shields.io/badge/OWASP-ASI01--ASI10-orange.svg)](https://genai.owasp.org/)
 
 **Immunize your OpenClaw installation.** One command. Full security posture. Actionable hardening.
@@ -21,7 +22,7 @@ agentsec catches these issues before attackers do.
 ## Quick Start
 
 ```bash
-pip install agentsec
+pip install agentsec-ai
 agentsec scan
 ```
 
@@ -238,7 +239,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install agentsec
+      - run: pip install agentsec-ai
 
       - name: Run security scan
         run: agentsec scan -o sarif -f results.sarif --fail-on high
@@ -260,12 +261,6 @@ repos:
     hooks:
       - id: agentsec-scan
         args: ['--fail-on', 'critical']
-```
-
-### Docker
-
-```bash
-docker run --rm -v $(pwd):/workspace debu-sinha/agentsec scan /workspace
 ```
 
 ## Output Formats
