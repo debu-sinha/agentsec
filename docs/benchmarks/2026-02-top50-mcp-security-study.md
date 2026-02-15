@@ -77,10 +77,10 @@ Scan script: `scripts/run_top50_study.py`
 |---|---:|---|
 | Exec approvals missing | 48 | No exec-approvals.json - expected since these are standalone MCP servers, not OpenClaw installations |
 | Version detection | 48 | Could not determine agent version (info-level, cosmetic) |
-| Dangerous `compile()` calls | ~80 | Regex compilation in Python skills flagged as dynamic code. Mostly false positives from `re.compile()` usage |
-| Potential secrets | ~25 | High-entropy strings and connection strings in docs, test files, and config examples |
+| Dangerous `compile()` calls | 99 | Regex compilation in Python skills flagged as dynamic code. Mostly false positives from `re.compile()` usage |
+| Potential secrets | 111 | Token-like findings (76) + high-entropy strings (35) in docs, tests, and config examples |
 | Prompt injection patterns | 5 | Instruction override or remote script references in skill descriptions |
-| `getattr()` usage | 5 | Dynamic attribute access in plugin code |
+| `getattr()` usage | 16 | Dynamic attribute access in plugin code |
 
 ## Analysis
 
@@ -90,13 +90,13 @@ Scan script: `scripts/run_top50_study.py`
 - `compile()` findings are regex compilation (`re.compile()`), not `compile()` for code execution. This is a known precision gap in the skill scanner's AST check that should be fixed in a future release.
 
 **Actionable findings:**
-- **Potential secrets in documentation and test files** (~25 findings): Connection strings, API keys, and high-entropy tokens in README files and test data. Some are intentional examples, others may be real credentials committed accidentally.
+- **Potential secrets in documentation and test files** (111 findings): Connection strings, API keys, and high-entropy tokens in README files and test data. Some are intentional examples, others may be real credentials committed accidentally.
 - **Prompt injection patterns** (5 findings): Skill descriptions containing instruction override patterns or references to remote scripts. These are the highest-signal findings from a security perspective.
 - **IBM/mcp-context-forge** (186 findings): This monorepo contains many bundled skills with Python code, triggering the skill scanner extensively. Most findings are `compile()` FPs.
 
 **Precision considerations:**
-- The `compile()` false positive is the single biggest precision issue. A fix to distinguish `re.compile()` from the builtin `compile()` would eliminate ~80 findings.
-- Excluding `compile()` and the two expected-noise categories, approximately 120 findings remain, of which ~30 are actionable (secrets + prompt injection).
+- The `compile()` false positive is the single biggest precision issue. A fix to distinguish `re.compile()` from the builtin `compile()` would eliminate 99 findings.
+- Excluding `compile()` and the two expected-noise categories, 157 findings remain. Manual triage is required to determine true actionable count.
 
 ## Targets by Finding Count (Top 10)
 
@@ -137,7 +137,7 @@ Scan script: `scripts/run_top50_study.py`
 
 1. Fix `compile()` FP: distinguish `re.compile()` from builtin `compile()` in skill scanner AST analysis.
 2. Run semgrep + gitleaks as supplementary scanners for broader coverage.
-3. Manual triage of the ~30 actionable findings (secrets + prompt injection).
+3. Manual triage of the 157 post-noise findings (especially secrets + prompt injection).
 4. Re-run study quarterly to track ecosystem security posture over time.
 5. Add weighted ranking formula (stars + recency + adoption signals).
 
