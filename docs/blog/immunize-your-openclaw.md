@@ -43,7 +43,7 @@ pip install agentsec-ai
 agentsec scan
 ```
 
-It runs 35+ checks across four scanners:
+It runs 27 named checks plus dynamic credential detection across four scanners:
 
 **Installation Scanner** -- checks your OpenClaw configuration for gateway exposure, identity policy misconfigurations, overpermissive tool profiles, missing exec approvals, disabled sandboxing, SSRF vulnerabilities, and 5 known CVEs.
 

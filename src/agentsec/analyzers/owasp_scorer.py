@@ -176,8 +176,10 @@ class OwaspScorer:
                 "grade": "A",
             }
 
-        # Apply context-sensitive severity escalation before scoring
-        self._escalate_severities(findings)
+        # Apply context-sensitive severity escalation before scoring.
+        # Guard against double-escalation if called more than once on same findings.
+        unescalated = [f for f in findings if not getattr(f, "_escalated", False)]
+        self._escalate_severities(unescalated)
 
         # Count by severity
         severity_counts = dict.fromkeys(FindingSeverity, 0)
@@ -342,10 +344,12 @@ class OwaspScorer:
                 and auth_disabled
             ):
                 finding.severity = FindingSeverity.CRITICAL
+                finding._escalated = True  # type: ignore[attr-defined]
 
             # Risky tool groups + open inbound = unauthenticated code exec
             if "tool group" in title_lower and "open access" in title_lower and open_inbound:
                 finding.severity = FindingSeverity.CRITICAL
+                finding._escalated = True  # type: ignore[attr-defined]
 
     @staticmethod
     def _score_to_grade(score: float) -> str:

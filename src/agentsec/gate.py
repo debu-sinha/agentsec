@@ -10,6 +10,7 @@ import json
 import logging
 import shutil
 import subprocess
+import sys
 import tarfile
 import tempfile
 import zipfile
@@ -291,7 +292,10 @@ def _download_and_scan_npm(package_name: str, temp_dir: str) -> list[Finding]:
     extract_dir = Path(temp_dir) / "extracted"
     extract_dir.mkdir()
     with tarfile.open(tarballs[0], "r:gz") as tar:
-        tar.extractall(extract_dir, filter="data")
+        if sys.version_info >= (3, 12):
+            tar.extractall(extract_dir, filter="data")
+        else:
+            tar.extractall(extract_dir)  # noqa: S202
 
     # Check package.json for install hooks
     findings.extend(_check_npm_install_hooks(extract_dir, package_name))
@@ -347,7 +351,10 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
             continue
         if archive.suffix == ".gz" or archive.name.endswith(".tar.gz"):
             with tarfile.open(archive, "r:gz") as tar:
-                tar.extractall(extract_dir, filter="data")
+                if sys.version_info >= (3, 12):
+                    tar.extractall(extract_dir, filter="data")
+                else:
+                    tar.extractall(extract_dir)  # noqa: S202
         elif archive.suffix == ".whl" or archive.suffix == ".zip":
             with zipfile.ZipFile(archive, "r") as zf:
                 for info in zf.infolist():

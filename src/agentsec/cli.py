@@ -199,15 +199,16 @@ def scan(
         else:
             report = run_scan(config)
     except (OSError, PermissionError) as e:
+        logger.debug("Scan failed with file error: %s", e)
         console.print(
-            f"[bold red]Error:[/bold red] Scan failed: {e}\n"
-            f"[dim]Check that the target path exists and you have read permission.[/dim]"
+            "[bold red]Error:[/bold red] Scan failed due to a file access error.\n"
+            "[dim]Check that the target path exists and you have read permission.[/dim]"
         )
         sys.exit(2)
     except Exception as e:
         logger.debug("Scan error traceback:", exc_info=True)
         console.print(
-            f"[bold red]Error:[/bold red] Scan failed: {type(e).__name__}: {e}\n"
+            f"[bold red]Error:[/bold red] Scan failed: {type(e).__name__}\n"
             f"[dim]Run with -v for debug output. "
             f"Report bugs at https://github.com/debu-sinha/agentsec/issues[/dim]"
         )
@@ -592,7 +593,7 @@ def watch(target: str, interval: float, verbose: bool) -> None:
                 f"grade [bold]{result.grade}[/bold] ({result.score:.0f}/100)"
             )
             if result.critical_count > 0:
-                console.print(f"  [bold red]{result.critical_count} critical[/bold red] findings")
+                console.print(f"  [bold red]{result.critical_count} CRITICAL[/bold red] findings")
             if result.high_count > 0:
                 console.print(f"  [bold yellow]{result.high_count} high[/bold yellow] findings")
             console.print("[dim]Watching for changes...[/dim]\n")
@@ -771,8 +772,15 @@ def gate(
     args = list(command[1:])
     pkg_manager = "pip" if pm in ("pip", "pip3") else "npm"
 
+    # Validate install subcommand is present
+    install_cmds = {"install", "add", "i"}
+    if not args or args[0] not in install_cmds:
+        console.print("[red]Usage: agentsec gate <npm|pip> install <package>[/red]")
+        console.print("[dim]Example: agentsec gate npm install lodash[/dim]")
+        raise SystemExit(1)
+
     console.print()
-    console.print("[bold]agentsec gate[/bold] - pre-install security check")
+    console.print("[bold]agentsec gate[/bold] — pre-install security check")
     console.print(f"  Package manager: [cyan]{pm}[/cyan]")
     console.print(f"  Command: [dim]{pm} {' '.join(args)}[/dim]")
     console.print(f"  Fail threshold: [yellow]{fail_on}[/yellow]")
@@ -799,8 +807,9 @@ def gate(
         console.print(f"[bold]Found {len(result.findings)} issue(s):[/bold]")
         console.print()
         for f in result.findings:
-            color = severity_colors.get(f.severity.value, "white")
-            console.print(f"  [{color}]{f.severity.value:>8}[/{color}]  {f.title}")
+            sev = f.severity.value.upper()
+            color = severity_colors.get(sev, "white")
+            console.print(f"  [{color}]{sev:>8}[/{color}]  {f.title}")
             if f.evidence:
                 console.print(f"           [dim]{f.evidence[:120]}[/dim]")
         console.print()
