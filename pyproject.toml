@@ -58,7 +58,7 @@ dev = [
     "agentsec-ai[test]",
     "ruff>=0.4,<1",
     "mypy>=1.10,<2",
-    "pre-commit>=3.7,<4",
+    "pre-commit>=3.7,<5",
     "pip-audit>=2.7,<3",
 ]
 
