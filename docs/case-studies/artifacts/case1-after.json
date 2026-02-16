@@ -1,0 +1,197 @@
+{
+  "version": "0.4.0",
+  "scan_id": "e4c9f87e54b8",
+  "timestamp": "2026-02-16T15:28:32.952785Z",
+  "target_path": "/tmp/case1",
+  "agent_type": "openclaw",
+  "findings": [
+    {
+      "id": "4e079e88b9ac",
+      "scanner": "installation",
+      "category": "insecure_permissions",
+      "severity": "high",
+      "title": "World-readable sensitive file: exec-approvals.json",
+      "description": "The file '/tmp/case1\\.openclaw\\exec-approvals.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "evidence": "Permissions: 666",
+      "file_path": "/tmp/case1\\.openclaw\\exec-approvals.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict permissions on exec-approvals.json to owner-only",
+        "steps": [
+          "chmod 600 '/tmp/case1\\.openclaw\\exec-approvals.json'",
+          "Verify no other processes depend on group/world access"
+        ],
+        "automated": true,
+        "command": "chmod 600 '/tmp/case1\\.openclaw\\exec-approvals.json'",
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:28:32.949374Z",
+      "fingerprint": "dfa7f9a9cdb619ea"
+    },
+    {
+      "id": "3e279273d7ea",
+      "scanner": "installation",
+      "category": "insecure_permissions",
+      "severity": "high",
+      "title": "World-readable sensitive file: openclaw.json",
+      "description": "The file '/tmp/case1\\.openclaw\\openclaw.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "evidence": "Permissions: 666",
+      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict permissions on openclaw.json to owner-only",
+        "steps": [
+          "chmod 600 '/tmp/case1\\.openclaw\\openclaw.json'",
+          "Verify no other processes depend on group/world access"
+        ],
+        "automated": true,
+        "command": "chmod 600 '/tmp/case1\\.openclaw\\openclaw.json'",
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:28:32.949420Z",
+      "fingerprint": "a2febc7b6470a058"
+    },
+    {
+      "id": "f2879c9ee62a",
+      "scanner": "installation",
+      "category": "insecure_permissions",
+      "severity": "high",
+      "title": "Agent config directory world-accessible: .openclaw",
+      "description": "The directory '/tmp/case1\\.openclaw' is accessible by all users. This directory contains agent configuration, credentials, session history, and exec approvals.",
+      "evidence": "Permissions: 777",
+      "file_path": "/tmp/case1\\.openclaw",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict .openclaw to owner-only access",
+        "steps": [
+          "chmod 700 '/tmp/case1\\.openclaw'"
+        ],
+        "automated": true,
+        "command": "chmod 700 '/tmp/case1\\.openclaw'",
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:28:32.949463Z",
+      "fingerprint": "4f68fb069e9c78ee"
+    },
+    {
+      "id": "b897fa6bc53c",
+      "scanner": "installation",
+      "category": "outdated_version",
+      "severity": "info",
+      "title": "Could not determine agent version",
+      "description": "Unable to detect the installed agent version. Cannot check for known CVEs without version information.",
+      "evidence": null,
+      "file_path": null,
+      "line_number": null,
+      "remediation": {
+        "summary": "Ensure agent is updated to latest version",
+        "steps": [
+          "Run 'npm update -g openclaw' or check release notes"
+        ],
+        "automated": false,
+        "command": null,
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI03"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:28:32.950296Z",
+      "fingerprint": "95acf7851abbf8c0"
+    }
+  ],
+  "owasp_mappings": [
+    {
+      "finding_id": "4e079e88b9ac",
+      "categories": [
+        "ASI05"
+      ],
+      "risk_score": 7.5,
+      "rationale": "Finding 'World-readable sensitive file: exec-approvals.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
+    },
+    {
+      "finding_id": "3e279273d7ea",
+      "categories": [
+        "ASI05"
+      ],
+      "risk_score": 7.5,
+      "rationale": "Finding 'World-readable sensitive file: openclaw.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
+    },
+    {
+      "finding_id": "f2879c9ee62a",
+      "categories": [
+        "ASI05"
+      ],
+      "risk_score": 7.5,
+      "rationale": "Finding 'Agent config directory world-accessible: .openclaw' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
+    },
+    {
+      "finding_id": "b897fa6bc53c",
+      "categories": [
+        "ASI03"
+      ],
+      "risk_score": 1.0,
+      "rationale": "Finding 'Could not determine agent version' (info) maps to ASI03 (Supply Chain Vulnerabilities). Category: outdated_version."
+    }
+  ],
+  "summary": {
+    "total_findings": 4,
+    "critical": 0,
+    "high": 3,
+    "medium": 0,
+    "low": 0,
+    "info": 1,
+    "scanners_run": [
+      "installation",
+      "skill",
+      "mcp",
+      "credential"
+    ],
+    "files_scanned": 5,
+    "duration_seconds": 0.009703199999421486,
+    "owasp_categories_hit": [
+      "ASI03",
+      "ASI05"
+    ]
+  },
+  "metadata": {
+    "config_files_found": {
+      "exec-approvals.json": "/tmp/case1\\.openclaw\\exec-approvals.json",
+      "openclaw.json": "/tmp/case1\\.openclaw\\openclaw.json",
+      "openclaw.json.bak": "/tmp/case1\\.openclaw\\openclaw.json.bak"
+    },
+    "secrets_locations": []
+  },
+  "posture": {
+    "overall_score": 79.0,
+    "category_scores": {
+      "ASI01: Agent Goal Hijack / Prompt Injection": 10.0,
+      "ASI02: Excessive Agency / Overprivileged Agents": 10.0,
+      "ASI03: Supply Chain Vulnerabilities": 9.6,
+      "ASI04: Knowledge Poisoning / Data Integrity": 10.0,
+      "ASI05: Privilege Compromise / Credential Theft": 0.0,
+      "ASI06: Memory & Context Manipulation": 10.0,
+      "ASI07: Multi-Agent System Exploitation": 10.0,
+      "ASI08: Uncontrolled Cascading / Runaway Agents": 10.0,
+      "ASI09: Repudiation / Insufficient Audit Trail": 10.0,
+      "ASI10: Misaligned Behaviors / Unintended Actions": 10.0
+    },
+    "grade": "C"
+  }
+}

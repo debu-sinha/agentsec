@@ -18,6 +18,7 @@ import shutil
 import stat
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -295,7 +296,7 @@ def _find_config(target: Path) -> Path | None:
 def _get_nested(data: dict, dotpath: str) -> object:
     """Get a value from a nested dict using dot notation."""
     keys = dotpath.split(".")
-    current = data
+    current: Any = data
     for key in keys:
         if isinstance(current, dict):
             current = current.get(key)

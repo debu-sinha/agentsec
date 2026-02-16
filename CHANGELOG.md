@@ -24,7 +24,7 @@ All notable changes to agentsec are documented here.
 
 - Pinned dependency upper bounds to prevent future breakage
 - Removed 3 unused dependencies (pyyaml, pathspec, jinja2)
-- CI self-scan now fails on high severity (was silently ignored)
+- CI self-scan now fails on critical severity (was silently ignored)
 - Added pip-audit to CI for dependency vulnerability scanning
 - Separated test/dev optional dependency groups
 - Fixed action.yml shell injection via env var indirection
@@ -56,7 +56,7 @@ All notable changes to agentsec are documented here.
 
 - Pinned dependency upper bounds to prevent future breakage
 - Fixed action.yml shell injection via env var indirection
-- CI self-scan now fails on high severity (was silently ignored)
+- CI self-scan now fails on critical severity (was silently ignored)
 - Added pip-audit to CI security job
 - Separated test/dev optional dependency groups
 - Removed unused deps (pyyaml, pathspec, jinja2)

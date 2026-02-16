@@ -22,8 +22,10 @@ from rich.table import Table
 
 from agentsec import __version__
 from agentsec.analyzers.owasp_scorer import OwaspScorer
+from agentsec.hardener import HardenResult
 from agentsec.models.config import AgentsecConfig, ScannerConfig, ScanTarget
 from agentsec.models.findings import FindingSeverity
+from agentsec.models.report import ScanReport
 from agentsec.orchestrator import run_scan
 from agentsec.reporters.json_reporter import JsonReporter
 from agentsec.reporters.sarif_reporter import SarifReporter
@@ -375,7 +377,7 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
 
     if is_dry_run and result.applied:
         # Show impact preview
-        if pre_posture:
+        if pre_report and pre_posture:
             _render_harden_preview(pre_report, pre_posture, result)
         console.print(
             f"\n[yellow]Dry run complete.[/yellow] "
@@ -412,9 +414,9 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
 
 
 def _render_harden_preview(
-    pre_report: object,
+    pre_report: ScanReport,
     pre_posture: dict,
-    result: object,
+    result: HardenResult,
 ) -> None:
     """Show projected impact of hardening before applying."""
     pre_grade = pre_posture.get("grade", "?")
@@ -442,9 +444,9 @@ def _render_harden_preview(
 
 
 def _render_harden_delta(
-    pre_report: object,
+    pre_report: ScanReport,
     pre_posture: dict,
-    post_report: object,
+    post_report: ScanReport,
     post_posture: dict,
 ) -> None:
     """Show before/after delta after hardening is applied."""

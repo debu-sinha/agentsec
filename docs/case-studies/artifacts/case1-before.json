@@ -1,0 +1,405 @@
+{
+  "version": "0.4.0",
+  "scan_id": "9249e020e84b",
+  "timestamp": "2026-02-16T15:27:40.147625Z",
+  "target_path": "/tmp/case1",
+  "agent_type": "openclaw",
+  "findings": [
+    {
+      "id": "c6c03854e2b6",
+      "scanner": "installation",
+      "category": "insecure_permissions",
+      "severity": "high",
+      "title": "World-readable sensitive file: exec-approvals.json",
+      "description": "The file '/tmp/case1\\.openclaw\\exec-approvals.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "evidence": "Permissions: 666",
+      "file_path": "/tmp/case1\\.openclaw\\exec-approvals.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict permissions on exec-approvals.json to owner-only",
+        "steps": [
+          "chmod 600 '/tmp/case1\\.openclaw\\exec-approvals.json'",
+          "Verify no other processes depend on group/world access"
+        ],
+        "automated": true,
+        "command": "chmod 600 '/tmp/case1\\.openclaw\\exec-approvals.json'",
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.142792Z",
+      "fingerprint": "dfa7f9a9cdb619ea"
+    },
+    {
+      "id": "0b31afe79106",
+      "scanner": "installation",
+      "category": "insecure_permissions",
+      "severity": "high",
+      "title": "World-readable sensitive file: openclaw.json",
+      "description": "The file '/tmp/case1\\.openclaw\\openclaw.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "evidence": "Permissions: 666",
+      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict permissions on openclaw.json to owner-only",
+        "steps": [
+          "chmod 600 '/tmp/case1\\.openclaw\\openclaw.json'",
+          "Verify no other processes depend on group/world access"
+        ],
+        "automated": true,
+        "command": "chmod 600 '/tmp/case1\\.openclaw\\openclaw.json'",
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.142874Z",
+      "fingerprint": "a2febc7b6470a058"
+    },
+    {
+      "id": "d0bb62d0992b",
+      "scanner": "installation",
+      "category": "insecure_permissions",
+      "severity": "high",
+      "title": "Agent config directory world-accessible: .openclaw",
+      "description": "The directory '/tmp/case1\\.openclaw' is accessible by all users. This directory contains agent configuration, credentials, session history, and exec approvals.",
+      "evidence": "Permissions: 777",
+      "file_path": "/tmp/case1\\.openclaw",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict .openclaw to owner-only access",
+        "steps": [
+          "chmod 700 '/tmp/case1\\.openclaw'"
+        ],
+        "automated": true,
+        "command": "chmod 700 '/tmp/case1\\.openclaw'",
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.142990Z",
+      "fingerprint": "4f68fb069e9c78ee"
+    },
+    {
+      "id": "1561c826b2da",
+      "scanner": "installation",
+      "category": "outdated_version",
+      "severity": "info",
+      "title": "Could not determine agent version",
+      "description": "Unable to detect the installed agent version. Cannot check for known CVEs without version information.",
+      "evidence": null,
+      "file_path": null,
+      "line_number": null,
+      "remediation": {
+        "summary": "Ensure agent is updated to latest version",
+        "steps": [
+          "Run 'npm update -g openclaw' or check release notes"
+        ],
+        "automated": false,
+        "command": null,
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI03"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.144036Z",
+      "fingerprint": "95acf7851abbf8c0"
+    },
+    {
+      "id": "65a6174518d1",
+      "scanner": "installation",
+      "category": "insecure_config",
+      "severity": "critical",
+      "title": "DM policy set to 'open' \u2014 anyone can message the agent",
+      "description": "The agent accepts direct messages from anyone without pairing or allowlisting. This makes the agent a direct target for prompt injection attacks from untrusted users.",
+      "evidence": "dmPolicy = open",
+      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict DM access to paired/allowlisted users",
+        "steps": [
+          "Set dmPolicy to 'paired' or 'allowlist'",
+          "Use 'openclaw config set dmPolicy paired'"
+        ],
+        "automated": false,
+        "command": null,
+        "references": [
+          "https://docs.openclaw.ai/gateway/security"
+        ]
+      },
+      "owasp_ids": [
+        "ASI01",
+        "ASI02",
+        "ASI10"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.144217Z",
+      "fingerprint": "815b15bd5d0ef802"
+    },
+    {
+      "id": "e506af40b3d5",
+      "scanner": "installation",
+      "category": "insecure_config",
+      "severity": "high",
+      "title": "Group policy is 'open' \u2014 agent responds in any group",
+      "description": "The agent will respond to messages in any group it's added to. In large or public groups, untrusted users can inject prompts and trigger tool execution.",
+      "evidence": "groupPolicy = open",
+      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict group policy to allowlisted groups",
+        "steps": [
+          "Set groupPolicy to 'allowlist'",
+          "Maintain an explicit list of trusted group IDs"
+        ],
+        "automated": false,
+        "command": null,
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI01",
+        "ASI02"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.144236Z",
+      "fingerprint": "8acba1a737c3ffa3"
+    },
+    {
+      "id": "8165a4b7692b",
+      "scanner": "installation",
+      "category": "insecure_default",
+      "severity": "critical",
+      "title": "Full tool profile with open inbound access",
+      "description": "tools.profile is 'unset (defaults to full)' and the agent accepts messages from untrusted sources. This gives prompt-injected inputs access to all tools including exec, browser, and filesystem.",
+      "evidence": "tools.profile=unset, dmPolicy=open",
+      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Restrict tool profile for untrusted input routes",
+        "steps": [
+          "Set tools.profile to 'messaging' or 'minimal'",
+          "Explicitly allow only needed tools via tools.allow",
+          "Use 'openclaw config set tools.profile messaging'"
+        ],
+        "automated": false,
+        "command": null,
+        "references": [
+          "https://docs.openclaw.ai/tools"
+        ]
+      },
+      "owasp_ids": [
+        "ASI02",
+        "ASI01",
+        "ASI10"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.144251Z",
+      "fingerprint": "44dbff5a8f90e770"
+    },
+    {
+      "id": "20dbaf5f5fee",
+      "scanner": "installation",
+      "category": "insecure_default",
+      "severity": "high",
+      "title": "Sandboxing disabled with full tool access and open input",
+      "description": "The agent has full tool access and accepts untrusted input, but sandboxing is not enabled. Without container isolation, compromised tool calls run directly on the host.",
+      "evidence": "sandbox.mode=unset, tools.profile=full",
+      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Enable sandboxing for untrusted-input agents",
+        "steps": [
+          "Set sandbox.mode to 'all' or 'non-main'",
+          "Or restrict tools.profile to 'messaging'/'minimal'"
+        ],
+        "automated": false,
+        "command": null,
+        "references": [
+          "https://docs.openclaw.ai/tools/multi-agent-sandbox-tools"
+        ]
+      },
+      "owasp_ids": [
+        "ASI02",
+        "ASI08"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.144397Z",
+      "fingerprint": "513faf90125ec7df"
+    },
+    {
+      "id": "791958cae525",
+      "scanner": "installation",
+      "category": "insecure_default",
+      "severity": "high",
+      "title": "No SSRF protection configured for URL-based inputs",
+      "description": "The agent can process URL-based inputs (input_file, input_image) but has no SSRF deny policy or hostname allowlist configured. Attackers can use the agent to scan internal networks, access cloud metadata endpoints (169.254.169.254), or exfiltrate data to external servers.",
+      "evidence": "security.ssrf.denyPolicy and hostnameAllowlist are both absent",
+      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Configure SSRF deny policy and hostname allowlist",
+        "steps": [
+          "Set security.ssrf.denyPolicy to block internal/private ranges",
+          "Set security.ssrf.hostnameAllowlist to trusted domains",
+          "Enable audit logging for blocked fetch attempts",
+          "Update to OpenClaw v2026.2.12+ which includes built-in SSRF deny"
+        ],
+        "automated": false,
+        "command": null,
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2026-25475"
+        ]
+      },
+      "owasp_ids": [
+        "ASI05",
+        "ASI02"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-16T15:27:40.144850Z",
+      "fingerprint": "dc8db00f40dc90cd"
+    }
+  ],
+  "owasp_mappings": [
+    {
+      "finding_id": "c6c03854e2b6",
+      "categories": [
+        "ASI05"
+      ],
+      "risk_score": 7.5,
+      "rationale": "Finding 'World-readable sensitive file: exec-approvals.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
+    },
+    {
+      "finding_id": "0b31afe79106",
+      "categories": [
+        "ASI05"
+      ],
+      "risk_score": 7.5,
+      "rationale": "Finding 'World-readable sensitive file: openclaw.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
+    },
+    {
+      "finding_id": "d0bb62d0992b",
+      "categories": [
+        "ASI05"
+      ],
+      "risk_score": 7.5,
+      "rationale": "Finding 'Agent config directory world-accessible: .openclaw' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
+    },
+    {
+      "finding_id": "1561c826b2da",
+      "categories": [
+        "ASI03"
+      ],
+      "risk_score": 1.0,
+      "rationale": "Finding 'Could not determine agent version' (info) maps to ASI03 (Supply Chain Vulnerabilities). Category: outdated_version."
+    },
+    {
+      "finding_id": "65a6174518d1",
+      "categories": [
+        "ASI01",
+        "ASI02",
+        "ASI10"
+      ],
+      "risk_score": 10.0,
+      "rationale": "Finding 'DM policy set to 'open' \u2014 anyone can message the agent' (critical) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI02 (Excessive Agency / Overprivileged Agents), ASI10 (Misaligned Behaviors / Unintended Actions). Category: insecure_config."
+    },
+    {
+      "finding_id": "e506af40b3d5",
+      "categories": [
+        "ASI01",
+        "ASI02"
+      ],
+      "risk_score": 8.2,
+      "rationale": "Finding 'Group policy is 'open' \u2014 agent responds in any group' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI02 (Excessive Agency / Overprivileged Agents). Category: insecure_config."
+    },
+    {
+      "finding_id": "8165a4b7692b",
+      "categories": [
+        "ASI02",
+        "ASI01",
+        "ASI10"
+      ],
+      "risk_score": 10.0,
+      "rationale": "Finding 'Full tool profile with open inbound access' (critical) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI01 (Agent Goal Hijack / Prompt Injection), ASI10 (Misaligned Behaviors / Unintended Actions). Category: insecure_default."
+    },
+    {
+      "finding_id": "20dbaf5f5fee",
+      "categories": [
+        "ASI02",
+        "ASI08"
+      ],
+      "risk_score": 8.2,
+      "rationale": "Finding 'Sandboxing disabled with full tool access and open input' (high) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI08 (Uncontrolled Cascading / Runaway Agents). Category: insecure_default."
+    },
+    {
+      "finding_id": "791958cae525",
+      "categories": [
+        "ASI05",
+        "ASI02"
+      ],
+      "risk_score": 8.2,
+      "rationale": "Finding 'No SSRF protection configured for URL-based inputs' (high) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: insecure_default."
+    }
+  ],
+  "summary": {
+    "total_findings": 9,
+    "critical": 2,
+    "high": 6,
+    "medium": 0,
+    "low": 0,
+    "info": 1,
+    "scanners_run": [
+      "installation",
+      "skill",
+      "mcp",
+      "credential"
+    ],
+    "files_scanned": 4,
+    "duration_seconds": 0.013830700001562946,
+    "owasp_categories_hit": [
+      "ASI01",
+      "ASI02",
+      "ASI03",
+      "ASI05",
+      "ASI08",
+      "ASI10"
+    ]
+  },
+  "metadata": {
+    "config_files_found": {
+      "exec-approvals.json": "/tmp/case1\\.openclaw\\exec-approvals.json",
+      "openclaw.json": "/tmp/case1\\.openclaw\\openclaw.json"
+    },
+    "secrets_locations": []
+  },
+  "posture": {
+    "overall_score": 20.0,
+    "category_scores": {
+      "ASI01: Agent Goal Hijack / Prompt Injection": 3.5,
+      "ASI02: Excessive Agency / Overprivileged Agents": 0.0,
+      "ASI03: Supply Chain Vulnerabilities": 9.8,
+      "ASI04: Knowledge Poisoning / Data Integrity": 10.0,
+      "ASI05: Privilege Compromise / Credential Theft": 2.9,
+      "ASI06: Memory & Context Manipulation": 10.0,
+      "ASI07: Multi-Agent System Exploitation": 10.0,
+      "ASI08: Uncontrolled Cascading / Runaway Agents": 8.2,
+      "ASI09: Repudiation / Insufficient Audit Trail": 10.0,
+      "ASI10: Misaligned Behaviors / Unintended Actions": 5.3
+    },
+    "grade": "F"
+  }
+}

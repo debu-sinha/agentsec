@@ -157,7 +157,7 @@ $summary = [ordered]@{
     avg_findings_per_target = if ($targets.Count -gt 0) { [math]::Round($totalFindings / $targets.Count, 4) } else { 0.0 }
     runtime_median_seconds = [math]::Round($median, 4)
     runtime_p95_seconds = [math]::Round($p95, 4)
-    false_positive_rate_sampled = 0.0
+    false_positive_rate_sampled = $null
     notes = @(
         "Set confidence via manual review for critical/high findings.",
         "Run semgrep/gitleaks integration before final publication."

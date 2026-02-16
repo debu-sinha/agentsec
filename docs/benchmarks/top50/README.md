@@ -11,12 +11,12 @@ This folder contains data, schemas, and reports for the Top-50 MCP security stud
 
 ## Current Snapshot
 
-- **2026-02-15**: 50 targets, 49 scanned, 352 findings. See `../2026-02-top50-mcp-security-study.md` for full analysis.
+- **2026-02-16**: 50 targets, 255 findings in the current agentsec-only repro run (`-SkipSemgrep -SkipGitleaks`). See `../2026-02-top50-mcp-security-study.md` for full analysis.
 
 ## Quick Start
 
-1. Run `python scripts/run_top50_study.py` (clones repos, scans with agentsec, produces JSONL + summary).
-2. Or populate `data/` manually and run `scripts/reproduce_top50_study.ps1` (PowerShell).
+1. Run `python scripts/run_top50_study.py` (full study path with agentsec + optional semgrep/gitleaks integration in that script).
+2. Or populate `data/` manually and run `scripts/reproduce_top50_study.ps1` (PowerShell, currently agentsec-focused; semgrep/gitleaks are placeholders there).
 3. Review results in `../2026-02-top50-mcp-security-study.md`.
 
 ## Safety

@@ -34,3 +34,11 @@ agentsec scan ~ -o json -f /tmp/report.json
 # SARIF for GitHub Code Scanning
 agentsec scan ~ -o sarif -f /tmp/results.sarif
 ```
+
+## Generate UI Screenshots
+
+```bash
+python docs/demo/generate_ui_screenshots.py
+```
+
+Artifacts are written to `docs/demo/screenshots/` as both `.html` and `.svg`.

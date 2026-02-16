@@ -1,0 +1,67 @@
+[
+  {
+    "package": "event-stream",
+    "manager": "npm",
+    "allowed": false,
+    "blocklist_hit": true,
+    "findings": [
+      {
+        "title": "Blocked package: event-stream",
+        "severity": "critical",
+        "category": "supply_chain"
+      }
+    ]
+  },
+  {
+    "package": "crossenv",
+    "manager": "npm",
+    "allowed": false,
+    "blocklist_hit": true,
+    "findings": [
+      {
+        "title": "Blocked package: crossenv",
+        "severity": "critical",
+        "category": "supply_chain"
+      }
+    ]
+  },
+  {
+    "package": "flatmap-stream",
+    "manager": "npm",
+    "allowed": false,
+    "blocklist_hit": true,
+    "findings": [
+      {
+        "title": "Blocked package: flatmap-stream",
+        "severity": "critical",
+        "category": "supply_chain"
+      }
+    ]
+  },
+  {
+    "package": "colourama",
+    "manager": "pip",
+    "allowed": false,
+    "blocklist_hit": true,
+    "findings": [
+      {
+        "title": "Blocked package: colourama",
+        "severity": "critical",
+        "category": "supply_chain"
+      }
+    ]
+  },
+  {
+    "package": "noblesse",
+    "manager": "pip",
+    "allowed": false,
+    "blocklist_hit": true,
+    "findings": [
+      {
+        "title": "Blocked package: noblesse",
+        "severity": "critical",
+        "category": "supply_chain"
+      }
+    ]
+  }
+]

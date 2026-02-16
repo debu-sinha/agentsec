@@ -33,20 +33,24 @@ class OwaspAgenticCategory(str, Enum):
     ASI10_MISALIGNED_BEHAVIORS = "ASI10"
 
     @property
-    def title(self) -> str:
-        return _CATEGORY_METADATA[self]["title"]
+    def title(self) -> str:  # type: ignore[override]
+        result: str = _CATEGORY_METADATA[self]["title"]
+        return result
 
     @property
     def description(self) -> str:
-        return _CATEGORY_METADATA[self]["description"]
+        result: str = _CATEGORY_METADATA[self]["description"]
+        return result
 
     @property
     def attack_scenarios(self) -> list[str]:
-        return _CATEGORY_METADATA[self]["attack_scenarios"]
+        result: list[str] = _CATEGORY_METADATA[self]["attack_scenarios"]
+        return result
 
     @property
     def controls(self) -> list[str]:
-        return _CATEGORY_METADATA[self]["controls"]
+        result: list[str] = _CATEGORY_METADATA[self]["controls"]
+        return result
 
 
 _CATEGORY_METADATA: dict[OwaspAgenticCategory, dict[str, Any]] = {

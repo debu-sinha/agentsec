@@ -42,7 +42,7 @@ CAT_MAP = {
 }
 
 SEMGREP_RULES = "scripts/semgrep-top50-rules.yml"
-GITLEAKS_BIN = r"C:\Users\dsinh\bin\gitleaks.exe"
+GITLEAKS_BIN = shutil.which("gitleaks") or "gitleaks"
 
 
 def get_repos():

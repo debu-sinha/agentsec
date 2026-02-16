@@ -120,7 +120,7 @@ class Finding(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def fingerprint(self) -> str:
         """Stable hash for deduplication across scans.

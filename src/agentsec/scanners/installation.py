@@ -1504,7 +1504,8 @@ class InstallationScanner(BaseScanner):
         """Load the primary OpenClaw/Clawdbot config as dict. Cached in metadata."""
         cache_key = "_main_config_data"
         if cache_key in context.metadata:
-            return context.metadata[cache_key]
+            cached: dict | None = context.metadata[cache_key]
+            return cached
 
         config_path = self._get_main_config_path(context)
         if not config_path or not config_path.exists():
@@ -1516,7 +1517,7 @@ class InstallationScanner(BaseScanner):
                 logger.warning("Config file too large, skipping: %s", config_path)
                 context.metadata[cache_key] = None
                 return None
-            data = json.loads(config_path.read_text())
+            data: dict = json.loads(config_path.read_text())
             context.metadata[cache_key] = data
             return data
         except (json.JSONDecodeError, OSError):
@@ -1549,7 +1550,8 @@ class InstallationScanner(BaseScanner):
         if pkg_json.exists():
             try:
                 data = json.loads(pkg_json.read_text())
-                return data.get("version")
+                ver = data.get("version")
+                return str(ver) if ver is not None else None
             except (json.JSONDecodeError, OSError):
                 pass
 
