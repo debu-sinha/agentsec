@@ -196,7 +196,6 @@ python scripts/repo_consistency_audit.py
 ## Launch Evidence
 
 - [Launch Evidence Manifest](docs/launch/LAUNCH_EVIDENCE_MANIFEST.md)
-- [EB1A Profile Brief](docs/launch/EB1A_PROFILE_BRIEF.md)
 
 ## Development
 
