@@ -145,8 +145,8 @@ python docs/demo/generate_ui_screenshots.py
 
 - [Fixture benchmark (v0.4.0, dated 2026-02-15)](docs/benchmarks/results/2026-02-15-v0.4.0.md)  
   Precision/recall/F1 over a 20-fixture suite.
-- [Top-50 MCP study (snapshot 2026-02-15)](docs/benchmarks/2026-02-top50-mcp-security-study.md)  
-  Public-repo scan study with normalized findings output.
+- [Top-50 MCP study (snapshot 2026-02-16)](docs/benchmarks/2026-02-top50-mcp-security-study.md)  
+  Agentsec-only repro run with normalized findings output.
 - [Top-50 study kit](docs/benchmarks/top50/README.md)  
   Schema, selection CSV, JSONL findings, and summary JSON.
 

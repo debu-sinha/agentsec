@@ -27,6 +27,12 @@ ENV/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+tmp_pytest_codex/
+
+# Local temp artifacts
+.tmp/
+bench_tmp/
+tmp_gitleaks_repo.json
 
 # OS
 .DS_Store

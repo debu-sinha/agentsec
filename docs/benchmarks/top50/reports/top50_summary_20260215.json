@@ -11,7 +11,7 @@
     "avg_findings_per_target":  5.1,
     "runtime_median_seconds":  0.6989,
     "runtime_p95_seconds":  7.8058,
-    "false_positive_rate_sampled":  0,
+    "false_positive_rate_sampled":  null,
     "notes":  [
                   "Set confidence via manual review for critical/high findings.",
                   "Run semgrep/gitleaks integration before final publication."
