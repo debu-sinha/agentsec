@@ -458,15 +458,10 @@ class InstallationScanner(BaseScanner):
                                 remediation=Remediation(
                                     summary=f"Move {secret_type} to OS keychain or secrets manager",
                                     steps=[
-                                        "Move secrets to OS keychain or environment variables",
-                                        "Run 'agentsec harden -p workstation --apply'",
                                         "Rotate the exposed credential immediately",
                                         f"Remove plaintext value from {name}",
-                                    ],
-                                    automated=False,
-                                    command="agentsec harden -p workstation --apply",
-                                    references=[
-                                        "https://docs.openclaw.ai/gateway/security",
+                                        "Store in OS keychain, secrets manager, or environment variable",
+                                        f"Add {name} to .gitignore if not already excluded",
                                     ],
                                 ),
                                 owasp_ids=["ASI05", "ASI03"],
@@ -569,6 +564,8 @@ class InstallationScanner(BaseScanner):
                             "If remote access is needed, use a reverse proxy with auth",
                             "Ensure firewall rules restrict access to trusted IPs",
                         ],
+                        automated=True,
+                        command="agentsec harden ~ -p workstation --apply",
                     ),
                     owasp_ids=["ASI05", "ASI02"],
                 )
@@ -620,6 +617,8 @@ class InstallationScanner(BaseScanner):
                     remediation=Remediation(
                         summary="Configure allowed origins",
                         steps=["Set 'allowed_origins' to specific trusted domains"],
+                        automated=True,
+                        command="agentsec harden ~ -p workstation --apply",
                     ),
                     owasp_ids=["ASI05", "ASI01"],
                 )
@@ -646,6 +645,8 @@ class InstallationScanner(BaseScanner):
                             "Set gateway.auth.token or gateway.auth.password",
                             "Prefer token-based auth for programmatic access",
                         ],
+                        automated=True,
+                        command="agentsec harden ~ -p workstation --apply",
                         references=["https://docs.openclaw.ai/gateway/security"],
                     ),
                     owasp_ids=["ASI05", "ASI02"],
@@ -698,6 +699,8 @@ class InstallationScanner(BaseScanner):
                         remediation=Remediation(
                             summary=f"Remove {flag} from configuration",
                             steps=[f"Delete or set {flag} to false"],
+                            automated=True,
+                            command="agentsec harden ~ -p workstation --apply",
                         ),
                         owasp_ids=["ASI05", "ASI10"],
                     )
@@ -765,6 +768,8 @@ class InstallationScanner(BaseScanner):
                             "Set dmPolicy to 'paired' or 'allowlist'",
                             "Use 'openclaw config set dmPolicy paired'",
                         ],
+                        automated=True,
+                        command="agentsec harden ~ -p workstation --apply",
                         references=["https://docs.openclaw.ai/gateway/security"],
                     ),
                     owasp_ids=["ASI01", "ASI02", "ASI10"],
@@ -793,6 +798,8 @@ class InstallationScanner(BaseScanner):
                             "Set groupPolicy to 'allowlist'",
                             "Maintain an explicit list of trusted group IDs",
                         ],
+                        automated=True,
+                        command="agentsec harden ~ -p workstation --apply",
                     ),
                     owasp_ids=["ASI01", "ASI02"],
                 )
@@ -839,6 +846,8 @@ class InstallationScanner(BaseScanner):
                     remediation=Remediation(
                         summary="Set dmScope to per-channel-peer for isolation",
                         steps=["Set session.dmScope to 'per-channel-peer'"],
+                        automated=True,
+                        command="agentsec harden ~ -p workstation --apply",
                     ),
                     owasp_ids=["ASI05", "ASI07"],
                 )
@@ -887,6 +896,8 @@ class InstallationScanner(BaseScanner):
                             "Explicitly allow only needed tools via tools.allow",
                             "Use 'openclaw config set tools.profile messaging'",
                         ],
+                        automated=True,
+                        command="agentsec harden ~ -p workstation --apply",
                         references=["https://docs.openclaw.ai/tools"],
                     ),
                     owasp_ids=["ASI02", "ASI01", "ASI10"],
@@ -1108,6 +1119,8 @@ class InstallationScanner(BaseScanner):
                                 "Set sandbox.mode to 'all' or 'non-main'",
                                 "Or restrict tools.profile to 'messaging'/'minimal'",
                             ],
+                            automated=True,
+                            command="agentsec harden ~ -p workstation --apply",
                             references=["https://docs.openclaw.ai/tools/multi-agent-sandbox-tools"],
                         ),
                         owasp_ids=["ASI02", "ASI08"],

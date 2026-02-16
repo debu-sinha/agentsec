@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0d1117;
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+}
+.terminal {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  width: 960px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+.titlebar {
+  background: #21262d;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #30363d;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: #28c840; }
+.cmd { color: #8b949e; font-size: 13px; margin-left: 12px;
+        font-family: 'Cascadia Code','Fira Code','JetBrains Mono','Consolas',monospace; }
+.body {
+  padding: 16px 20px;
+  color: #c9d1d9;
+  background: #161b22;
+}
+.body pre {
+  font-family: 'Cascadia Code','Fira Code','JetBrains Mono','Consolas',monospace;
+  font-size: 13.5px;
+  line-height: 1.65;
+  white-space: pre;
+  overflow-x: auto;
+}
+</style>
+</head>
+<body>
+<div class="terminal">
+  <div class="titlebar">
+    <span class="dot dot-r"></span>
+    <span class="dot dot-y"></span>
+    <span class="dot dot-g"></span>
+    <span class="cmd">agentsec scan ~/.openclaw  # after hardening</span>
+  </div>
+  <div class="body">
+    <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+
+body {
+    color: #e6edf3;
+    background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+    <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><code>
+<span style="color: #00afff; text-decoration-color: #00afff">agentsec</span> <span style="color: #af87ff; text-decoration-color: #af87ff">v0.</span><span style="color: #af87ff; text-decoration-color: #af87ff; font-weight: bold">4.0</span> <span style="color: #b2b2b2; text-decoration-color: #b2b2b2">— AI Agent Security Scanner</span>
+<span style="color: #b2b2b2; text-decoration-color: #b2b2b2">Target: ~/.openclaw · Agent: openclaw</span>
+
+<span style="color: #b2b2b2; text-decoration-color: #b2b2b2">Security Grade: </span><span style="color: #e3b341; text-decoration-color: #e3b341; font-weight: bold"> C </span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span><span style="color: #8b949e; text-decoration-color: #8b949e">━━━━━━━━━━━</span><span style="color: #e3b341; text-decoration-color: #e3b341; font-weight: bold"> 79.0/100</span>
+<span style="color: #7fbfbf; text-decoration-color: #7fbfbf; font-weight: bold">0</span><span style="color: #8b949e; text-decoration-color: #8b949e"> critical</span> · <span style="color: #ff8700; text-decoration-color: #ff8700; font-weight: bold">3</span><span style="color: #ff8700; text-decoration-color: #ff8700"> high</span> · <span style="color: #7fbfbf; text-decoration-color: #7fbfbf; font-weight: bold">0</span><span style="color: #8b949e; text-decoration-color: #8b949e"> medium</span> · <span style="color: #7fbfbf; text-decoration-color: #7fbfbf; font-weight: bold">0</span><span style="color: #8b949e; text-decoration-color: #8b949e"> low</span>
+<span style="color: #ff5555; text-decoration-color: #ff5555; font-weight: bold">FAIL</span>
+
+<span style="color: #ff8700; text-decoration-color: #ff8700">██████████████████████████████████████████████████</span>
+<span style="color: #ff8700; text-decoration-color: #ff8700">█ HIGH:</span><span style="color: #ff8700; text-decoration-color: #ff8700; font-weight: bold">3</span>
+
+<span style="font-weight: bold"> Sev   Finding                                                                    OWASP </span>
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  World-readable sensitive file: exec-approvals.json <span style="color: #8b949e; text-decoration-color: #8b949e">(exec-approvals.json)</span>  <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #b62324; font-weight: bold"> ASI05</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  World-readable sensitive file: openclaw.json <span style="color: #8b949e; text-decoration-color: #8b949e">(openclaw.json)</span>              <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #b62324; font-weight: bold"> ASI05</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  Agent config directory world-accessible: .openclaw <span style="color: #8b949e; text-decoration-color: #8b949e">(.openclaw)</span>            <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #b62324; font-weight: bold"> ASI05</span> 
+
+<span style="color: #e3b341; text-decoration-color: #e3b341">╭─────────────────────────────────────────── </span><span style="color: #e3b341; text-decoration-color: #e3b341; font-weight: bold">Fix First</span><span style="color: #e3b341; text-decoration-color: #e3b341"> ────────────────────────────────────────────╮</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span>   <span style="color: #ff8700; text-decoration-color: #ff8700">1. [HIGH]</span> World-readable sensitive file: exec-approvals.json → <span style="color: #58d1eb; text-decoration-color: #58d1eb">chmod 600 </span>                      <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span> <span style="color: #58d1eb; text-decoration-color: #58d1eb">&#x27;~/.openclaw\.openclaw\exec-approv</span> <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span> <span style="color: #58d1eb; text-decoration-color: #58d1eb">als.json&#x27;</span>                                                                                        <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span>   <span style="color: #ff8700; text-decoration-color: #ff8700">2. [HIGH]</span> World-readable sensitive file: openclaw.json → <span style="color: #58d1eb; text-decoration-color: #58d1eb">chmod 600 </span>                            <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span> <span style="color: #58d1eb; text-decoration-color: #58d1eb">&#x27;~/.openclaw\.openclaw\openclaw.js</span> <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span> <span style="color: #58d1eb; text-decoration-color: #58d1eb">on&#x27;</span>                                                                                              <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span>   <span style="color: #ff8700; text-decoration-color: #ff8700">3. [HIGH]</span> Agent config directory world-accessible: .openclaw → <span style="color: #58d1eb; text-decoration-color: #58d1eb">chmod 700 </span>                      <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">│</span> <span style="color: #58d1eb; text-decoration-color: #58d1eb">&#x27;~/.openclaw\.openclaw&#x27;</span>            <span style="color: #e3b341; text-decoration-color: #e3b341">│</span>
+<span style="color: #e3b341; text-decoration-color: #e3b341">╰──────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
+
+<span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">3</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2"> findings · </span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">4</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2"> scanners · </span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">0.</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2">00s · </span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">4</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2"> files</span>
+<span style="color: #ff8700; text-decoration-color: #ff8700">Address high-severity issues before deploying.</span>
+
+</code></pre>
+</body>
+</html>
+
+  </div>
+</div>
+</body>
+</html>

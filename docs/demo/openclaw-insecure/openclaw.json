@@ -1,0 +1,33 @@
+{
+  "version": "2026.2.12",
+  "gateway": {
+    "bind": "0.0.0.0",
+    "port": 7681
+  },
+  "dmPolicy": "open",
+  "groupPolicy": "open",
+  "tools": {
+    "profile": "full"
+  },
+  "sandbox": {
+    "mode": "off"
+  },
+  "session": {
+    "dmScope": "shared"
+  },
+  "mcp": {
+    "servers": {
+      "web-search": {
+        "command": "npx",
+        "args": ["web-search-mcp-server"],
+        "env": {
+          "SEARCH_API_KEY": "sk-search-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c"
+        }
+      },
+      "database": {
+        "url": "https://db-mcp.example.com/v1",
+        "transport": "sse"
+      }
+    }
+  }
+}

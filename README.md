@@ -1,11 +1,17 @@
-# agentsec
+<p align="center">
+  <img src="docs/demo/screenshots/hero-banner.svg" alt="agentsec — AI Agent Security Scanner" width="600">
+</p>
 
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-CI-brightgreen.svg)](https://github.com/debu-sinha/agentsec/actions)
-[![PyPI](https://img.shields.io/pypi/v/agentsec-ai.svg)](https://pypi.org/project/agentsec-ai/)
-[![Downloads](https://img.shields.io/pypi/dm/agentsec-ai.svg)](https://pypi.org/project/agentsec-ai/)
-[![OWASP](https://img.shields.io/badge/OWASP-ASI01--ASI10-orange.svg)](https://genai.owasp.org/)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python"></a>
+  <a href="https://github.com/debu-sinha/agentsec/actions"><img src="https://img.shields.io/badge/tests-CI-brightgreen.svg" alt="Tests"></a>
+  <a href="https://pypi.org/project/agentsec-ai/"><img src="https://img.shields.io/pypi/v/agentsec-ai.svg" alt="PyPI"></a>
+  <a href="https://pypi.org/project/agentsec-ai/"><img src="https://img.shields.io/pypi/dm/agentsec-ai.svg" alt="Downloads"></a>
+  <a href="https://genai.owasp.org/"><img src="https://img.shields.io/badge/OWASP-ASI01--ASI10-orange.svg" alt="OWASP"></a>
+</p>
+
+# agentsec
 
 Security scanner and hardener for agentic AI installations.
 
@@ -40,7 +46,7 @@ agentsec scan ~/.openclaw
 | `credential` | 16 provider-specific secret patterns, high-entropy detection, git credential leakage |
 
 Reference catalog:
-- [checks-catalog.md](docs/checks-catalog.md) (26 named checks + dynamic credential findings)
+- [checks-catalog.md](docs/checks-catalog.md) (27 named checks + dynamic credential findings)
 
 ## Core Commands
 
@@ -62,8 +68,8 @@ agentsec scan --fail-on critical
 ```
 
 ```bash
-# Hardening preview
-agentsec harden -p workstation --dry-run
+# Hardening preview (default: preview only)
+agentsec harden -p workstation
 
 # Apply hardening profile
 agentsec harden -p workstation --apply

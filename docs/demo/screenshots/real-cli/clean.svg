@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1328">
+<rect width="100%" height="100%" fill="#0b1020"/>
+<rect x="12" y="12" width="1376" height="36" rx="8" fill="#1f2937"/>
+<text x="28" y="36" fill="#f9fafb" font-family="Consolas, Menlo, monospace" font-size="14">agentsec real CLI transcript</text>
+<g transform="translate(24,64)">
+<text x="0" y="0" fill="#93c5fd" font-family="Consolas, Menlo, monospace" font-size="14">$ agentsec scan docs\demo\screenshots\fixtures\clean --fail-on none</text>
+<text x="0" y="20" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14"></text>
+<text x="0" y="40" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14"></text>
+<text x="0" y="60" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">agentsec v0.4.0 � AI Agent Security Scanner</text>
+<text x="0" y="80" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">Target: </text>
+<text x="0" y="100" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">C:\Users\dsinh\agentsec-dev\agentsec\docs\demo\screenshots\fixtures\clean � </text>
+<text x="0" y="120" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">Agent: openclaw</text>
+<text x="0" y="140" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14"></text>
+<text x="0" y="160" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">Security Grade:  C </text>
+<text x="0" y="180" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14"></text>
+<text x="0" y="200" fill="#fca5a5" font-family="Consolas, Menlo, monospace" font-size="14">[stderr]</text>
+<text x="0" y="220" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">Traceback (most recent call last):</text>
+<text x="0" y="240" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;&lt;frozen runpy&gt;&quot;, line 198, in _run_module_as_main</text>
+<text x="0" y="260" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;&lt;frozen runpy&gt;&quot;, line 88, in _run_code</text>
+<text x="0" y="280" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Scripts\agentsec.exe\__main__.py&quot;, line 6, in &lt;module&gt;</text>
+<text x="0" y="300" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    sys.exit(main())</text>
+<text x="0" y="320" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">             ~~~~^^</text>
+<text x="0" y="340" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py&quot;, line 1161, in __call__</text>
+<text x="0" y="360" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    return self.main(*args, **kwargs)</text>
+<text x="0" y="380" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">           ~~~~~~~~~^^^^^^^^^^^^^^^^^</text>
+<text x="0" y="400" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py&quot;, line 1082, in main</text>
+<text x="0" y="420" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    rv = self.invoke(ctx)</text>
+<text x="0" y="440" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py&quot;, line 1697, in invoke</text>
+<text x="0" y="460" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    return _process_result(sub_ctx.command.invoke(sub_ctx))</text>
+<text x="0" y="480" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^</text>
+<text x="0" y="500" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py&quot;, line 1443, in invoke</text>
+<text x="0" y="520" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    return ctx.invoke(self.callback, **ctx.params)</text>
+<text x="0" y="540" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</text>
+<text x="0" y="560" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py&quot;, line 788, in invoke</text>
+<text x="0" y="580" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    return __callback(*args, **kwargs)</text>
+<text x="0" y="600" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\agentsec-dev\agentsec\src\agentsec\cli.py&quot;, line 227, in scan</text>
+<text x="0" y="620" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    terminal_reporter.render(report, posture=posture)</text>
+<text x="0" y="640" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^</text>
+<text x="0" y="660" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\agentsec-dev\agentsec\src\agentsec\reporters\terminal.py&quot;, line 66, in render</text>
+<text x="0" y="680" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    self._render_grade(report, posture)</text>
+<text x="0" y="700" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^</text>
+<text x="0" y="720" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\agentsec-dev\agentsec\src\agentsec\reporters\terminal.py&quot;, line 121, in _render_grade</text>
+<text x="0" y="740" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    self.console.print(bar)</text>
+<text x="0" y="760" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~~~~^^^^^</text>
+<text x="0" y="780" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py&quot;, line 1673, in print</text>
+<text x="0" y="800" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    with self:</text>
+<text x="0" y="820" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">         ^^^^</text>
+<text x="0" y="840" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py&quot;, line 865, in __exit__</text>
+<text x="0" y="860" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    self._exit_buffer()</text>
+<text x="0" y="880" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~~~^^</text>
+<text x="0" y="900" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py&quot;, line 823, in _exit_buffer</text>
+<text x="0" y="920" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    self._check_buffer()</text>
+<text x="0" y="940" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~~~~^^</text>
+<text x="0" y="960" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py&quot;, line 2027, in _check_buffer</text>
+<text x="0" y="980" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    legacy_windows_render(buffer, LegacyWindowsTerm(self.file))</text>
+<text x="0" y="1000" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</text>
+<text x="0" y="1020" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\_windows_renderer.py&quot;, line 17, in legacy_windows_render</text>
+<text x="0" y="1040" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    term.write_styled(text, style)</text>
+<text x="0" y="1060" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^</text>
+<text x="0" y="1080" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\_win32_console.py&quot;, line 442, in write_styled</text>
+<text x="0" y="1100" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    self.write_text(text)</text>
+<text x="0" y="1120" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~~~~~~^^^^^^</text>
+<text x="0" y="1140" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\_win32_console.py&quot;, line 403, in write_text</text>
+<text x="0" y="1160" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    self.write(text)</text>
+<text x="0" y="1180" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    ~~~~~~~~~~^^^^^^</text>
+<text x="0" y="1200" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">  File &quot;C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py&quot;, line 19, in encode</text>
+<text x="0" y="1220" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">    return codecs.charmap_encode(input,self.errors,encoding_table)[0]</text>
+<text x="0" y="1240" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</text>
+<text x="0" y="1260" fill="#e5e7eb" font-family="Consolas, Menlo, monospace" font-size="14">UnicodeEncodeError: &#x27;charmap&#x27; codec can&#x27;t encode characters in position 0-38: character maps to &lt;undefined&gt;</text>
+</g></svg>

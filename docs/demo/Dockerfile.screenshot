@@ -1,0 +1,24 @@
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
+# Install agentsec from local source
+COPY . /opt/agentsec
+RUN pip install /opt/agentsec
+
+# Create a realistic insecure OpenClaw installation
+RUN useradd -m agent && mkdir -p /home/agent/.openclaw/skills /home/agent/.openclaw/mcp-servers
+
+# --- INSECURE installation (the "before" scan) ---
+COPY docs/demo/openclaw-insecure/ /home/agent/.openclaw/
+RUN chmod 755 /home/agent/.openclaw && \
+    chmod 644 /home/agent/.openclaw/openclaw.json
+
+# Set ownership
+RUN chown -R agent:agent /home/agent
+
+USER agent
+WORKDIR /home/agent
+
+ENV TERM=xterm-256color
+CMD ["bash"]

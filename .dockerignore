@@ -6,4 +6,11 @@ __pycache__
 *.egg-info
 dist
 build
+bench_tmp
+tmp_*
+.screenshot-venv
+.venv
 agentsec_report.html
+docs/demo/screenshots/fixtures
+docs/demo/screenshots/*.html
+docs/demo/screenshots/*.svg

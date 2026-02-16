@@ -61,7 +61,7 @@ Key decisions:
 ## Security & Governance
 - Tool itself must be secure: secrets always sanitized, no eval/exec on scanned content
 - No network calls during scanning (offline-only)
-- Read-only by default; hardening requires explicit `--fix` flag
+- Read-only by default; hardening requires explicit `--apply` flag
 - Finding evidence is truncated to prevent accidental secret leakage
 
 ## Rollout / Migration Plan

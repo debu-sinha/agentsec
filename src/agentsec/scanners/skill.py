@@ -681,10 +681,10 @@ class SkillAnalyzer(BaseScanner):
                         file_path=file_path,
                         line_number=line_num,
                         remediation=Remediation(
-                            summary=f"Quarantine skill '{skill_name}' and investigate",
+                            summary=f"Remove skill '{skill_name}' and investigate",
                             steps=[
                                 "Do NOT follow the instructions in this skill",
-                                f"Run: agentsec skill quarantine {skill_name}",
+                                f"Remove the skill directory: rm -rf ~/.openclaw/skills/{skill_name}",
                                 "Report to ClawHub if the skill is from marketplace",
                                 "Check other skills from the same author",
                             ],

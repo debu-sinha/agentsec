@@ -1,0 +1,64 @@
+$ agentsec scan docs\demo\screenshots\fixtures\insecure --fail-on none
+
+
+agentsec v0.4.0 � AI Agent Security Scanner
+Target: 
+C:\Users\dsinh\agentsec-dev\agentsec\docs\demo\screenshots\fixtures\insecure � 
+Agent: openclaw
+
+Security Grade:  F 
+
+[stderr]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Scripts\agentsec.exe\__main__.py", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py", line 1161, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py", line 1082, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py", line 1697, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\click\core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+  File "C:\Users\dsinh\agentsec-dev\agentsec\src\agentsec\cli.py", line 227, in scan
+    terminal_reporter.render(report, posture=posture)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dsinh\agentsec-dev\agentsec\src\agentsec\reporters\terminal.py", line 66, in render
+    self._render_grade(report, posture)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\dsinh\agentsec-dev\agentsec\src\agentsec\reporters\terminal.py", line 121, in _render_grade
+    self.console.print(bar)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py", line 1673, in print
+    with self:
+         ^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py", line 865, in __exit__
+    self._exit_buffer()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py", line 823, in _exit_buffer
+    self._check_buffer()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\console.py", line 2027, in _check_buffer
+    legacy_windows_render(buffer, LegacyWindowsTerm(self.file))
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\_windows_renderer.py", line 17, in legacy_windows_render
+    term.write_styled(text, style)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\_win32_console.py", line 442, in write_styled
+    self.write_text(text)
+    ~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\site-packages\rich\_win32_console.py", line 403, in write_text
+    self.write(text)
+    ~~~~~~~~~~^^^^^^
+  File "C:\Users\dsinh\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>

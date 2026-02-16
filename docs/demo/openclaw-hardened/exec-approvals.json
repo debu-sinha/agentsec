@@ -1,0 +1,12 @@
+{
+  "defaults": {
+    "security": "allowlist",
+    "askFallback": "deny"
+  },
+  "rules": [
+    {
+      "pattern": "/usr/bin/python3",
+      "approval": "ask"
+    }
+  ]
+}

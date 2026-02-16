@@ -12,12 +12,13 @@ import logging
 import subprocess
 import sys
 import time
+from collections import OrderedDict
 from pathlib import Path
 
 import click
 from rich.console import Console
 from rich.panel import Panel
-from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
 from agentsec import __version__
@@ -45,23 +46,45 @@ def _configure_logging(verbose: bool) -> None:
     )
 
 
+class _WorkflowGroup(click.Group):
+    """Click group that lists commands in workflow order instead of alphabetical."""
+
+    _COMMAND_ORDER = [
+        "scan",
+        "harden",
+        "gate",
+        "watch",
+        "show-profile",
+        "hook",
+        "list-scanners",
+    ]
+
+    def list_commands(self, ctx: click.Context) -> list[str]:
+        commands = super().list_commands(ctx)
+        ordered = [c for c in self._COMMAND_ORDER if c in commands]
+        ordered.extend(c for c in commands if c not in ordered)
+        return ordered
+
+
 @click.group(
-    epilog="""Examples:
+    cls=_WorkflowGroup,
+    epilog="""Typical workflow:
 
-  Quick scan of current directory:
-    $ agentsec scan
-
-  CI/CD pipeline (fail on critical, JSON output):
-    $ agentsec scan -o json -f report.json --fail-on critical
-
-  GitHub Code Scanning integration:
-    $ agentsec scan -o sarif -f results.sarif
-
-  Deep credential scan only:
-    $ agentsec scan -s credential -v
-
-  Scan a specific agent installation:
+  1. Scan your installation:
     $ agentsec scan ~/.openclaw
+
+  2. Harden configuration:
+    $ agentsec harden -p workstation --apply
+
+  3. Pre-screen new packages before installing:
+    $ agentsec gate npm install some-skill
+
+  4. Monitor for changes continuously:
+    $ agentsec watch
+
+CI/CD integration:
+    $ agentsec scan -o json -f report.json --fail-on critical
+    $ agentsec scan -o sarif -f results.sarif
 
 Learn more: https://github.com/debu-sinha/agentsec
 """
@@ -161,7 +184,7 @@ def scan(
         fail_on_severity=fail_on if fail_on != "none" else None,
     )
 
-    # Run the scan with progress animation
+    # Run the scan with progress spinner
     is_tty = console.is_terminal and not quiet and output == "terminal"
 
     try:
@@ -169,28 +192,26 @@ def scan(
             with Progress(
                 SpinnerColumn("dots"),
                 TextColumn("[deep_sky_blue1]{task.description}[/deep_sky_blue1]"),
-                BarColumn(bar_width=30),
-                TextColumn("[grey70]{task.fields[status]}[/grey70]"),
                 console=console,
                 transient=True,
             ) as progress:
-                scan_task = progress.add_task("Scanning...", total=4, status="starting")
-                phases = ["configuration", "skills", "MCP servers", "credentials"]
-                for i, phase in enumerate(phases):
-                    progress.update(scan_task, description=f"Scanning {phase}...", status=phase)
-                    if i == 0:
-                        report = run_scan(config)
-                    progress.update(scan_task, advance=1)
-                progress.update(scan_task, description="Calculating posture...", status="scoring")
+                progress.add_task("Scanning...", total=None)
+                report = run_scan(config)
         else:
             report = run_scan(config)
     except (OSError, PermissionError) as e:
-        console.print(f"[bold red]Error:[/bold red] Scan failed: {e}")
+        console.print(
+            f"[bold red]Error:[/bold red] Scan failed: {e}\n"
+            f"[dim]Check that the target path exists and you have read permission.[/dim]"
+        )
         sys.exit(2)
     except Exception as e:
         logger.debug("Scan error traceback:", exc_info=True)
-        msg = f"Scan failed unexpectedly: {type(e).__name__}: {e}"
-        console.print(f"[bold red]Error:[/bold red] {msg}")
+        console.print(
+            f"[bold red]Error:[/bold red] Scan failed: {type(e).__name__}: {e}\n"
+            f"[dim]Run with -v for debug output. "
+            f"Report bugs at https://github.com/debu-sinha/agentsec/issues[/dim]"
+        )
         sys.exit(2)
 
     # Score posture
@@ -293,18 +314,16 @@ def list_scanners() -> None:
     "do_apply",
     is_flag=True,
     default=False,
-    help="Actually write changes (default is dry-run)",
-)
-@click.option(
-    "--dry-run",
-    is_flag=True,
-    default=True,
-    help="Show what would change without writing (default)",
+    help="Write changes to disk (default: preview only)",
 )
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
-def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bool) -> None:
+def harden(target: str, profile: str, do_apply: bool, verbose: bool) -> None:
     """Apply a hardening profile to an agent installation.
 
+    Without --apply, shows a preview of what would change (safe to run).
+    With --apply, writes changes and creates a .bak backup.
+
+    \b
     Profiles:
       workstation  — single owner, loopback, minimal exposure
       vps          — remote hosting, strong auth + tool restrictions
@@ -312,9 +331,10 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
 
     \b
     Examples:
-        agentsec harden -p workstation --dry-run   # preview changes
-        agentsec harden -p vps --apply             # apply VPS hardening
-        agentsec harden -p public-bot --apply      # lock down public bot
+        agentsec harden -p workstation              # preview changes
+        agentsec harden -p vps --apply              # apply VPS hardening
+        agentsec harden -p public-bot --apply       # lock down public bot
+        agentsec show-profile workstation            # view profile details
     """
     from agentsec.hardener import harden as do_harden
 
@@ -359,6 +379,9 @@ def harden(target: str, profile: str, do_apply: bool, dry_run: bool, verbose: bo
     if result.errors:
         for err in result.errors:
             console.print(f"[bold red]Error:[/bold red] {err}")
+        console.print(
+            f"[dim]Check file permissions and that {target_path} contains an agent config.[/dim]"
+        )
         sys.exit(1)
 
     if result.applied:
@@ -711,7 +734,7 @@ pip3() { _agentsec_post_install pip3 "$@"; }
     default="critical",
     help="Block install at this severity or above (default: critical)",
 )
-@click.option("--force", is_flag=True, help="Allow install despite findings")
+@click.option("--force", is_flag=True, help="Allow install despite findings (use with caution)")
 @click.option("--dry-run", is_flag=True, help="Scan only, don't run install")
 @click.pass_context
 def gate(
@@ -805,7 +828,13 @@ def gate(
         )
         raise SystemExit(1)
 
-    if result.findings and result.allowed:
+    if result.findings and result.allowed and force:
+        console.print(
+            "[bold yellow]WARNING:[/bold yellow] Proceeding with install despite findings. "
+            "[yellow]--force bypasses security checks.[/yellow]"
+        )
+        console.print()
+    elif result.findings and result.allowed:
         console.print(
             "[yellow]Findings detected but below threshold. Proceeding with install.[/yellow]"
         )

@@ -457,10 +457,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 9,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],
@@ -488,10 +488,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 13,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],
@@ -519,10 +519,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 11,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],
@@ -550,10 +550,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 11,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],
@@ -581,10 +581,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 11,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],
@@ -612,10 +612,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 15,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],
@@ -643,10 +643,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 9,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],
@@ -674,10 +674,10 @@
       "file_path": "/tmp/case4\\skills\\quick-setup\\README.md",
       "line_number": 13,
       "remediation": {
-        "summary": "Quarantine skill 'quick-setup' and investigate",
+        "summary": "Remove skill 'quick-setup' and investigate",
         "steps": [
           "Do NOT follow the instructions in this skill",
-          "Run: agentsec skill quarantine quick-setup",
+          "Remove the skill directory: rm -rf ~/.openclaw/skills/quick-setup",
           "Report to ClawHub if the skill is from marketplace",
           "Check other skills from the same author"
         ],

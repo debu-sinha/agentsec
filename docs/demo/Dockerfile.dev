@@ -1,21 +1,40 @@
 FROM node:22-slim
 
-# Install system dependencies (git needed for openclaw npm install)
-RUN apt-get update && apt-get install -y git python3 python3-pip python3-venv && \
+# Pin OpenClaw version for reproducible demo results
+ARG OPENCLAW_VERSION=2026.2.12
+
+# Install Python 3.12 and system dependencies
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-venv git && \
     rm -rf /var/lib/apt/lists/*
 
-# Install OpenClaw
-RUN npm install -g openclaw
+# Install real OpenClaw at the pinned version
+RUN npm install -g openclaw@${OPENCLAW_VERSION}
 
 # Install agentsec from local source
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
 COPY . /opt/agentsec-src
-RUN pip install /opt/agentsec-src
+RUN pip install --break-system-packages /opt/agentsec-src
 
-# Create a test user
+# Create demo user
 RUN useradd -m testuser
+
+# Apply insecure configuration on top of the real OpenClaw installation.
+# This simulates a user who installed OpenClaw but misconfigured it:
+#   - gateway bound to 0.0.0.0 (network-exposed)
+#   - open DM and group policies (no access control)
+#   - sandbox disabled, full tool access
+#   - plaintext credentials in .env
+#   - untrusted skills with subprocess calls and credential access
+COPY docs/demo/openclaw-insecure/ /home/testuser/.openclaw/
+
+# Set insecure permissions (world-readable) to trigger CFS findings
+RUN chmod 755 /home/testuser/.openclaw && \
+    chmod 644 /home/testuser/.openclaw/openclaw.json && \
+    chmod 644 /home/testuser/.openclaw/.env && \
+    chown -R testuser:testuser /home/testuser
+
 USER testuser
 WORKDIR /home/testuser
+ENV TERM=xterm-256color
 
 CMD ["bash"]

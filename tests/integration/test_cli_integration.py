@@ -243,13 +243,13 @@ def test_version_output():
 
 
 def test_harden_dry_run(tmp_path):
-    """harden --dry-run should not modify files."""
+    """harden without --apply should not modify files (preview only)."""
     target = _create_openclaw_dir(tmp_path)
     config_file = target / ".openclaw" / "openclaw.json"
     original_content = config_file.read_text()
 
     runner = CliRunner()
-    result = runner.invoke(main, ["harden", str(target), "-p", "workstation", "--dry-run"])
+    result = runner.invoke(main, ["harden", str(target), "-p", "workstation"])
 
     assert result.exit_code == 0
     assert config_file.read_text() == original_content

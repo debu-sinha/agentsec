@@ -78,8 +78,8 @@ class TerminalReporter:
                 if posture:
                     self._render_posture(posture)
 
-            # 6. Fix First — prioritized action list
-            self._render_fix_first(report)
+            # 6. Next Steps — actionable remediation
+            self._render_next_steps(report)
         else:
             self._render_clean_scan()
 
@@ -170,12 +170,13 @@ class TerminalReporter:
         self.console.print()
 
     def _render_findings_table(self, report: ScanReport) -> None:
-        """Compact findings table with OWASP tags."""
+        """Compact findings table with OWASP tags and auto-fix indicator."""
         sorted_findings = sorted(report.findings, key=lambda f: f.severity_rank)
 
         table = Table(show_lines=False, pad_edge=True, box=None, show_header=True)
         table.add_column("Sev", width=4)
         table.add_column("Finding", min_width=40, no_wrap=False)
+        table.add_column("Fix", width=4, justify="center")
         table.add_column("OWASP", width=6, justify="right")
 
         for finding in sorted_findings:
@@ -189,55 +190,155 @@ class TerminalReporter:
                     loc += f":{finding.line_number}"
                 title += f" [dim]({loc})[/dim]"
 
+            # Auto-fix indicator
+            fix_tag = ""
+            if finding.remediation and finding.remediation.automated:
+                fix_tag = "[green]AUTO[/green]"
+
             owasp = ""
             if finding.owasp_ids:
                 owasp = f"[bold white on dark_red] {finding.owasp_ids[0]} [/bold white on dark_red]"
 
-            table.add_row(sev_text, title, owasp)
+            table.add_row(sev_text, title, fix_tag, owasp)
 
         self.console.print(table)
 
-    def _render_fix_first(self, report: ScanReport) -> None:
-        """Prioritized action list — what to fix first."""
-        urgent = sorted(
+    def _render_next_steps(self, report: ScanReport) -> None:
+        """Actionable next steps — split into auto-fixable and manual."""
+        from agentsec.models.findings import FindingCategory
+
+        auto_fixable = [
+            f for f in report.findings if f.remediation and f.remediation.automated
+        ]
+        manual = [
+            f for f in report.findings if not (f.remediation and f.remediation.automated)
+        ]
+
+        self.console.print()
+        lines: list[str] = []
+
+        # Auto-fix section with summary of what gets fixed
+        if auto_fixable:
+            lines.append(
+                f"  [bold green]\u25b8 Auto-fix available[/bold green] "
+                f"[{_DIM}]({len(auto_fixable)} findings):[/{_DIM}]"
+            )
+            lines.append(
+                "  [cyan]agentsec harden ~ -p workstation --apply[/cyan]"
+            )
+            # Show compact list of what gets fixed
+            auto_titles = [f.title for f in sorted(auto_fixable, key=lambda f: f.severity_rank)]
+            for title in auto_titles[:6]:
+                lines.append(f"     [{_DIM}]\u2713 {title}[/{_DIM}]")
+            if len(auto_titles) > 6:
+                lines.append(f"     [{_DIM}]\u2713 ...and {len(auto_titles) - 6} more[/{_DIM}]")
+            lines.append("")
+
+        # Manual section — group credential findings to avoid repetition
+        manual_urgent = sorted(
             [
                 f
-                for f in report.findings
+                for f in manual
                 if f.severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH)
             ],
             key=lambda f: f.severity_rank,
         )
 
-        if not urgent:
-            return
+        if manual_urgent:
+            # Separate credential-type findings from others
+            _CRED_CATEGORIES = {
+                FindingCategory.PLAINTEXT_SECRET,
+                FindingCategory.EXPOSED_TOKEN,
+                FindingCategory.HARDCODED_CREDENTIAL,
+                FindingCategory.EXPOSED_CREDENTIALS,
+            }
+            cred_findings = [f for f in manual_urgent if f.category in _CRED_CATEGORIES]
+            other_findings = [f for f in manual_urgent if f.category not in _CRED_CATEGORIES]
 
-        self.console.print()
-        lines = []
-        for i, finding in enumerate(urgent[:3], 1):
-            sev_color = _SEVERITY_COLORS[finding.severity]
-            sev_label = _SEVERITY_LABELS[finding.severity].strip()
-            fix_text = ""
-            if finding.remediation:
-                if finding.remediation.automated and finding.remediation.command:
-                    fix_text = f" \u2192 [cyan]{finding.remediation.command}[/cyan]"
-                else:
-                    fix_text = f" \u2192 {finding.remediation.summary}"
             lines.append(
-                f"  [{sev_color}]{i}. [{sev_label}][/{sev_color}] {finding.title}{fix_text}"
+                f"  [bold yellow]\u25b8 Manual action required[/bold yellow] "
+                f"[{_DIM}]({len(manual_urgent)} findings):[/{_DIM}]"
             )
 
-        remaining = len(urgent) - 3
-        if remaining > 0:
-            lines.append(f"  [{_DIM}]... and {remaining} more[/{_DIM}]")
+            item_num = 1
 
-        self.console.print(
-            Panel(
-                "\n".join(lines),
-                title="[bold yellow]Fix First[/bold yellow]",
-                border_style="yellow",
-                padding=(0, 1),
+            # Group credential findings by file
+            if cred_findings:
+                file_groups: dict[str, list] = {}
+                for f in cred_findings:
+                    key = str(f.file_path.name) if f.file_path else "unknown"
+                    file_groups.setdefault(key, []).append(f)
+
+                for file_name, group in file_groups.items():
+                    worst = min(group, key=lambda f: f.severity_rank)
+                    sev_color = _SEVERITY_COLORS[worst.severity]
+                    sev_label = _SEVERITY_LABELS[worst.severity].strip()
+
+                    lines.append(
+                        f"  [{sev_color}]{item_num}. [{sev_label}][/{sev_color}] "
+                        f"{len(group)} plaintext credential{'s' if len(group) != 1 else ''}"
+                        f" in {file_name}"
+                    )
+
+                    # List individual credential types compactly
+                    cred_types = []
+                    for f in group:
+                        name = f.title
+                        # Strip common prefixes and suffixes to get the credential type
+                        for prefix in ("Plaintext ", "plaintext "):
+                            if name.startswith(prefix):
+                                name = name[len(prefix) :]
+                        for suffix in (
+                            f" found in {file_name}",
+                            f" in {file_name}",
+                        ):
+                            if name.endswith(suffix):
+                                name = name[: -len(suffix)]
+                        # Remove trailing " (possible secret)" for entropy findings
+                        name = name.replace(" (possible secret)", "")
+                        cred_types.append(name)
+
+                    # Deduplicate while preserving order
+                    seen: set[str] = set()
+                    unique_types = []
+                    for ct in cred_types:
+                        if ct not in seen:
+                            seen.add(ct)
+                            unique_types.append(ct)
+
+                    lines.append(f"     [{_DIM}]{', '.join(unique_types)}[/{_DIM}]")
+
+                    # Show remediation steps once for the group
+                    representative = next((f for f in group if f.remediation), None)
+                    if representative and representative.remediation:
+                        # Generalize file-specific steps for the group
+                        for step in representative.remediation.steps:
+                            generalized = step.replace(f"from {file_name}", f"from {file_name}")
+                            lines.append(f"     [{_DIM}]- {generalized}[/{_DIM}]")
+
+                    item_num += 1
+
+            # Individual non-credential findings
+            for finding in other_findings:
+                sev_color = _SEVERITY_COLORS[finding.severity]
+                sev_label = _SEVERITY_LABELS[finding.severity].strip()
+                lines.append(
+                    f"  [{sev_color}]{item_num}. [{sev_label}][/{sev_color}] {finding.title}"
+                )
+                if finding.remediation:
+                    for step in finding.remediation.steps:
+                        lines.append(f"     [{_DIM}]- {step}[/{_DIM}]")
+                item_num += 1
+
+        if lines:
+            self.console.print(
+                Panel(
+                    "\n".join(lines),
+                    title="[bold yellow]Next Steps[/bold yellow]",
+                    border_style="yellow",
+                    padding=(0, 1),
+                )
             )
-        )
 
     def _render_details(self, report: ScanReport) -> None:
         """Verbose: full finding details with remediation steps."""
@@ -303,7 +404,7 @@ class TerminalReporter:
         )
 
     def _render_footer(self, report: ScanReport) -> None:
-        """Compact footer with scan stats."""
+        """Compact footer with scan stats and command hints."""
         summary = report.summary
         self.console.print(
             f"\n[{_DIM}]{summary.total_findings} findings \u00b7 "
@@ -320,4 +421,12 @@ class TerminalReporter:
             self.console.print(
                 "[dark_orange]Address high-severity issues before deploying.[/dark_orange]"
             )
+
+        # Command hints for discoverability
+        self.console.print(
+            f"[{_DIM}]More: [cyan]agentsec harden[/cyan] \u00b7 "
+            f"[cyan]agentsec gate[/cyan] npm install <pkg> \u00b7 "
+            f"[cyan]agentsec watch[/cyan] \u00b7 "
+            f"[cyan]agentsec --help[/cyan][/{_DIM}]"
+        )
         self.console.print()

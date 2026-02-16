@@ -77,7 +77,7 @@ Three hardening profiles apply safe configuration changes directly to your openc
 
 ```bash
 # See what would change (safe preview)
-agentsec harden -p workstation --dry-run
+agentsec harden -p workstation
 
 # Apply the changes
 agentsec harden -p workstation --apply
