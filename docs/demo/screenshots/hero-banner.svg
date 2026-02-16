@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 220">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220">
 
   <!-- Background -->
-  <rect width="600" height="220" rx="12" fill="#0d1117"/>
+  <rect width="720" height="220" rx="12" fill="#0d1117"/>
 
   <!-- Lobster body (simplified claw/agent shape) -->
   <g transform="translate(190,110)">
