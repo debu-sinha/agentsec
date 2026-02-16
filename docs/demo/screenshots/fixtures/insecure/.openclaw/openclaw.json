@@ -1,0 +1,14 @@
+{
+  "version": "2026.1.0",
+  "gateway": {
+    "bind": "lan"
+  },
+  "dmPolicy": "open",
+  "groupPolicy": "open",
+  "tools": {
+    "profile": "full"
+  },
+  "sandbox": {
+    "mode": "off"
+  }
+}

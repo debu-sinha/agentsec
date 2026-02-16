@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+
+body {
+    color: #000000;
+    background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+    <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><code>
+<span style="color: #00afff; text-decoration-color: #00afff">agentsec</span> <span style="color: #af87ff; text-decoration-color: #af87ff">v0.</span><span style="color: #af87ff; text-decoration-color: #af87ff; font-weight: bold">4.0</span> <span style="color: #b2b2b2; text-decoration-color: #b2b2b2">— AI Agent Security Scanner</span>
+<span style="color: #b2b2b2; text-decoration-color: #b2b2b2">Target: C:\Users\dsinh\agentsec-dev\agentsec\docs\demo\screenshots\fixtures\insecure · Agent: openclaw</span>
+
+<span style="color: #b2b2b2; text-decoration-color: #b2b2b2">Security Grade: </span><span style="color: #800000; text-decoration-color: #800000; font-weight: bold"> F </span>
+<span style="color: #800000; text-decoration-color: #800000">━━</span><span style="color: #7f7f7f; text-decoration-color: #7f7f7f">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span><span style="color: #800000; text-decoration-color: #800000; font-weight: bold"> 5.0/100</span>
+<span style="color: #800000; text-decoration-color: #800000; font-weight: bold">6</span><span style="color: #800000; text-decoration-color: #800000; font-weight: bold"> critical</span> · <span style="color: #ff8700; text-decoration-color: #ff8700; font-weight: bold">11</span><span style="color: #ff8700; text-decoration-color: #ff8700"> high</span> · <span style="color: #7fbfbf; text-decoration-color: #7fbfbf; font-weight: bold">0</span><span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> medium</span> · <span style="color: #7fbfbf; text-decoration-color: #7fbfbf; font-weight: bold">0</span><span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> low</span>
+<span style="color: #800000; text-decoration-color: #800000; font-weight: bold">FAIL</span>
+
+<span style="color: #800000; text-decoration-color: #800000">█████████████████</span><span style="color: #ff8700; text-decoration-color: #ff8700">████████████████████████████████</span>
+<span style="color: #800000; text-decoration-color: #800000">█ CRIT:</span><span style="color: #800000; text-decoration-color: #800000; font-weight: bold">6</span>  <span style="color: #ff8700; text-decoration-color: #ff8700">█ HIGH:</span><span style="color: #ff8700; text-decoration-color: #ff8700; font-weight: bold">11</span>
+
+<span style="font-weight: bold"> Sev   Finding                                                                    OWASP </span>
+ <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">CRIT</span>  CVE-2026-25593: Unauthenticated local RCE via WebSocket API               <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI03</span> 
+ <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">CRIT</span>  Gateway bound to non-loopback interface <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>                   <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI05</span> 
+ <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">CRIT</span>  Gateway auth missing on non-loopback interface <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>            <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI05</span> 
+ <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">CRIT</span>  DM policy set to &#x27;open&#x27; — anyone can message the agent <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>    <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI01</span> 
+ <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">CRIT</span>  Group policy is &#x27;open&#x27; — agent responds in any group <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>      <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI01</span> 
+ <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">CRIT</span>  Full tool profile with open inbound access <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>                <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI02</span> 
+ <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">CRIT</span>  Authentication disabled on non-loopback agent <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>             <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI05</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  World-readable sensitive file: openclaw.json <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>              <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI05</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  Agent config directory world-accessible: .openclaw <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(.openclaw)</span>            <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI05</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  CVE-2026-25253: One-click RCE via WebSocket hijacking                     <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI03</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  CVE-2026-24763: Command injection in Docker sandbox via PATH variable     <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI03</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  CVE-2026-25157: SSH command injection via sshNodeCommand                  <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI03</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  CVE-2026-25475: Path traversal via MEDIA: file extraction                 <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI03</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  No WebSocket origin validation configured <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>                 <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI05</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  Exec approvals file missing — host execution uncontrolled                 <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI02</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  Sandboxing disabled with full tool access and open input <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>  <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI02</span> 
+ <span style="color: #ff8700; text-decoration-color: #ff8700">HIGH</span>  No SSRF protection configured for URL-based inputs <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">(openclaw.json)</span>        <span style="color: #c0c0c0; text-decoration-color: #c0c0c0; background-color: #870000; font-weight: bold"> ASI05</span> 
+
+<span style="color: #808000; text-decoration-color: #808000">╭───────────────────────────────────────────────────── </span><span style="color: #808000; text-decoration-color: #808000; font-weight: bold">Fix First</span><span style="color: #808000; text-decoration-color: #808000"> ──────────────────────────────────────────────────────╮</span>
+<span style="color: #808000; text-decoration-color: #808000">│</span>   <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">1. [CRIT]</span> CVE-2026-25593: Unauthenticated local RCE via WebSocket API → Update to version 2026.1.30 or later       <span style="color: #808000; text-decoration-color: #808000">│</span>
+<span style="color: #808000; text-decoration-color: #808000">│</span>   <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">2. [CRIT]</span> Gateway bound to non-loopback interface → Bind Gateway to loopback or add strong authentication          <span style="color: #808000; text-decoration-color: #808000">│</span>
+<span style="color: #808000; text-decoration-color: #808000">│</span>   <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">3. [CRIT]</span> Gateway auth missing on non-loopback interface → Configure token or password authentication              <span style="color: #808000; text-decoration-color: #808000">│</span>
+<span style="color: #808000; text-decoration-color: #808000">│</span>   <span style="color: #b2b2b2; text-decoration-color: #b2b2b2">... and 14 more</span>                                                                                                    <span style="color: #808000; text-decoration-color: #808000">│</span>
+<span style="color: #808000; text-decoration-color: #808000">╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
+
+<span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">17</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2"> findings · </span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">4</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2"> scanners · </span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">0.</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2">01s · </span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2; font-weight: bold">2</span><span style="color: #b2b2b2; text-decoration-color: #b2b2b2"> files</span>
+<span style="color: #800000; text-decoration-color: #800000; font-weight: bold">Fix critical issues now.</span> Re-run: <span style="color: #008080; text-decoration-color: #008080">agentsec scan</span>
+
+</code></pre>
+</body>
+</html>
