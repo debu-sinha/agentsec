@@ -14,7 +14,7 @@
   2. Full tool profile with open inbound access (critical)
   3. Plaintext Slack Token in config file (critical, detected by both installation and credential scanners)
   4. Slack Bot Token found in env.json (critical)
-  5. Exec approvals file missing - host execution uncontrolled (high)
+  5. World-readable sensitive file: exec-approvals.json (high)
   6. Sandboxing disabled with full tool access and open input (high)
   7. MCP server 'remote-tools' has no authentication configured (high)
 
@@ -53,7 +53,7 @@ Note: Grade remains F because residual critical findings (plaintext credentials,
 - Auto-fixed by `harden -p public-bot`:
   - `dmPolicy`: open -> paired
   - `groupPolicy`: open -> allowlist
-  - `toolProfile`: full -> messaging
+  - `tools.profile`: full -> messaging
   - `gateway.bind`: all interfaces -> loopback
   - `sandbox`: disabled -> enabled
   - `discovery.mdns.mode`: default -> disabled
@@ -91,8 +91,18 @@ Note: Grade remains F because residual critical findings (plaintext credentials,
 mkdir -p /tmp/test-vps/.openclaw
 cat > /tmp/test-vps/.openclaw/openclaw.json << 'EOF'
 {
+  "version": "2026.2.10",
+  "gateway": {
+    "bind": "0.0.0.0"
+  },
   "dmPolicy": "open",
   "groupPolicy": "open"
+}
+EOF
+
+cat > /tmp/test-vps/.openclaw/exec-approvals.json << 'EOF'
+{
+  "askFallback": "full"
 }
 EOF
 
@@ -107,8 +117,8 @@ EOF
 
 cat > /tmp/test-vps/.openclaw/env.json << 'EOF'
 {
-  "openai_api_key": "<OPENAI_TOKEN_REDACTED>",
-  "slack_token": "<SLACK_TOKEN_REDACTED>"
+  "openai_api_key": "sk-test-0123456789abcdef0123456789abcdef",
+  "slack_token": "xoxb-123456789012-123456789012-abcdefghijklmnopqrstuvwx"
 }
 EOF
 

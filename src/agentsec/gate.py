@@ -292,10 +292,7 @@ def _download_and_scan_npm(package_name: str, temp_dir: str) -> list[Finding]:
     extract_dir = Path(temp_dir) / "extracted"
     extract_dir.mkdir()
     with tarfile.open(tarballs[0], "r:gz") as tar:
-        if sys.version_info >= (3, 12):
-            tar.extractall(extract_dir, filter="data")
-        else:
-            tar.extractall(extract_dir)  # noqa: S202
+        _extract_tar_archive(tar, extract_dir)
 
     # Check package.json for install hooks
     findings.extend(_check_npm_install_hooks(extract_dir, package_name))
@@ -351,10 +348,7 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
             continue
         if archive.suffix == ".gz" or archive.name.endswith(".tar.gz"):
             with tarfile.open(archive, "r:gz") as tar:
-                if sys.version_info >= (3, 12):
-                    tar.extractall(extract_dir, filter="data")
-                else:
-                    tar.extractall(extract_dir)  # noqa: S202
+                _extract_tar_archive(tar, extract_dir)
         elif archive.suffix == ".whl" or archive.suffix == ".zip":
             with zipfile.ZipFile(archive, "r") as zf:
                 for info in zf.infolist():
@@ -367,6 +361,29 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
     findings.extend(_run_scanners_on_dir(extract_dir, package_name))
 
     return findings
+
+
+def _extract_tar_archive(tar: tarfile.TarFile, extract_dir: Path) -> None:
+    """Extract tar archive safely across supported Python versions.
+
+    Python 3.12+ supports tarfile's built-in filter-based extraction.
+    For older runtimes, validate members manually to block traversal and links.
+    """
+    if sys.version_info >= (3, 12):
+        tar.extractall(extract_dir, filter="data")
+        return
+
+    base_dir = extract_dir.resolve()
+    safe_members: list[tarfile.TarInfo] = []
+    for member in tar.getmembers():
+        target = (base_dir / member.name).resolve()
+        if not str(target).startswith(str(base_dir)):
+            raise ValueError(f"Tar path traversal blocked: {member.name}")
+        if member.issym() or member.islnk():
+            raise ValueError(f"Tar link entry blocked: {member.name}")
+        safe_members.append(member)
+
+    tar.extractall(extract_dir, members=safe_members)  # noqa: S202
 
 
 def _check_npm_install_hooks(extract_dir: Path, package_name: str) -> list[Finding]:

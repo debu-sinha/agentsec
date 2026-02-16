@@ -27,7 +27,7 @@ ENV/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
-tmp_pytest_codex/
+tmp_pytest_*/
 
 # Local temp artifacts
 .tmp/
@@ -52,3 +52,9 @@ agentsec_report.*
 
 # Claude Code
 CLAUDE.md
+.claude/
+.codex/
+internal/
+*strategy*.md
+*memory*.md
+*assessment*.md

@@ -180,6 +180,12 @@ powershell -ExecutionPolicy Bypass -File scripts\reproduce_top50_study.ps1 -Date
 
 Note: the PowerShell repro script currently supports agentsec scan output; semgrep/gitleaks steps are placeholders in that script.
 
+Adversarial consistency audit (docs vs artifacts):
+
+```bash
+python scripts/repo_consistency_audit.py
+```
+
 ## Case Studies
 
 - [001: Insecure workstation remediation](docs/case-studies/001-insecure-openclaw-workstation.md)

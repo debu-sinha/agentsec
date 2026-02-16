@@ -14,7 +14,7 @@
   2. Full tool profile with open inbound access (critical)
   3. Group policy is 'open' - agent responds in any group (high)
   4. Sandboxing disabled with full tool access and open input (high)
-  5. Exec approvals file missing - host execution uncontrolled (high)
+  5. World-readable sensitive file: exec-approvals.json (high)
   6. No SSRF protection configured for URL-based inputs (high)
 
 The configuration under test represents a common default setup: gateway bound to `0.0.0.0`, authentication disabled, DM and group policies both set to `open`, and the full tool profile enabled. This is roughly what you get if you stand up OpenClaw with minimal configuration and start developing against it.
@@ -24,7 +24,7 @@ The configuration under test represents a common default setup: gateway bound to
 1. Ran `agentsec scan` against the unconfigured installation (9 findings, grade F)
 2. Applied hardening profile: `workstation`
 3. Re-scanned to validate (4 findings, grade C)
-4. Reviewed residual findings - all three are filesystem permission issues that `harden` cannot fix on all platforms
+4. Reviewed residual findings - three high-severity filesystem permission issues plus one informational version-detection finding remain
 
 ## Measurable Outcomes
 
@@ -77,8 +77,19 @@ Note: The `harden` command does attempt to tighten permissions via `os.chmod`, b
 mkdir -p /tmp/test-openclaw/.openclaw
 cat > /tmp/test-openclaw/.openclaw/openclaw.json << 'EOF'
 {
+  "version": "2026.2.10",
+  "gateway": {
+    "bind": "0.0.0.0"
+  },
   "dmPolicy": "open",
   "groupPolicy": "open"
+}
+EOF
+
+# Include exec approvals file to reproduce world-readable permission finding
+cat > /tmp/test-openclaw/.openclaw/exec-approvals.json << 'EOF'
+{
+  "askFallback": "full"
 }
 EOF
 

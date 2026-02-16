@@ -4,11 +4,9 @@
 
 ---
 
-OpenClaw crossed 180,000 GitHub stars in early February 2026. In the same week, security researchers found over 135,000 exposed instances leaking API keys, chat histories, and credentials. Cisco tested a third-party skill and watched it silently exfiltrate data. Trend Micro documented 341 malicious skills on ClawHub. Five CVEs were published in a two-week span.
+This post focuses on evidence you can reproduce from this repository.
 
-The agentic AI revolution is here. So are the attackers.
-
-I built **agentsec** because I kept finding the same security anti-patterns in every OpenClaw installation I reviewed -- and there was no tool that checked for all of them at once.
+I built **agentsec** to detect recurring OpenClaw security misconfigurations and secret exposures, and to harden the risky defaults in one workflow.
 
 ## The Problem: Security Is Optional, Attackers Are Not
 
@@ -20,19 +18,16 @@ OpenClaw's own documentation admits: *"There is no 'perfectly secure' setup."* T
 - No SSRF protection until v2026.2.12
 - Skills installed without behavioral analysis
 
-The numbers tell the story:
+Repository-backed evidence:
 
-| What we found | Number | Source |
+| What we measured in this repo | Number | Artifact |
 |--------------|--------|--------|
-| Exposed OpenClaw instances on the internet | 135,000+ | Bitdefender |
-| ClawHub skills with vulnerabilities | 36.82% | Snyk ToxicSkills |
-| Confirmed malicious skill payloads | 76 | Snyk |
-| MCP servers with critical vulnerabilities | 32% | Enkrypt AI |
-| Average vulnerabilities per MCP server | 5.2 | Enkrypt AI |
-| MCP servers using insecure static secrets | 53% | Astrix |
-| Enterprise genAI use that is shadow IT | 72% | Netskope |
+| Named checks | 27 | `docs/checks-catalog.md` |
+| Fixture benchmark | P=0.82 / R=1.00 / F1=0.90 | `docs/benchmarks/results/2026-02-15-v0.4.0.json` |
+| Case studies | 4 | `docs/case-studies/` |
+| Top-50 study targets | 50 | `docs/benchmarks/top50/reports/top50_summary_20260216.json` |
 
-And these are just the ones that have been publicly documented.
+Any external ecosystem statistics should be cited separately in a references section before publication.
 
 ## What agentsec Does
 
@@ -107,17 +102,16 @@ agentsec produces SARIF output that integrates directly with GitHub Code Scannin
 
 Security findings appear as annotations on your pull requests. Same workflow as CodeQL, Semgrep, or Trivy -- but for your AI agent configuration.
 
-## How agentsec Compares
+## Scope
 
-The agentic AI security tooling space is growing fast. Here's where agentsec fits:
+This repository demonstrates an offline CLI workflow with:
 
-- **Snyk agent-scan** (formerly mcp-scan): Excellent MCP tool-poisoning detection with a unique proxy mode. But no installation config scanning, no hardening, no OWASP mapping, and sends data to Snyk cloud by default.
+- installation + skill + mcp + credential scanning
+- OWASP ASI01-ASI10 mapping
+- hardening profiles
+- JSON/SARIF output for CI
 
-- **Cisco Skill Scanner**: Sophisticated 6-layer analysis with LLM-as-Judge. But requires cloud connectivity and an LLM, no hardening, no credential scanning.
-
-- **Agentic Radar (SplxAI/Zscaler)**: Strong workflow visualization. But focused on agentic frameworks (LangGraph, CrewAI), not OpenClaw installation security.
-
-agentsec is the only tool that maps findings to the OWASP Agentic Top 10 (ASI01-ASI10) while also providing installation hardening, credential scanning, and SARIF output in a single offline CLI. No cloud. No LLM dependency. No data leaves your machine.
+Claims about comparative market position are intentionally omitted here unless backed by reproducible side-by-side benchmarks.
 
 ## What's Next
 
@@ -135,7 +129,7 @@ pip install agentsec-ai
 agentsec scan ~/.openclaw
 ```
 
-The scan takes seconds. The report might save you from being one of the 135,000.
+The scan takes seconds and produces artifact-backed findings you can verify.
 
 ---
 

@@ -36,6 +36,12 @@ logger = logging.getLogger(__name__)
 console = Console()
 
 
+def _supports_unicode_output() -> bool:
+    """Return True when terminal encoding supports Rich Unicode spinners."""
+    encoding = (console.encoding or "").lower()
+    return "utf" in encoding
+
+
 def _configure_logging(verbose: bool) -> None:
     level = logging.DEBUG if verbose else logging.WARNING
     logging.basicConfig(
@@ -184,7 +190,12 @@ def scan(
     )
 
     # Run the scan with progress spinner
-    is_tty = console.is_terminal and not quiet and output == "terminal"
+    is_tty = (
+        console.is_terminal
+        and not quiet
+        and output == "terminal"
+        and _supports_unicode_output()
+    )
 
     try:
         if is_tty:
@@ -786,14 +797,18 @@ def gate(
     console.print(f"  Fail threshold: [yellow]{fail_on}[/yellow]")
     console.print()
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        console=console,
-    ) as progress:
-        task = progress.add_task("Downloading and scanning...", total=None)
+    if console.is_terminal and _supports_unicode_output():
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console,
+        ) as progress:
+            task = progress.add_task("Downloading and scanning...", total=None)
+            result = gate_check(pkg_manager, args, fail_on=fail_on, force=force)
+            progress.update(task, completed=True)
+    else:
+        console.print("[dim]Downloading and scanning...[/dim]")
         result = gate_check(pkg_manager, args, fail_on=fail_on, force=force)
-        progress.update(task, completed=True)
 
     if result.findings:
         # Show findings

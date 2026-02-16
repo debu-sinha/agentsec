@@ -4,12 +4,12 @@
 
 Build the first comprehensive, developer-friendly security scanner and hardener for agentic AI installations that:
 
-1. Detects real-world vulnerabilities exploited in the wild (42K+ exposed OpenClaw instances, 341 malicious ClawHub skills, CVE-2026-25253)
+1. Detects high-impact OpenClaw security misconfigurations, secret exposure, and known CVE patterns
 2. Maps all findings to the OWASP Top 10 for Agentic Applications (2026)
 3. Provides actionable remediation guidance with auto-fix capabilities
 4. Runs as a single CLI command (`agentsec scan`) with zero configuration
 5. Integrates into CI/CD pipelines via JSON output and configurable exit codes
-6. Serves as the missing "trust layer" between free open-source tools and $100K+ enterprise platforms
+6. Produces reproducible evidence artifacts for security review and release gating
 
 ## Non-Goals
 
@@ -23,31 +23,17 @@ Build the first comprehensive, developer-friendly security scanner and hardener 
 
 ### The Problem
 
-OpenClaw (formerly Clawdbot/Moltbot) has exploded to 134K+ GitHub stars and 416K+ npm downloads. The security landscape is dire:
+OpenClaw deployments commonly combine inbound exposure, permissive messaging policies, over-broad tool access, and plaintext credentials. This project targets that installation-level risk with deterministic checks, hardening profiles, and reproducible artifacts.
 
-- **42,900+ exposed instances** found on the internet (Bitsight, SecurityScorecard STRIKE)
-- **93% of verified instances** have critical auth bypass vulnerabilities
-- **341 malicious skills** discovered in ClawHub marketplace (Koi Security "ClawHavoc" report)
-- **33% of 1,000 MCP servers** scanned have critical vulnerabilities (Enkrypt AI)
-- **CVE-2026-25253**: One-click RCE via WebSocket hijacking (CVSS 8.8)
-- **Active supply chain campaigns**: "clawdhub1" reverse shell campaign (Snyk), postmark-mcp email exfiltration (Snyk), fake VS Code extension RAT (Aikido)
+### Why This Tool Exists
 
-### Why Existing Tools Are Insufficient
-
-| Tool | Limitation |
-|------|-----------|
-| ClawSec (352 stars, 8 days old) | Config drift only, no behavioral analysis, no deep skill scanning |
-| Astrix Scanner | Detection-only — finds instances but doesn't scan or harden them |
-| mcp-scan (Snyk, 1,467 stars) | MCP-only — no OpenClaw skill ecosystem, no credential scanning |
-| VirusTotal/ClawHub | Pattern matching misses 7.1% of critical issues (Koi audit) |
-| Akto / Cisco AI Defense | $10K-$500K annually, enterprise-only, no developer tier |
+This repository focuses on one operational workflow: local scanning + hardening + report export. Comparative market analysis is intentionally out of scope for this design document unless benchmarked in-repo.
 
 ### Why Now
 
-- OWASP published the Top 10 for Agentic Applications in 2026 — no tooling exists to operationalize it
-- VCs investing heavily in AI agent security (2026 is the consolidation year)
-- 22% of Token Security's enterprise customers have employees running OpenClaw without IT approval
-- 6-12 month window before market consolidates
+- OWASP Agentic Top 10 provides a practical taxonomy for mapping findings.
+- OpenClaw deployments are expanding, and installation-hardening workflows are often ad hoc.
+- Reproducible local evidence is needed for launch and compliance reviews.
 
 ## Requirements
 
