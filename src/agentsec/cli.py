@@ -135,7 +135,7 @@ def scan(
     target_path = Path(target).expanduser().resolve()
 
     # Build config
-    valid_scanner_names = {"installation", "skill", "mcp", "credential"}
+    valid_scanner_names = set(get_all_scanners().keys())
     scanner_configs: dict[str, ScannerConfig] = {}
     if scanners:
         enabled_names = {s.strip() for s in scanners.split(",")}

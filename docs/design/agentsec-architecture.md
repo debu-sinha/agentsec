@@ -75,9 +75,9 @@ OpenClaw (formerly Clawdbot/Moltbot) has exploded to 134K+ GitHub stars and 416K
 
 ## Current State
 
-This is a greenfield project. No prior codebase exists.
+v0.4.0 shipped with 206 tests, 4 scanner modules, pre-install gate, 3 hardening profiles, and SARIF output.
 
-## Proposed Design
+## Design
 
 ### Architecture
 
@@ -100,6 +100,7 @@ flowchart TB
 
     Report --> Terminal[Terminal Reporter<br/>Rich]
     Report --> JSON[JSON Reporter]
+    Report --> SARIF[SARIF Reporter]
 
     subgraph Models
         Finding[Finding]
@@ -128,9 +129,10 @@ flowchart TB
 - Computes per-category risk scores (0-10)
 - Computes aggregate posture score (0-100) and letter grade (A-F)
 
-**Reporters** (terminal, JSON)
+**Reporters** (terminal, JSON, SARIF)
 - Terminal: Rich-based colored output with tables and panels
 - JSON: Structured output for CI/CD and programmatic consumption
+- SARIF: GitHub Code Scanning compatible output for PR integration
 
 ### Data Flow
 
@@ -165,7 +167,7 @@ sequenceDiagram
 #### Installation Scanner
 - Discovers config files (openclaw.json, .env, SOUL.md, etc.)
 - Checks file permissions (world-readable sensitive files)
-- Scans for plaintext secrets via 13 provider-specific regex patterns
+- Scans for plaintext secrets via 16 provider-specific regex patterns
 - Validates version against known CVE database
 - Checks network config (WebSocket bind address, origin validation)
 - Validates auth settings (enabled, auto-approve)
@@ -238,7 +240,7 @@ Aggregation of all findings with metadata:
 
 ## Security (of the Tool Itself)
 
-- **Secret sanitization**: All secrets are truncated to first 4 + last 4 chars in evidence fields
+- **Secret sanitization**: All secrets show first 4 + last 4 chars via shared `sanitize_secret()` utility
 - **Read-only**: No file modifications during scan (hardening is a separate command)
 - **No network calls**: Fully offline operation
 - **No eval/exec**: Tool never executes code from scanned targets
@@ -263,30 +265,35 @@ Aggregation of all findings with metadata:
 
 ## Rollout Plan
 
-### Phase 1: Core Scanner (v0.1.0) — Current
+### Phase 1: Core Scanner (v0.1.0) — Shipped
 - Installation, Skill, MCP, Credential scanners
 - OWASP scoring
 - Terminal and JSON reporters
 - CLI with scan command
-- Unit tests (43 passing)
 
-### Phase 2: Hardening (v0.2.0)
-- `agentsec harden` command
-- Credential vault migration (OS keychain)
-- File permission hardening
-- Config template generation
+### Phase 2: Hardening & Coverage (v0.2.0) — Shipped
+- `agentsec harden` command with 3 profiles (workstation, vps, public-bot)
+- SARIF reporter for GitHub Code Scanning
+- 30+ configuration checks, 16 credential providers
 
-### Phase 3: Advanced Detection (v0.3.0)
-- YARA rule support for custom detection
-- Sandboxed skill detonation
-- Network egress analysis
-- Drift detection daemon
+### Phase 3: Advanced Detection (v0.3.0) — Shipped
+- 5 CVE detections, SSRF protection check
+- `agentsec watch` filesystem watcher
+- `agentsec hook` shell hook generator
+- Version-gated checks via `_version_gte()`
 
-### Phase 4: Ecosystem (v0.4.0)
-- GitHub Action
-- Pre-commit hook
-- ClawHub integration
+### Phase 4: Pre-Install Gate (v0.4.0) — Shipped
+- `agentsec gate` pre-install security gate for npm/pip packages
+- Known-malicious package blocklist
+- npm install hook detection
+- Context-sensitive severity escalation
+- 206 tests, benchmark suite with P=0.82 R=1.00 F1=0.90
+
+### Phase 5: Ecosystem (v0.5.0) — Planned
+- GitHub Action marketplace listing
 - Community rule repository
+- Baseline/diff mode (alert only on new findings)
+- Skill quarantine command
 
 ## Risks / Open Questions
 

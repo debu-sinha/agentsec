@@ -39,7 +39,7 @@ And these are just the ones that have been publicly documented.
 agentsec is an open-source security scanner and hardener for OpenClaw installations. One command gives you a complete security posture assessment:
 
 ```bash
-pip install agentsec
+pip install agentsec-ai
 agentsec scan
 ```
 
@@ -117,21 +117,21 @@ The agentic AI security tooling space is growing fast. Here's where agentsec fit
 
 - **Agentic Radar (SplxAI/Zscaler)**: Strong workflow visualization. But focused on agentic frameworks (LangGraph, CrewAI), not OpenClaw installation security.
 
-agentsec is the only tool that combines full OWASP ASI01-ASI10 mapping, installation hardening, credential scanning, and SARIF output in a single offline CLI. No cloud. No LLM dependency. No data leaves your machine.
+agentsec is the only tool that maps findings to the OWASP Agentic Top 10 (ASI01-ASI10) while also providing installation hardening, credential scanning, and SARIF output in a single offline CLI. No cloud. No LLM dependency. No data leaves your machine.
 
 ## What's Next
 
-agentsec v0.3 will add:
+agentsec v0.5 will add:
 
-- **`agentsec watch`** -- continuous monitoring with drift detection
 - **`.agentsec.yaml`** -- per-project configuration with ignore rules
 - **Baseline/diff mode** -- only alert on new findings since last scan
 - **`agentsec skill quarantine`** -- isolate suspicious skills before analysis
+- **Community rule repository** -- share and import custom detection rules
 
 ## Get Started
 
 ```bash
-pip install agentsec
+pip install agentsec-ai
 agentsec scan ~/.openclaw
 ```
 

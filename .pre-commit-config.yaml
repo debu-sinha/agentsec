@@ -19,6 +19,6 @@ repos:
     hooks:
       - id: mypy
         args: [--ignore-missing-imports]
-        additional_dependencies: [pydantic, click, rich, pyyaml, pathspec, jinja2]
+        additional_dependencies: [pydantic, click, rich]
         pass_filenames: false
         entry: mypy src/agentsec/

@@ -350,6 +350,12 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
                 tar.extractall(extract_dir, filter="data")
         elif archive.suffix == ".whl" or archive.suffix == ".zip":
             with zipfile.ZipFile(archive, "r") as zf:
+                for info in zf.infolist():
+                    target = (extract_dir / info.filename).resolve()
+                    if not str(target).startswith(str(extract_dir.resolve())):
+                        raise ValueError(
+                            f"Zip path traversal blocked: {info.filename}"
+                        )
                 zf.extractall(extract_dir)  # noqa: S202
 
     # Run scanners on extracted contents

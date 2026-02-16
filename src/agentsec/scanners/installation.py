@@ -29,6 +29,7 @@ from agentsec.models.findings import (
     Remediation,
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
+from agentsec.utils import sanitize_secret
 
 logger = logging.getLogger(__name__)
 
@@ -434,10 +435,7 @@ class InstallationScanner(BaseScanner):
                 for secret_type, pattern in _SECRET_PATTERNS:
                     for match in pattern.finditer(content):
                         matched_text = match.group(0)
-                        if len(matched_text) > 12:
-                            sanitized = matched_text[:4] + "****" + matched_text[-4:]
-                        else:
-                            sanitized = "****"
+                        sanitized = sanitize_secret(matched_text)
 
                         line_num = content[: match.start()].count("\n") + 1
 

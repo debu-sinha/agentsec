@@ -65,7 +65,7 @@ Key decisions:
 - Finding evidence is truncated to prevent accidental secret leakage
 
 ## Rollout / Migration Plan
-1. v0.1.0: Core scanners, OWASP scoring, CLI — publish to PyPI
-2. v0.2.0: Hardening commands, credential vault migration
-3. v0.3.0: YARA rules, sandboxed detonation, drift detection
-4. v0.4.0: GitHub Action, pre-commit hook, ecosystem integrations
+1. v0.1.0: Core scanners, OWASP scoring, CLI — publish to PyPI (shipped)
+2. v0.2.0: Hardener with 3 profiles, SARIF reporter (shipped)
+3. v0.3.0: 5 CVE detections, filesystem watcher, shell hooks (shipped)
+4. v0.4.0: Pre-install gate, context-sensitive escalation, benchmark suite (shipped)

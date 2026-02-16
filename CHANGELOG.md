@@ -39,8 +39,8 @@ All notable changes to agentsec are documented here.
 
 ### Stats
 
-- 187 tests across 17 test files
-- 5 scanner modules (installation, skill, mcp, credential, gate)
+- 206 tests across 17 test files
+- 4 scanner modules (installation, skill, mcp, credential) + pre-install gate
 - 4 ADRs documenting key architectural decisions
 
 ## [0.3.1] - 2026-02-15
@@ -54,21 +54,7 @@ All notable changes to agentsec are documented here.
 
 ### Packaging & CI
 
-- Pinned dependency upper bounds to prevent future breakage
-- Fixed action.yml shell injection via env var indirection
-- CI self-scan now fails on critical severity (was silently ignored)
-- Added pip-audit to CI security job
-- Separated test/dev optional dependency groups
-- Removed unused deps (pyyaml, pathspec, jinja2)
 - Fixed README content-type for PyPI rendering
-
-### Bug Fixes
-
-- Fixed watcher always reporting score=0.0 (wrong dict key)
-- Fixed stale fallback version in SARIF output (0.2.0 -> 0.3.1)
-- Fixed config docstring listing "html" instead of "sarif"
-- Removed dead code (unused _findings attribute, empty hardeners package)
-- Exported SarifReporter from reporters package
 
 ### Stats
 
@@ -91,7 +77,7 @@ All notable changes to agentsec are documented here.
 
 ### Stats
 
-- 35+ security checks across 10 OWASP Agentic categories (ASI01-ASI10)
+- 35+ security checks across 7 OWASP Agentic categories
 - 123 tests, all passing
 
 ## [0.2.0] - 2026-02-13

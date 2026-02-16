@@ -30,7 +30,7 @@ The configuration simulates a common VPS deployment: gateway bound to all interf
    - Profile applied 8 config changes targeting all policy and gateway settings
 3. Re-scan after hardening:
    - `agentsec scan /opt/openclaw -o json -f case2-after.json --fail-on none`
-   - Result: 6 findings, score 49.0/100 (F)
+   - Result: 7 findings, score 42.0/100 (F)
 4. Manual follow-up fixes required:
    - Move Slack bot token from env.json to environment variable or secrets manager
    - Add authentication headers to remote MCP server configuration
@@ -40,11 +40,11 @@ The configuration simulates a common VPS deployment: gateway bound to all interf
 
 | Metric | Before | After | Delta |
 |---|---:|---:|---:|
-| Score | 5.0 | 49.0 | +44.0 |
+| Score | 5.0 | 42.0 | +37.0 |
 | Grade | F | F | -- |
 | Critical findings | 4 | 2 | -2 |
-| High findings | 7 | 3 | -4 |
-| Total findings | 12 | 6 | -6 |
+| High findings | 7 | 4 | -3 |
+| Total findings | 12 | 7 | -5 |
 
 Note: Grade remains F because residual critical findings (plaintext credentials, unauthenticated MCP) keep the score below passing threshold. These require manual remediation.
 
@@ -69,7 +69,8 @@ Note: Grade remains F because residual critical findings (plaintext credentials,
 - Remaining critical findings (2):
   - Plaintext Slack Token in env.json (installation scanner)
   - Slack Bot Token found in env.json (credential scanner)
-- Remaining high findings (3):
+- Remaining high findings (4):
+  - World-readable sensitive file: exec-approvals.json
   - World-readable sensitive file: openclaw.json
   - Agent config directory world-accessible: .openclaw
   - MCP server 'remote-tools' has no authentication configured
@@ -90,12 +91,8 @@ Note: Grade remains F because residual critical findings (plaintext credentials,
 mkdir -p /tmp/test-vps/.openclaw
 cat > /tmp/test-vps/.openclaw/openclaw.json << 'EOF'
 {
-  "gatewayHostname": "0.0.0.0",
-  "gatewayPort": 40000,
-  "authRequired": false,
   "dmPolicy": "open",
-  "groupPolicy": "open",
-  "toolProfile": "full"
+  "groupPolicy": "open"
 }
 EOF
 

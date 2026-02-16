@@ -1,7 +1,7 @@
 # ADR-0004: Pre-Install Security Gate for Skills and MCP Servers
 
 ## Status
-Proposed
+Accepted
 
 ## Context
 agentsec currently offers two reactive mechanisms for detecting malicious skills and MCP servers:

@@ -111,7 +111,7 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 
 ## Summary
 
-- **26 named checks** across 9 check families
+- **27 named checks** across 9 check families
 - **Dynamic credential detection** covering 16+ providers
 - **5 known CVE detections** (CVE-2026-25253, CVE-2026-24763, CVE-2026-25157, CVE-2026-25593, CVE-2026-25475)
 - All findings map to OWASP Agentic Top 10 (ASI01-ASI10)

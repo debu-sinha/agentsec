@@ -23,18 +23,18 @@ The configuration under test represents a common default setup: gateway bound to
 
 1. Ran `agentsec scan` against the unconfigured installation (9 findings, grade F)
 2. Applied hardening profile: `workstation`
-3. Re-scanned to validate (3 findings, grade B)
-4. Reviewed residual findings - both are filesystem permission issues that `harden` cannot fix on all platforms
+3. Re-scanned to validate (4 findings, grade C)
+4. Reviewed residual findings - all three are filesystem permission issues that `harden` cannot fix on all platforms
 
 ## Measurable Outcomes
 
 | Metric | Before | After | Delta |
 |---|---:|---:|---:|
-| Score | 20.0 | 86.0 | +66.0 |
-| Grade | F | B | -- |
+| Score | 20.0 | 79.0 | +59.0 |
+| Grade | F | C | -- |
 | Critical findings | 2 | 0 | -2 |
-| High findings | 6 | 2 | -4 |
-| Total findings | 9 | 3 | -6 |
+| High findings | 6 | 3 | -3 |
+| Total findings | 9 | 4 | -5 |
 
 ## What Automation Fixed vs Manual
 
@@ -48,6 +48,7 @@ The configuration under test represents a common default setup: gateway bound to
   - `dangerouslyDisableDeviceAuth`: (unset) -> false
   - `dangerouslyDisableAuth`: (unset) -> false
 - Manual fixes required:
+  - File permissions on `exec-approvals.json` (detected as world-readable; needs `chmod 600`)
   - File permissions on `openclaw.json` (detected as world-readable; needs `chmod 600`)
   - Directory permissions on `.openclaw/` (detected as world-accessible; needs `chmod 700`)
 
@@ -55,7 +56,8 @@ Note: The `harden` command does attempt to tighten permissions via `os.chmod`, b
 
 ## Residual Risk
 
-- Remaining high findings (2):
+- Remaining high findings (3):
+  - World-readable sensitive file: exec-approvals.json
   - World-readable sensitive file: openclaw.json
   - Agent config directory world-accessible: .openclaw
 - Remaining info findings (1):
@@ -66,7 +68,7 @@ Note: The `harden` command does attempt to tighten permissions via `os.chmod`, b
 
 ## Operator Feedback
 
-> The workstation profile resolved all the critical and most high-severity findings in a single command. The two remaining highs are filesystem permission issues that need manual attention on Windows. On a Linux workstation, the same run would likely land at 0 critical, 0 high.
+> The workstation profile resolved all the critical and most high-severity findings in a single command. The three remaining highs are filesystem permission issues that need manual attention on Windows. On a Linux workstation, the same run would likely land at 0 critical, 0 high.
 
 ## Repro Commands
 
@@ -75,12 +77,8 @@ Note: The `harden` command does attempt to tighten permissions via `os.chmod`, b
 mkdir -p /tmp/test-openclaw/.openclaw
 cat > /tmp/test-openclaw/.openclaw/openclaw.json << 'EOF'
 {
-  "gatewayHostname": "0.0.0.0",
-  "gatewayPort": 40000,
-  "authRequired": false,
   "dmPolicy": "open",
-  "groupPolicy": "open",
-  "toolProfile": "full"
+  "groupPolicy": "open"
 }
 EOF
 

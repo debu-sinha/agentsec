@@ -151,12 +151,12 @@ def test_git_config_credentials(scanner, tmp_path):
 def test_secret_sanitization():
     """Verify secrets are properly sanitized for display."""
     result = CredentialScanner._sanitize_secret("sk-abc123456789012345678901234567890")
-    assert result.startswith("sk")
-    assert result.endswith("90")
+    assert result.startswith("sk-a")
+    assert result.endswith("7890")
     assert "*" in result
-    # Should not expose more than first 2 + last 2 chars
+    # Should not expose more than first 4 + last 4 chars
     non_star = result.replace("*", "")
-    assert len(non_star) == 4
+    assert len(non_star) == 8
 
 
 def test_shannon_entropy():

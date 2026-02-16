@@ -22,6 +22,7 @@ from agentsec.models.findings import (
     Remediation,
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
+from agentsec.utils import sanitize_secret
 
 logger = logging.getLogger(__name__)
 
@@ -421,14 +422,8 @@ class CredentialScanner(BaseScanner):
 
     @staticmethod
     def _sanitize_secret(value: str) -> str:
-        """Sanitize a secret value for safe display.
-
-        Shows only the first 2 and last 2 characters to minimize exposure
-        while still allowing identification of the secret type.
-        """
-        if len(value) > 8:
-            return value[:2] + "*" * min(len(value) - 4, 16) + value[-2:]
-        return "*" * len(value)
+        """Sanitize a secret value for safe display."""
+        return sanitize_secret(value)
 
     @staticmethod
     def _is_placeholder(value: str) -> bool:
