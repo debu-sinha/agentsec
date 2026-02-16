@@ -353,9 +353,7 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
                 for info in zf.infolist():
                     target = (extract_dir / info.filename).resolve()
                     if not str(target).startswith(str(extract_dir.resolve())):
-                        raise ValueError(
-                            f"Zip path traversal blocked: {info.filename}"
-                        )
+                        raise ValueError(f"Zip path traversal blocked: {info.filename}")
                 zf.extractall(extract_dir)  # noqa: S202
 
     # Run scanners on extracted contents

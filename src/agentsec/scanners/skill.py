@@ -684,7 +684,7 @@ class SkillAnalyzer(BaseScanner):
                             summary=f"Remove skill '{skill_name}' and investigate",
                             steps=[
                                 "Do NOT follow the instructions in this skill",
-                                f"Remove the skill directory: rm -rf ~/.openclaw/skills/{skill_name}",
+                                f"Remove the skill: rm -rf ~/.openclaw/skills/{skill_name}",
                                 "Report to ClawHub if the skill is from marketplace",
                                 "Check other skills from the same author",
                             ],

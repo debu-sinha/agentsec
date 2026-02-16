@@ -96,7 +96,9 @@ class BaseScanner(ABC):
         except Exception as e:
             logger.error(
                 "Scanner '%s' failed unexpectedly: %s: %s",
-                self.name, type(e).__name__, e,
+                self.name,
+                type(e).__name__,
+                e,
             )
             logger.debug("Scanner '%s' traceback:", self.name, exc_info=True)
             return []

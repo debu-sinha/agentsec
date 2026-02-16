@@ -207,12 +207,8 @@ class TerminalReporter:
         """Actionable next steps — split into auto-fixable and manual."""
         from agentsec.models.findings import FindingCategory
 
-        auto_fixable = [
-            f for f in report.findings if f.remediation and f.remediation.automated
-        ]
-        manual = [
-            f for f in report.findings if not (f.remediation and f.remediation.automated)
-        ]
+        auto_fixable = [f for f in report.findings if f.remediation and f.remediation.automated]
+        manual = [f for f in report.findings if not (f.remediation and f.remediation.automated)]
 
         self.console.print()
         lines: list[str] = []
@@ -223,9 +219,7 @@ class TerminalReporter:
                 f"  [bold green]\u25b8 Auto-fix available[/bold green] "
                 f"[{_DIM}]({len(auto_fixable)} findings):[/{_DIM}]"
             )
-            lines.append(
-                "  [cyan]agentsec harden ~ -p workstation --apply[/cyan]"
-            )
+            lines.append("  [cyan]agentsec harden ~ -p workstation --apply[/cyan]")
             # Show compact list of what gets fixed
             auto_titles = [f.title for f in sorted(auto_fixable, key=lambda f: f.severity_rank)]
             for title in auto_titles[:6]:
@@ -236,24 +230,20 @@ class TerminalReporter:
 
         # Manual section — group credential findings to avoid repetition
         manual_urgent = sorted(
-            [
-                f
-                for f in manual
-                if f.severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH)
-            ],
+            [f for f in manual if f.severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH)],
             key=lambda f: f.severity_rank,
         )
 
         if manual_urgent:
             # Separate credential-type findings from others
-            _CRED_CATEGORIES = {
+            cred_categories = {
                 FindingCategory.PLAINTEXT_SECRET,
                 FindingCategory.EXPOSED_TOKEN,
                 FindingCategory.HARDCODED_CREDENTIAL,
                 FindingCategory.EXPOSED_CREDENTIALS,
             }
-            cred_findings = [f for f in manual_urgent if f.category in _CRED_CATEGORIES]
-            other_findings = [f for f in manual_urgent if f.category not in _CRED_CATEGORIES]
+            cred_findings = [f for f in manual_urgent if f.category in cred_categories]
+            other_findings = [f for f in manual_urgent if f.category not in cred_categories]
 
             lines.append(
                 f"  [bold yellow]\u25b8 Manual action required[/bold yellow] "

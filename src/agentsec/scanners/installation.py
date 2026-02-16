@@ -460,7 +460,7 @@ class InstallationScanner(BaseScanner):
                                     steps=[
                                         "Rotate the exposed credential immediately",
                                         f"Remove plaintext value from {name}",
-                                        "Store in OS keychain, secrets manager, or environment variable",
+                                        "Store in OS keychain, secrets manager, or env var",
                                         f"Add {name} to .gitignore if not already excluded",
                                     ],
                                 ),

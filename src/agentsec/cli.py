@@ -12,7 +12,6 @@ import logging
 import subprocess
 import sys
 import time
-from collections import OrderedDict
 from pathlib import Path
 
 import click
@@ -87,7 +86,7 @@ CI/CD integration:
     $ agentsec scan -o sarif -f results.sarif
 
 Learn more: https://github.com/debu-sinha/agentsec
-"""
+""",
 )
 @click.version_option(version=__version__, prog_name="agentsec")
 def main() -> None:
