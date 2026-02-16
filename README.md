@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/demo/screenshots/hero-banner.svg" alt="agentsec — AI Agent Security Scanner" width="600">
+  <img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/hero-banner.svg" alt="agentsec — AI Agent Security Scanner" width="600">
 </p>
 
 <p align="center">
@@ -135,17 +135,21 @@ jobs:
 Action definition:
 - [action.yml](action.yml)
 
-## UI Screenshots
+## Screenshots
 
-Deterministic colored UI captures (generated from fixed local fixtures):
-- `docs/demo/screenshots/ui-insecure.svg`
-- `docs/demo/screenshots/ui-clean.svg`
+### Step 1: Scan an insecure installation (Grade F, 28 findings)
 
-Regenerate:
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-before.png" alt="agentsec scan — insecure installation" width="900">
 
-```bash
-python docs/demo/generate_ui_screenshots.py
-```
+### Step 2: Apply hardening profile
+
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/harden-apply.png" alt="agentsec harden — workstation profile applied" width="900">
+
+### Step 3: Re-scan after hardening (14 findings remain — credentials need manual rotation)
+
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-findings.png" alt="agentsec scan — after hardening, findings view" width="900">
+
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-posture.png" alt="agentsec scan — after hardening, OWASP posture" width="900">
 
 ## Benchmarks and Studies
 
