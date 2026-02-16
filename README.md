@@ -193,6 +193,11 @@ python scripts/repo_consistency_audit.py
 - [003: Pre-install gate blocked malicious package](docs/case-studies/003-preinstall-gate-blocked-malicious-package.md)
 - [004: Malicious skill detection and block](docs/case-studies/004-malicious-skill-detection-and-block.md)
 
+## Launch Evidence
+
+- [Launch Evidence Manifest](docs/launch/LAUNCH_EVIDENCE_MANIFEST.md)
+- [EB1A Profile Brief](docs/launch/EB1A_PROFILE_BRIEF.md)
+
 ## Development
 
 ```bash

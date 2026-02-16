@@ -93,6 +93,7 @@ def _check_unbacked_claims(errors: list[str]) -> None:
             "93%",
             "341 malicious",
             "VCs investing",
+            "first comprehensive",
         ],
     }
     for path, banned_terms in checks.items():
@@ -102,6 +103,20 @@ def _check_unbacked_claims(errors: list[str]) -> None:
                 _fail(errors, f"{path}: contains unverified market claim token '{term}'")
 
 
+def _check_referenced_artifacts_exist(errors: list[str]) -> None:
+    paths = [
+        REPO_ROOT / "docs/blog/immunize-your-openclaw.md",
+        REPO_ROOT / "README.md",
+    ]
+    pattern = re.compile(r"`(docs/[^`]+\.(?:json|jsonl|md|csv))`")
+    for md_path in paths:
+        text = _load_text(md_path)
+        for rel in pattern.findall(text):
+            artifact = REPO_ROOT / rel
+            if not artifact.exists():
+                _fail(errors, f"{md_path}: referenced artifact missing: {rel}")
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -109,6 +124,7 @@ def main() -> int:
     _check_case_study_metrics(errors, case_num=1)
     _check_case_study_metrics(errors, case_num=2)
     _check_unbacked_claims(errors)
+    _check_referenced_artifacts_exist(errors)
 
     if errors:
         print("Repository consistency audit FAILED:")

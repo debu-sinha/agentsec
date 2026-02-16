@@ -25,7 +25,7 @@ Repository-backed evidence:
 | Named checks | 27 | `docs/checks-catalog.md` |
 | Fixture benchmark | P=0.82 / R=1.00 / F1=0.90 | `docs/benchmarks/results/2026-02-15-v0.4.0.json` |
 | Case studies | 4 | `docs/case-studies/` |
-| Top-50 study targets | 50 | `docs/benchmarks/top50/reports/top50_summary_20260216.json` |
+| Top-50 study targets | 50 | `docs/benchmarks/top50/reports/top50_summary_20260215.json` |
 
 Any external ecosystem statistics should be cited separately in a references section before publication.
 

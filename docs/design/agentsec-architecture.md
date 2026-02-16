@@ -2,7 +2,7 @@
 
 ## Goals
 
-Build the first comprehensive, developer-friendly security scanner and hardener for agentic AI installations that:
+Build a comprehensive, developer-friendly security scanner and hardener for agentic AI installations that:
 
 1. Detects high-impact OpenClaw security misconfigurations, secret exposure, and known CVE patterns
 2. Maps all findings to the OWASP Top 10 for Agentic Applications (2026)

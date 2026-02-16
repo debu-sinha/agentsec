@@ -15,18 +15,23 @@ import re
 import shutil
 import subprocess
 import sys
-import time
 import tempfile
+import time
+from contextlib import suppress
 from datetime import datetime, timezone
 from pathlib import Path
-
 
 DATE_STAMP = "20260215"
 STUDY_ID = "mcp-top50-2026-02"
 
 SKIP_PATTERNS = [
-    "awesome-mcp", "Awesome-MCP", "registry", "inspector",
-    "mcpso", "chatmcp", "mcp-use",
+    "awesome-mcp",
+    "Awesome-MCP",
+    "registry",
+    "inspector",
+    "mcpso",
+    "chatmcp",
+    "mcp-use",
 ]
 
 CAT_MAP = {
@@ -47,9 +52,20 @@ GITLEAKS_BIN = shutil.which("gitleaks") or "gitleaks"
 
 def get_repos():
     result = subprocess.run(
-        ["gh", "search", "repos", "mcp server", "--sort", "stars", "--limit", "60",
-         "--json", "fullName,stargazersCount,updatedAt,url"],
-        capture_output=True, text=True,
+        [
+            "gh",
+            "search",
+            "repos",
+            "mcp server",
+            "--sort",
+            "stars",
+            "--limit",
+            "60",
+            "--json",
+            "fullName,stargazersCount,updatedAt,url",
+        ],
+        capture_output=True,
+        text=True,
     )
     all_repos = json.loads(result.stdout)
     filtered = [
@@ -59,7 +75,11 @@ def get_repos():
     return filtered[:50]
 
 
-def _run(cmd: list[str], cwd: Path | None = None, timeout: int = 120) -> subprocess.CompletedProcess:
+def _run(
+    cmd: list[str],
+    cwd: Path | None = None,
+    timeout: int = 120,
+) -> subprocess.CompletedProcess:
     return subprocess.run(
         cmd,
         cwd=str(cwd) if cwd else None,
@@ -155,38 +175,35 @@ def _append_semgrep_findings(
     has_hicrit = False
     if not semgrep_json.exists():
         return has_hicrit
-    try:
+    with suppress(Exception):
         report = json.loads(semgrep_json.read_text(encoding="utf-8"))
-    except Exception:
-        return has_hicrit
-
-    for r in report.get("results", []):
-        sev = _map_semgrep_severity(r.get("extra", {}).get("severity", "INFO"))
-        sev_counts[sev] = sev_counts.get(sev, 0) + 1
-        if sev in ("critical", "high"):
-            has_hicrit = True
-        start = r.get("start", {}) or {}
-        line = start.get("line")
-        path = r.get("path")
-        location = f"{path}:{line}" if path and line else path
-        all_findings.append(
-            {
-                "study_id": STUDY_ID,
-                "target_id": target_id,
-                "source_type": "github",
-                "snapshot_ref": snapshot_ref,
-                "scanner": "semgrep",
-                "finding_id": r.get("check_id", "semgrep"),
-                "severity": sev,
-                "category": "other",
-                "title": r.get("extra", {}).get("message", "semgrep finding"),
-                "evidence": (r.get("extra", {}).get("metavars") or None),
-                "location": _sanitize_location(target_id, location),
-                "confidence": "needs_review",
-                "remediation": None,
-                "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-            }
-        )
+        for r in report.get("results", []):
+            sev = _map_semgrep_severity(r.get("extra", {}).get("severity", "INFO"))
+            sev_counts[sev] = sev_counts.get(sev, 0) + 1
+            if sev in ("critical", "high"):
+                has_hicrit = True
+            start = r.get("start", {}) or {}
+            line = start.get("line")
+            path = r.get("path")
+            location = f"{path}:{line}" if path and line else path
+            all_findings.append(
+                {
+                    "study_id": STUDY_ID,
+                    "target_id": target_id,
+                    "source_type": "github",
+                    "snapshot_ref": snapshot_ref,
+                    "scanner": "semgrep",
+                    "finding_id": r.get("check_id", "semgrep"),
+                    "severity": sev,
+                    "category": "other",
+                    "title": r.get("extra", {}).get("message", "semgrep finding"),
+                    "evidence": (r.get("extra", {}).get("metavars") or None),
+                    "location": _sanitize_location(target_id, location),
+                    "confidence": "needs_review",
+                    "remediation": None,
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+                }
+            )
     return has_hicrit
 
 
@@ -200,39 +217,36 @@ def _append_gitleaks_findings(
     has_hicrit = False
     if not gitleaks_json.exists():
         return has_hicrit
-    try:
+    with suppress(Exception):
         report = json.loads(gitleaks_json.read_text(encoding="utf-8"))
-    except Exception:
-        return has_hicrit
+        if not isinstance(report, list):
+            return has_hicrit
 
-    if not isinstance(report, list):
-        return has_hicrit
-
-    for r in report:
-        sev = "high"
-        sev_counts[sev] = sev_counts.get(sev, 0) + 1
-        has_hicrit = True
-        file_path = r.get("File")
-        line = r.get("StartLine")
-        location = f"{file_path}:{line}" if file_path and line else file_path
-        all_findings.append(
-            {
-                "study_id": STUDY_ID,
-                "target_id": target_id,
-                "source_type": "github",
-                "snapshot_ref": snapshot_ref,
-                "scanner": "gitleaks",
-                "finding_id": r.get("RuleID", "gitleaks"),
-                "severity": sev,
-                "category": "secret",
-                "title": f"Gitleaks: {r.get('Description', 'potential secret')}",
-                "evidence": None,
-                "location": _sanitize_location(target_id, location),
-                "confidence": "needs_review",
-                "remediation": "Rotate secret and remove from git history if real.",
-                "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-            }
-        )
+        for r in report:
+            sev = "high"
+            sev_counts[sev] = sev_counts.get(sev, 0) + 1
+            has_hicrit = True
+            file_path = r.get("File")
+            line = r.get("StartLine")
+            location = f"{file_path}:{line}" if file_path and line else file_path
+            all_findings.append(
+                {
+                    "study_id": STUDY_ID,
+                    "target_id": target_id,
+                    "source_type": "github",
+                    "snapshot_ref": snapshot_ref,
+                    "scanner": "gitleaks",
+                    "finding_id": r.get("RuleID", "gitleaks"),
+                    "severity": sev,
+                    "category": "secret",
+                    "title": f"Gitleaks: {r.get('Description', 'potential secret')}",
+                    "evidence": None,
+                    "location": _sanitize_location(target_id, location),
+                    "confidence": "needs_review",
+                    "remediation": "Rotate secret and remove from git history if real.",
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+                }
+            )
     return has_hicrit
 
 
@@ -292,7 +306,11 @@ def main():
         safe_name = name.replace("/", "_")
         target_path = work_dir / safe_name
 
-        print(f'[{i:>2}/{len(repos)}] {name} ({r["stargazersCount"]} stars)... ', end="", flush=True)
+        print(
+            f'[{i:>2}/{len(repos)}] {name} ({r["stargazersCount"]} stars)... ',
+            end="",
+            flush=True,
+        )
 
         # Shallow clone
         try:
@@ -324,8 +342,19 @@ def main():
         t0 = time.perf_counter()
         try:
             _run(
-                [sys.executable, "-m", "agentsec.cli", "scan", str(target_path),
-                 "-o", "json", "-f", str(scan_out), "--fail-on", "none"],
+                [
+                    sys.executable,
+                    "-m",
+                    "agentsec.cli",
+                    "scan",
+                    str(target_path),
+                    "-o",
+                    "json",
+                    "-f",
+                    str(scan_out),
+                    "--fail-on",
+                    "none",
+                ],
                 timeout=180,
             )
         except subprocess.TimeoutExpired:
@@ -335,7 +364,7 @@ def main():
             continue
 
         if semgrep_available:
-            try:
+            with suppress(Exception):
                 _run(
                     [
                         "semgrep",
@@ -349,11 +378,9 @@ def main():
                     ],
                     timeout=180,
                 )
-            except Exception:
-                pass
 
         if gitleaks_available:
-            try:
+            with suppress(Exception):
                 _run(
                     [
                         GITLEAKS_BIN,
@@ -369,8 +396,6 @@ def main():
                     ],
                     timeout=180,
                 )
-            except Exception:
-                pass
 
         elapsed = time.perf_counter() - t0
         durations.append(elapsed)
@@ -381,12 +406,17 @@ def main():
             continue
 
         has_hicrit = False
-        has_hicrit = _append_agentsec_findings(name, commit_sha, scan_out, all_findings, sev_counts) or has_hicrit
         has_hicrit = (
-            _append_semgrep_findings(name, commit_sha, semgrep_out, all_findings, sev_counts) or has_hicrit
+            _append_agentsec_findings(name, commit_sha, scan_out, all_findings, sev_counts)
+            or has_hicrit
         )
         has_hicrit = (
-            _append_gitleaks_findings(name, commit_sha, gitleaks_out, all_findings, sev_counts) or has_hicrit
+            _append_semgrep_findings(name, commit_sha, semgrep_out, all_findings, sev_counts)
+            or has_hicrit
+        )
+        has_hicrit = (
+            _append_gitleaks_findings(name, commit_sha, gitleaks_out, all_findings, sev_counts)
+            or has_hicrit
         )
 
         if has_hicrit:
