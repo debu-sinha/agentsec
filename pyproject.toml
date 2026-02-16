@@ -39,7 +39,7 @@ keywords = [
 ]
 dependencies = [
     "click>=8.1,<9",
-    "rich>=13.0,<14",
+    "rich>=13.0,<15",
     "pydantic>=2.0,<3",
     "tomli>=2.0,<3; python_version < '3.11'",
 ]
