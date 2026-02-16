@@ -1,6 +1,0 @@
-{
-  "defaults": {
-    "security": "allowlist",
-    "askFallback": "deny"
-  }
-}
