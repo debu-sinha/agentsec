@@ -1,15 +1,16 @@
 {
   "snapshot_date": "2026-02-17",
   "targets_scanned": 50,
-  "targets_cloned": 48,
-  "targets_with_critical_or_high": 6,
-  "critical": 9,
+  "targets_cloned": 49,
+  "targets_with_critical_or_high": 7,
+  "critical": 22,
   "high": 14,
-  "medium": 128,
-  "low": 395,
-  "info": 47,
-  "total_findings": 593,
-  "avg_findings_per_target": 12.35,
+  "medium": 217,
+  "low": 737,
+  "info": 48,
+  "total_findings": 1038,
+  "avg_findings_per_target": 21.18,
   "runtime_median_s": 2.66,
-  "runtime_p95_s": 58.21
+  "runtime_p95_s": 58.21,
+  "notes": "v0.4.2 expert-reviewed hardening. Expanded file coverage (+16 extensions, all .env.* variants). 77% of findings are Secret Keyword (detect-secrets KeywordDetector); 71% in test/doc context at LOW severity."
 }
