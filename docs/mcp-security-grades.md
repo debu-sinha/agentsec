@@ -14,21 +14,21 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 |--------|------:|
 | Repositories scanned | **50** |
 | Total findings | **219** |
-| ðŸ”´ Critical | **75** |
-| ðŸŸ  High | **28** |
-| ðŸŸ¡ Medium | **58** |
-| ðŸŸ¢ Low | **8** |
-| ðŸ”µ Info | **50** |
+| Ã°Å¸â€Â´ Critical | **75** |
+| Ã°Å¸Å¸Â  High | **28** |
+| Ã°Å¸Å¸Â¡ Medium | **58** |
+| Ã°Å¸Å¸Â¢ Low | **8** |
+| Ã°Å¸â€Âµ Info | **50** |
 | Repos with zero critical/high findings | **39** |
 | Repos with critical findings | **9** |
 
 ## Grade Distribution
 
-**A** `â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘â–‘â–‘â–‘â–‘â–‘` 41 repos (82%)
-**B** `â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 2 repos (4%)
-**C** `â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 1 repos (2%)
-**D** `â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 0 repos (0%)
-**F** `â–ˆâ–ˆâ–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 6 repos (12%)
+**A** `#########################-----` 41 repos (82%)
+**B** `#-----------------------------` 2 repos (4%)
+**C** `#-----------------------------` 1 repos (2%)
+**D** `------------------------------` 0 repos (0%)
+**F** `####--------------------------` 6 repos (12%)
 
 ## Most Common Finding Categories
 
@@ -127,11 +127,11 @@ Info-severity findings are tracked but do not affect the score.
 
 | Grade | Score Range | Meaning |
 |:-----:|:----------:|---------|
-| âœ… A | 90 -- 100 | Excellent -- minimal risk |
-| ðŸŸ¢ B | 75 -- 89  | Good -- minor issues only |
-| ðŸŸ¡ C | 60 -- 74  | Fair -- some high-severity issues |
-| ðŸŸ  D | 40 -- 59  | Poor -- multiple high-severity issues |
-| ðŸ”´ F | 0 -- 39   | Critical -- immediate action required |
+| Ã¢Å“â€¦ A | 90 -- 100 | Excellent -- minimal risk |
+| Ã°Å¸Å¸Â¢ B | 75 -- 89  | Good -- minor issues only |
+| Ã°Å¸Å¸Â¡ C | 60 -- 74  | Fair -- some high-severity issues |
+| Ã°Å¸Å¸Â  D | 40 -- 59  | Poor -- multiple high-severity issues |
+| Ã°Å¸â€Â´ F | 0 -- 39   | Critical -- immediate action required |
 
 ### Scanner Coverage
 
