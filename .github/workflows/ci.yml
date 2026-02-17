@@ -46,8 +46,20 @@ jobs:
       - name: Run tests
         run: pytest tests/ -v --tb=short --cov=src/agentsec --cov-report=term-missing --cov-fail-under=75
 
-  security:
+  test-gate:
     needs: test
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: Enforce matrix success
+        run: |
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "Matrix test job did not fully succeed: ${{ needs.test.result }}"
+            exit 1
+          fi
+
+  security:
+    needs: test-gate
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -72,7 +84,7 @@ jobs:
         run: pip-audit
 
   benchmark:
-    needs: test
+    needs: test-gate
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

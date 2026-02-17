@@ -92,3 +92,9 @@ Write commit messages in plain English, imperative mood:
 
 Use GitHub Issues for bug reports and feature requests via the issue templates.\nFor security vulnerabilities, see [SECURITY.md](SECURITY.md).\n\nAll contributors are expected to follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
+## Release Process
+
+- Create signed annotated tags only (example: `git tag -s v0.4.2 -m "v0.4.2"`).
+- Push tags with `git push origin v0.4.2`.
+- Tag pushes are validated by `.github/workflows/tag-verify.yml`.
+- GitHub release publication triggers PyPI publish with provenance attestation.
