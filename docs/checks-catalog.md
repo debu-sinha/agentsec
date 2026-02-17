@@ -104,9 +104,12 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 | ASI02 - Excessive Agency | CGW-001, CGW-005, CID-001, CID-002, CTO-001, CTO-002, CTO-003, CEX-001, CEX-003, CPL-001, CMCP-001 |
 | ASI03 - Supply Chain | CSK-001, CSK-002, CSK-004, CSK-005, CPL-001, CSF-001, CMCP-001, CMCP-002, CMCP-003 |
 | ASI05 - Insecure Output / Secrets | CGW-001, CGW-002, CGW-003, CGW-004, CGW-005, CFS-001, CFS-002, CSF-002, CMCP-002, credentials |
+| ASI04 - Knowledge Poisoning / Data Integrity | installation (workspace integrity) |
+| ASI06 - Memory & Context Manipulation | installation (workspace integrity) |
 | ASI07 - Multi-Agent Exploitation | CID-003 |
 | ASI08 - Uncontrolled Cascading | CEX-001, CEX-002, CEX-003 |
-| ASI10 - Insufficient Monitoring | CID-001, CSF-001 |
+| ASI09 - Repudiation / Insufficient Audit | installation (discovery config) |
+| ASI10 - Insufficient Monitoring | CID-001, CGW-003, CTO-001, CSF-001 |
 
 ## Summary
 

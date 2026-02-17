@@ -101,7 +101,7 @@ All notable changes to agentsec are documented here.
 
 ### Stats
 
-- 35+ security checks across 7 OWASP Agentic categories
+- 35+ security checks across all 10 OWASP Agentic categories
 - 123 tests, all passing
 
 ## [0.2.0] - 2026-02-13

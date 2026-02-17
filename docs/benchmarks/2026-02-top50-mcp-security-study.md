@@ -57,8 +57,8 @@ powershell -ExecutionPolicy Bypass -File scripts\reproduce_top50_study.ps1 -Date
 | Info findings | 49 |
 | Total findings | 255 |
 | Avg findings/target | 5.1 |
-| Median scan time | 0.6989 s |
-| P95 scan time | 7.8058 s |
+| Median scan time | 0.5738 s |
+| P95 scan time | 7.7053 s |
 
 ## Scanner Mix
 
