@@ -178,7 +178,7 @@ def render_dashboard(
             all_cats[cat] = all_cats.get(cat, 0) + count
     top_cats = sorted(all_cats.items(), key=lambda x: -x[1])[:8]
 
-    # Category display names
+    # Category display names and primary OWASP mapping
     cat_labels = {
         "exposed_token": "Exposed Token",
         "plaintext_secret": "Plaintext Secret",
@@ -197,6 +197,29 @@ def render_dashboard(
         "auth": "Auth",
         "config": "Config",
         "other": "Other",
+    }
+    cat_owasp = {
+        "exposed_token": "ASI05",
+        "plaintext_secret": "ASI05",
+        "exposed_credentials": "ASI05",
+        "insecure_default": "ASI02",
+        "outdated_version": "ASI03",
+        "dangerous_pattern": "ASI02",
+        "prompt_injection_vector": "ASI01",
+        "data_exfiltration_risk": "ASI05",
+        "config_drift": "ASI10",
+        "tool_poisoning": "ASI03",
+        "exec_risk": "ASI02",
+        "supply_chain": "ASI03",
+        "insecure_permissions": "ASI05",
+        "malicious_skill": "ASI03",
+        "missing_auth": "ASI05",
+        "network_exposure": "ASI05",
+        "mcp_tool_poisoning": "ASI03",
+        "mcp_no_auth": "ASI05",
+        "mcp_schema_violation": "ASI03",
+        "mcp_cross_origin": "ASI05",
+        "mcp_excessive_permissions": "ASI02",
     }
 
     # Severity totals (include info from the aggregated findings data)
@@ -293,12 +316,13 @@ def render_dashboard(
     # -- Top Finding Categories --
     lines.append("## Most Common Finding Categories")
     lines.append("")
-    lines.append("| # | Category | Findings | Share |")
-    lines.append("|--:|----------|--------:|------:|")
+    lines.append("| # | Category | OWASP | Findings | Share |")
+    lines.append("|--:|----------|:-----:|--------:|------:|")
     for i, (cat, count) in enumerate(top_cats, 1):
         label = cat_labels.get(cat, cat.replace("_", " ").title())
+        owasp = cat_owasp.get(cat, "---")
         share = round(count / max(total_findings, 1) * 100)
-        lines.append(f"| {i} | {label} | {count} | {share}% |")
+        lines.append(f"| {i} | {label} | {owasp} | {count} | {share}% |")
     lines.append("")
 
     # -- Repos Requiring Attention (C/D/F sorted worst-first) --

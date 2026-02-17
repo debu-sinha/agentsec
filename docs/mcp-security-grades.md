@@ -32,16 +32,16 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 
 ## Most Common Finding Categories
 
-| # | Category | Findings | Share |
-|--:|----------|--------:|------:|
-| 1 | Exposed Token | 85 | 32% |
-| 2 | Outdated Version | 50 | 19% |
-| 3 | Insecure Default | 50 | 19% |
-| 4 | Plaintext Secret | 43 | 16% |
-| 5 | Dangerous Pattern | 25 | 9% |
-| 6 | Data Exfiltration | 5 | 2% |
-| 7 | Prompt Injection | 5 | 2% |
-| 8 | Config Drift | 4 | 1% |
+| # | Category | OWASP | Findings | Share |
+|--:|----------|:-----:|--------:|------:|
+| 1 | Exposed Token | ASI05 | 85 | 32% |
+| 2 | Outdated Version | ASI03 | 50 | 19% |
+| 3 | Insecure Default | ASI02 | 50 | 19% |
+| 4 | Plaintext Secret | ASI05 | 43 | 16% |
+| 5 | Dangerous Pattern | ASI02 | 25 | 9% |
+| 6 | Data Exfiltration | ASI05 | 5 | 2% |
+| 7 | Prompt Injection | ASI01 | 5 | 2% |
+| 8 | Config Drift | ASI10 | 4 | 1% |
 
 ## Repos Requiring Attention
 
