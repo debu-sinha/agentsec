@@ -16,11 +16,15 @@ All notable changes to agentsec are documented here.
 - Use em-dash consistently in gate command header
 - Fix blog post check count from "35+" to accurate "27 named checks + dynamic credential detection"
 - Use absolute GitHub URLs for images in README (fixes PyPI rendering)
+- Fix zip extractall TOCTOU: extract members individually with per-file path traversal validation
+- Fix summary severity counts computed before escalation (summary now reflects post-escalation severities)
+- Sanitize gate error message to avoid leaking raw exception details
+- Update CITATION.cff, launch docs to v0.4.1
 
 ### Stats
 
-- 205 tests passing (1 Windows-only symlink skip)
-- All benchmark data verified by 6-expert swarm audit
+- 206 tests passing (1 Windows-only symlink skip)
+- All benchmark data verified by 8-expert swarm audit
 
 ## [0.4.0] - 2026-02-15
 

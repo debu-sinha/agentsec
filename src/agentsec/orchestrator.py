@@ -66,7 +66,11 @@ def run_scan(config: AgentsecConfig) -> ScanReport:
     scorer = OwaspScorer()
     owasp_mappings = scorer.score(all_findings)
 
-    # Build summary
+    # Run posture scoring first so context-sensitive severity escalation
+    # happens BEFORE the summary counts severities.
+    scorer.compute_posture_score(all_findings)
+
+    # Build summary (now reflects post-escalation severities)
     summary = ScanSummary.from_findings(
         findings=all_findings,
         scanners_run=scanners_run,
