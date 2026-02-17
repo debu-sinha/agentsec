@@ -197,10 +197,7 @@ def scan(
 
     # Run the scan with progress spinner
     is_tty = (
-        console.is_terminal
-        and not quiet
-        and output == "terminal"
-        and _supports_unicode_output()
+        console.is_terminal and not quiet and output == "terminal" and _supports_unicode_output()
     )
 
     try:

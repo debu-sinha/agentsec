@@ -91,6 +91,7 @@ def test_skips_symlinks(scanner, tmp_path):
     # The scan should complete without following symlinks into unexpected dirs
     assert isinstance(findings, list)
 
+
 def test_deduplicates_findings(scanner, tmp_path):
     """Same secret in same file should not be reported twice."""
     py_file = tmp_path / "config.py"
@@ -217,5 +218,3 @@ def test_skips_binary_extensions(scanner, tmp_path):
     scanner.scan(context)
     # Binary files should not increment the scan counter
     assert context.files_scanned == 0
-
-
