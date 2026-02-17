@@ -28,9 +28,40 @@ All notable changes to agentsec are documented here.
 - Add placeholder detection to installation scanner's plaintext secret check
   with doc context severity downgrade
 
+### Security Hardening (expert-reviewed)
+
+- Fix OpenAI pattern collision with Anthropic keys by adding `(?!ant-)` negative
+  lookahead; add support for `sk-proj-` and `sk-svcacct-` key formats with
+  hyphens/underscores; add upper bound `{20,200}` to prevent greedy over-matching
+- Fix `_is_placeholder()` false negative: remove `startswith(word)` check that
+  suppressed real secrets whose post-prefix body began with "test", "example",
+  etc.; replace with multi-word detection (2+ placeholder words = placeholder)
+- Fix connection string regex ReDoS risk: exclude `:@` from username capture
+  group to eliminate O(n^2) backtracking with multiple `:` before `@`
+- Add `mongodb+srv`, `mssql`, `rediss`, `amqps` protocols to connection string
+  detection
+- Fix connection string `$` prefix check: require proper env var pattern
+  (`${VAR}` or `$VAR_NAME`) instead of suppressing any password starting with `$`
+- Fix fingerprint deduplication: include `line_number` in hash so distinct
+  secrets of the same type in the same file are not collapsed into one finding
+- Add Groq (`gsk_`) and Replicate (`r8_`) API key detection patterns
+- Expand scannable file extensions: `.go`, `.rb`, `.java`, `.kt`, `.rs`, `.php`,
+  `.tf`, `.tfvars`, `.hcl`, `.pem`, `.key`, `.gradle`, `.cs`, `.swift`, `.r`
+- Scan all `.env.*` variants (was only 4 hardcoded names); add extensionless
+  files: Dockerfile, .npmrc, .pypirc, .netrc, .pgpass, .bashrc, Makefile
+- Increase `HexHighEntropyString` entropy threshold from 4.0 to 4.5 to reduce
+  false positives on git SHAs and commit hashes
+- Fix installation scanner `_is_plaintext_placeholder`: replace blanket
+  `len < 40` check with word-dominance ratio (word must be >= 30% of value)
+- Fix installation scanner `$` prefix check to match credential scanner fix
+
 ### Dependencies
 
 - Add `detect-secrets>=1.4,<2` as a runtime dependency
+
+### Stats
+
+- 230 tests passing (14 new expert-review tests, 1 Windows-only symlink skip)
 
 ## [0.4.1] - 2026-02-17
 

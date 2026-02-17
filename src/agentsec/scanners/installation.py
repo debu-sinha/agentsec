@@ -529,10 +529,10 @@ class InstallationScanner(BaseScanner):
         if lower in placeholders:
             return True
 
-        # Check for placeholder-ish words
+        # Check for placeholder-ish words — only suppress if word dominates value
         placeholder_words = {"example", "test", "dummy", "fake", "sample", "placeholder", "todo"}
         for word in placeholder_words:
-            if word in lower and len(lower) < 40:
+            if word in lower and len(word) >= len(lower) * 0.3:
                 return True
 
         # All same character or simple patterns
@@ -546,8 +546,12 @@ class InstallationScanner(BaseScanner):
         if "1234567890" in stripped or "abcdefghij" in stripped:
             return True
 
-        # Environment variable references
-        return value.startswith("${") or value.startswith("$") or value.startswith("%")
+        # Environment variable references: ${VAR}, $VAR_NAME, %VAR%
+        if value.startswith("${") and "}" in value:
+            return True
+        if re.match(r"^\$[A-Z_][A-Z0-9_]*$", value):
+            return True
+        return value.startswith("%") and value.endswith("%")
 
     def _scan_version_and_cves(self, context: ScanContext) -> list[Finding]:
         """Check installed version against known CVEs."""

@@ -51,6 +51,21 @@ _SCANNABLE_EXTENSIONS = {
     ".zsh",
     ".fish",
     ".ps1",
+    ".go",
+    ".rb",
+    ".java",
+    ".kt",
+    ".rs",
+    ".php",
+    ".tf",
+    ".tfvars",
+    ".hcl",
+    ".pem",
+    ".key",
+    ".gradle",
+    ".cs",
+    ".swift",
+    ".r",
 }
 
 # Files to always skip (binary or too large)
@@ -106,7 +121,7 @@ _DETECT_SECRETS_PLUGINS = [
     {"name": "GitHubTokenDetector"},
     {"name": "GitLabTokenDetector"},
     {"name": "Base64HighEntropyString", "limit": 5.0},
-    {"name": "HexHighEntropyString", "limit": 4.0},
+    {"name": "HexHighEntropyString", "limit": 4.5},
     {"name": "IbmCloudIamDetector"},
     {"name": "IbmCosHmacDetector"},
     {"name": "JwtTokenDetector"},
@@ -180,13 +195,13 @@ _ROTATION_ADVICE: dict[str, str] = {
 _EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
     (
         "OpenAI API Key",
-        re.compile(r"sk-[a-zA-Z0-9]{20,}"),
+        re.compile(r"sk-(?!ant-)(?:proj-|svcacct-)?[a-zA-Z0-9_\-]{20,200}"),
         FindingSeverity.CRITICAL,
         "Rotate at https://platform.openai.com/api-keys",
     ),
     (
         "Anthropic API Key",
-        re.compile(r"sk-ant-[a-zA-Z0-9_\-]{20,}"),
+        re.compile(r"sk-ant-[a-zA-Z0-9_\-]{20,200}"),
         FindingSeverity.CRITICAL,
         "Rotate at https://console.anthropic.com/settings/keys",
     ),
@@ -209,9 +224,22 @@ _EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
         "Restrict or delete in Google Cloud Console",
     ),
     (
+        "Groq API Key",
+        re.compile(r"gsk_[a-zA-Z0-9]{20,200}"),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://console.groq.com/keys",
+    ),
+    (
+        "Replicate API Token",
+        re.compile(r"r8_[a-zA-Z0-9]{20,200}"),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://replicate.com/account/api-tokens",
+    ),
+    (
         "Generic Connection String",
         re.compile(
-            r'(?:postgres(?:ql)?|mysql|mongodb|redis|amqp|mariadb)://[^\s"\']{1,200}:[^\s"\']{1,200}@[^\s"\']{1,200}',
+            r"(?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?|rediss?|amqps?|mariadb|mssql)"
+            r'://[^\s"\':@]{1,200}:[^\s"\'@]{1,200}@[^\s"\']{1,200}',
             re.I,
         ),
         FindingSeverity.CRITICAL,
@@ -359,13 +387,25 @@ class CredentialScanner(BaseScanner):
                 if item.name.lower() in _LOCK_FILE_NAMES:
                     continue
 
-                # Check extension (also allow extensionless .env files)
-                if item.suffix.lower() not in _SCANNABLE_EXTENSIONS and item.name not in {
-                    ".env",
-                    ".env.local",
-                    ".env.production",
-                    ".env.development",
-                }:
+                # Check extension (also allow .env* files and key extensionless files)
+                name_lower = item.name.lower()
+                if (
+                    item.suffix.lower() not in _SCANNABLE_EXTENSIONS
+                    and not name_lower.startswith(".env")
+                    and name_lower
+                    not in {
+                        "dockerfile",
+                        ".npmrc",
+                        ".pypirc",
+                        ".netrc",
+                        ".pgpass",
+                        ".bashrc",
+                        ".bash_profile",
+                        ".zshrc",
+                        ".profile",
+                        "makefile",
+                    }
+                ):
                     continue
 
                 # Check size
@@ -617,12 +657,17 @@ class CredentialScanner(BaseScanner):
         if any(p in lower for p in phrase_placeholders):
             return True
 
+        # Word placeholder check: suppress if (a) the word dominates the value
+        # (makes up >= 40% of the stripped length), or (b) multiple placeholder
+        # words appear in the same value. Do NOT use startswith to avoid
+        # suppressing real secrets like sk-testABC123... where "test" is just
+        # the first 4 random chars after prefix stripping.
+        placeholder_hits = sum(1 for w in word_placeholders if w in lower)
+        if placeholder_hits >= 2:
+            return True
         for word in word_placeholders:
-            if word in lower:
-                if len(word) >= len(stripped) * 0.4:
-                    return True
-                if stripped.startswith(word):
-                    return True
+            if word in lower and len(word) >= len(stripped) * 0.4:
+                return True
 
         # Check if it's all the same character
         if len(set(value)) <= 2:
@@ -645,8 +690,10 @@ class CredentialScanner(BaseScanner):
             return False
         password = m.group(1)
 
-        # Check for env var reference: ${VAR} or $VAR
-        if password.startswith("${") or password.startswith("$"):
+        # Check for env var reference: ${VAR_NAME} or $VAR_NAME (uppercase+underscore)
+        if password.startswith("${") and "}" in password:
+            return True
+        if re.match(r"^\$[A-Z_][A-Z0-9_]*$", password):
             return True
         # Check for angle-bracket placeholder: <password>
         if password.startswith("<") and password.endswith(">"):

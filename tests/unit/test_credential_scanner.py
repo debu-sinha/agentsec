@@ -341,3 +341,193 @@ def test_test_or_doc_context():
     assert CredentialScanner._is_test_or_doc_context(Path("examples/demo.py"))
     assert not CredentialScanner._is_test_or_doc_context(Path("src/config.py"))
     assert not CredentialScanner._is_test_or_doc_context(Path("app/settings.py"))
+
+
+# --- Expert review: Pattern coverage tests ---
+
+
+def test_detects_anthropic_key(scanner, tmp_path):
+    """Anthropic sk-ant- keys should be detected as CRITICAL."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "sk-ant-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    ant = [f for f in findings if "Anthropic" in f.title]
+    assert len(ant) >= 1
+    assert ant[0].severity == FindingSeverity.CRITICAL
+
+
+def test_detects_databricks_token(scanner, tmp_path):
+    """Databricks dapi tokens should be detected as CRITICAL."""
+    # Build token dynamically to avoid GitHub push protection flagging test data
+    token = "d" + "api" + "0" * 32
+    f = tmp_path / "config.py"
+    f.write_text(f'TOKEN = "{token}"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    db = [f for f in findings if "Databricks" in f.title]
+    assert len(db) >= 1
+    assert db[0].severity == FindingSeverity.CRITICAL
+
+
+def test_detects_huggingface_token(scanner, tmp_path):
+    """HuggingFace hf_ tokens should be detected as HIGH."""
+    f = tmp_path / "config.py"
+    f.write_text('TOKEN = "hf_aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    hf = [f for f in findings if "Hugging Face" in f.title]
+    assert len(hf) >= 1
+    assert hf[0].severity == FindingSeverity.HIGH
+
+
+def test_detects_google_api_key(scanner, tmp_path):
+    """Google AIza keys should be detected as HIGH."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "AIzaSyB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    goog = [f for f in findings if "Google" in f.title]
+    assert len(goog) >= 1
+    assert goog[0].severity == FindingSeverity.HIGH
+
+
+def test_detects_groq_api_key(scanner, tmp_path):
+    """Groq gsk_ keys should be detected as CRITICAL."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "gsk_aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    groq = [f for f in findings if "Groq" in f.title]
+    assert len(groq) >= 1
+    assert groq[0].severity == FindingSeverity.CRITICAL
+
+
+def test_detects_replicate_token(scanner, tmp_path):
+    """Replicate r8_ tokens should be detected as CRITICAL."""
+    f = tmp_path / "config.py"
+    f.write_text('TOKEN = "r8_aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    rep = [f for f in findings if "Replicate" in f.title]
+    assert len(rep) >= 1
+    assert rep[0].severity == FindingSeverity.CRITICAL
+
+
+# --- Expert review: OpenAI/Anthropic collision test ---
+
+
+def test_openai_pattern_does_not_match_anthropic(scanner, tmp_path):
+    """OpenAI pattern should NOT match sk-ant- keys (no double findings)."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "sk-ant-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    ant = [f for f in findings if "Anthropic" in f.title]
+    assert len(openai) == 0, "OpenAI pattern should not match sk-ant- keys"
+    assert len(ant) >= 1
+
+
+def test_openai_proj_key_detected(scanner, tmp_path):
+    """OpenAI sk-proj- keys with hyphens should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "sk-proj-aB3cD4eF-5gH6iJ7kL8mN9oP0"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) >= 1
+
+
+# --- Expert review: Placeholder bypass resistance ---
+
+
+def test_real_key_starting_with_test_not_suppressed(scanner, tmp_path):
+    """A real key whose post-prefix body starts with 'test' must NOT be suppressed."""
+    f = tmp_path / "config.py"
+    # Use high-entropy non-sequential value after "test"
+    f.write_text('KEY = "sk-testRn3K7mN9pQ2wY5zB8cD4fH6jL"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) >= 1, "Real key starting with 'test' after prefix should be detected"
+
+
+# --- Expert review: Connection string improvements ---
+
+
+def test_detects_mongodb_srv_connection_string(scanner, tmp_path):
+    """mongodb+srv:// connection strings should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('DB = "mongodb+srv://admin:Xk9mP2vR7wQ4@cluster0.example.net/prod"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    conn = [f for f in findings if "Connection String" in f.title]
+    assert len(conn) >= 1
+
+
+def test_connection_string_dollar_password_not_suppressed(scanner, tmp_path):
+    """Connection string with password starting with $ (not env var) should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('DB = "postgresql://admin:$ecureP@ss@prod.db.example.com:5432/app"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    conn = [f for f in findings if "Connection String" in f.title]
+    assert len(conn) >= 1, "Password starting with $ but not an env var ref should be detected"
+
+
+# --- Expert review: Lock file skipping ---
+
+
+def test_skips_lock_files(scanner, tmp_path):
+    """Lock files should be excluded from scanning entirely."""
+    lock = tmp_path / "pnpm-lock.yaml"
+    lock.write_text("password: sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    assert len(findings) == 0
+    assert context.files_scanned == 0
+
+
+# --- Expert review: Distinct secrets in same file not collapsed ---
+
+
+def test_distinct_secrets_same_file_not_collapsed(scanner, tmp_path):
+    """Two different secrets in the same file must produce two findings."""
+    f = tmp_path / "config.py"
+    f.write_text(
+        'KEY1 = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"\n'
+        'KEY2 = "sk-xY9wV8uT7sR6qP5oN4mL3kJ2iH1gF0eD9cB8aA7z"\n'
+    )
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) == 2, "Two distinct secrets should produce two findings"
+
+
+# --- Expert review: .env variant scanning ---
+
+
+def test_scans_env_variants(scanner, tmp_path):
+    """All .env.* variants should be scanned, not just the 4 hardcoded ones."""
+    f = tmp_path / ".env.staging"
+    f.write_text("API_KEY=sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    assert context.files_scanned >= 1
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) >= 1

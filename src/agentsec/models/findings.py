@@ -125,10 +125,12 @@ class Finding(BaseModel):
     def fingerprint(self) -> str:
         """Stable hash for deduplication across scans.
 
-        Based on scanner + category + file + title so the same issue
-        found in repeated scans is recognized as the same finding.
+        Based on scanner + category + file + title + line so distinct secrets
+        in the same file are not collapsed.
         """
-        content = f"{self.scanner}:{self.category.value}:{self.file_path}:{self.title}"
+        content = (
+            f"{self.scanner}:{self.category.value}:{self.file_path}:{self.title}:{self.line_number}"
+        )
         return hashlib.sha256(content.encode()).hexdigest()[:16]
 
     @property
