@@ -14,10 +14,19 @@ All notable changes to agentsec are documented here.
 - Add connection string placeholder password detection (skips `changeme`,
   `password`, env var references `${...}`, and angle-bracket placeholders)
 - Add file path context awareness: downgrade severity for findings in
-  documentation files (README, CHANGELOG) and test/example directories
+  documentation files (all `.md`/`.rst`), test files (`*.test.ts`, `*.spec.js`,
+  `test_*.py`, `*_test.go`), mock/fixture/stub files, docker-compose, and
+  template config files (alembic.ini, `.env.example`)
+- Downgrade all severity levels (critical/high/medium → low) in test/doc context,
+  not just critical/high
 - Add sequential pattern detection (`1234567890`, `abcdefghij`) to skip
   obviously fake credential values
+- Skip lock files entirely (pnpm-lock.yaml, package-lock.json, yarn.lock, etc.)
+- Expand placeholder password dictionary to 37 common values (postgres, mysql,
+  redis, guest, foobar, hunter2, etc.)
 - Fix connection string regex to match `postgresql://` (was only `postgres://`)
+- Add placeholder detection to installation scanner's plaintext secret check
+  with doc context severity downgrade
 
 ### Dependencies
 

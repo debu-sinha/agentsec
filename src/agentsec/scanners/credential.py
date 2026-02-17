@@ -66,6 +66,35 @@ _SKIP_PATTERNS = {
     ".cache",
 }
 
+# Lock files to skip entirely (contain integrity hashes, not secrets)
+_LOCK_FILE_NAMES = {
+    "pnpm-lock.yaml",
+    "pnpm-lock.json",
+    "package-lock.json",
+    "yarn.lock",
+    "pipfile.lock",
+    "poetry.lock",
+    "cargo.lock",
+    "gemfile.lock",
+    "composer.lock",
+    "bun.lockb",
+    "go.sum",
+    "flake.lock",
+    "packages.lock.json",
+    "pdm.lock",
+    "uv.lock",
+}
+
+# Known config template files where placeholder credentials are expected
+_TEMPLATE_CONFIG_FILES = {
+    "alembic.ini",
+    ".env.example",
+    ".env.sample",
+    ".env.template",
+    "config.example.yml",
+    "config.sample.yml",
+}
+
 # detect-secrets plugin configuration
 _DETECT_SECRETS_PLUGINS = [
     {"name": "AWSKeyDetector"},
@@ -205,6 +234,30 @@ _PLACEHOLDER_PASSWORDS: set[str] = {
     "example",
     "changeit",
     "default",
+    "postgres",
+    "mysql",
+    "redis",
+    "guest",
+    "user",
+    "foobar",
+    "foo",
+    "bar",
+    "baz",
+    "qwerty",
+    "abc123",
+    "123456",
+    "letmein",
+    "welcome",
+    "master",
+    "dbname",
+    "dbpass",
+    "dbpassword",
+    "testpassword",
+    "supersecret",
+    "topsecret",
+    "passw0rd",
+    "p@ssw0rd",
+    "hunter2",
 }
 
 # File names that indicate documentation context
@@ -302,6 +355,10 @@ class CredentialScanner(BaseScanner):
                 if not item.is_file():
                     continue
 
+                # Skip lock files (contain integrity hashes, not secrets)
+                if item.name.lower() in _LOCK_FILE_NAMES:
+                    continue
+
                 # Check extension (also allow extensionless .env files)
                 if item.suffix.lower() not in _SCANNABLE_EXTENSIONS and item.name not in {
                     ".env",
@@ -360,7 +417,11 @@ class CredentialScanner(BaseScanner):
                 # Downgrade severity for test/doc context
                 metadata: dict[str, str] = {"detector": secret.type}
                 if is_low_confidence:
-                    if severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH):
+                    if severity in (
+                        FindingSeverity.CRITICAL,
+                        FindingSeverity.HIGH,
+                        FindingSeverity.MEDIUM,
+                    ):
                         severity = FindingSeverity.LOW
                     metadata["context"] = "test_or_doc"
 
@@ -432,7 +493,11 @@ class CredentialScanner(BaseScanner):
                 effective_severity = severity
                 metadata: dict[str, str] = {}
                 if is_low_confidence:
-                    if severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH):
+                    if severity in (
+                        FindingSeverity.CRITICAL,
+                        FindingSeverity.HIGH,
+                        FindingSeverity.MEDIUM,
+                    ):
                         effective_severity = FindingSeverity.LOW
                     metadata["context"] = "test_or_doc"
 
@@ -514,6 +579,12 @@ class CredentialScanner(BaseScanner):
     @staticmethod
     def _is_placeholder(value: str) -> bool:
         """Check if a value looks like a placeholder rather than a real secret."""
+        lower = value.lower()
+
+        # Exact match against known placeholder passwords / common defaults
+        if lower in _PLACEHOLDER_PASSWORDS:
+            return True
+
         phrase_placeholders = {
             "your_api_key",
             "your-api-key",
@@ -539,8 +610,6 @@ class CredentialScanner(BaseScanner):
             "sk-xxx",
             "placeholder",
         }
-
-        lower = value.lower()
 
         # Strip known prefixes before checking (e.g. "sk-", "ghp_", "AKIA")
         stripped = re.sub(r"^(?:sk-(?:ant-)?|ghp_|gho_|gh[us]_|AKIA|hf_|dapi)", "", value).lower()
@@ -594,11 +663,34 @@ class CredentialScanner(BaseScanner):
         name_lower = file_path.name.lower()
         parts_lower = {p.lower() for p in file_path.parts}
 
-        # Documentation files
+        # All markdown files are documentation context
+        if name_lower.endswith(".md") or name_lower.endswith(".rst"):
+            return True
+        # Named documentation files
         if name_lower in _DOC_FILE_NAMES:
             return True
-        # Test files
+        # Python test files: test_*.py, *_test.py, conftest.py
         if name_lower.startswith("test_") or name_lower.endswith("_test.py"):
+            return True
+        if name_lower == "conftest.py":
+            return True
+        # JS/TS test files: *.test.ts, *.test.js, *.spec.ts, *.spec.js, etc.
+        if ".test." in name_lower or ".spec." in name_lower:
+            return True
+        # Integration test files: *.integration.test.ts, etc.
+        if "integration" in name_lower and ("test" in name_lower or "spec" in name_lower):
+            return True
+        # Go test files: *_test.go
+        if name_lower.endswith("_test.go"):
+            return True
+        # Mock/stub/fixture files
+        if "mock" in name_lower or "stub" in name_lower or "fixture" in name_lower:
+            return True
+        # Known config template files
+        if name_lower in _TEMPLATE_CONFIG_FILES:
+            return True
+        # Docker compose files (common placeholder passwords)
+        if name_lower.startswith("docker-compose") or name_lower == "compose.yml":
             return True
         # Example/template files
         if ".example" in name_lower or ".sample" in name_lower or ".template" in name_lower:

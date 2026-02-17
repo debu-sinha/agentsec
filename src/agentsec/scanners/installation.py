@@ -432,12 +432,30 @@ class InstallationScanner(BaseScanner):
                 content = path.read_text(errors="replace")
                 context.files_scanned += 1
 
+                # Determine if this is a documentation/example file
+                is_doc_context = path.name.lower().endswith((".md", ".rst"))
+
                 for secret_type, pattern in _SECRET_PATTERNS:
                     for match in pattern.finditer(content):
                         matched_text = match.group(0)
-                        sanitized = sanitize_secret(matched_text)
 
+                        # Extract the value portion (after = or :) to check placeholders
+                        value = matched_text
+                        value_match = re.search(r'[:=]\s*["\']?(.+?)(?:["\']?\s*$)', matched_text)
+                        if value_match:
+                            value = value_match.group(1).strip("\"' ")
+
+                        # Skip known placeholder values
+                        if self._is_plaintext_placeholder(value):
+                            continue
+
+                        sanitized = sanitize_secret(matched_text)
                         line_num = content[: match.start()].count("\n") + 1
+
+                        # Downgrade severity for documentation files
+                        severity = FindingSeverity.CRITICAL
+                        if is_doc_context:
+                            severity = FindingSeverity.LOW
 
                         context.register_secrets_location(path)
 
@@ -445,7 +463,7 @@ class InstallationScanner(BaseScanner):
                             Finding(
                                 scanner=self.name,
                                 category=FindingCategory.PLAINTEXT_SECRET,
-                                severity=FindingSeverity.CRITICAL,
+                                severity=severity,
                                 title=f"Plaintext {secret_type} in {name}",
                                 description=(
                                     f"A {secret_type} was found stored in plaintext in '{name}'. "
@@ -472,6 +490,64 @@ class InstallationScanner(BaseScanner):
                 logger.debug("Could not read %s", path)
 
         return findings
+
+    @staticmethod
+    def _is_plaintext_placeholder(value: str) -> bool:
+        """Check if a value from a config file is a placeholder, not a real secret."""
+        lower = value.lower()
+
+        # Known placeholder values
+        placeholders = {
+            "password",
+            "pass",
+            "changeme",
+            "mysecretpassword",
+            "secret",
+            "testpass",
+            "test",
+            "admin",
+            "root",
+            "your-password",
+            "example",
+            "changeit",
+            "default",
+            "foobar",
+            "placeholder",
+            "your_api_key",
+            "your-api-key",
+            "replace_me",
+            "sk-your",
+            "your-secret-key",
+            "my-test-salt",
+            "secret123",
+            "password123",
+            "for_testing_only",
+            "supersecret",
+            "topsecret",
+            "hunter2",
+        }
+        if lower in placeholders:
+            return True
+
+        # Check for placeholder-ish words
+        placeholder_words = {"example", "test", "dummy", "fake", "sample", "placeholder", "todo"}
+        for word in placeholder_words:
+            if word in lower and len(lower) < 40:
+                return True
+
+        # All same character or simple patterns
+        if len(set(value)) <= 2:
+            return True
+        if re.match(r"^[x\*\.]+$", value, re.I):
+            return True
+
+        # Sequential patterns
+        stripped = re.sub(r"[^a-z0-9]", "", lower)
+        if "1234567890" in stripped or "abcdefghij" in stripped:
+            return True
+
+        # Environment variable references
+        return value.startswith("${") or value.startswith("$") or value.startswith("%")
 
     def _scan_version_and_cves(self, context: ScanContext) -> list[Finding]:
         """Check installed version against known CVEs."""

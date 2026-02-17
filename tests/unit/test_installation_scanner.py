@@ -37,7 +37,7 @@ def temp_agent_dir(tmp_path):
 
     # Create .env with a fake secret
     env_path = tmp_path / ".env"
-    env_path.write_text("OPENAI_API_KEY=sk-abc123456789012345678901234567890123456789\n")
+    env_path.write_text("OPENAI_API_KEY=sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a\n")
 
     # Create SOUL.md with injection attempt
     soul_path = tmp_path / "SOUL.md"
