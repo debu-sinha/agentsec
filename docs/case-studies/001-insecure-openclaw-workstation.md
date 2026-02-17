@@ -8,7 +8,7 @@
 ## Starting Risk Posture
 
 - Overall score/grade: 5.0/100, F
-- Findings: 12 total, 5 critical, 7 high, 0 medium, 0 info
+- Findings: 12 total, 6 critical, 6 high, 0 medium, 0 info
 - Top blockers:
   1. DM policy set to 'open' - anyone can message the agent (critical)
   2. Full tool profile with open inbound access (critical)
@@ -30,8 +30,8 @@
 |---|---:|---:|---:|
 | Score | 5.0 | 79.0 | +74.0 |
 | Grade | F | C | -- |
-| Critical findings | 5 | 0 | -5 |
-| High findings | 7 | 3 | -4 |
+| Critical findings | 6 | 0 | -6 |
+| High findings | 6 | 3 | -3 |
 | Total findings | 12 | 3 | -9 |
 
 ## What Automation Fixed vs Manual

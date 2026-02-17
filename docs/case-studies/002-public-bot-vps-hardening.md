@@ -8,7 +8,7 @@
 ## Starting Risk Posture
 
 - Overall score/grade: 5.0/100, F
-- Findings: 15 total, 7 critical, 8 high, 0 medium, 0 low, 0 info
+- Findings: 15 total, 8 critical, 7 high, 0 medium, 0 low, 0 info
 
 ## Actions Taken
 
@@ -27,8 +27,8 @@
 |---|---:|---:|---:|
 | Score | 5.0 | 42.0 | +37.0 |
 | Grade | F | F | -- |
-| Critical findings | 7 | 2 | -5 |
-| High findings | 8 | 4 | -4 |
+| Critical findings | 8 | 2 | -6 |
+| High findings | 7 | 4 | -3 |
 | Total findings | 15 | 6 | -9 |
 
 ## What Automation Fixed vs Manual

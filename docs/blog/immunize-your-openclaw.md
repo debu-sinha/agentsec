@@ -46,7 +46,7 @@ It runs 27 named checks plus dynamic credential detection across four scanners:
 
 **MCP Server Scanner** -- audits MCP server configurations for tool poisoning, hardcoded credentials, missing authentication, and unverified packages.
 
-**Credential Scanner** -- deep recursive scan for secrets using 16 provider-specific patterns (OpenAI, Anthropic, AWS, GitHub, Slack, and more) plus Shannon entropy detection for custom tokens.
+**Credential Scanner** -- deep recursive scan for secrets using 17 regex patterns (OpenAI, Anthropic, AWS, GitHub, Slack, Stripe, Telegram, Discord, Google, Databricks, HuggingFace, and more) plus Shannon entropy detection for custom tokens.
 
 Every finding maps to the **OWASP Top 10 for Agentic Applications (ASI01-ASI10)**. You get a posture grade from A to F.
 

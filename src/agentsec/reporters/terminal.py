@@ -301,10 +301,8 @@ class TerminalReporter:
                     # Show remediation steps once for the group
                     representative = next((f for f in group if f.remediation), None)
                     if representative and representative.remediation:
-                        # Generalize file-specific steps for the group
                         for step in representative.remediation.steps:
-                            generalized = step.replace(f"from {file_name}", f"from {file_name}")
-                            lines.append(f"     [{_DIM}]- {generalized}[/{_DIM}]")
+                            lines.append(f"     [{_DIM}]- {step}[/{_DIM}]")
 
                     item_num += 1
 

@@ -43,7 +43,7 @@ agentsec scan ~/.openclaw
 | `installation` | Gateway exposure, auth posture, DM/group policy, tool/sandbox settings, SSRF and safety checks, known CVE version checks, sensitive file/dir permissions |
 | `skill` | Instruction malware, risky code patterns (`eval/exec/subprocess`), prompt-injection patterns, frontmatter capability risk, dependency/install-hook risk |
 | `mcp` | Tool poisoning patterns, auth gaps on remote endpoints, dangerous schema/permissions, unverified `npx` usage |
-| `credential` | 16 provider-specific secret patterns, high-entropy detection, git credential leakage |
+| `credential` | 17 secret patterns (OpenAI, Anthropic, AWS, GitHub, Slack, Stripe, etc.), high-entropy detection, git credential leakage |
 
 Reference catalog:
 - [checks-catalog.md](docs/checks-catalog.md) (27 named checks + dynamic credential findings)

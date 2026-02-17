@@ -153,7 +153,7 @@ sequenceDiagram
 #### Installation Scanner
 - Discovers config files (openclaw.json, .env, SOUL.md, etc.)
 - Checks file permissions (world-readable sensitive files)
-- Scans for plaintext secrets via 16 provider-specific regex patterns
+- Scans for plaintext secrets via 17 regex patterns covering major providers
 - Validates version against known CVE database
 - Checks network config (WebSocket bind address, origin validation)
 - Validates auth settings (enabled, auto-approve)
@@ -177,7 +177,7 @@ sequenceDiagram
 
 #### Credential Scanner
 - Deep recursive scan of all scannable files
-- 16 provider-specific secret patterns (OpenAI, Anthropic, AWS, GitHub, Slack, Stripe, etc.)
+- 17 secret patterns (OpenAI, Anthropic, AWS, GitHub, Slack, Stripe, Telegram, Discord, Google, Databricks, HuggingFace, Private Key, JWT, Connection String)
 - Shannon entropy detection for unknown secret formats
 - Git config credential exposure detection
 - Placeholder/false-positive filtering

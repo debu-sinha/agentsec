@@ -80,10 +80,9 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 
 The credential scanner does not use fixed check IDs. It generates findings dynamically based on:
 
-- **16 provider-specific patterns**: OpenAI, Anthropic, AWS, GitHub, GitLab, Slack, Stripe, Twilio, SendGrid, Mailgun, Datadog, New Relic, Sentry, Firebase, Supabase, HuggingFace
+- **17 regex patterns** covering: OpenAI, Anthropic, AWS, GitHub (PAT, OAuth, App), Slack (Bot, User), Stripe, Telegram, Discord, Google, Databricks, HuggingFace, Private Key (PEM), JWT, Generic Connection String (Postgres/MySQL/MongoDB/Redis/AMQP)
 - **Shannon entropy detection**: Strings with entropy >= 4.5 in secret-adjacent contexts
 - **Git config credentials**: Plaintext passwords in `.gitconfig` or `.git-credentials`
-- **Private key blocks**: PEM-formatted RSA/EC/DSA private keys
 
 All credential findings map to ASI05 (Insecure Output Handling / Secret Exposure).
 
@@ -101,17 +100,17 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 
 | OWASP Category | Check IDs |
 |----------------|-----------|
-| ASI01 - Prompt Injection | CTO-001, CSK-001, CSK-005, CMCP-001 |
-| ASI02 - Excessive Agency | CGW-001, CTO-001, CTO-002, CTO-003, CEX-001, CEX-002, CEX-003, CPL-001, CMCP-001 |
-| ASI03 - Supply Chain | CSK-001, CSK-002, CSK-004, CSK-005, CPL-001, CSF-001, CMCP-002, CMCP-003 |
-| ASI05 - Insecure Output / Secrets | CGW-001, CGW-002, CGW-003, CGW-004, CGW-005, CID-001, CID-002, CFS-001, CFS-002, CSF-002, CMCP-002, credentials |
+| ASI01 - Prompt Injection | CID-001, CID-002, CTO-001, CSK-001, CSK-003, CSK-005, CMCP-001 |
+| ASI02 - Excessive Agency | CGW-001, CGW-005, CID-001, CID-002, CTO-001, CTO-002, CTO-003, CEX-001, CEX-003, CPL-001, CMCP-001 |
+| ASI03 - Supply Chain | CSK-001, CSK-002, CSK-004, CSK-005, CPL-001, CSF-001, CMCP-001, CMCP-002, CMCP-003 |
+| ASI05 - Insecure Output / Secrets | CGW-001, CGW-002, CGW-003, CGW-004, CGW-005, CFS-001, CFS-002, CSF-002, CMCP-002, credentials |
 | ASI07 - Multi-Agent Exploitation | CID-003 |
 | ASI08 - Uncontrolled Cascading | CEX-001, CEX-002, CEX-003 |
-| ASI10 - Insufficient Monitoring | CSF-001 |
+| ASI10 - Insufficient Monitoring | CID-001, CSF-001 |
 
 ## Summary
 
 - **27 named checks** across 9 check families
-- **Dynamic credential detection** covering 16+ providers
+- **Dynamic credential detection** covering 17 regex patterns + entropy heuristics
 - **5 known CVE detections** (CVE-2026-25253, CVE-2026-24763, CVE-2026-25157, CVE-2026-25593, CVE-2026-25475)
 - All findings map to OWASP Agentic Top 10 (ASI01-ASI10)

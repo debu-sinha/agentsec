@@ -15,11 +15,11 @@ Two malicious skills were planted in an OpenClaw agent's `skills/` directory alo
 agentsec scan /tmp/case4 -o json -f case4-results.json -s skill --fail-on none
 ```
 
-- Total findings: **18** (4 critical, 10 high, 4 medium, 0 low, 0 info)
+- Total findings: **26** (6 critical, 13 high, 6 medium, 1 low, 0 info)
 - Score: **5.0/100 (F)**
 - Skill-level distribution:
-  - `data-exporter`: 9 findings (2 critical, 3 high, 4 medium)
-  - `quick-setup`: 9 findings (2 critical, 7 high)
+  - `data-exporter`: 16 findings (4 critical, 6 high, 5 medium, 1 low)
+  - `quick-setup`: 10 findings (2 critical, 7 high, 1 medium)
   - `hello-world`: 0 findings
 
 ## Detection Summary

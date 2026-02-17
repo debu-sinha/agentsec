@@ -112,7 +112,7 @@ All notable changes to agentsec are documented here.
 - OpenClaw installation scanner with 30+ configuration checks
 - MCP server scanner (tool poisoning, auth, schema validation)
 - Skill analyzer (AST malware, instruction malware, prompt injection)
-- Credential scanner (16 providers + Shannon entropy)
+- Credential scanner (17 patterns + Shannon entropy)
 - OWASP Agentic posture scoring (A-F grade, 0-100 score)
 - SARIF, JSON, and terminal reporters
 - Pre-commit hook support
