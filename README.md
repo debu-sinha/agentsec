@@ -47,6 +47,7 @@ agentsec scan ~/.openclaw
 
 Reference catalog:
 - [checks-catalog.md](docs/checks-catalog.md) (27 named checks + dynamic credential findings)
+- [CLI reference](docs/cli-reference.md) (full command/options guide)
 
 ## Core Commands
 
@@ -79,6 +80,9 @@ agentsec watch ~/.openclaw -i 2
 
 # Pre-install security gate
 agentsec gate npm install some-skill
+
+# Generate shell hook for auto scan workflow
+agentsec hook --shell zsh
 ```
 
 List available scanners:
@@ -136,6 +140,8 @@ Action definition:
 - [action.yml](action.yml)
 
 ## Screenshots
+
+Screenshots below focus on scan/harden flow. Gate and hook behavior are documented in the case studies and ADRs (`docs/case-studies/003-preinstall-gate-blocked-malicious-package.md`, `docs/adr/ADR-0004-pre-install-gate.md`).
 
 ### Step 1: Scan an insecure installation
 
@@ -224,5 +230,8 @@ Issue intake is template-driven under `.github/ISSUE_TEMPLATE/` to keep triage a
 ## License
 
 Apache-2.0
+
+
+
 
 
