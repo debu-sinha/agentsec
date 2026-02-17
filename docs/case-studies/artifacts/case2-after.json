@@ -1,28 +1,28 @@
 {
   "version": "0.4.0",
-  "scan_id": "aba2127375e3",
-  "timestamp": "2026-02-16T15:28:46.176236Z",
-  "target_path": "/tmp/case2",
+  "scan_id": "d78046343ea5",
+  "timestamp": "2026-02-17T00:04:17.992432Z",
+  "target_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2",
   "agent_type": "openclaw",
   "findings": [
     {
-      "id": "a2229572f836",
+      "id": "b6b3079dce94",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
       "title": "World-readable sensitive file: exec-approvals.json",
-      "description": "The file '/tmp/case2\\.openclaw\\exec-approvals.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "description": "The file 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\exec-approvals.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
       "evidence": "Permissions: 666",
-      "file_path": "/tmp/case2\\.openclaw\\exec-approvals.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\exec-approvals.json",
       "line_number": null,
       "remediation": {
         "summary": "Restrict permissions on exec-approvals.json to owner-only",
         "steps": [
-          "chmod 600 '/tmp/case2\\.openclaw\\exec-approvals.json'",
+          "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\exec-approvals.json'",
           "Verify no other processes depend on group/world access"
         ],
         "automated": true,
-        "command": "chmod 600 '/tmp/case2\\.openclaw\\exec-approvals.json'",
+        "command": "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\exec-approvals.json'",
         "references": []
       },
       "owasp_ids": [
@@ -30,27 +30,27 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:28:46.171839Z",
-      "fingerprint": "60f7be16de25287e"
+      "timestamp": "2026-02-17T00:04:17.985116Z",
+      "fingerprint": "514d2df337288e18"
     },
     {
-      "id": "33fdde362ee1",
+      "id": "3e9e08abee52",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
       "title": "World-readable sensitive file: openclaw.json",
-      "description": "The file '/tmp/case2\\.openclaw\\openclaw.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "description": "The file 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\openclaw.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
       "evidence": "Permissions: 666",
-      "file_path": "/tmp/case2\\.openclaw\\openclaw.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
         "summary": "Restrict permissions on openclaw.json to owner-only",
         "steps": [
-          "chmod 600 '/tmp/case2\\.openclaw\\openclaw.json'",
+          "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\openclaw.json'",
           "Verify no other processes depend on group/world access"
         ],
         "automated": true,
-        "command": "chmod 600 '/tmp/case2\\.openclaw\\openclaw.json'",
+        "command": "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\openclaw.json'",
         "references": []
       },
       "owasp_ids": [
@@ -58,26 +58,26 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:28:46.171884Z",
-      "fingerprint": "27895486c9e84442"
+      "timestamp": "2026-02-17T00:04:17.985172Z",
+      "fingerprint": "62f5559559be4387"
     },
     {
-      "id": "ba672e6b1548",
+      "id": "b17a87ea4ff3",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
       "title": "Agent config directory world-accessible: .openclaw",
-      "description": "The directory '/tmp/case2\\.openclaw' is accessible by all users. This directory contains agent configuration, credentials, session history, and exec approvals.",
+      "description": "The directory 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw' is accessible by all users. This directory contains agent configuration, credentials, session history, and exec approvals.",
       "evidence": "Permissions: 777",
-      "file_path": "/tmp/case2\\.openclaw",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw",
       "line_number": null,
       "remediation": {
         "summary": "Restrict .openclaw to owner-only access",
         "steps": [
-          "chmod 700 '/tmp/case2\\.openclaw'"
+          "chmod 700 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw'"
         ],
         "automated": true,
-        "command": "chmod 700 '/tmp/case2\\.openclaw'",
+        "command": "chmod 700 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw'",
         "references": []
       },
       "owasp_ids": [
@@ -85,32 +85,30 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:28:46.171980Z",
-      "fingerprint": "f52dfc70ea8a4f23"
+      "timestamp": "2026-02-17T00:04:17.985297Z",
+      "fingerprint": "980a3a21c5082ae7"
     },
     {
-      "id": "37c4b19ad4f7",
+      "id": "95cd92edebd4",
       "scanner": "installation",
       "category": "plaintext_secret",
       "severity": "critical",
       "title": "Plaintext Slack Token in env.json",
       "description": "A Slack Token was found stored in plaintext in 'env.json'. Plaintext credentials are trivially extractable by any malware, infostealer, or local process with read access.",
-      "evidence": "Pattern match: xoxb****uvwx (line 3)",
-      "file_path": "/tmp/case2\\.openclaw\\env.json",
+      "evidence": "Pattern match: xoxb****************uvwx (line 3)",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\env.json",
       "line_number": 3,
       "remediation": {
         "summary": "Move Slack Token to OS keychain or secrets manager",
         "steps": [
-          "Move secrets to OS keychain or environment variables",
-          "Run 'agentsec harden -p workstation --apply'",
           "Rotate the exposed credential immediately",
-          "Remove plaintext value from env.json"
+          "Remove plaintext value from env.json",
+          "Store in OS keychain, secrets manager, or env var",
+          "Add env.json to .gitignore if not already excluded"
         ],
         "automated": false,
-        "command": "agentsec harden -p workstation --apply",
-        "references": [
-          "https://docs.openclaw.ai/gateway/security"
-        ]
+        "command": null,
+        "references": []
       },
       "owasp_ids": [
         "ASI05",
@@ -118,45 +116,18 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:28:46.172334Z",
-      "fingerprint": "d6ee69206d14557d"
+      "timestamp": "2026-02-17T00:04:17.985687Z",
+      "fingerprint": "d1a7242d47cc1547"
     },
     {
-      "id": "aee1ed9c59f1",
-      "scanner": "installation",
-      "category": "outdated_version",
-      "severity": "info",
-      "title": "Could not determine agent version",
-      "description": "Unable to detect the installed agent version. Cannot check for known CVEs without version information.",
-      "evidence": null,
-      "file_path": null,
-      "line_number": null,
-      "remediation": {
-        "summary": "Ensure agent is updated to latest version",
-        "steps": [
-          "Run 'npm update -g openclaw' or check release notes"
-        ],
-        "automated": false,
-        "command": null,
-        "references": []
-      },
-      "owasp_ids": [
-        "ASI03"
-      ],
-      "cve_ids": [],
-      "metadata": {},
-      "timestamp": "2026-02-16T15:28:46.173047Z",
-      "fingerprint": "95acf7851abbf8c0"
-    },
-    {
-      "id": "945068e417ed",
+      "id": "00f4d5eeb37c",
       "scanner": "mcp",
       "category": "mcp_no_auth",
       "severity": "high",
       "title": "MCP server 'remote-tools' has no authentication configured",
       "description": "The MCP server 'remote-tools' connects to 'https://mcp.example.com/tools' without any authentication headers or tokens. This means the connection is unauthenticated and potentially accessible to unauthorized parties.",
       "evidence": null,
-      "file_path": "/tmp/case2\\.openclaw\\mcp.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\mcp.json",
       "line_number": null,
       "remediation": {
         "summary": "Configure authentication for the MCP server",
@@ -174,18 +145,18 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:28:46.174250Z",
-      "fingerprint": "e6baeac5d1320b8a"
+      "timestamp": "2026-02-17T00:04:17.987680Z",
+      "fingerprint": "720fbdde93d7df12"
     },
     {
-      "id": "8edcf43f39f6",
+      "id": "78fd660425ab",
       "scanner": "credential",
       "category": "exposed_token",
       "severity": "critical",
       "title": "Slack Bot Token found in env.json",
       "description": "A Slack Bot Token was found in 'env.json' at line 3. This credential should be stored in a secrets manager, not in plaintext files.",
-      "evidence": "Value: xo****************wx (line 3)",
-      "file_path": "/tmp/case2\\.openclaw\\env.json",
+      "evidence": "Value: xoxb****************uvwx (line 3)",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\env.json",
       "line_number": 3,
       "remediation": {
         "summary": "Rotate and secure the Slack Bot Token",
@@ -196,7 +167,7 @@
           "Add file to .gitignore if not already excluded"
         ],
         "automated": false,
-        "command": "agentsec harden -p workstation --apply",
+        "command": null,
         "references": []
       },
       "owasp_ids": [
@@ -204,13 +175,13 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:28:46.175096Z",
-      "fingerprint": "750dc6ac06f45bf3"
+      "timestamp": "2026-02-17T00:04:17.991402Z",
+      "fingerprint": "ced3a1b0200373e8"
     }
   ],
   "owasp_mappings": [
     {
-      "finding_id": "a2229572f836",
+      "finding_id": "b6b3079dce94",
       "categories": [
         "ASI05"
       ],
@@ -218,7 +189,7 @@
       "rationale": "Finding 'World-readable sensitive file: exec-approvals.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "33fdde362ee1",
+      "finding_id": "3e9e08abee52",
       "categories": [
         "ASI05"
       ],
@@ -226,7 +197,7 @@
       "rationale": "Finding 'World-readable sensitive file: openclaw.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "ba672e6b1548",
+      "finding_id": "b17a87ea4ff3",
       "categories": [
         "ASI05"
       ],
@@ -234,7 +205,7 @@
       "rationale": "Finding 'Agent config directory world-accessible: .openclaw' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "37c4b19ad4f7",
+      "finding_id": "95cd92edebd4",
       "categories": [
         "ASI05",
         "ASI03"
@@ -243,15 +214,7 @@
       "rationale": "Finding 'Plaintext Slack Token in env.json' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI03 (Supply Chain Vulnerabilities). Category: plaintext_secret."
     },
     {
-      "finding_id": "aee1ed9c59f1",
-      "categories": [
-        "ASI03"
-      ],
-      "risk_score": 1.0,
-      "rationale": "Finding 'Could not determine agent version' (info) maps to ASI03 (Supply Chain Vulnerabilities). Category: outdated_version."
-    },
-    {
-      "finding_id": "945068e417ed",
+      "finding_id": "00f4d5eeb37c",
       "categories": [
         "ASI05"
       ],
@@ -259,7 +222,7 @@
       "rationale": "Finding 'MCP server 'remote-tools' has no authentication configured' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: mcp_no_auth."
     },
     {
-      "finding_id": "8edcf43f39f6",
+      "finding_id": "78fd660425ab",
       "categories": [
         "ASI05"
       ],
@@ -268,20 +231,20 @@
     }
   ],
   "summary": {
-    "total_findings": 7,
+    "total_findings": 6,
     "critical": 2,
     "high": 4,
     "medium": 0,
     "low": 0,
-    "info": 1,
+    "info": 0,
     "scanners_run": [
       "installation",
       "skill",
       "mcp",
       "credential"
     ],
-    "files_scanned": 10,
-    "duration_seconds": 0.010985000000800937,
+    "files_scanned": 11,
+    "duration_seconds": 0.007562799997685943,
     "owasp_categories_hit": [
       "ASI03",
       "ASI05"
@@ -289,14 +252,14 @@
   },
   "metadata": {
     "config_files_found": {
-      "env.json": "/tmp/case2\\.openclaw\\env.json",
-      "exec-approvals.json": "/tmp/case2\\.openclaw\\exec-approvals.json",
-      "mcp.json": "/tmp/case2\\.openclaw\\mcp.json",
-      "openclaw.json": "/tmp/case2\\.openclaw\\openclaw.json",
-      "openclaw.json.bak": "/tmp/case2\\.openclaw\\openclaw.json.bak"
+      "env.json": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\env.json",
+      "exec-approvals.json": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\exec-approvals.json",
+      "mcp.json": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\mcp.json",
+      "openclaw.json": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\openclaw.json",
+      "openclaw.json.bak": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\openclaw.json.bak"
     },
     "secrets_locations": [
-      "/tmp/case2\\.openclaw\\env.json"
+      "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2\\.openclaw\\env.json"
     ]
   },
   "posture": {
@@ -304,7 +267,7 @@
     "category_scores": {
       "ASI01: Agent Goal Hijack / Prompt Injection": 10.0,
       "ASI02: Excessive Agency / Overprivileged Agents": 10.0,
-      "ASI03: Supply Chain Vulnerabilities": 7.8,
+      "ASI03: Supply Chain Vulnerabilities": 8.0,
       "ASI04: Knowledge Poisoning / Data Integrity": 10.0,
       "ASI05: Privilege Compromise / Credential Theft": 0.0,
       "ASI06: Memory & Context Manipulation": 10.0,

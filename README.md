@@ -196,6 +196,7 @@ python scripts/repo_consistency_audit.py
 ## Launch Evidence
 
 - [Launch Evidence Manifest](docs/launch/LAUNCH_EVIDENCE_MANIFEST.md)
+- [Reproducibility Spec](docs/launch/REPRODUCIBILITY_SPEC.md)
 
 ## Development
 

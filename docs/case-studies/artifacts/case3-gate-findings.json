@@ -1,16 +1,13 @@
-[
+﻿[
   {
     "package": "event-stream",
     "manager": "npm",
     "allowed": false,
     "blocklist_hit": true,
     "findings": [
-      {
-        "title": "Blocked package: event-stream",
-        "severity": "critical",
-        "category": "supply_chain"
-      }
-    ]
+      "Blocked package: event-stream"
+    ],
+    "seconds": 0.0001
   },
   {
     "package": "crossenv",
@@ -18,12 +15,9 @@
     "allowed": false,
     "blocklist_hit": true,
     "findings": [
-      {
-        "title": "Blocked package: crossenv",
-        "severity": "critical",
-        "category": "supply_chain"
-      }
-    ]
+      "Blocked package: crossenv"
+    ],
+    "seconds": 0.0
   },
   {
     "package": "flatmap-stream",
@@ -31,12 +25,9 @@
     "allowed": false,
     "blocklist_hit": true,
     "findings": [
-      {
-        "title": "Blocked package: flatmap-stream",
-        "severity": "critical",
-        "category": "supply_chain"
-      }
-    ]
+      "Blocked package: flatmap-stream"
+    ],
+    "seconds": 0.0
   },
   {
     "package": "colourama",
@@ -44,12 +35,9 @@
     "allowed": false,
     "blocklist_hit": true,
     "findings": [
-      {
-        "title": "Blocked package: colourama",
-        "severity": "critical",
-        "category": "supply_chain"
-      }
-    ]
+      "Blocked package: colourama"
+    ],
+    "seconds": 0.0
   },
   {
     "package": "noblesse",
@@ -57,11 +45,26 @@
     "allowed": false,
     "blocklist_hit": true,
     "findings": [
-      {
-        "title": "Blocked package: noblesse",
-        "severity": "critical",
-        "category": "supply_chain"
-      }
-    ]
+      "Blocked package: noblesse"
+    ],
+    "seconds": 0.0
+  },
+  {
+    "package": "express",
+    "manager": "npm",
+    "allowed": true,
+    "blocklist_hit": false,
+    "findings": [
+      "Gate scan failed for express"
+    ],
+    "seconds": 0.0061
+  },
+  {
+    "package": "requests",
+    "manager": "pip",
+    "allowed": true,
+    "blocklist_hit": false,
+    "findings": [],
+    "seconds": 4.9485
   }
 ]

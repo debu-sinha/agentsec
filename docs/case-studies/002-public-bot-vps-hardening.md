@@ -1,6 +1,6 @@
-# Case Study: Public OpenClaw Bot Hardening on VPS
+﻿# Case Study: Public OpenClaw Bot Hardening on VPS
 
-- Date: 2026-02-15
+- Date: 2026-02-16
 - Environment type: Public bot on internet-exposed VPS
 - Scope: installation + mcp + credential
 - Tool version: agentsec 0.4.0
@@ -8,33 +8,18 @@
 ## Starting Risk Posture
 
 - Overall score/grade: 5.0/100, F
-- Findings: 12 total, 4 critical, 7 high, 0 medium, 1 info
-- Top blockers:
-  1. DM policy set to 'open' - anyone can message the agent (critical)
-  2. Full tool profile with open inbound access (critical)
-  3. Plaintext Slack Token in config file (critical, detected by both installation and credential scanners)
-  4. Slack Bot Token found in env.json (critical)
-  5. World-readable sensitive file: exec-approvals.json (high)
-  6. Sandboxing disabled with full tool access and open input (high)
-  7. MCP server 'remote-tools' has no authentication configured (high)
-
-The configuration simulates a common VPS deployment: gateway bound to all interfaces, no authentication, open DM/group policies, full tool profile, a remote MCP server without auth headers, and a Slack bot token stored in plaintext. Score of 5.0 represents the minimum floor - nearly zero security controls.
+- Findings: 15 total, 7 critical, 8 high, 0 medium, 0 low, 0 info
 
 ## Actions Taken
 
 1. Baseline scan:
    - `agentsec scan /opt/openclaw -o json -f case2-before.json --fail-on none`
-   - Result: 12 findings, score 5.0/100 (F)
+   - Result: 15 findings, score 5.0/100 (F)
 2. Applied strict hardening profile:
    - `agentsec harden /opt/openclaw -p public-bot --apply`
-   - Profile applied 8 config changes targeting all policy and gateway settings
 3. Re-scan after hardening:
    - `agentsec scan /opt/openclaw -o json -f case2-after.json --fail-on none`
-   - Result: 7 findings, score 42.0/100 (F)
-4. Manual follow-up fixes required:
-   - Move Slack bot token from env.json to environment variable or secrets manager
-   - Add authentication headers to remote MCP server configuration
-   - Fix file permissions: `chmod 700 .openclaw && chmod 600 .openclaw/*.json`
+   - Result: 6 findings, score 42.0/100 (F)
 
 ## Measurable Outcomes
 
@@ -42,11 +27,9 @@ The configuration simulates a common VPS deployment: gateway bound to all interf
 |---|---:|---:|---:|
 | Score | 5.0 | 42.0 | +37.0 |
 | Grade | F | F | -- |
-| Critical findings | 4 | 2 | -2 |
-| High findings | 7 | 4 | -3 |
-| Total findings | 12 | 7 | -5 |
-
-Note: Grade remains F because residual critical findings (plaintext credentials, unauthenticated MCP) keep the score below passing threshold. These require manual remediation.
+| Critical findings | 7 | 2 | -5 |
+| High findings | 8 | 4 | -4 |
+| Total findings | 15 | 6 | -9 |
 
 ## What Automation Fixed vs Manual
 
@@ -74,15 +57,6 @@ Note: Grade remains F because residual critical findings (plaintext credentials,
   - World-readable sensitive file: openclaw.json
   - Agent config directory world-accessible: .openclaw
   - MCP server 'remote-tools' has no authentication configured
-- Remaining info (1):
-  - Could not determine agent version
-- Accepted risks and rationale:
-  - File permission findings resolve automatically on Linux with `chmod` commands in the manual fix step
-  - Version detection is cosmetic and does not affect security posture
-
-## Operator Feedback
-
-> The public-bot profile eliminated all the policy-level critical findings in one command, but credentials and MCP auth need manual attention. On a real VPS you'd also want firewall rules and reverse proxy in front of the gateway - agentsec flags the config-level issues but network hardening is out of scope.
 
 ## Repro Commands
 
@@ -92,9 +66,7 @@ mkdir -p /tmp/test-vps/.openclaw
 cat > /tmp/test-vps/.openclaw/openclaw.json << 'EOF'
 {
   "version": "2026.2.10",
-  "gateway": {
-    "bind": "0.0.0.0"
-  },
+  "gateway": {"bind": "0.0.0.0"},
   "dmPolicy": "open",
   "groupPolicy": "open"
 }
@@ -134,6 +106,5 @@ agentsec scan /tmp/test-vps -o json -f case2-after.json --fail-on none
 
 ## Artifacts
 
-- Raw report JSON (before): reproducible via repro commands above
-- Raw report JSON (after): reproducible via repro commands above
-- Config backup: `.openclaw/openclaw.json.bak` (created by `harden --apply`)
+- Raw report JSON (before): `docs/case-studies/artifacts/case2-before.json`
+- Raw report JSON (after): `docs/case-studies/artifacts/case2-after.json`

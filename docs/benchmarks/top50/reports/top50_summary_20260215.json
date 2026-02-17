@@ -9,8 +9,8 @@
     "low_findings":  8,
     "info_findings":  49,
     "avg_findings_per_target":  5.1,
-    "runtime_median_seconds":  0.6989,
-    "runtime_p95_seconds":  7.8058,
+    "runtime_median_seconds":  0.5738,
+    "runtime_p95_seconds":  7.7053,
     "false_positive_rate_sampled":  null,
     "notes":  [
                   "Set confidence via manual review for critical/high findings.",

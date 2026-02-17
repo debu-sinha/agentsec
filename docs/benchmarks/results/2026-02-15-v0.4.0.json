@@ -12,8 +12,8 @@
     "recall": 1.0,
     "f1": 0.9032,
     "critical_recall": 1.0,
-    "runtime_p50_ms": 6.0,
-    "runtime_p95_ms": 26.0
+    "runtime_p50_ms": 3.5,
+    "runtime_p95_ms": 11.6
   },
   "module_metrics": {
     "installation": {
@@ -70,7 +70,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 17.0,
+      "runtime_ms": 11.6,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -109,14 +109,14 @@
       "fp": 2,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 4.9,
+      "runtime_ms": 3.5,
       "expected": [
-        "Gateway bound to non-loopback interface",
-        "Gateway auth missing on non-loopback interface"
+        "Gateway auth missing on non-loopback interface",
+        "Gateway bound to non-loopback interface"
       ],
       "matched": [
-        "Gateway bound to non-loopback interface",
-        "Gateway auth missing on non-loopback interface"
+        "Gateway auth missing on non-loopback interface",
+        "Gateway bound to non-loopback interface"
       ],
       "missed": [],
       "false_positives": [
@@ -175,16 +175,16 @@
       "fp": 2,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 4.6,
+      "runtime_ms": 3.1,
       "expected": [
         "DM policy set to 'open'",
-        "Sandboxing disabled with full tool access and open input",
-        "Full tool profile with open inbound access"
+        "Full tool profile with open inbound access",
+        "Sandboxing disabled with full tool access and open input"
       ],
       "matched": [
         "DM policy set to 'open'",
-        "Sandboxing disabled with full tool access and open input",
-        "Full tool profile with open inbound access"
+        "Full tool profile with open inbound access",
+        "Sandboxing disabled with full tool access and open input"
       ],
       "missed": [],
       "false_positives": [
@@ -249,7 +249,7 @@
       "fp": 2,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 5.2,
+      "runtime_ms": 3.5,
       "expected": [
         "Exec approvals defaults.security set to 'full'"
       ],
@@ -313,20 +313,20 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 5.3,
+      "runtime_ms": 3.4,
       "expected": [
-        "CVE-2026-25593",
         "CVE-2026-25475",
+        "CVE-2026-25593",
         "CVE-2026-24763",
         "CVE-2026-25157",
         "CVE-2026-25253"
       ],
       "matched": [
-        "CVE-2026-25253",
-        "CVE-2026-25593",
         "CVE-2026-25475",
         "CVE-2026-25157",
-        "CVE-2026-24763"
+        "CVE-2026-25593",
+        "CVE-2026-24763",
+        "CVE-2026-25253"
       ],
       "missed": [],
       "false_positives": [],
@@ -388,7 +388,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 9.2,
+      "runtime_ms": 9.0,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -421,7 +421,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 22.9,
+      "runtime_ms": 8.9,
       "expected": [
         "Remote pipe to shell"
       ],
@@ -464,7 +464,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 26.0,
+      "runtime_ms": 7.8,
       "expected": [
         "Credential path targeting"
       ],
@@ -519,7 +519,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 23.8,
+      "runtime_ms": 7.7,
       "expected": [
         "Base64 encoded payload"
       ],
@@ -562,16 +562,16 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 23.7,
+      "runtime_ms": 9.5,
       "expected": [
+        "Dangerous import 'subprocess'",
         "Dangerous call 'exec()'",
-        "Dangerous call 'eval()'",
-        "Dangerous import 'subprocess'"
+        "Dangerous call 'eval()'"
       ],
       "matched": [
+        "Dangerous import 'subprocess'",
         "Dangerous call 'exec()'",
-        "Dangerous call 'eval()'",
-        "Dangerous import 'subprocess'"
+        "Dangerous call 'eval()'"
       ],
       "missed": [],
       "false_positives": [],
@@ -621,7 +621,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 5.9,
+      "runtime_ms": 3.5,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -654,14 +654,14 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 10.7,
+      "runtime_ms": 3.4,
       "expected": [
-        "Remote MCP server",
-        "MCP server 'remote-api' has no authentication"
+        "MCP server 'remote-api' has no authentication",
+        "Remote MCP server"
       ],
       "matched": [
-        "Remote MCP server",
-        "MCP server 'remote-api' has no authentication"
+        "MCP server 'remote-api' has no authentication",
+        "Remote MCP server"
       ],
       "missed": [],
       "false_positives": [],
@@ -705,15 +705,15 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 6.4,
+      "runtime_ms": 3.8,
       "expected": [
-        "Tool poisoning",
         "Dangerous parameter 'file_path'",
+        "Tool poisoning",
         "Dangerous parameter 'shell_command'"
       ],
       "matched": [
-        "Tool poisoning",
         "Dangerous parameter 'file_path'",
+        "Tool poisoning",
         "Dangerous parameter 'shell_command'"
       ],
       "missed": [],
@@ -764,7 +764,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 6.0,
+      "runtime_ms": 3.3,
       "expected": [
         "npx with unverified package"
       ],
@@ -807,7 +807,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 5.2,
+      "runtime_ms": 3.0,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -840,7 +840,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 6.4,
+      "runtime_ms": 4.0,
       "expected": [
         "AWS Access Key",
         "GitHub Personal Access Token",
@@ -923,7 +923,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 5.0,
+      "runtime_ms": 3.2,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -956,7 +956,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 0,
-      "runtime_ms": 1.8,
+      "runtime_ms": 1.2,
       "expected": [
         "npm install hook"
       ],

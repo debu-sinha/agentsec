@@ -1,28 +1,28 @@
 {
   "version": "0.4.0",
-  "scan_id": "9249e020e84b",
-  "timestamp": "2026-02-16T15:27:40.147625Z",
-  "target_path": "/tmp/case1",
+  "scan_id": "277d49150986",
+  "timestamp": "2026-02-17T00:04:00.090604Z",
+  "target_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1",
   "agent_type": "openclaw",
   "findings": [
     {
-      "id": "c6c03854e2b6",
+      "id": "39cb24b37b07",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
       "title": "World-readable sensitive file: exec-approvals.json",
-      "description": "The file '/tmp/case1\\.openclaw\\exec-approvals.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "description": "The file 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\exec-approvals.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
       "evidence": "Permissions: 666",
-      "file_path": "/tmp/case1\\.openclaw\\exec-approvals.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\exec-approvals.json",
       "line_number": null,
       "remediation": {
         "summary": "Restrict permissions on exec-approvals.json to owner-only",
         "steps": [
-          "chmod 600 '/tmp/case1\\.openclaw\\exec-approvals.json'",
+          "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\exec-approvals.json'",
           "Verify no other processes depend on group/world access"
         ],
         "automated": true,
-        "command": "chmod 600 '/tmp/case1\\.openclaw\\exec-approvals.json'",
+        "command": "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\exec-approvals.json'",
         "references": []
       },
       "owasp_ids": [
@@ -30,27 +30,27 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.142792Z",
-      "fingerprint": "dfa7f9a9cdb619ea"
+      "timestamp": "2026-02-17T00:04:00.086480Z",
+      "fingerprint": "2b50aeffb8e832cb"
     },
     {
-      "id": "0b31afe79106",
+      "id": "87713ed8667a",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
       "title": "World-readable sensitive file: openclaw.json",
-      "description": "The file '/tmp/case1\\.openclaw\\openclaw.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
+      "description": "The file 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json' is readable by all users on the system. Any local process or user can read its contents, which may include API keys, tokens, and other credentials.",
       "evidence": "Permissions: 666",
-      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
         "summary": "Restrict permissions on openclaw.json to owner-only",
         "steps": [
-          "chmod 600 '/tmp/case1\\.openclaw\\openclaw.json'",
+          "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json'",
           "Verify no other processes depend on group/world access"
         ],
         "automated": true,
-        "command": "chmod 600 '/tmp/case1\\.openclaw\\openclaw.json'",
+        "command": "chmod 600 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json'",
         "references": []
       },
       "owasp_ids": [
@@ -58,26 +58,26 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.142874Z",
-      "fingerprint": "a2febc7b6470a058"
+      "timestamp": "2026-02-17T00:04:00.086527Z",
+      "fingerprint": "b77e95f6ddaa5771"
     },
     {
-      "id": "d0bb62d0992b",
+      "id": "b048ffd863a1",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
       "title": "Agent config directory world-accessible: .openclaw",
-      "description": "The directory '/tmp/case1\\.openclaw' is accessible by all users. This directory contains agent configuration, credentials, session history, and exec approvals.",
+      "description": "The directory 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw' is accessible by all users. This directory contains agent configuration, credentials, session history, and exec approvals.",
       "evidence": "Permissions: 777",
-      "file_path": "/tmp/case1\\.openclaw",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw",
       "line_number": null,
       "remediation": {
         "summary": "Restrict .openclaw to owner-only access",
         "steps": [
-          "chmod 700 '/tmp/case1\\.openclaw'"
+          "chmod 700 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw'"
         ],
         "automated": true,
-        "command": "chmod 700 '/tmp/case1\\.openclaw'",
+        "command": "chmod 700 'C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw'",
         "references": []
       },
       "owasp_ids": [
@@ -85,45 +85,107 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.142990Z",
-      "fingerprint": "4f68fb069e9c78ee"
+      "timestamp": "2026-02-17T00:04:00.086627Z",
+      "fingerprint": "24b68bfac5dcb29c"
     },
     {
-      "id": "1561c826b2da",
+      "id": "0edc2c988f7b",
       "scanner": "installation",
-      "category": "outdated_version",
-      "severity": "info",
-      "title": "Could not determine agent version",
-      "description": "Unable to detect the installed agent version. Cannot check for known CVEs without version information.",
-      "evidence": null,
-      "file_path": null,
+      "category": "network_exposure",
+      "severity": "critical",
+      "title": "Gateway bound to non-loopback interface",
+      "description": "The OpenClaw Gateway is configured with bind='0.0.0.0', exposing the control interface beyond localhost. Unless protected by a firewall and strong auth, this allows remote attackers to interact with the agent directly.",
+      "evidence": "gateway.bind = 0.0.0.0",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
-        "summary": "Ensure agent is updated to latest version",
+        "summary": "Bind Gateway to loopback or add strong authentication",
         "steps": [
-          "Run 'npm update -g openclaw' or check release notes"
+          "Set gateway.bind to 'loopback' (default)",
+          "If remote access is needed, use a reverse proxy with auth",
+          "Ensure firewall rules restrict access to trusted IPs"
         ],
-        "automated": false,
-        "command": null,
+        "automated": true,
+        "command": "agentsec harden ~ -p workstation --apply",
         "references": []
       },
       "owasp_ids": [
-        "ASI03"
+        "ASI05",
+        "ASI02"
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.144036Z",
-      "fingerprint": "95acf7851abbf8c0"
+      "timestamp": "2026-02-17T00:04:00.087430Z",
+      "fingerprint": "a04f4e0d6db4fcbd"
     },
     {
-      "id": "65a6174518d1",
+      "id": "dfa1f4737565",
+      "scanner": "installation",
+      "category": "missing_auth",
+      "severity": "high",
+      "title": "No WebSocket origin validation configured",
+      "description": "The WebSocket server does not validate the Origin header. This enables Cross-Site WebSocket Hijacking from malicious webpages.",
+      "evidence": null,
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Configure allowed origins",
+        "steps": [
+          "Set 'allowed_origins' to specific trusted domains"
+        ],
+        "automated": true,
+        "command": "agentsec harden ~ -p workstation --apply",
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05",
+        "ASI01"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-17T00:04:00.087445Z",
+      "fingerprint": "c52f78402ae026e1"
+    },
+    {
+      "id": "61db5f1f1875",
+      "scanner": "installation",
+      "category": "missing_auth",
+      "severity": "critical",
+      "title": "Gateway auth missing on non-loopback interface",
+      "description": "The Gateway is bound to '0.0.0.0' but has no authentication configured. Any device on the network can control the agent.",
+      "evidence": "gateway.bind=0.0.0.0, gateway.auth=<missing>",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Configure token or password authentication",
+        "steps": [
+          "Set gateway.auth.token or gateway.auth.password",
+          "Prefer token-based auth for programmatic access"
+        ],
+        "automated": true,
+        "command": "agentsec harden ~ -p workstation --apply",
+        "references": [
+          "https://docs.openclaw.ai/gateway/security"
+        ]
+      },
+      "owasp_ids": [
+        "ASI05",
+        "ASI02"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-17T00:04:00.087455Z",
+      "fingerprint": "f7f35999f00de290"
+    },
+    {
+      "id": "bd4bdf814d42",
       "scanner": "installation",
       "category": "insecure_config",
       "severity": "critical",
       "title": "DM policy set to 'open' \u2014 anyone can message the agent",
       "description": "The agent accepts direct messages from anyone without pairing or allowlisting. This makes the agent a direct target for prompt injection attacks from untrusted users.",
       "evidence": "dmPolicy = open",
-      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
         "summary": "Restrict DM access to paired/allowlisted users",
@@ -131,8 +193,8 @@
           "Set dmPolicy to 'paired' or 'allowlist'",
           "Use 'openclaw config set dmPolicy paired'"
         ],
-        "automated": false,
-        "command": null,
+        "automated": true,
+        "command": "agentsec harden ~ -p workstation --apply",
         "references": [
           "https://docs.openclaw.ai/gateway/security"
         ]
@@ -144,18 +206,18 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.144217Z",
-      "fingerprint": "815b15bd5d0ef802"
+      "timestamp": "2026-02-17T00:04:00.087469Z",
+      "fingerprint": "d88a165db01dadaa"
     },
     {
-      "id": "e506af40b3d5",
+      "id": "682dff212e8b",
       "scanner": "installation",
       "category": "insecure_config",
-      "severity": "high",
+      "severity": "critical",
       "title": "Group policy is 'open' \u2014 agent responds in any group",
       "description": "The agent will respond to messages in any group it's added to. In large or public groups, untrusted users can inject prompts and trigger tool execution.",
       "evidence": "groupPolicy = open",
-      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
         "summary": "Restrict group policy to allowlisted groups",
@@ -163,8 +225,8 @@
           "Set groupPolicy to 'allowlist'",
           "Maintain an explicit list of trusted group IDs"
         ],
-        "automated": false,
-        "command": null,
+        "automated": true,
+        "command": "agentsec harden ~ -p workstation --apply",
         "references": []
       },
       "owasp_ids": [
@@ -173,18 +235,18 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.144236Z",
-      "fingerprint": "8acba1a737c3ffa3"
+      "timestamp": "2026-02-17T00:04:00.087477Z",
+      "fingerprint": "dce3499fcb2f98e0"
     },
     {
-      "id": "8165a4b7692b",
+      "id": "088dab364331",
       "scanner": "installation",
       "category": "insecure_default",
       "severity": "critical",
       "title": "Full tool profile with open inbound access",
       "description": "tools.profile is 'unset (defaults to full)' and the agent accepts messages from untrusted sources. This gives prompt-injected inputs access to all tools including exec, browser, and filesystem.",
       "evidence": "tools.profile=unset, dmPolicy=open",
-      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
         "summary": "Restrict tool profile for untrusted input routes",
@@ -193,8 +255,8 @@
           "Explicitly allow only needed tools via tools.allow",
           "Use 'openclaw config set tools.profile messaging'"
         ],
-        "automated": false,
-        "command": null,
+        "automated": true,
+        "command": "agentsec harden ~ -p workstation --apply",
         "references": [
           "https://docs.openclaw.ai/tools"
         ]
@@ -206,18 +268,18 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.144251Z",
-      "fingerprint": "44dbff5a8f90e770"
+      "timestamp": "2026-02-17T00:04:00.087492Z",
+      "fingerprint": "cf4b07b140310761"
     },
     {
-      "id": "20dbaf5f5fee",
+      "id": "38496c06fafb",
       "scanner": "installation",
       "category": "insecure_default",
       "severity": "high",
       "title": "Sandboxing disabled with full tool access and open input",
       "description": "The agent has full tool access and accepts untrusted input, but sandboxing is not enabled. Without container isolation, compromised tool calls run directly on the host.",
       "evidence": "sandbox.mode=unset, tools.profile=full",
-      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
         "summary": "Enable sandboxing for untrusted-input agents",
@@ -225,8 +287,8 @@
           "Set sandbox.mode to 'all' or 'non-main'",
           "Or restrict tools.profile to 'messaging'/'minimal'"
         ],
-        "automated": false,
-        "command": null,
+        "automated": true,
+        "command": "agentsec harden ~ -p workstation --apply",
         "references": [
           "https://docs.openclaw.ai/tools/multi-agent-sandbox-tools"
         ]
@@ -237,18 +299,47 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.144397Z",
-      "fingerprint": "513faf90125ec7df"
+      "timestamp": "2026-02-17T00:04:00.087672Z",
+      "fingerprint": "bcea8d78d7bd3297"
     },
     {
-      "id": "791958cae525",
+      "id": "4dca3a025cb0",
+      "scanner": "installation",
+      "category": "missing_auth",
+      "severity": "critical",
+      "title": "Authentication disabled on non-loopback agent",
+      "description": "The agent is accessible beyond localhost but has no authentication configured. Anyone who can reach the interface can issue commands and access credentials.",
+      "evidence": null,
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
+      "line_number": null,
+      "remediation": {
+        "summary": "Enable authentication",
+        "steps": [
+          "Enable auth in agent configuration",
+          "Set a strong, unique access token"
+        ],
+        "automated": false,
+        "command": null,
+        "references": []
+      },
+      "owasp_ids": [
+        "ASI05",
+        "ASI02"
+      ],
+      "cve_ids": [],
+      "metadata": {},
+      "timestamp": "2026-02-17T00:04:00.087685Z",
+      "fingerprint": "2b604b32df3654af"
+    },
+    {
+      "id": "d6b2f670032c",
       "scanner": "installation",
       "category": "insecure_default",
       "severity": "high",
       "title": "No SSRF protection configured for URL-based inputs",
       "description": "The agent can process URL-based inputs (input_file, input_image) but has no SSRF deny policy or hostname allowlist configured. Attackers can use the agent to scan internal networks, access cloud metadata endpoints (169.254.169.254), or exfiltrate data to external servers.",
       "evidence": "security.ssrf.denyPolicy and hostnameAllowlist are both absent",
-      "file_path": "/tmp/case1\\.openclaw\\openclaw.json",
+      "file_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json",
       "line_number": null,
       "remediation": {
         "summary": "Configure SSRF deny policy and hostname allowlist",
@@ -270,13 +361,13 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-16T15:27:40.144850Z",
-      "fingerprint": "dc8db00f40dc90cd"
+      "timestamp": "2026-02-17T00:04:00.088151Z",
+      "fingerprint": "e0ca0d7e99dcc928"
     }
   ],
   "owasp_mappings": [
     {
-      "finding_id": "c6c03854e2b6",
+      "finding_id": "39cb24b37b07",
       "categories": [
         "ASI05"
       ],
@@ -284,7 +375,7 @@
       "rationale": "Finding 'World-readable sensitive file: exec-approvals.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "0b31afe79106",
+      "finding_id": "87713ed8667a",
       "categories": [
         "ASI05"
       ],
@@ -292,7 +383,7 @@
       "rationale": "Finding 'World-readable sensitive file: openclaw.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "d0bb62d0992b",
+      "finding_id": "b048ffd863a1",
       "categories": [
         "ASI05"
       ],
@@ -300,15 +391,34 @@
       "rationale": "Finding 'Agent config directory world-accessible: .openclaw' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "1561c826b2da",
+      "finding_id": "0edc2c988f7b",
       "categories": [
-        "ASI03"
+        "ASI05",
+        "ASI02"
       ],
-      "risk_score": 1.0,
-      "rationale": "Finding 'Could not determine agent version' (info) maps to ASI03 (Supply Chain Vulnerabilities). Category: outdated_version."
+      "risk_score": 10.0,
+      "rationale": "Finding 'Gateway bound to non-loopback interface' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: network_exposure."
     },
     {
-      "finding_id": "65a6174518d1",
+      "finding_id": "dfa1f4737565",
+      "categories": [
+        "ASI05",
+        "ASI01"
+      ],
+      "risk_score": 8.2,
+      "rationale": "Finding 'No WebSocket origin validation configured' (high) maps to ASI05 (Privilege Compromise / Credential Theft), ASI01 (Agent Goal Hijack / Prompt Injection). Category: missing_auth."
+    },
+    {
+      "finding_id": "61db5f1f1875",
+      "categories": [
+        "ASI05",
+        "ASI02"
+      ],
+      "risk_score": 10.0,
+      "rationale": "Finding 'Gateway auth missing on non-loopback interface' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: missing_auth."
+    },
+    {
+      "finding_id": "bd4bdf814d42",
       "categories": [
         "ASI01",
         "ASI02",
@@ -318,7 +428,7 @@
       "rationale": "Finding 'DM policy set to 'open' \u2014 anyone can message the agent' (critical) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI02 (Excessive Agency / Overprivileged Agents), ASI10 (Misaligned Behaviors / Unintended Actions). Category: insecure_config."
     },
     {
-      "finding_id": "e506af40b3d5",
+      "finding_id": "682dff212e8b",
       "categories": [
         "ASI01",
         "ASI02"
@@ -327,7 +437,7 @@
       "rationale": "Finding 'Group policy is 'open' \u2014 agent responds in any group' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI02 (Excessive Agency / Overprivileged Agents). Category: insecure_config."
     },
     {
-      "finding_id": "8165a4b7692b",
+      "finding_id": "088dab364331",
       "categories": [
         "ASI02",
         "ASI01",
@@ -337,7 +447,7 @@
       "rationale": "Finding 'Full tool profile with open inbound access' (critical) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI01 (Agent Goal Hijack / Prompt Injection), ASI10 (Misaligned Behaviors / Unintended Actions). Category: insecure_default."
     },
     {
-      "finding_id": "20dbaf5f5fee",
+      "finding_id": "38496c06fafb",
       "categories": [
         "ASI02",
         "ASI08"
@@ -346,7 +456,16 @@
       "rationale": "Finding 'Sandboxing disabled with full tool access and open input' (high) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI08 (Uncontrolled Cascading / Runaway Agents). Category: insecure_default."
     },
     {
-      "finding_id": "791958cae525",
+      "finding_id": "4dca3a025cb0",
+      "categories": [
+        "ASI05",
+        "ASI02"
+      ],
+      "risk_score": 10.0,
+      "rationale": "Finding 'Authentication disabled on non-loopback agent' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: missing_auth."
+    },
+    {
+      "finding_id": "d6b2f670032c",
       "categories": [
         "ASI05",
         "ASI02"
@@ -356,12 +475,12 @@
     }
   ],
   "summary": {
-    "total_findings": 9,
-    "critical": 2,
-    "high": 6,
+    "total_findings": 12,
+    "critical": 5,
+    "high": 7,
     "medium": 0,
     "low": 0,
-    "info": 1,
+    "info": 0,
     "scanners_run": [
       "installation",
       "skill",
@@ -369,11 +488,10 @@
       "credential"
     ],
     "files_scanned": 4,
-    "duration_seconds": 0.013830700001562946,
+    "duration_seconds": 0.004094800002349075,
     "owasp_categories_hit": [
       "ASI01",
       "ASI02",
-      "ASI03",
       "ASI05",
       "ASI08",
       "ASI10"
@@ -381,24 +499,24 @@
   },
   "metadata": {
     "config_files_found": {
-      "exec-approvals.json": "/tmp/case1\\.openclaw\\exec-approvals.json",
-      "openclaw.json": "/tmp/case1\\.openclaw\\openclaw.json"
+      "exec-approvals.json": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\exec-approvals.json",
+      "openclaw.json": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1\\.openclaw\\openclaw.json"
     },
     "secrets_locations": []
   },
   "posture": {
-    "overall_score": 20.0,
+    "overall_score": 5.0,
     "category_scores": {
-      "ASI01: Agent Goal Hijack / Prompt Injection": 3.5,
+      "ASI01: Agent Goal Hijack / Prompt Injection": 5.0,
       "ASI02: Excessive Agency / Overprivileged Agents": 0.0,
-      "ASI03: Supply Chain Vulnerabilities": 9.8,
+      "ASI03: Supply Chain Vulnerabilities": 10.0,
       "ASI04: Knowledge Poisoning / Data Integrity": 10.0,
-      "ASI05: Privilege Compromise / Credential Theft": 2.9,
+      "ASI05: Privilege Compromise / Credential Theft": 1.0,
       "ASI06: Memory & Context Manipulation": 10.0,
       "ASI07: Multi-Agent System Exploitation": 10.0,
-      "ASI08: Uncontrolled Cascading / Runaway Agents": 8.2,
+      "ASI08: Uncontrolled Cascading / Runaway Agents": 9.0,
       "ASI09: Repudiation / Insufficient Audit Trail": 10.0,
-      "ASI10: Misaligned Behaviors / Unintended Actions": 5.3
+      "ASI10: Misaligned Behaviors / Unintended Actions": 7.3
     },
     "grade": "F"
   }
