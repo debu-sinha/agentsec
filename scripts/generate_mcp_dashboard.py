@@ -239,6 +239,29 @@ def render_dashboard(
     )
     lines.append("")
 
+    # -- Table of Contents --
+    lines.append(
+        "**Jump to:** "
+        "[Summary](#at-a-glance) | "
+        "[Grades](#grade-distribution) | "
+        "[Repos Requiring Attention](#repos-requiring-attention) | "
+        "[All Repos](#all-scanned-repos) | "
+        "[Methodology](#methodology)"
+    )
+    lines.append("")
+
+    # -- Key Risks callout --
+    risky_rows = [r for r in rows if r["grade"] in ("C", "D", "F")]
+    if risky_rows:
+        worst = max(risky_rows, key=lambda r: r["total"])
+        lines.append(
+            f"> **{len(risky_rows)} repos** scored below B. "
+            f"**{worst['target_id']}** alone has "
+            f"**{worst['critical']} critical** and "
+            f"**{worst['total']} total findings**."
+        )
+        lines.append("")
+
     # -- Quick Stats --
     lines.append("## At a Glance")
     lines.append("")
@@ -277,42 +300,61 @@ def render_dashboard(
         lines.append(f"| {i} | {label} | {count} | {share}% |")
     lines.append("")
 
-    # -- Leaderboard --
-    lines.append("## Security Leaderboard")
-    lines.append("")
-    lines.append(
-        "> Sorted by security score (highest first). Grade badges link to the repository on GitHub."
-    )
-    lines.append("")
-    lines.append("| # | Repository | Stars | Grade | Score | Crit | High | Med | Low | Total |")
-    lines.append("|--:|------------|------:|:-----:|------:|-----:|-----:|----:|----:|------:|")
+    # -- Repos Requiring Attention (C/D/F sorted worst-first) --
+    attention_rows = [r for r in rows if r["grade"] in ("C", "D", "F")]
+    attention_rows.sort(key=lambda r: (r["score"], r["target_id"]))
+    clean_rows = [r for r in rows if r["grade"] in ("A", "B")]
 
-    for i, r in enumerate(rows, 1):
+    lines.append("## Repos Requiring Attention")
+    lines.append("")
+    if attention_rows:
+        lines.append(
+            f"> {len(attention_rows)} repositories scored below B and have actionable findings."
+        )
+        lines.append("")
+        lines.append("| # | Repository | Grade | Score | Critical | High | Medium | Low | Total |")
+        lines.append("|--:|------------|:-----:|------:|---------:|-----:|-------:|----:|------:|")
+        for i, r in enumerate(attention_rows, 1):
+            tid = r["target_id"]
+            color = GRADE_COLORS[r["grade"]]
+            badge = (
+                f"![{r['grade']}](https://img.shields.io/badge/"
+                f"{r['grade']}-{color}?style=flat-square)"
+            )
+            repo_link = f"[{tid}](https://github.com/{tid})"
+            crit_fmt = f"**{r['critical']}**" if r["critical"] > 0 else "0"
+            high_fmt = f"**{r['high']}**" if r["high"] > 0 else "0"
+            lines.append(
+                f"| {i} | {repo_link} | {badge} | {r['score']} | "
+                f"{crit_fmt} | {high_fmt} | {r['medium']} "
+                f"| {r['low']} | {r['total']} |"
+            )
+        lines.append("")
+    else:
+        lines.append("No repositories scored below B.")
+        lines.append("")
+
+    # -- All Scanned Repos (A/B collapsed) --
+    lines.append("## All Scanned Repos")
+    lines.append("")
+    lines.append(f"> {len(clean_rows)} repositories scored A or B.")
+    lines.append("")
+    lines.append("<details>")
+    lines.append(f"<summary>View all {len(clean_rows)} clean repos</summary>")
+    lines.append("")
+    lines.append("| Repository | Stars | Grade | Score |")
+    lines.append("|------------|------:|:-----:|------:|")
+    for r in clean_rows:
         tid = r["target_id"]
-        grade = r["grade"]
-        color = GRADE_COLORS[grade]
-        badge = f"![{grade}](https://img.shields.io/badge/{grade}-{color}?style=flat-square)"
+        color = GRADE_COLORS[r["grade"]]
+        badge = (
+            f"![{r['grade']}](https://img.shields.io/badge/{r['grade']}-{color}?style=flat-square)"
+        )
         repo_link = f"[{tid}](https://github.com/{tid})"
         stars_fmt = f"{r['stars']:,}"
-
-        crit_fmt = f"**{r['critical']}**" if r["critical"] > 0 else "0"
-        high_fmt = f"**{r['high']}**" if r["high"] > 0 else "0"
-
-        lines.append(
-            f"| {i} | {repo_link} | {stars_fmt} | {badge} | {r['score']} | "
-            f"{crit_fmt} | {high_fmt} | {r['medium']} | {r['low']} | {r['total']} |"
-        )
+        lines.append(f"| {repo_link} | {stars_fmt} | {badge} | {r['score']} |")
     lines.append("")
-
-    # -- Severity Breakdown --
-    lines.append("## Severity Breakdown")
-    lines.append("")
-    sev_bar_total = sum(sev_totals.values()) or 1
-    for sev_name, sev_count in sev_totals.items():
-        emoji = SEV_EMOJI[sev_name]
-        bar_len = int(sev_count / sev_bar_total * 40)
-        bar = "\u2588" * max(bar_len, 1 if sev_count > 0 else 0)
-        lines.append(f"{emoji} **{sev_name.capitalize()}** ({sev_count}): `{bar}`")
+    lines.append("</details>")
     lines.append("")
 
     # -- Methodology --
