@@ -2,14 +2,14 @@
   "snapshot_date": "2026-02-17",
   "targets_scanned": 50,
   "targets_cloned": 50,
-  "targets_with_critical_or_high": 50,
+  "targets_with_critical_or_high": 11,
   "critical": 75,
-  "high": 78,
+  "high": 28,
   "medium": 58,
   "low": 8,
   "info": 50,
-  "total_findings": 269,
-  "avg_findings_per_target": 5.38,
+  "total_findings": 219,
+  "avg_findings_per_target": 4.38,
   "runtime_median_s": 0.45,
-  "runtime_p95_s": 6.14
+  "runtime_p95_s": 6.13
 }
