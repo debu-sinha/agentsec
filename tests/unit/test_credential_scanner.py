@@ -15,9 +15,9 @@ def scanner():
 @pytest.fixture
 def temp_cred_dir(tmp_path):
     """Create a directory with various credential patterns."""
-    # Python file with an OpenAI key
+    # Python file with an OpenAI key (realistic-looking, not sequential)
     py_file = tmp_path / "config.py"
-    py_file.write_text("import os\nAPI_KEY = 'sk-abc123456789012345678901234567890123456789'\n")
+    py_file.write_text("import os\nAPI_KEY = 'sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a'\n")
 
     # JSON file with AWS credentials (AKIA + exactly 16 uppercase alphanumeric)
     json_file = tmp_path / "settings.json"
@@ -96,8 +96,8 @@ def test_deduplicates_findings(scanner, tmp_path):
     """Same secret in same file should not be reported twice."""
     py_file = tmp_path / "config.py"
     py_file.write_text(
-        "KEY1 = 'sk-abc123456789012345678901234567890123456789'\n"
-        "KEY2 = 'sk-abc123456789012345678901234567890123456789'\n"
+        "KEY1 = 'sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a'\n"
+        "KEY2 = 'sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a'\n"
     )
 
     context = ScanContext(target_path=tmp_path)
@@ -133,7 +133,8 @@ def test_high_entropy_detection(scanner, tmp_path):
     context = ScanContext(target_path=tmp_path)
     findings = scanner.scan(context)
 
-    entropy_findings = [f for f in findings if f.category == FindingCategory.PLAINTEXT_SECRET]
+    # detect-secrets flags this via KeywordDetector and/or entropy detectors
+    entropy_findings = [f for f in findings if f.category == FindingCategory.EXPOSED_TOKEN]
     assert len(entropy_findings) >= 1
     assert entropy_findings[0].severity == FindingSeverity.MEDIUM
 
@@ -218,3 +219,125 @@ def test_skips_binary_extensions(scanner, tmp_path):
     scanner.scan(context)
     # Binary files should not increment the scan counter
     assert context.files_scanned == 0
+
+
+# --- False positive suppression tests (detect-secrets integration) ---
+
+
+def test_skips_aws_example_key(scanner, tmp_path):
+    """AWS official EXAMPLE key should not trigger findings."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "AKIAIOSFODNN7EXAMPLE"\n')  # gitleaks:allow
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    aws = [f for f in findings if "AWS" in f.title]
+    assert len(aws) == 0
+
+
+def test_skips_connection_string_with_placeholder_password(scanner, tmp_path):
+    """Connection strings with placeholder passwords should not trigger."""
+    f = tmp_path / "docker-compose.yml"
+    f.write_text("DATABASE_URL: postgresql://postgres:changeme@localhost:5432/db\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    conn = [f for f in findings if "Connection String" in f.title]
+    assert len(conn) == 0
+
+
+def test_skips_connection_string_with_env_var(scanner, tmp_path):
+    """Connection strings with env var references should not trigger."""
+    f = tmp_path / "compose.yml"
+    f.write_text("DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@db:5432/app\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    conn = [f for f in findings if "Connection String" in f.title]
+    assert len(conn) == 0
+
+
+def test_skips_sequential_fake_keys(scanner, tmp_path):
+    """Keys with sequential patterns (1234567890) should be skipped."""
+    f = tmp_path / "test_enc.py"
+    f.write_text('KEY = "sk-1234567890abcdefghijklmnopqrst"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) == 0
+
+
+def test_downgrades_severity_in_readme(scanner, tmp_path):
+    """Findings in README.md should get downgraded severity."""
+    f = tmp_path / "README.md"
+    f.write_text("Use your key: sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    if openai:
+        assert openai[0].severity == FindingSeverity.LOW
+
+
+def test_downgrades_severity_in_test_dir(scanner, tmp_path):
+    """Findings in tests/ directory should get downgraded severity."""
+    test_dir = tmp_path / "tests"
+    test_dir.mkdir()
+    f = test_dir / "test_auth.py"
+    f.write_text('KEY = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    if openai:
+        assert openai[0].severity == FindingSeverity.LOW
+
+
+def test_real_looking_key_still_detected(scanner, tmp_path):
+    """Ensure real-looking keys are still detected (no over-suppression)."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) >= 1
+    assert openai[0].severity == FindingSeverity.CRITICAL
+
+
+def test_real_connection_string_still_detected(scanner, tmp_path):
+    """Ensure connection strings with real-looking passwords are detected."""
+    f = tmp_path / "config.py"
+    f.write_text('DB = "postgresql://admin:Xk9mP2vR7wQ4nL@prod.db.example.com:5432/myapp"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    conn = [f for f in findings if "Connection String" in f.title]
+    assert len(conn) >= 1
+
+
+def test_placeholder_connection_string():
+    """Verify connection string placeholder detection logic."""
+    assert CredentialScanner._is_placeholder_connection_string(
+        "postgresql://user:changeme@localhost:5432/db"
+    )
+    assert CredentialScanner._is_placeholder_connection_string(
+        "mysql://admin:${DB_PASS}@db:3306/app"
+    )
+    assert CredentialScanner._is_placeholder_connection_string("redis://user:<password>@host:6379")
+    assert not CredentialScanner._is_placeholder_connection_string(
+        "postgresql://admin:Xk9mP2vR7wQ4nL@prod.db.example.com:5432/myapp"
+    )
+
+
+def test_test_or_doc_context():
+    """Verify file path context detection."""
+    from pathlib import Path
+
+    assert CredentialScanner._is_test_or_doc_context(Path("README.md"))
+    assert CredentialScanner._is_test_or_doc_context(Path("docs/setup.py"))
+    assert CredentialScanner._is_test_or_doc_context(Path("tests/test_auth.py"))
+    assert CredentialScanner._is_test_or_doc_context(Path("examples/demo.py"))
+    assert not CredentialScanner._is_test_or_doc_context(Path("src/config.py"))
+    assert not CredentialScanner._is_test_or_doc_context(Path("app/settings.py"))

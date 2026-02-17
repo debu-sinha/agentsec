@@ -2,6 +2,27 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.4.2] - 2026-02-17
+
+### Changed
+
+- Migrate credential scanner to use Yelp's `detect-secrets` library as primary
+  scanning engine for battle-tested false positive handling (23 detection plugins,
+  11 heuristic filters including sequential string, UUID, and template detection)
+- Add custom patterns for providers not covered by detect-secrets: OpenAI,
+  Anthropic, Databricks, Hugging Face, Google API Key, connection strings
+- Add connection string placeholder password detection (skips `changeme`,
+  `password`, env var references `${...}`, and angle-bracket placeholders)
+- Add file path context awareness: downgrade severity for findings in
+  documentation files (README, CHANGELOG) and test/example directories
+- Add sequential pattern detection (`1234567890`, `abcdefghij`) to skip
+  obviously fake credential values
+- Fix connection string regex to match `postgresql://` (was only `postgres://`)
+
+### Dependencies
+
+- Add `detect-secrets>=1.4,<2` as a runtime dependency
+
 ## [0.4.1] - 2026-02-17
 
 ### Fixes

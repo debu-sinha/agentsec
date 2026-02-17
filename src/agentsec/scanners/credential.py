@@ -1,19 +1,22 @@
 """Credential scanner — deep scan for secrets, tokens, and credential exposure.
 
-Performs thorough scanning beyond the installation scanner's config-file checks:
-- Recursive scan of all files in the installation directory
-- High-entropy string detection for unknown secret formats
-- Git history scanning for previously committed secrets
-- Environment variable exposure analysis
+Uses Yelp's detect-secrets library as the scanning engine for battle-tested
+false positive handling, then maps results to agentsec's Finding model with
+OWASP categorization and severity classification.
+
+Also performs:
+- Git config scanning for embedded credentials
+- File-path context awareness (test/doc files get downgraded severity)
 """
 
 from __future__ import annotations
 
 import logging
-import math
 import re
-from collections import Counter
 from pathlib import Path
+
+from detect_secrets import SecretsCollection
+from detect_secrets.settings import transient_settings
 
 from agentsec.models.findings import (
     Finding,
@@ -63,8 +66,89 @@ _SKIP_PATTERNS = {
     ".cache",
 }
 
-# Structured secret patterns with provider context
-_PROVIDER_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
+# detect-secrets plugin configuration
+_DETECT_SECRETS_PLUGINS = [
+    {"name": "AWSKeyDetector"},
+    {"name": "ArtifactoryDetector"},
+    {"name": "AzureStorageKeyDetector"},
+    {"name": "BasicAuthDetector"},
+    {"name": "CloudantDetector"},
+    {"name": "DiscordBotTokenDetector"},
+    {"name": "GitHubTokenDetector"},
+    {"name": "GitLabTokenDetector"},
+    {"name": "Base64HighEntropyString", "limit": 5.0},
+    {"name": "HexHighEntropyString", "limit": 4.0},
+    {"name": "IbmCloudIamDetector"},
+    {"name": "IbmCosHmacDetector"},
+    {"name": "JwtTokenDetector"},
+    {"name": "KeywordDetector"},
+    {"name": "MailchimpDetector"},
+    {"name": "NpmDetector"},
+    {"name": "PrivateKeyDetector"},
+    {"name": "SendGridDetector"},
+    {"name": "SlackDetector"},
+    {"name": "SoftlayerDetector"},
+    {"name": "SquareOAuthDetector"},
+    {"name": "StripeDetector"},
+    {"name": "TwilioKeyDetector"},
+]
+
+# detect-secrets filter configuration (built-in FP reduction)
+_DETECT_SECRETS_FILTERS = [
+    {"path": "detect_secrets.filters.allowlist_filter.is_line_allowlisted"},
+    {"path": "detect_secrets.filters.heuristic.is_sequential_string"},
+    {"path": "detect_secrets.filters.heuristic.is_potential_uuid"},
+    {"path": "detect_secrets.filters.heuristic.is_templated_secret"},
+    {"path": "detect_secrets.filters.heuristic.is_prefixed_with_dollar_sign"},
+    {"path": "detect_secrets.filters.heuristic.is_indirect_reference"},
+    {"path": "detect_secrets.filters.heuristic.is_lock_file"},
+    {"path": "detect_secrets.filters.heuristic.is_not_alphanumeric_string"},
+    {"path": "detect_secrets.filters.heuristic.is_swagger_file"},
+    {"path": "detect_secrets.filters.heuristic.is_non_text_file"},
+    {"path": "detect_secrets.filters.heuristic.is_likely_id_string"},
+]
+
+# Map detect-secrets secret types to agentsec severity levels
+_SEVERITY_MAP: dict[str, FindingSeverity] = {
+    "AWS Access Key": FindingSeverity.CRITICAL,
+    "Artifactory Credentials": FindingSeverity.HIGH,
+    "Azure Storage Account access key": FindingSeverity.CRITICAL,
+    "Basic Auth Credentials": FindingSeverity.HIGH,
+    "Cloudant Credentials": FindingSeverity.HIGH,
+    "Discord Bot Token": FindingSeverity.CRITICAL,
+    "GitHub Token": FindingSeverity.CRITICAL,
+    "GitLab Token": FindingSeverity.HIGH,
+    "Base64 High Entropy String": FindingSeverity.MEDIUM,
+    "Hex High Entropy String": FindingSeverity.MEDIUM,
+    "IBM Cloud IAM Key": FindingSeverity.CRITICAL,
+    "IBM COS HMAC Credentials": FindingSeverity.HIGH,
+    "JSON Web Token": FindingSeverity.HIGH,
+    "Secret Keyword": FindingSeverity.MEDIUM,
+    "Mailchimp Access Key": FindingSeverity.HIGH,
+    "NPM tokens": FindingSeverity.HIGH,
+    "Private Key": FindingSeverity.CRITICAL,
+    "SendGrid API Key": FindingSeverity.CRITICAL,
+    "Slack Token": FindingSeverity.CRITICAL,
+    "SoftLayer Credentials": FindingSeverity.HIGH,
+    "Square OAuth Secret": FindingSeverity.HIGH,
+    "Stripe Access Key": FindingSeverity.CRITICAL,
+    "Twilio API Key": FindingSeverity.HIGH,
+}
+
+# Map detect-secrets types to rotation advice
+_ROTATION_ADVICE: dict[str, str] = {
+    "AWS Access Key": "Rotate in AWS IAM console immediately",
+    "Discord Bot Token": "Regenerate in Discord Developer Portal",
+    "GitHub Token": "Rotate at https://github.com/settings/tokens",
+    "GitLab Token": "Rotate in GitLab personal access token settings",
+    "Private Key": "Generate new key pair and revoke the exposed key",
+    "Slack Token": "Rotate in Slack App management",
+    "Stripe Access Key": "Rotate at https://dashboard.stripe.com/apikeys",
+    "SendGrid API Key": "Rotate at https://app.sendgrid.com/settings/api_keys",
+}
+
+# Additional provider patterns not covered by detect-secrets
+_EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
     (
         "OpenAI API Key",
         re.compile(r"sk-[a-zA-Z0-9]{20,}"),
@@ -76,66 +160,6 @@ _PROVIDER_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
         re.compile(r"sk-ant-[a-zA-Z0-9_\-]{20,}"),
         FindingSeverity.CRITICAL,
         "Rotate at https://console.anthropic.com/settings/keys",
-    ),
-    (
-        "AWS Access Key",
-        re.compile(r"AKIA[0-9A-Z]{16}"),
-        FindingSeverity.CRITICAL,
-        "Rotate in AWS IAM console immediately",
-    ),
-    (
-        "GitHub Personal Access Token",
-        re.compile(r"ghp_[a-zA-Z0-9]{36}"),
-        FindingSeverity.CRITICAL,
-        "Rotate at https://github.com/settings/tokens",
-    ),
-    (
-        "GitHub OAuth Token",
-        re.compile(r"gho_[a-zA-Z0-9]{36}"),
-        FindingSeverity.HIGH,
-        "Rotate in GitHub OAuth app settings",
-    ),
-    (
-        "GitHub App Token",
-        re.compile(r"(?:ghu|ghs)_[a-zA-Z0-9]{36}"),
-        FindingSeverity.HIGH,
-        "Regenerate in GitHub App settings",
-    ),
-    (
-        "Slack Bot Token",
-        re.compile(r"xoxb-[a-zA-Z0-9\-]+"),
-        FindingSeverity.CRITICAL,
-        "Rotate in Slack App management",
-    ),
-    (
-        "Slack User Token",
-        re.compile(r"xoxp-[a-zA-Z0-9\-]+"),
-        FindingSeverity.CRITICAL,
-        "Rotate in Slack App management",
-    ),
-    (
-        "Stripe Secret Key",
-        re.compile(r"sk_live_[a-zA-Z0-9]{24,}"),
-        FindingSeverity.CRITICAL,
-        "Rotate at https://dashboard.stripe.com/apikeys",
-    ),
-    (
-        "Telegram Bot Token",
-        re.compile(r"\d{8,10}:[a-zA-Z0-9_\-]{35}"),
-        FindingSeverity.HIGH,
-        "Revoke via @BotFather on Telegram",
-    ),
-    (
-        "Discord Bot Token",
-        re.compile(r"[MN][a-zA-Z0-9_\-]{23,80}\.[a-zA-Z0-9_\-]{6,10}\.[a-zA-Z0-9_\-]{27,80}"),
-        FindingSeverity.CRITICAL,
-        "Regenerate in Discord Developer Portal",
-    ),
-    (
-        "Google API Key",
-        re.compile(r"AIza[0-9A-Za-z_\-]{35}"),
-        FindingSeverity.HIGH,
-        "Restrict or delete in Google Cloud Console",
     ),
     (
         "Databricks Token",
@@ -150,21 +174,15 @@ _PROVIDER_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
         "Rotate at https://huggingface.co/settings/tokens",
     ),
     (
-        "Private Key Block",
-        re.compile(r"-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----"),
-        FindingSeverity.CRITICAL,
-        "Generate new key pair and revoke the exposed key",
-    ),
-    (
-        "JWT Token",
-        re.compile(r"eyJ[a-zA-Z0-9_\-]{10,}\.eyJ[a-zA-Z0-9_\-]{10,}\.[a-zA-Z0-9_\-]+"),
+        "Google API Key",
+        re.compile(r"AIza[0-9A-Za-z_\-]{35}"),
         FindingSeverity.HIGH,
-        "Identify issuer and rotate signing keys if long-lived",
+        "Restrict or delete in Google Cloud Console",
     ),
     (
         "Generic Connection String",
         re.compile(
-            r'(?:postgres|mysql|mongodb|redis|amqp)://[^\s"\']{1,200}:[^\s"\']{1,200}@[^\s"\']{1,200}',
+            r'(?:postgres(?:ql)?|mysql|mongodb|redis|amqp|mariadb)://[^\s"\']{1,200}:[^\s"\']{1,200}@[^\s"\']{1,200}',
             re.I,
         ),
         FindingSeverity.CRITICAL,
@@ -172,14 +190,57 @@ _PROVIDER_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
     ),
 ]
 
-# Minimum Shannon entropy threshold for flagging high-entropy strings
-_ENTROPY_THRESHOLD = 4.5
-_MIN_SECRET_LENGTH = 16
-_MAX_SECRET_LENGTH = 256
+# Common placeholder passwords found in docker-compose, documentation, and examples
+_PLACEHOLDER_PASSWORDS: set[str] = {
+    "password",
+    "pass",
+    "changeme",
+    "mysecretpassword",
+    "secret",
+    "testpass",
+    "test",
+    "admin",
+    "root",
+    "your-password",
+    "example",
+    "changeit",
+    "default",
+}
+
+# File names that indicate documentation context
+_DOC_FILE_NAMES: set[str] = {
+    "readme.md",
+    "readme.rst",
+    "readme.txt",
+    "changelog.md",
+    "contributing.md",
+    "claude.md",
+    "agents.md",
+    "testing.md",
+    "curl_testing.md",
+}
+
+# Directory names that indicate test/documentation/example context
+_LOW_CONFIDENCE_DIRS: set[str] = {
+    "docs",
+    "doc",
+    "documentation",
+    "examples",
+    "example",
+    "fixtures",
+    "test",
+    "tests",
+}
 
 
 class CredentialScanner(BaseScanner):
-    """Deep recursive credential scanner for agent installations."""
+    """Deep recursive credential scanner for agent installations.
+
+    Uses detect-secrets (Yelp) as the primary scanning engine with built-in
+    heuristic filters for false positive reduction. Supplements with custom
+    patterns for providers not covered by detect-secrets (OpenAI, Anthropic,
+    Databricks, Hugging Face, connection strings).
+    """
 
     @property
     def name(self) -> str:
@@ -199,12 +260,17 @@ class CredentialScanner(BaseScanner):
         if not target.exists():
             return findings
 
-        # Scan all eligible files recursively
-        for file_path in self._iter_scannable_files(target):
-            context.files_scanned += 1
-            findings.extend(self._scan_file(file_path))
+        scannable_files = self._iter_scannable_files(target)
+        context.files_scanned += len(scannable_files)
 
-        # Check for .git/config with credentials
+        # Phase 1: detect-secrets scanning (battle-tested FP handling)
+        findings.extend(self._scan_with_detect_secrets(scannable_files))
+
+        # Phase 2: Custom patterns for providers detect-secrets doesn't cover
+        for file_path in scannable_files:
+            findings.extend(self._scan_extra_patterns(file_path))
+
+        # Phase 3: Check .git/config for embedded credentials
         git_config = target / ".git" / "config"
         if git_config.exists():
             findings.extend(self._scan_git_config(git_config))
@@ -258,8 +324,85 @@ class CredentialScanner(BaseScanner):
 
         return files
 
-    def _scan_file(self, file_path: Path) -> list[Finding]:
-        """Scan a single file for credential patterns."""
+    def _scan_with_detect_secrets(self, files: list[Path]) -> list[Finding]:
+        """Run detect-secrets on all scannable files and map results to Findings."""
+        findings: list[Finding] = []
+
+        secrets = SecretsCollection()
+        with transient_settings(
+            {
+                "plugins_used": _DETECT_SECRETS_PLUGINS,
+                "filters_used": _DETECT_SECRETS_FILTERS,
+            }
+        ):
+            for file_path in files:
+                try:
+                    secrets.scan_file(str(file_path))
+                except Exception:  # noqa: BLE001
+                    logger.debug("detect-secrets failed on %s", file_path)
+                    continue
+
+        for filename in secrets.files:
+            file_path = Path(filename)
+            is_low_confidence = self._is_test_or_doc_context(file_path)
+
+            for secret in secrets[filename]:
+                # Skip placeholders that detect-secrets doesn't filter
+                if secret.secret_value and self._is_placeholder(secret.secret_value):
+                    continue
+
+                severity = _SEVERITY_MAP.get(secret.type, FindingSeverity.MEDIUM)
+                rotation = _ROTATION_ADVICE.get(
+                    secret.type,
+                    "Rotate the credential and store in a secrets manager",
+                )
+
+                # Downgrade severity for test/doc context
+                metadata: dict[str, str] = {"detector": secret.type}
+                if is_low_confidence:
+                    if severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH):
+                        severity = FindingSeverity.LOW
+                    metadata["context"] = "test_or_doc"
+
+                # Build sanitized evidence from the secret hash (we don't
+                # retain the plaintext value for security)
+                evidence = (
+                    f"Type: {secret.type} (line {secret.line_number}, "
+                    f"hash: {secret.secret_hash[:12]}...)"
+                )
+
+                findings.append(
+                    Finding(
+                        scanner=self.name,
+                        category=FindingCategory.EXPOSED_TOKEN,
+                        severity=severity,
+                        title=f"{secret.type} found in {file_path.name}",
+                        description=(
+                            f"A {secret.type} was found in '{file_path.name}' at line "
+                            f"{secret.line_number}. This credential should be stored in "
+                            f"a secrets manager, not in plaintext files."
+                        ),
+                        evidence=evidence,
+                        file_path=file_path,
+                        line_number=secret.line_number,
+                        remediation=Remediation(
+                            summary=f"Rotate and secure the {secret.type}",
+                            steps=[
+                                rotation,
+                                f"Remove the plaintext value from {file_path.name}",
+                                "Store in OS keychain or environment variable",
+                                "Add file to .gitignore if not already excluded",
+                            ],
+                        ),
+                        owasp_ids=["ASI05"],
+                        metadata=metadata,
+                    )
+                )
+
+        return findings
+
+    def _scan_extra_patterns(self, file_path: Path) -> list[Finding]:
+        """Scan for provider patterns not covered by detect-secrets."""
         findings: list[Finding] = []
 
         try:
@@ -267,23 +410,39 @@ class CredentialScanner(BaseScanner):
         except OSError:
             return findings
 
-        # Pattern-based detection
-        for secret_type, pattern, severity, rotation_advice in _PROVIDER_PATTERNS:
+        is_low_confidence = self._is_test_or_doc_context(file_path)
+
+        for secret_type, pattern, severity, rotation_advice in _EXTRA_PATTERNS:
             for match in pattern.finditer(content):
                 matched = match.group(0)
                 line_num = content[: match.start()].count("\n") + 1
 
-                # Skip if it looks like a placeholder or example
+                # Skip placeholders and examples
                 if self._is_placeholder(matched):
                     continue
 
-                sanitized = self._sanitize_secret(matched)
+                # Skip connection strings with placeholder passwords
+                if (
+                    secret_type == "Generic Connection String"
+                    and self._is_placeholder_connection_string(matched)
+                ):
+                    continue
+
+                # Downgrade severity for test/doc context
+                effective_severity = severity
+                metadata: dict[str, str] = {}
+                if is_low_confidence:
+                    if severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH):
+                        effective_severity = FindingSeverity.LOW
+                    metadata["context"] = "test_or_doc"
+
+                sanitized = sanitize_secret(matched)
 
                 findings.append(
                     Finding(
                         scanner=self.name,
                         category=FindingCategory.EXPOSED_TOKEN,
-                        severity=severity,
+                        severity=effective_severity,
                         title=f"{secret_type} found in {file_path.name}",
                         description=(
                             f"A {secret_type} was found in '{file_path.name}' at line "
@@ -303,59 +462,7 @@ class CredentialScanner(BaseScanner):
                             ],
                         ),
                         owasp_ids=["ASI05"],
-                    )
-                )
-
-        # High-entropy string detection for unknown secret formats
-        findings.extend(self._detect_high_entropy_strings(file_path, content))
-
-        return findings
-
-    def _detect_high_entropy_strings(self, file_path: Path, content: str) -> list[Finding]:
-        """Detect high-entropy strings that may be secrets in unknown formats."""
-        findings: list[Finding] = []
-
-        # Look for assignment patterns with high-entropy values
-        assignment_pattern = re.compile(
-            r"(?:(?:key|token|secret|password|credential|auth)\s*[:=]\s*)"
-            r'["\']?([a-zA-Z0-9+/=_\-]{16,256})["\']?',
-            re.I,
-        )
-
-        for match in assignment_pattern.finditer(content):
-            value = match.group(1)
-            if self._is_placeholder(value):
-                continue
-            if len(value) < _MIN_SECRET_LENGTH or len(value) > _MAX_SECRET_LENGTH:
-                continue
-
-            entropy = self._shannon_entropy(value)
-            if entropy >= _ENTROPY_THRESHOLD:
-                line_num = content[: match.start()].count("\n") + 1
-                sanitized = self._sanitize_secret(value)
-                findings.append(
-                    Finding(
-                        scanner=self.name,
-                        category=FindingCategory.PLAINTEXT_SECRET,
-                        severity=FindingSeverity.MEDIUM,
-                        title=f"High-entropy string in {file_path.name} (possible secret)",
-                        description=(
-                            f"A high-entropy string (Shannon entropy: {entropy:.2f}) was "
-                            f"found in a credential-like context in '{file_path.name}'. "
-                            f"This may be a secret in an unknown format."
-                        ),
-                        evidence=f"Value: {sanitized} (entropy: {entropy:.2f}, line {line_num})",
-                        file_path=file_path,
-                        line_number=line_num,
-                        remediation=Remediation(
-                            summary="Review whether this is a secret and move to vault if so",
-                            steps=[
-                                "Determine if the flagged value is actually a secret",
-                                "If yes, move to OS keychain or secrets manager",
-                                "If false positive, no action needed",
-                            ],
-                        ),
-                        owasp_ids=["ASI05"],
+                        metadata=metadata if metadata else {},
                     )
                 )
 
@@ -405,28 +512,8 @@ class CredentialScanner(BaseScanner):
         return findings
 
     @staticmethod
-    def _shannon_entropy(data: str) -> float:
-        """Calculate Shannon entropy of a string."""
-        if not data:
-            return 0.0
-        counts = Counter(data)
-        length = len(data)
-        entropy = 0.0
-        for count in counts.values():
-            probability = count / length
-            if probability > 0:
-                entropy -= probability * math.log2(probability)
-        return entropy
-
-    @staticmethod
-    def _sanitize_secret(value: str) -> str:
-        """Sanitize a secret value for safe display."""
-        return sanitize_secret(value)
-
-    @staticmethod
     def _is_placeholder(value: str) -> bool:
         """Check if a value looks like a placeholder rather than a real secret."""
-        # Long phrases that indicate placeholder intent (match as substrings)
         phrase_placeholders = {
             "your_api_key",
             "your-api-key",
@@ -436,10 +523,22 @@ class CredentialScanner(BaseScanner):
             "changeme",
             "placeholder",
             "sk-your",
+            "mysecretpassword",
+            "your-secret-key",
+            "my-test-salt",
+            "secret123",
+            "password123",
+            "for_testing_only",
         }
-        # Short words that only count when the value is short or starts with them.
-        # Avoids false-flagging a 40-char key that happens to contain "test".
-        word_placeholders = {"example", "test", "dummy", "fake", "sample", "sk-xxx"}
+        word_placeholders = {
+            "example",
+            "test",
+            "dummy",
+            "fake",
+            "sample",
+            "sk-xxx",
+            "placeholder",
+        }
 
         lower = value.lower()
 
@@ -451,10 +550,8 @@ class CredentialScanner(BaseScanner):
 
         for word in word_placeholders:
             if word in lower:
-                # Only flag if the word dominates the value (>40% of stripped length)
                 if len(word) >= len(stripped) * 0.4:
                     return True
-                # Or if it appears at a word boundary at the start
                 if stripped.startswith(word):
                     return True
 
@@ -462,4 +559,71 @@ class CredentialScanner(BaseScanner):
         if len(set(value)) <= 2:
             return True
         # Check if it's a common pattern like "xxx...xxx"
-        return bool(re.match(r"^[x\*\.]+$", value, re.I))
+        if re.match(r"^[x\*\.]+$", value, re.I):
+            return True
+
+        # Detect sequential/obviously-fake patterns
+        stripped_alnum = re.sub(r"[^a-z0-9]", "", value.lower())
+        if "1234567890" in stripped_alnum:
+            return True
+        return "abcdefghij" in stripped_alnum
+
+    @staticmethod
+    def _is_placeholder_connection_string(value: str) -> bool:
+        """Check if a connection string contains placeholder credentials."""
+        m = re.match(r"[a-z]+://[^:]+:([^@]+)@", value, re.I)
+        if not m:
+            return False
+        password = m.group(1)
+
+        # Check for env var reference: ${VAR} or $VAR
+        if password.startswith("${") or password.startswith("$"):
+            return True
+        # Check for angle-bracket placeholder: <password>
+        if password.startswith("<") and password.endswith(">"):
+            return True
+        # Check against known placeholder passwords
+        if password.lower() in _PLACEHOLDER_PASSWORDS:
+            return True
+        # Check if password itself is a placeholder
+        return CredentialScanner._is_placeholder(password)
+
+    @staticmethod
+    def _is_test_or_doc_context(file_path: Path) -> bool:
+        """Check if file is in a test/documentation/example context."""
+        name_lower = file_path.name.lower()
+        parts_lower = {p.lower() for p in file_path.parts}
+
+        # Documentation files
+        if name_lower in _DOC_FILE_NAMES:
+            return True
+        # Test files
+        if name_lower.startswith("test_") or name_lower.endswith("_test.py"):
+            return True
+        # Example/template files
+        if ".example" in name_lower or ".sample" in name_lower or ".template" in name_lower:
+            return True
+        # Documentation/test/example directories
+        return bool(_LOW_CONFIDENCE_DIRS & parts_lower)
+
+    @staticmethod
+    def _sanitize_secret(value: str) -> str:
+        """Sanitize a secret value for safe display."""
+        return sanitize_secret(value)
+
+    @staticmethod
+    def _shannon_entropy(data: str) -> float:
+        """Calculate Shannon entropy of a string."""
+        import math
+        from collections import Counter
+
+        if not data:
+            return 0.0
+        counts = Counter(data)
+        length = len(data)
+        entropy = 0.0
+        for count in counts.values():
+            probability = count / length
+            if probability > 0:
+                entropy -= probability * math.log2(probability)
+        return entropy

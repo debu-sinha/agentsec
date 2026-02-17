@@ -69,7 +69,8 @@ def test_run_scan_has_summary(tmp_path):
     assert report.summary.duration_seconds >= 0
 
 
-def test_run_scan_defaults_to_cwd_when_no_targets():
+def test_run_scan_defaults_to_cwd_when_no_targets(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     config = AgentsecConfig(targets=[])
     report = run_scan(config)
     assert isinstance(report, ScanReport)
