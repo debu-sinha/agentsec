@@ -191,13 +191,13 @@ Examples:
 
 ```bash
 # Pre-scan npm package before install; block on critical findings
-agentsec gate npm install some-skill
+agentsec gate npm install express
 
 # Pre-scan pip package before install
-agentsec gate pip install some-mcp-server
+agentsec gate pip install requests
 
 # Enforce stricter policy: block on high and above
-agentsec gate --fail-on high npm install some-skill
+agentsec gate --fail-on high npm install express
 
 # Simulate gate decision without executing real install
 agentsec gate --dry-run npm install event-stream

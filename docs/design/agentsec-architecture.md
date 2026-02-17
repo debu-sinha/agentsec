@@ -180,7 +180,7 @@ sequenceDiagram
 - 17 provider-specific patterns (OpenAI, Anthropic, AWS, GitHub, Slack, Stripe, Telegram, Discord, Google, Databricks, HuggingFace, Private Key, JWT, Connection String)
 - Shannon entropy detection for unknown secret formats
 - Git config credential exposure detection
-- Placeholder/false-positive filtering
+- Synthetic-secret/false-positive filtering
 - Deduplication by fingerprint
 
 ## Alternatives Considered
@@ -284,7 +284,7 @@ Aggregation of all findings with metadata:
 ## Risks / Open Questions
 
 1. **OpenClaw config format stability**: Config format may change between versions; detection patterns need to track upstream changes
-2. **False positive rate**: Regex-based secret detection will have false positives in test fixtures and documentation; placeholder filtering helps but isn't perfect
+2. **False positive rate**: Regex-based secret detection will have false positives in test fixtures and documentation; synthetic-test-data filtering helps but is not perfect
 3. **Performance at scale**: Large monorepo installations with thousands of skills may be slow; may need parallel scanning in v0.2
 4. **Scope creep**: Runtime monitoring is tempting but should remain a v2 feature
 5. **Legal considerations**: Responsible disclosure process needed for any CVEs discovered through skill scanning

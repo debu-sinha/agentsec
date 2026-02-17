@@ -61,17 +61,17 @@ User runs: agentsec gate npm install cool-skill
 
 ```bash
 # Gate a single install
-agentsec gate npm install some-skill
-agentsec gate pip install some-mcp-server
+agentsec gate npm install express
+agentsec gate pip install requests
 
 # Gate with custom threshold
-agentsec gate --fail-on critical npm install some-skill
+agentsec gate --fail-on critical npm install express
 
 # Force install despite findings
-agentsec gate --force npm install some-skill
+agentsec gate --force npm install express
 
 # Check a package without installing
-agentsec gate --dry-run npm install some-skill
+agentsec gate --dry-run npm install express
 ```
 
 ### What Gets Scanned Pre-Install

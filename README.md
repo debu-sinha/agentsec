@@ -79,7 +79,7 @@ agentsec harden -p workstation --apply
 agentsec watch ~/.openclaw -i 2
 
 # Pre-install package gate (scan before install)
-agentsec gate npm install some-skill
+agentsec gate npm install express
 
 # Generate shell hook wrappers for npm/pip install flows
 agentsec hook --shell zsh

@@ -46,6 +46,6 @@ case4-scan-results.json # Case 004 skill scanner results
 
 Before committing any artifact file:
 
-1. Strip absolute paths (replace with relative or `/tmp/...` placeholders)
+1. Strip absolute paths (replace with relative or sanitized `/tmp/<path>` forms)
 2. Redact real tokens and credentials (use `<TYPE_REDACTED>` format)
 3. Remove hostnames and IPs that reference internal infrastructure
