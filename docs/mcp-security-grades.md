@@ -1,6 +1,6 @@
 # MCP Ecosystem Security Dashboard
 
-![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-87%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026-02-17-grey?style=for-the-badge)
+![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-87%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026--02--17-grey?style=for-the-badge)
 
 Automated weekly security scan of the top MCP server repositories, powered by [agentsec](https://github.com/debu-sinha/agentsec). Findings are mapped to the [OWASP Top 10 for Agentic Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/).
 
@@ -14,21 +14,21 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 |--------|------:|
 | Repositories scanned | **50** |
 | Total findings | **219** |
-| 🔴 Critical | **75** |
-| 🟠 High | **28** |
-| 🟡 Medium | **58** |
-| 🟢 Low | **8** |
-| 🔵 Info | **50** |
+| ðŸ”´ Critical | **75** |
+| ðŸŸ  High | **28** |
+| ðŸŸ¡ Medium | **58** |
+| ðŸŸ¢ Low | **8** |
+| ðŸ”µ Info | **50** |
 | Repos with zero critical/high findings | **39** |
 | Repos with critical findings | **9** |
 
 ## Grade Distribution
 
-**A** `████████████████████████░░░░░░` 41 repos (82%)
-**B** `█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 2 repos (4%)
-**C** `░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 1 repos (2%)
-**D** `░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 0 repos (0%)
-**F** `███░░░░░░░░░░░░░░░░░░░░░░░░░░░` 6 repos (12%)
+**A** `â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘â–‘â–‘â–‘â–‘â–‘` 41 repos (82%)
+**B** `â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 2 repos (4%)
+**C** `â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 1 repos (2%)
+**D** `â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 0 repos (0%)
+**F** `â–ˆâ–ˆâ–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘` 6 repos (12%)
 
 ## Most Common Finding Categories
 
@@ -127,11 +127,11 @@ Info-severity findings are tracked but do not affect the score.
 
 | Grade | Score Range | Meaning |
 |:-----:|:----------:|---------|
-| ✅ A | 90 -- 100 | Excellent -- minimal risk |
-| 🟢 B | 75 -- 89  | Good -- minor issues only |
-| 🟡 C | 60 -- 74  | Fair -- some high-severity issues |
-| 🟠 D | 40 -- 59  | Poor -- multiple high-severity issues |
-| 🔴 F | 0 -- 39   | Critical -- immediate action required |
+| âœ… A | 90 -- 100 | Excellent -- minimal risk |
+| ðŸŸ¢ B | 75 -- 89  | Good -- minor issues only |
+| ðŸŸ¡ C | 60 -- 74  | Fair -- some high-severity issues |
+| ðŸŸ  D | 40 -- 59  | Poor -- multiple high-severity issues |
+| ðŸ”´ F | 0 -- 39   | Critical -- immediate action required |
 
 ### Scanner Coverage
 
