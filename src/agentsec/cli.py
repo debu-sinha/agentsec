@@ -150,6 +150,12 @@ def scan(
     TARGET is the path to the agent installation directory (default: current directory).
 
     \b
+    Exit codes:
+        0       No findings at or above --fail-on threshold
+        1-127   Count of findings at or above threshold (capped)
+        2       Usage or runtime error
+
+    \b
     Examples:
         agentsec scan                            # scan current directory
         agentsec scan ~/.openclaw                # scan specific path
@@ -239,7 +245,7 @@ def scan(
                 output_path=config.output_path,
             )
             if not config.output_path and not quiet:
-                console.print(json_str)
+                click.echo(json_str)
             elif config.output_path and not quiet:
                 console.print(f"[green]Report written to {config.output_path}[/green]")
         elif output == "sarif":
@@ -250,7 +256,7 @@ def scan(
                 output_path=config.output_path,
             )
             if not config.output_path and not quiet:
-                console.print(sarif_str)
+                click.echo(sarif_str)
             elif config.output_path and not quiet:
                 console.print(f"[green]SARIF report written to {config.output_path}[/green]")
         else:
@@ -631,6 +637,12 @@ def watch(target: str, interval: float, verbose: bool) -> None:
 
     try:
         watch_and_scan(target_path, interval=interval, on_result=on_result)
+    except FileNotFoundError:
+        console.print(
+            f"[yellow]No watchable agent files found at {target_path}.[/yellow]\n"
+            "[dim]Make sure the path contains an OpenClaw or similar agent installation.[/dim]"
+        )
+        raise SystemExit(1) from None
     except KeyboardInterrupt:
         console.print("\n[dim]Stopped watching.[/dim]")
 

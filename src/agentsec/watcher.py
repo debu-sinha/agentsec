@@ -157,7 +157,7 @@ def watch_and_scan(
     watch_paths = _get_watch_paths(target)
     if not watch_paths:
         logger.warning("No watchable paths found at %s", target)
-        return
+        raise FileNotFoundError(f"No watchable agent files found at {target}")
 
     logger.info("Watching %d paths at %s (poll every %.1fs)", len(watch_paths), target, interval)
 
