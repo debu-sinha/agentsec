@@ -145,19 +145,19 @@ Screenshots below show the experimental demo sandbox flow (intentionally insecur
 
 ### Step 1: Initial scan on intentionally insecure demo config
 
-<img src="docs/demo/screenshots/scan-before.png" alt="agentsec scan - intentionally insecure demo config" width="900">
+![agentsec scan - intentionally insecure demo config](docs/demo/screenshots/scan-before.png)
 
 ### Step 2: Apply workstation hardening profile
 
-<img src="docs/demo/screenshots/harden-apply.png" alt="agentsec harden - workstation profile applied" width="900">
+![agentsec harden - workstation profile applied](docs/demo/screenshots/harden-apply.png)
 
 ### Step 3: Re-scan findings after hardening
 
-<img src="docs/demo/screenshots/scan-after-findings.png" alt="agentsec scan - post-hardening findings" width="900">
+![agentsec scan - post-hardening findings](docs/demo/screenshots/scan-after-findings.png)
 
 ### Step 4: OWASP posture view after hardening
 
-<img src="docs/demo/screenshots/scan-after-posture.png" alt="agentsec scan - OWASP posture after hardening" width="900">
+![agentsec scan - OWASP posture after hardening](docs/demo/screenshots/scan-after-posture.png)
 
 ## MCP Ecosystem Security Dashboard
 
