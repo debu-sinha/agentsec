@@ -1,4 +1,4 @@
-﻿<p align="center">
+<p align="center">
   <img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/hero-banner.png" alt="agentsec - AI Agent Security Scanner" width="600">
 </p>
 
@@ -240,6 +240,7 @@ Issue intake is template-driven under `.github/ISSUE_TEMPLATE/` to keep triage a
 ## License
 
 Apache-2.0
+
 
 
 
