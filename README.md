@@ -157,6 +157,14 @@ Screenshots below focus on scan/harden flow. Gate and hook behavior are document
 
 <img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-posture.png" alt="agentsec scan — after hardening, OWASP posture" width="900">
 
+## MCP Ecosystem Security Dashboard
+
+Weekly automated security scan of the top 50 MCP server repositories, graded A through F.
+
+[![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=flat-square)](docs/mcp-security-grades.md) [![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=flat-square)](docs/mcp-security-grades.md)
+
+**[View the full dashboard](docs/mcp-security-grades.md)** — updated every Monday via GitHub Actions.
+
 ## Benchmarks and Studies
 
 - [Fixture benchmark (v0.4.0, dated 2026-02-15)](docs/benchmarks/results/2026-02-15-v0.4.0.md)  
