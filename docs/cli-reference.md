@@ -5,13 +5,17 @@ This document is the command-level reference for `agentsec`.
 ## Install
 
 ```bash
+# Install agentsec CLI from PyPI
 pip install agentsec-ai
 ```
 
 ## Global Help and Version
 
 ```bash
+# Show all commands, options, and workflow order
 agentsec --help
+
+# Print installed agentsec version
 agentsec --version
 ```
 
@@ -45,10 +49,19 @@ Options:
 Examples:
 
 ```bash
+# Scan current directory for all supported risk categories
 agentsec scan
+
+# Scan a specific OpenClaw installation path
 agentsec scan ~/.openclaw
+
+# Generate machine-readable JSON for CI parsing or pipelines
 agentsec scan -o json -f report.json
+
+# Generate SARIF for GitHub code scanning integrations
 agentsec scan -o sarif -f results.sarif
+
+# Run only selected scanners and fail build on critical findings
 agentsec scan -s installation,mcp --fail-on critical
 ```
 
@@ -61,6 +74,7 @@ Exit codes:
 ## list-scanners
 
 ```bash
+# List scanner modules and descriptions before selective runs
 agentsec list-scanners
 ```
 
@@ -83,8 +97,13 @@ Options:
 Examples:
 
 ```bash
+# Preview workstation-safe config changes without writing files
 agentsec harden -p workstation
+
+# Apply VPS profile for remote-hosted agent hardening
 agentsec harden ~/.openclaw -p vps --apply
+
+# Apply strict profile for public, untrusted-input bots
 agentsec harden ~/.openclaw -p public-bot --apply
 ```
 
@@ -98,6 +117,7 @@ Notes:
 Show exact changes a profile would apply.
 
 ```bash
+# Inspect exact keys/values that a profile will change
 agentsec show-profile workstation
 ```
 
@@ -123,8 +143,13 @@ Options:
 Examples:
 
 ```bash
+# Watch current directory for security-relevant changes
 agentsec watch
+
+# Watch a specific installation and auto re-scan on updates
 agentsec watch ~/.openclaw
+
+# Reduce scan frequency for lower overhead environments
 agentsec watch ~/.openclaw -i 5
 ```
 
@@ -133,13 +158,17 @@ agentsec watch ~/.openclaw -i 5
 Generate shell hooks that wrap npm/pip install workflows.
 
 ```bash
+# Generate zsh wrapper functions for auto post-install scanning
 agentsec hook --shell zsh
+
+# Generate bash wrapper functions for the same workflow
 agentsec hook --shell bash
 ```
 
 Use in shell profile:
 
 ```bash
+# Activate generated shell hook in current shell session
 eval "$(agentsec hook --shell zsh)"
 ```
 
@@ -160,9 +189,16 @@ Options:
 Examples:
 
 ```bash
+# Pre-scan npm package before install; block on critical findings
 agentsec gate npm install some-skill
+
+# Pre-scan pip package before install
 agentsec gate pip install some-mcp-server
+
+# Enforce stricter policy: block on high and above
 agentsec gate --fail-on high npm install some-skill
+
+# Simulate gate decision without executing real install
 agentsec gate --dry-run npm install event-stream
 ```
 
@@ -177,12 +213,14 @@ Behavior summary:
 JSON for automation:
 
 ```bash
+# Persist findings/posture in JSON for automation workflows
 agentsec scan -o json -f report.json
 ```
 
 SARIF for GitHub Code Scanning:
 
 ```bash
+# Persist SARIF for upload to GitHub security dashboards
 agentsec scan -o sarif -f results.sarif
 ```
 

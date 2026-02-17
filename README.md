@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/hero-banner.png" alt="agentsec â€” AI Agent Security Scanner" width="600">
+ï»¿<p align="center">
+  <img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/hero-banner.png" alt="agentsec - AI Agent Security Scanner" width="600">
 </p>
 
 <p align="center">
@@ -52,40 +52,40 @@ Reference catalog:
 ## Core Commands
 
 ```bash
-# Full scan
+# Full installation scan (all scanners, default target=. )
 agentsec scan
 
-# JSON output for CI
+# JSON report for CI parsing and pipelines
 agentsec scan -o json -f report.json
 
-# SARIF for GitHub Code Scanning
+# SARIF output for GitHub code scanning upload
 agentsec scan -o sarif -f results.sarif
 
-# Run only selected scanners
+# Run only selected scanners for focused checks
 agentsec scan -s installation,mcp
 
-# Control CI failure threshold
+# Fail build only at/above selected severity
 agentsec scan --fail-on critical
 ```
 
 ```bash
-# Hardening preview (default: preview only)
+# Preview profile changes without writing config
 agentsec harden -p workstation
 
-# Apply hardening profile
+# Apply profile and write hardened config values
 agentsec harden -p workstation --apply
 
-# Watch mode
+# Watch files and auto re-scan on security-relevant changes
 agentsec watch ~/.openclaw -i 2
 
-# Pre-install security gate
+# Pre-install package gate (scan before install)
 agentsec gate npm install some-skill
 
-# Generate shell hook for auto scan workflow
+# Generate shell hook wrappers for npm/pip install flows
 agentsec hook --shell zsh
 ```
 
-List available scanners:
+List available scanners (names + descriptions):
 
 ```bash
 agentsec list-scanners
@@ -145,19 +145,19 @@ Screenshots below show the demo sandbox flow (intentionally insecure configurati
 
 ### Step 1: Initial scan on intentionally insecure demo config
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-before.png" alt="agentsec scan — intentionally insecure demo config" width="900">
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-before.png" alt="agentsec scan - intentionally insecure demo config" width="900">
 
 ### Step 2: Apply workstation hardening profile
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/harden-apply.png" alt="agentsec harden — workstation profile applied" width="900">
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/harden-apply.png" alt="agentsec harden - workstation profile applied" width="900">
 
 ### Step 3: Re-scan findings after hardening
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-findings.png" alt="agentsec scan — post-hardening findings" width="900">
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-findings.png" alt="agentsec scan - post-hardening findings" width="900">
 
 ### Step 4: OWASP posture view after hardening
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-posture.png" alt="agentsec scan — OWASP posture after hardening" width="900">
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-posture.png" alt="agentsec scan - OWASP posture after hardening" width="900">
 
 ## MCP Ecosystem Security Dashboard
 
@@ -165,7 +165,7 @@ Weekly automated security scan of the top 50 MCP server repositories, graded A t
 
 [![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=flat-square)](docs/mcp-security-grades.md) [![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=flat-square)](docs/mcp-security-grades.md)
 
-**[View the full dashboard](docs/mcp-security-grades.md)** â€” updated every Monday via GitHub Actions.
+**[View the full dashboard](docs/mcp-security-grades.md)** - updated every Monday via GitHub Actions.
 
 ## Benchmarks and Studies
 
@@ -240,6 +240,9 @@ Issue intake is template-driven under `.github/ISSUE_TEMPLATE/` to keep triage a
 ## License
 
 Apache-2.0
+
+
+
 
 
 
