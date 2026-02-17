@@ -1,0 +1,34 @@
+name: Bug report
+description: Report a reproducible defect in agentsec
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: Minimal steps and sample config/files to reproduce.
+      placeholder: |
+        1. Run `agentsec scan ...`
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, Python version, agentsec version.
+      placeholder: Windows 11, Python 3.14.2, agentsec 0.4.1
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output/logs
+      description: Paste terminal output or attach JSON/SARIF snippets (redacted).
