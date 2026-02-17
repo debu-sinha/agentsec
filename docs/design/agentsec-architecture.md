@@ -1,4 +1,4 @@
-# agentsec — Architecture Design Document
+# agentsec -- Architecture Design Document
 
 ## Goals
 
@@ -49,7 +49,7 @@ This repository focuses on one operational workflow: local scanning + hardening 
 - CI/CD-friendly with configurable exit codes
 
 ### Security (of the tool itself)
-- Never log, display, or store full secrets — always sanitize
+- Never log, display, or store full secrets -- always sanitize
 - No network calls during scanning (fully offline)
 - No code execution from scanned targets
 - Read-only operations only (no modifications without explicit `--fix`)
@@ -251,31 +251,31 @@ Aggregation of all findings with metadata:
 
 ## Rollout Plan
 
-### Phase 1: Core Scanner (v0.1.0) — Shipped
+### Phase 1: Core Scanner (v0.1.0) -- Shipped
 - Installation, Skill, MCP, Credential scanners
 - OWASP scoring
 - Terminal and JSON reporters
 - CLI with scan command
 
-### Phase 2: Hardening & Coverage (v0.2.0) — Shipped
+### Phase 2: Hardening & Coverage (v0.2.0) -- Shipped
 - `agentsec harden` command with 3 profiles (workstation, vps, public-bot)
 - SARIF reporter for GitHub Code Scanning
 - 30+ configuration checks, 16 credential providers
 
-### Phase 3: Advanced Detection (v0.3.0) — Shipped
+### Phase 3: Advanced Detection (v0.3.0) -- Shipped
 - 5 CVE detections, SSRF protection check
 - `agentsec watch` filesystem watcher
 - `agentsec hook` shell hook generator
 - Version-gated checks via `_version_gte()`
 
-### Phase 4: Pre-Install Gate (v0.4.0) — Shipped
+### Phase 4: Pre-Install Gate (v0.4.0) -- Shipped
 - `agentsec gate` pre-install security gate for npm/pip packages
 - Known-malicious package blocklist
 - npm install hook detection
 - Context-sensitive severity escalation
 - 206 tests, benchmark suite with P=0.82 R=1.00 F1=0.90
 
-### Phase 5: Ecosystem (v0.5.0) — Planned
+### Phase 5: Ecosystem (v0.5.0) -- Planned
 - GitHub Action marketplace listing
 - Community rule repository
 - Baseline/diff mode (alert only on new findings)

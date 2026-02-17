@@ -64,7 +64,7 @@ agentsec scan ~
 ```
 
 Configuration findings are fixed. Credential and skill findings remain
-(hardening only fixes config — secrets must be moved to a keychain or
+(hardening only fixes config -- secrets must be moved to a keychain or
 secrets manager manually).
 
 ## Export Reports

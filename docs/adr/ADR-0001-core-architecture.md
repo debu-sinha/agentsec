@@ -56,7 +56,7 @@ Key decisions:
 ## Scalability & Cost Notes
 - Scanning is CPU-bound and single-threaded in v0.1; parallel scanning planned for v0.2
 - Memory usage scales linearly with number of findings (bounded by file count)
-- No external service dependencies — runs fully offline
+- No external service dependencies -- runs fully offline
 
 ## Security & Governance
 - Tool itself must be secure: secrets always sanitized, no eval/exec on scanned content
@@ -65,7 +65,7 @@ Key decisions:
 - Finding evidence is truncated to prevent accidental secret leakage
 
 ## Rollout / Migration Plan
-1. v0.1.0: Core scanners, OWASP scoring, CLI — publish to PyPI (shipped)
+1. v0.1.0: Core scanners, OWASP scoring, CLI -- publish to PyPI (shipped)
 2. v0.2.0: Hardener with 3 profiles, SARIF reporter (shipped)
 3. v0.3.0: 5 CVE detections, filesystem watcher, shell hooks (shipped)
 4. v0.4.0: Pre-install gate, context-sensitive escalation, benchmark suite (shipped)
