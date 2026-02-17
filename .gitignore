@@ -57,3 +57,18 @@ internal/
 *strategy*.md
 *memory*.md
 *assessment*.md
+
+# Private legal/evidence material (must never enter public repo)
+**/EB1A*/
+**/eb1a*/
+**/*EB1A*.md
+**/*EB1A*.txt
+**/*eb1a*.md
+**/*eb1a*.txt
+**/*adjudicator*.md
+**/*petition*.md
+**/*immigration*.md
+**/*profile_brief*.md
+**/*evidence_index*.md
+private-evidence/
+legal/
