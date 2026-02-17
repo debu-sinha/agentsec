@@ -34,19 +34,24 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def compute_score(critical: int, high: int, medium: int, low: int) -> int:
-    """Compute a 0-100 security score from severity counts."""
-    raw = 100 - (critical * 15) - (high * 8) - (medium * 3) - (low * 1)
-    return max(0, min(100, raw))
+    """Compute a 0-100 security score from severity counts.
+
+    Uses the same formula as the OWASP scorer (owasp_scorer.py):
+    critical*15, high*7, medium*3, low*1, floor=5.
+    """
+    raw = 100 - (critical * 15) - (high * 7) - (medium * 3) - (low * 1)
+    return max(5, min(100, raw))
 
 
 def score_to_grade(score: int) -> str:
+    """Convert score to letter grade (matches owasp_scorer._score_to_grade)."""
     if score >= 90:
         return "A"
-    if score >= 75:
+    if score >= 80:
         return "B"
-    if score >= 60:
+    if score >= 70:
         return "C"
-    if score >= 40:
+    if score >= 60:
         return "D"
     return "F"
 
@@ -388,8 +393,8 @@ def render_dashboard(
     lines.append("### Scoring Formula")
     lines.append("")
     lines.append("```")
-    lines.append("Score = 100 - (Critical x 15) - (High x 8) - (Medium x 3) - (Low x 1)")
-    lines.append("Score is clamped to [0, 100]")
+    lines.append("Score = 100 - (Critical x 15) - (High x 7) - (Medium x 3) - (Low x 1)")
+    lines.append("Score is clamped to [5, 100]")
     lines.append("```")
     lines.append("")
     lines.append("Info-severity findings are tracked but do not affect the score.")
@@ -399,10 +404,10 @@ def render_dashboard(
     lines.append("| Grade | Score Range | Meaning |")
     lines.append("|:-----:|:----------:|---------|")
     lines.append(f"| {GRADE_EMOJI['A']} A | 90 -- 100 | Excellent -- minimal risk |")
-    lines.append(f"| {GRADE_EMOJI['B']} B | 75 -- 89  | Good -- minor issues only |")
-    lines.append(f"| {GRADE_EMOJI['C']} C | 60 -- 74  | Fair -- some high-severity issues |")
-    lines.append(f"| {GRADE_EMOJI['D']} D | 40 -- 59  | Poor -- multiple high-severity issues |")
-    lines.append(f"| {GRADE_EMOJI['F']} F | 0 -- 39   | Critical -- immediate action required |")
+    lines.append(f"| {GRADE_EMOJI['B']} B | 80 -- 89  | Good -- minor issues only |")
+    lines.append(f"| {GRADE_EMOJI['C']} C | 70 -- 79  | Fair -- some high-severity issues |")
+    lines.append(f"| {GRADE_EMOJI['D']} D | 60 -- 69  | Poor -- multiple high-severity issues |")
+    lines.append(f"| {GRADE_EMOJI['F']} F | 5 -- 59   | Critical -- immediate action required |")
     lines.append("")
     lines.append("### Scanner Coverage")
     lines.append("")

@@ -21,6 +21,20 @@ All notable changes to agentsec are documented here.
 - Sanitize gate error message to avoid leaking raw exception details
 - Update CITATION.cff, launch docs to v0.4.1
 - Skip CEX-001 (exec approvals missing) on non-OpenClaw targets to avoid false positives on MCP server repos
+- Align dashboard scoring formula with OWASP scorer (HIGH*7, B>=80, floor=5)
+- Fix action.yml shell injection by using proper arg array instead of unquoted string
+- Add version pinning input to action.yml for reproducible CI runs
+- Expand CI matrix to Python 3.10, 3.12, 3.13 (was 3.12 only)
+- Add pip cache to CI for faster builds
+- Replace static CI badge with live GitHub Actions status badge
+- Fix exit code collision: 0=clean, 1=findings, 2=usage error, 3=runtime error
+- Fix `_scan_exec_approvals` null check from `if not` to `if is None` for consistency
+- Fix ADR-0004 "two reactive mechanisms" to "three" (matching listed items)
+- Fix design doc `--fix` flag reference to `--apply` and stale credential provider count
+- Fix CHANGELOG v0.3.0 check count from "35+" to accurate "27 named checks"
+- Fix checks-catalog: add missing OWASP codes (CGW-002+ASI02, CID-003+ASI05)
+- Fix checks-catalog ASI10 label to "Misaligned Behaviors" (was "Insufficient Monitoring")
+- Update CLI reference exit codes documentation
 
 ### Stats
 
@@ -102,7 +116,7 @@ All notable changes to agentsec are documented here.
 
 ### Stats
 
-- 35+ security checks across all 10 OWASP Agentic categories
+- 27 named checks + dynamic credential detection across 7 OWASP Agentic categories
 - 123 tests, all passing
 
 ## [0.2.0] - 2026-02-13

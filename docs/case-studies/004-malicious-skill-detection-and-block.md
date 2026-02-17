@@ -1,4 +1,4 @@
-﻿# Case Study: Malicious Skill Detection and Pre-Install Block
+# Case Study: Malicious Skill Detection and Pre-Install Block
 
 - Date: 2026-02-16
 - Environment type: OpenClaw skill ecosystem (developer workstation, Windows 11, Python 3.14.2)

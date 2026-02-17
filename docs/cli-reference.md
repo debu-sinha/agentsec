@@ -68,8 +68,9 @@ agentsec scan -s installation,mcp --fail-on critical
 Exit codes:
 
 - `0`: no findings at/above threshold
-- `1-127`: number of findings at/above threshold (capped)
-- `2`: usage/runtime error
+- `1`: findings found at/above threshold
+- `2`: usage error (e.g., unknown scanner name)
+- `3`: runtime error (e.g., file access failure)
 
 ## list-scanners
 

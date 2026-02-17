@@ -27,6 +27,10 @@ inputs:
     description: 'Comma-separated scanner list (installation, skill, mcp, credential). Default: all'
     required: false
     default: ''
+  version:
+    description: 'agentsec-ai version to install (e.g. "0.4.1"). Empty = latest.'
+    required: false
+    default: ''
   python-version:
     description: 'Python version to use'
     required: false
@@ -46,7 +50,14 @@ runs:
 
     - name: Install agentsec
       shell: bash
-      run: pip install agentsec-ai
+      env:
+        INPUT_VERSION: ${{ inputs.version }}
+      run: |
+        if [ -n "$INPUT_VERSION" ]; then
+          pip install "agentsec-ai==$INPUT_VERSION"
+        else
+          pip install agentsec-ai
+        fi
 
     - name: Run security scan
       id: scan
@@ -58,19 +69,17 @@ runs:
         INPUT_OUTPUT_FILE: ${{ inputs.output-file }}
         INPUT_SCANNERS: ${{ inputs.scanners }}
       run: |
-        ARGS="$INPUT_TARGET"
-        ARGS="$ARGS -o $INPUT_OUTPUT"
-        ARGS="$ARGS --fail-on $INPUT_FAIL_ON"
+        set -- "$INPUT_TARGET" -o "$INPUT_OUTPUT" --fail-on "$INPUT_FAIL_ON"
 
         if [ -n "$INPUT_OUTPUT_FILE" ]; then
-          ARGS="$ARGS -f $INPUT_OUTPUT_FILE"
+          set -- "$@" -f "$INPUT_OUTPUT_FILE"
         fi
 
         if [ -n "$INPUT_SCANNERS" ]; then
-          ARGS="$ARGS -s $INPUT_SCANNERS"
+          set -- "$@" -s "$INPUT_SCANNERS"
         fi
 
-        agentsec scan $ARGS
+        agentsec scan "$@"
 
     - name: Upload SARIF to GitHub Code Scanning
       if: ${{ always() && inputs.upload-sarif == 'true' && inputs.output == 'sarif' }}

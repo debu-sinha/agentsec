@@ -9,7 +9,7 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 | ID | Check | Default Severity | OWASP | Detection |
 |----|-------|:---:|-------|-----------|
 | CGW-001 | Gateway bound to non-loopback interface | Critical | ASI05, ASI02 | Checks `gatewayHostname` for 0.0.0.0, LAN, or public bind addresses |
-| CGW-002 | Gateway auth missing on exposed interface | Critical | ASI05 | Detects non-loopback bind without `authRequired: true` |
+| CGW-002 | Gateway auth missing on exposed interface | Critical | ASI05, ASI02 | Detects non-loopback bind without `authRequired: true` |
 | CGW-003 | Control UI insecure auth / dangerouslyDisable flags | Critical | ASI05 | Flags `dangerouslyDisableDeviceAuth`, `dangerouslyDisableAuth`, and `allowInsecureAuth` on control UI |
 | CGW-004 | Reverse proxy without trustedProxies | Medium | ASI05 | Detects proxy headers without `trustedProxies` allowlist |
 | CGW-005 | No SSRF protection for URL-based inputs | High | ASI05, ASI02 | Checks for missing SSRF deny policies on tools that accept URLs |
@@ -20,7 +20,7 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 |----|-------|:---:|-------|-----------|
 | CID-001 | DM policy set to open | Critical | ASI01, ASI02, ASI10 | Checks `dmPolicy` for `open` value allowing unauthenticated message injection |
 | CID-002 | Group policy open / wildcard allowlist | High | ASI01, ASI02 | Detects `groupPolicy: open` or `allowList: ["*"]` |
-| CID-003 | DM scope not per-channel-peer | Medium | ASI07 | Flags shared DM scope that allows cross-conversation data leakage |
+| CID-003 | DM scope not per-channel-peer | Medium | ASI05, ASI07 | Flags shared DM scope that allows cross-conversation data leakage |
 
 ## Tool Policy and Sandboxing (CTO)
 
@@ -109,7 +109,7 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 | ASI07 - Multi-Agent Exploitation | CID-003 |
 | ASI08 - Uncontrolled Cascading | CEX-001, CEX-002, CEX-003 |
 | ASI09 - Repudiation / Insufficient Audit | installation (discovery config) |
-| ASI10 - Insufficient Monitoring | CID-001, CGW-003, CTO-001, CSF-001 |
+| ASI10 - Misaligned Behaviors / Unintended Actions | CID-001, CGW-003, CTO-001, CSF-001 |
 
 ## Summary
 

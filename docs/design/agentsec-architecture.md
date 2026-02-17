@@ -52,7 +52,7 @@ This repository focuses on one operational workflow: local scanning + hardening 
 - Never log, display, or store full secrets -- always sanitize
 - No network calls during scanning (fully offline)
 - No code execution from scanned targets
-- Read-only operations only (no modifications without explicit `--fix`)
+- Read-only operations only (no modifications without explicit `--apply`)
 
 ### Extensibility
 - Plugin architecture for custom scanner modules
@@ -177,7 +177,7 @@ sequenceDiagram
 
 #### Credential Scanner
 - Deep recursive scan of all scannable files
-- 17 secret patterns (OpenAI, Anthropic, AWS, GitHub, Slack, Stripe, Telegram, Discord, Google, Databricks, HuggingFace, Private Key, JWT, Connection String)
+- 17 provider-specific patterns (OpenAI, Anthropic, AWS, GitHub, Slack, Stripe, Telegram, Discord, Google, Databricks, HuggingFace, Private Key, JWT, Connection String)
 - Shannon entropy detection for unknown secret formats
 - Git config credential exposure detection
 - Placeholder/false-positive filtering
@@ -260,7 +260,7 @@ Aggregation of all findings with metadata:
 ### Phase 2: Hardening & Coverage (v0.2.0) -- Shipped
 - `agentsec harden` command with 3 profiles (workstation, vps, public-bot)
 - SARIF reporter for GitHub Code Scanning
-- 30+ configuration checks, 16 credential providers
+- 27 named configuration checks, 17 credential provider patterns
 
 ### Phase 3: Advanced Detection (v0.3.0) -- Shipped
 - 5 CVE detections, SSRF protection check

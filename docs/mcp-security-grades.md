@@ -1,12 +1,12 @@
 # MCP Ecosystem Security Dashboard
 
-![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-87%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026--02--17-grey?style=for-the-badge)
+![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-87%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026-02-17-grey?style=for-the-badge)
 
 Automated weekly security scan of the top MCP server repositories, powered by [agentsec](https://github.com/debu-sinha/agentsec). Findings are mapped to the [OWASP Top 10 for Agentic Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/).
 
 **Jump to:** [Summary](#at-a-glance) | [Grades](#grade-distribution) | [Repos Requiring Attention](#repos-requiring-attention) | [All Repos](#all-scanned-repos) | [Methodology](#methodology) | [Disclaimer](#disclaimer)
 
-> **7 repos** scored below B. **IBM/mcp-context-forge** alone has **34 critical** and **86 total findings**.
+> **8 repos** scored below B. **IBM/mcp-context-forge** alone has **34 critical** and **86 total findings**.
 
 ## At a Glance
 
@@ -14,21 +14,21 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 |--------|------:|
 | Repositories scanned | **50** |
 | Total findings | **219** |
-| Critical | **75** |
-| High | **28** |
-| Medium | **58** |
-| Low | **8** |
-| Info | **50** |
+| 🔴 Critical | **75** |
+| 🟠 High | **28** |
+| 🟡 Medium | **58** |
+| 🟢 Low | **8** |
+| 🔵 Info | **50** |
 | Repos with zero critical/high findings | **39** |
 | Repos with critical findings | **9** |
 
 ## Grade Distribution
 
-**A** `#########################-----` 41 repos (82%)
-**B** `#-----------------------------` 2 repos (4%)
-**C** `#-----------------------------` 1 repos (2%)
-**D** `------------------------------` 0 repos (0%)
-**F** `####--------------------------` 6 repos (12%)
+**A** `████████████████████████░░░░░░` 41 repos (82%)
+**B** `░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 1 repos (2%)
+**C** `█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 2 repos (4%)
+**D** `░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 0 repos (0%)
+**F** `███░░░░░░░░░░░░░░░░░░░░░░░░░░░` 6 repos (12%)
 
 ## Most Common Finding Categories
 
@@ -45,24 +45,25 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 
 ## Repos Requiring Attention
 
-> 7 repositories scored below B and have actionable findings.
+> 8 repositories scored below B and have actionable findings.
 
 | # | Repository | Grade | Score | Critical | High | Medium | Low | Total |
 |--:|------------|:-----:|------:|---------:|-----:|-------:|----:|------:|
-| 1 | [IBM/mcp-context-forge](https://github.com/IBM/mcp-context-forge) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 0 | **34** | **16** | 27 | 8 | 86 |
-| 2 | [awslabs/mcp](https://github.com/awslabs/mcp) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 0 | **5** | **2** | 15 | 0 | 23 |
-| 3 | [bytebase/dbhub](https://github.com/bytebase/dbhub) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 0 | **14** | 0 | 1 | 0 | 16 |
-| 4 | [mindsdb/mindsdb](https://github.com/mindsdb/mindsdb) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 0 | **11** | **1** | 7 | 0 | 20 |
-| 5 | [activepieces/activepieces](https://github.com/activepieces/activepieces) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 1 | **4** | **3** | 5 | 0 | 13 |
-| 6 | [BeehiveInnovations/pal-mcp-server](https://github.com/BeehiveInnovations/pal-mcp-server) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 28 | **3** | **3** | 1 | 0 | 8 |
+| 1 | [IBM/mcp-context-forge](https://github.com/IBM/mcp-context-forge) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **34** | **16** | 27 | 8 | 86 |
+| 2 | [activepieces/activepieces](https://github.com/activepieces/activepieces) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **4** | **3** | 5 | 0 | 13 |
+| 3 | [awslabs/mcp](https://github.com/awslabs/mcp) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **5** | **2** | 15 | 0 | 23 |
+| 4 | [bytebase/dbhub](https://github.com/bytebase/dbhub) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **14** | 0 | 1 | 0 | 16 |
+| 5 | [mindsdb/mindsdb](https://github.com/mindsdb/mindsdb) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **11** | **1** | 7 | 0 | 20 |
+| 6 | [BeehiveInnovations/pal-mcp-server](https://github.com/BeehiveInnovations/pal-mcp-server) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 31 | **3** | **3** | 1 | 0 | 8 |
 | 7 | [jlowin/fastmcp](https://github.com/jlowin/fastmcp) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 70 | **2** | 0 | 0 | 0 | 3 |
+| 8 | [steipete/Peekaboo](https://github.com/steipete/Peekaboo) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 78 | **1** | **1** | 0 | 0 | 3 |
 
 ## All Scanned Repos
 
-> 43 repositories scored A or B.
+> 42 repositories scored A or B.
 
 <details>
-<summary>View all 43 clean repos</summary>
+<summary>View all 42 clean repos</summary>
 
 | Repository | Stars | Grade | Score |
 |------------|------:|:-----:|------:|
@@ -105,10 +106,9 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 | [upstash/context7](https://github.com/upstash/context7) | 45,950 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 |
 | [CursorTouch/Windows-MCP](https://github.com/CursorTouch/Windows-MCP) | 4,355 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 |
 | [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) | 27,268 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 |
-| [aipotheosis-labs/aci](https://github.com/aipotheosis-labs/aci) | 4,713 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 92 |
-| [wonderwhy-er/DesktopCommanderMCP](https://github.com/wonderwhy-er/DesktopCommanderMCP) | 5,470 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 92 |
+| [aipotheosis-labs/aci](https://github.com/aipotheosis-labs/aci) | 4,713 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 93 |
+| [wonderwhy-er/DesktopCommanderMCP](https://github.com/wonderwhy-er/DesktopCommanderMCP) | 5,470 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 93 |
 | [u14app/deep-research](https://github.com/u14app/deep-research) | 4,428 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 85 |
-| [steipete/Peekaboo](https://github.com/steipete/Peekaboo) | 2,168 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 77 |
 
 </details>
 
@@ -117,8 +117,8 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 ### Scoring Formula
 
 ```
-Score = 100 - (Critical x 15) - (High x 8) - (Medium x 3) - (Low x 1)
-Score is clamped to [0, 100]
+Score = 100 - (Critical x 15) - (High x 7) - (Medium x 3) - (Low x 1)
+Score is clamped to [5, 100]
 ```
 
 Info-severity findings are tracked but do not affect the score.
@@ -127,11 +127,11 @@ Info-severity findings are tracked but do not affect the score.
 
 | Grade | Score Range | Meaning |
 |:-----:|:----------:|---------|
-| A | 90 -- 100 | Excellent -- minimal risk |
-| B | 75 -- 89  | Good -- minor issues only |
-| C | 60 -- 74  | Fair -- some high-severity issues |
-| D | 40 -- 59  | Poor -- multiple high-severity issues |
-| F | 0 -- 39   | Critical -- immediate action required |
+| ✅ A | 90 -- 100 | Excellent -- minimal risk |
+| 🟢 B | 80 -- 89  | Good -- minor issues only |
+| 🟡 C | 70 -- 79  | Fair -- some high-severity issues |
+| 🟠 D | 60 -- 69  | Poor -- multiple high-severity issues |
+| 🔴 F | 5 -- 59   | Critical -- immediate action required |
 
 ### Scanner Coverage
 

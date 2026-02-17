@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-agentsec currently offers two reactive mechanisms for detecting malicious skills and MCP servers:
+agentsec currently offers three reactive mechanisms for detecting malicious skills and MCP servers:
 
 1. **Post-install scanning** (`agentsec scan`): Detects issues after they're already on disk
 2. **Shell hooks** (`agentsec hook`): Wraps npm/pip to scan after `install` completes

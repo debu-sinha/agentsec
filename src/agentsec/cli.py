@@ -151,9 +151,10 @@ def scan(
 
     \b
     Exit codes:
-        0       No findings at or above --fail-on threshold
-        1-127   Count of findings at or above threshold (capped)
-        2       Usage or runtime error
+        0   No findings at or above --fail-on threshold
+        1   Findings found at or above --fail-on threshold
+        2   Usage error (e.g., unknown scanner name)
+        3   Runtime error (e.g., file access failure)
 
     \b
     Examples:
@@ -218,7 +219,7 @@ def scan(
             "[bold red]Error:[/bold red] Scan failed due to a file access error.\n"
             "[dim]Check that the target path exists and you have read permission.[/dim]"
         )
-        sys.exit(2)
+        sys.exit(3)
     except Exception as e:
         logger.debug("Scan error traceback:", exc_info=True)
         console.print(
@@ -226,7 +227,7 @@ def scan(
             f"[dim]Run with -v for debug output. "
             f"Report bugs at https://github.com/debu-sinha/agentsec/issues[/dim]"
         )
-        sys.exit(2)
+        sys.exit(3)
 
     # Score posture
     scorer = OwaspScorer()
@@ -287,8 +288,7 @@ def scan(
                         f"\n[bold red]FAIL[/bold red]: {failing_count} findings at "
                         f"severity '{config.fail_on_severity}' or above.\n"
                     )
-                # Exit code = min(failing count, 127) for shell compatibility
-                sys.exit(min(failing_count, 127))
+                sys.exit(1)
 
 
 @main.command("list-scanners")

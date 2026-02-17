@@ -944,7 +944,7 @@ class InstallationScanner(BaseScanner):
         findings: list[Finding] = []
         config_data = self._load_main_config(context)
 
-        if not config_data:
+        if config_data is None:
             return findings
 
         # Check if exec tool is potentially active
