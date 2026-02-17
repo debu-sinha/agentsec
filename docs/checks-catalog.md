@@ -34,7 +34,7 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 
 | ID | Check | Default Severity | OWASP | Detection |
 |----|-------|:---:|-------|-----------|
-| CEX-001 | Exec approvals file missing | High | ASI08, ASI02 | No `exec-approvals.json` found - host execution is uncontrolled |
+| CEX-001 | Exec approvals file missing | High | ASI08, ASI02 | No `exec-approvals.json` found — host execution is uncontrolled. Only fires when an OpenClaw config (`openclaw.json` or `clawdbot.json`) is present. |
 | CEX-002 | Exec approvals defaults too permissive | High | ASI08 | Detects `defaultApproval: always` or overly broad approval rules |
 | CEX-003 | safeBins expanded beyond defaults | Medium | ASI08, ASI02 | Flags additional binaries added to `safeBins` beyond the default set |
 

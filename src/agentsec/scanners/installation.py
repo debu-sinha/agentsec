@@ -944,8 +944,11 @@ class InstallationScanner(BaseScanner):
         findings: list[Finding] = []
         config_data = self._load_main_config(context)
 
+        if not config_data:
+            return findings
+
         # Check if exec tool is potentially active
-        tools_config = (config_data or {}).get("tools", {})
+        tools_config = config_data.get("tools", {})
         profile = tools_config.get("profile", "full")
         deny_list = tools_config.get("deny", [])
         exec_denied = isinstance(deny_list, list) and "exec" in deny_list

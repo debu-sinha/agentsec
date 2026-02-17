@@ -255,6 +255,15 @@ def test_detects_disabled_credential_redaction(scanner, tmp_path):
     assert len(redact_findings) >= 1
 
 
+def test_no_cex001_without_openclaw_config(scanner, tmp_path):
+    """CEX-001 should not fire on non-OpenClaw targets (e.g., MCP server repos)."""
+    (tmp_path / "server.py").write_text("print('hello')")
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    cex_findings = [f for f in findings if "exec approvals" in f.title.lower()]
+    assert len(cex_findings) == 0
+
+
 def test_version_gte():
     assert InstallationScanner._version_gte("2026.2.6", "2026.2.6")
     assert InstallationScanner._version_gte("2026.2.12", "2026.2.6")

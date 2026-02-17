@@ -20,6 +20,7 @@ All notable changes to agentsec are documented here.
 - Fix summary severity counts computed before escalation (summary now reflects post-escalation severities)
 - Sanitize gate error message to avoid leaking raw exception details
 - Update CITATION.cff, launch docs to v0.4.1
+- Skip CEX-001 (exec approvals missing) on non-OpenClaw targets to avoid false positives on MCP server repos
 
 ### Stats
 
