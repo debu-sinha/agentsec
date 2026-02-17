@@ -194,23 +194,6 @@ def get_profiles() -> list[str]:
     return list(_PROFILES.keys())
 
 
-def get_profile_details(profile: str) -> list[dict[str, str]]:
-    """Return human-readable details for a profile's actions.
-
-    Each entry has: key, value, reason, severity.
-    """
-    actions = get_profile_actions(profile)
-    return [
-        {
-            "key": a.key,
-            "value": str(a.value),
-            "reason": a.reason,
-            "severity": a.severity,
-        }
-        for a in actions
-    ]
-
-
 def get_profile_actions(profile: str) -> list[HardenAction]:
     """Return the hardening actions for a profile."""
     if profile not in _PROFILES:
