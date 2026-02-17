@@ -31,5 +31,5 @@ This script regenerates:
 ## Notes
 
 - If npm is unavailable, npm gate checks still run blocklist logic but clean-package npm download/scan paths will be advisory.
-- On Windows, filesystem permission findings can remain after hardening due ACL semantics.
+- On Windows, filesystem permission findings can remain after hardening due to ACL semantics.
 - Full pytest runs may require Developer Mode/admin privilege for symlink tests.
