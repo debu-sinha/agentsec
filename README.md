@@ -141,21 +141,23 @@ Action definition:
 
 ## Screenshots
 
-Screenshots below focus on scan/harden flow. Gate and hook behavior are documented in the case studies and ADRs (`docs/case-studies/003-preinstall-gate-blocked-malicious-package.md`, `docs/adr/ADR-0004-pre-install-gate.md`).
+Screenshots below show the demo sandbox flow (intentionally insecure configuration for detection and hardening demonstration). Gate and hook behavior are documented in `docs/case-studies/003-preinstall-gate-blocked-malicious-package.md` and `docs/adr/ADR-0004-pre-install-gate.md`.
 
-### Step 1: Scan an insecure installation
+### Step 1: Initial scan on intentionally insecure demo config
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-before.png" alt="agentsec scan â€” insecure installation" width="900">
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-before.png" alt="agentsec scan — intentionally insecure demo config" width="900">
 
-### Step 2: Apply hardening profile
+### Step 2: Apply workstation hardening profile
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/harden-apply.png" alt="agentsec harden â€” workstation profile applied" width="900">
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/harden-apply.png" alt="agentsec harden — workstation profile applied" width="900">
 
-### Step 3: Re-scan after hardening (14 findings remain â€” credentials need manual rotation)
+### Step 3: Re-scan findings after hardening
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-findings.png" alt="agentsec scan â€” after hardening, findings view" width="900">
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-findings.png" alt="agentsec scan — post-hardening findings" width="900">
 
-<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-posture.png" alt="agentsec scan â€” after hardening, OWASP posture" width="900">
+### Step 4: OWASP posture view after hardening
+
+<img src="https://raw.githubusercontent.com/debu-sinha/agentsec/main/docs/demo/screenshots/scan-after-posture.png" alt="agentsec scan — OWASP posture after hardening" width="900">
 
 ## MCP Ecosystem Security Dashboard
 
