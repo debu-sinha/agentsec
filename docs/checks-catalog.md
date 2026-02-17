@@ -10,16 +10,16 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 |----|-------|:---:|-------|-----------|
 | CGW-001 | Gateway bound to non-loopback interface | Critical | ASI05, ASI02 | Checks `gatewayHostname` for 0.0.0.0, LAN, or public bind addresses |
 | CGW-002 | Gateway auth missing on exposed interface | Critical | ASI05 | Detects non-loopback bind without `authRequired: true` |
-| CGW-003 | Control UI insecure auth / dangerouslyDisable flags | Critical | ASI05 | Flags `dangerouslyDisableAuth`, `dangerouslyDisableCSP`, weak UI passwords |
+| CGW-003 | Control UI insecure auth / dangerouslyDisable flags | Critical | ASI05 | Flags `dangerouslyDisableDeviceAuth`, `dangerouslyDisableAuth`, and `allowInsecureAuth` on control UI |
 | CGW-004 | Reverse proxy without trustedProxies | Medium | ASI05 | Detects proxy headers without `trustedProxies` allowlist |
-| CGW-005 | No SSRF protection for URL-based inputs | High | ASI05, ASI02 | Version-gated (v2026.2.6+). Checks for missing URL validation on tools that accept URLs |
+| CGW-005 | No SSRF protection for URL-based inputs | High | ASI05, ASI02 | Checks for missing SSRF deny policies on tools that accept URLs |
 
 ## Identity Policy (CID)
 
 | ID | Check | Default Severity | OWASP | Detection |
 |----|-------|:---:|-------|-----------|
-| CID-001 | DM policy set to open | Critical | ASI05, ASI02 | Checks `dmPolicy` for `open` value allowing unauthenticated message injection |
-| CID-002 | Group policy open / wildcard allowlist | High | ASI05, ASI02 | Detects `groupPolicy: open` or `allowList: ["*"]` |
+| CID-001 | DM policy set to open | Critical | ASI01, ASI02, ASI10 | Checks `dmPolicy` for `open` value allowing unauthenticated message injection |
+| CID-002 | Group policy open / wildcard allowlist | High | ASI01, ASI02 | Detects `groupPolicy: open` or `allowList: ["*"]` |
 | CID-003 | DM scope not per-channel-peer | Medium | ASI07 | Flags shared DM scope that allows cross-conversation data leakage |
 
 ## Tool Policy and Sandboxing (CTO)
