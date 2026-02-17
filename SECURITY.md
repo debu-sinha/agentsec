@@ -2,38 +2,43 @@
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.4.x   | Yes                |
-| 0.3.x   | Yes                |
-| < 0.3   | No                 |
+| Version | Supported |
+| ------- | --------- |
+| 0.4.x   | Yes       |
+| < 0.4   | No        |
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in agentsec, please report it responsibly through **GitHub's private security advisory** feature:
+Report vulnerabilities privately using GitHub Security Advisories:
 
-1. Go to the [Security tab](https://github.com/debu-sinha/agentsec/security/advisories) of this repository
-2. Click "Report a vulnerability"
-3. Provide a clear description of the issue, steps to reproduce, and potential impact
+1. Open: https://github.com/debu-sinha/agentsec/security/advisories/new
+2. Include clear reproduction steps, impact, and affected versions.
+3. Share proof-of-concept details privately only.
 
-**Do not open a public issue for security vulnerabilities.**
+Do not open public GitHub issues for undisclosed vulnerabilities.
 
-## What to Expect
+## Response Targets
 
-- Acknowledgment within 48 hours
-- Initial assessment within 5 business days
-- A fix or mitigation plan within 30 days for confirmed vulnerabilities
-- Credit in the release notes (unless you prefer to remain anonymous)
+- Acknowledgment: within 48 hours
+- Triage/initial severity decision: within 5 business days
+- Mitigation or fix plan for confirmed issues: within 30 days
+
+For severe actively exploited issues, we prioritize emergency response outside normal cadence.
 
 ## Scope
 
-This policy covers the `agentsec-ai` Python package and its dependencies. It includes:
+In scope:
 
-- Scanner logic (installation, skill, MCP, credential scanners)
-- Hardening profiles and configuration generation
-- CLI commands and output reporters
-- Secret detection and sanitization
+- `agentsec-ai` package source in `src/agentsec/`
+- CLI behavior and report generation
+- Built-in scanners and hardening profiles
+- Release artifacts and workflow security
 
-## Responsible Disclosure
+Out of scope:
 
-We follow coordinated disclosure. Please allow reasonable time for a fix before public disclosure.
+- Third-party packages and external repositories scanned by agentsec
+- Vulnerabilities already public without a reproducible new impact case
+
+## Disclosure Policy
+
+We follow coordinated disclosure. After a fix is available, advisories are published with affected versions and remediation guidance.

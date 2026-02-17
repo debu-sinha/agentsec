@@ -14,7 +14,7 @@ python -m venv .venv
 source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 
 # Install in editable mode with dev dependencies
-pip install -e ".[dev]"
+pip install -c requirements/constraints-dev.txt -e ".[dev]"
 
 # Install pre-commit hooks
 pre-commit install
@@ -90,4 +90,5 @@ Write commit messages in plain English, imperative mood:
 
 ## Reporting Issues
 
-Use GitHub Issues for bug reports and feature requests. For security vulnerabilities, see [SECURITY.md](SECURITY.md).
+Use GitHub Issues for bug reports and feature requests via the issue templates.\nFor security vulnerabilities, see [SECURITY.md](SECURITY.md).\n\nAll contributors are expected to follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+

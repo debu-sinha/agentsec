@@ -203,7 +203,7 @@ python scripts/repo_consistency_audit.py
 ```bash
 git clone https://github.com/debu-sinha/agentsec.git
 cd agentsec
-pip install -e ".[dev]"
+pip install -c requirements/constraints-dev.txt -e ".[dev]"
 ruff check src tests
 pytest
 ```
@@ -214,7 +214,15 @@ Contribution guide:
 Security policy:
 - [SECURITY.md](SECURITY.md)
 
+## Governance
+
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+- [Contribution Guide](CONTRIBUTING.md)
+
+Issue intake is template-driven under `.github/ISSUE_TEMPLATE/` to keep triage and reproduction quality high.
 ## License
 
 Apache-2.0
+
 
