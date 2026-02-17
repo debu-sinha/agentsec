@@ -1,4 +1,4 @@
-# Launch Evidence Manifest (v0.4.0)
+# Launch Evidence Manifest (v0.4.1)
 
 Date: 2026-02-16  
 Purpose: claim-to-artifact map for launch review and external evidence checks.

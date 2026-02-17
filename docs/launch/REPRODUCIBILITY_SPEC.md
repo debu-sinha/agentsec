@@ -6,7 +6,7 @@ This repository's launch artifacts are reproducible with the following pinned en
 
 - OS: Windows 11
 - Python: 3.14.2
-- agentsec: 0.4.0 (`python -m agentsec.cli --version`)
+- agentsec: 0.4.1 (`python -m agentsec.cli --version`)
 - pip: recent pip compatible with Python 3.14
 - npm: required for npm package gate checks (`event-stream`, `express` paths)
 

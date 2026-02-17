@@ -77,14 +77,19 @@ def test_skips_symlinks(scanner, tmp_path):
     real_file = tmp_path / "real.py"
     real_file.write_text("safe content\n")
     link = tmp_path / "link.py"
-    link.symlink_to(real_file)
+
+    try:
+        link.symlink_to(real_file)
+    except OSError as exc:
+        if getattr(exc, "winerror", None) == 1314:
+            pytest.skip("Symlink creation requires Windows developer/admin privilege")
+        raise
 
     context = ScanContext(target_path=tmp_path)
     findings = scanner.scan(context)
 
     # The scan should complete without following symlinks into unexpected dirs
     assert isinstance(findings, list)
-
 
 def test_deduplicates_findings(scanner, tmp_path):
     """Same secret in same file should not be reported twice."""
@@ -212,3 +217,5 @@ def test_skips_binary_extensions(scanner, tmp_path):
     scanner.scan(context)
     # Binary files should not increment the scan counter
     assert context.files_scanned == 0
+
+

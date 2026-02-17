@@ -9,8 +9,8 @@ authors:
 repository-code: "https://github.com/debu-sinha/agentsec"
 url: "https://pypi.org/project/agentsec-ai/"
 license: Apache-2.0
-version: "0.4.0"
-date-released: "2026-02-15"
+version: "0.4.1"
+date-released: "2026-02-17"
 keywords:
   - security
   - ai-agents

@@ -253,7 +253,7 @@ def _download_and_scan(pm: str, package_name: str) -> list[Finding]:
                 category=FindingCategory.SUPPLY_CHAIN,
                 severity=FindingSeverity.HIGH,
                 title=f"Gate scan failed for {package_name}",
-                description=f"Could not download or scan package: {e}",
+                description=f"Could not download or scan package '{package_name}'.",
                 remediation=Remediation(
                     summary="Inspect the package manually before installing",
                 ),
@@ -350,12 +350,7 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
             with tarfile.open(archive, "r:gz") as tar:
                 _extract_tar_archive(tar, extract_dir)
         elif archive.suffix == ".whl" or archive.suffix == ".zip":
-            with zipfile.ZipFile(archive, "r") as zf:
-                for info in zf.infolist():
-                    target = (extract_dir / info.filename).resolve()
-                    if not str(target).startswith(str(extract_dir.resolve())):
-                        raise ValueError(f"Zip path traversal blocked: {info.filename}")
-                zf.extractall(extract_dir)  # noqa: S202
+            _extract_zip_archive(archive, extract_dir)
 
     # Run scanners on extracted contents
     findings.extend(_run_scanners_on_dir(extract_dir, package_name))
@@ -384,6 +379,21 @@ def _extract_tar_archive(tar: tarfile.TarFile, extract_dir: Path) -> None:
         safe_members.append(member)
 
     tar.extractall(extract_dir, members=safe_members)  # noqa: S202
+
+
+def _extract_zip_archive(archive: Path, extract_dir: Path) -> None:
+    """Extract zip/wheel archive safely, validating each member individually.
+
+    Extracts members one at a time after path-traversal validation to
+    avoid TOCTOU between a bulk validation pass and a bulk extractall.
+    """
+    base_dir = extract_dir.resolve()
+    with zipfile.ZipFile(archive, "r") as zf:
+        for info in zf.infolist():
+            target = (base_dir / info.filename).resolve()
+            if not str(target).startswith(str(base_dir)):
+                raise ValueError(f"Zip path traversal blocked: {info.filename}")
+            zf.extract(info, extract_dir)  # noqa: S202
 
 
 def _check_npm_install_hooks(extract_dir: Path, package_name: str) -> list[Finding]:
