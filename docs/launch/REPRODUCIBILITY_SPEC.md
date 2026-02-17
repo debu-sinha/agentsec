@@ -1,4 +1,4 @@
-﻿# Reproducibility Spec
+# Reproducibility Spec
 
 Date: 2026-02-16
 
@@ -15,7 +15,7 @@ This repository's launch artifacts are reproducible with the following pinned en
 Run:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\reproduce_local_evidence.ps1
+python scripts/reproduce_local_evidence.py
 ```
 
 This script regenerates:

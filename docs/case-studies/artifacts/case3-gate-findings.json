@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "package": "event-stream",
     "manager": "npm",
@@ -57,7 +57,7 @@
     "findings": [
       "Gate scan failed for express"
     ],
-    "seconds": 0.0061
+    "seconds": 0.006
   },
   {
     "package": "requests",
@@ -65,6 +65,6 @@
     "allowed": true,
     "blocklist_hit": false,
     "findings": [],
-    "seconds": 4.9485
+    "seconds": 4.919
   }
 ]

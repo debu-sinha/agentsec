@@ -137,7 +137,7 @@ Action definition:
 
 ## Screenshots
 
-### Step 1: Scan an insecure installation (Grade F, 28 findings)
+### Step 1: Scan an insecure installation
 
 <img src="docs/demo/screenshots/scan-before.png" alt="agentsec scan — insecure installation" width="900">
 
@@ -178,7 +178,7 @@ Top-50 study repro:
 powershell -ExecutionPolicy Bypass -File scripts\reproduce_top50_study.ps1 -DateStamp 20260215
 ```
 
-Note: the PowerShell repro script currently supports agentsec scan output; semgrep/gitleaks steps are placeholders in that script.
+Note: semgrep and gitleaks baseline runs are optional in the PowerShell repro script and require those tools on PATH.
 
 Adversarial consistency audit (docs vs artifacts):
 
@@ -217,3 +217,4 @@ Security policy:
 ## License
 
 Apache-2.0
+

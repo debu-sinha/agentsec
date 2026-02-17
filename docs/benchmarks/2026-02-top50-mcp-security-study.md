@@ -110,7 +110,7 @@ powershell -ExecutionPolicy Bypass -File scripts\reproduce_top50_study.ps1 -Date
 
 ## Next Steps
 
-1. Add semgrep and gitleaks into the PowerShell repro script (currently placeholders).
+1. Run baseline semgrep and gitleaks in the repro script on hosts where those tools are installed.
 2. Emit explicit `targets_cloned_successfully` in summary output.
 3. Add a manual triage sample and report measured false-positive rate.
 4. Publish scanner-specific precision estimates by category/rule family.
@@ -123,3 +123,4 @@ powershell -ExecutionPolicy Bypass -File scripts\reproduce_top50_study.ps1 -Date
 - Repro scripts:
   - `scripts/run_top50_study.py`
   - `scripts/reproduce_top50_study.ps1`
+

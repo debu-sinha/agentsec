@@ -1,12 +1,12 @@
 {
   "version": "0.4.0",
-  "scan_id": "08c9963a621a",
-  "timestamp": "2026-02-17T00:04:00.863444Z",
+  "scan_id": "7d292119bf94",
+  "timestamp": "2026-02-17T00:24:01.690765Z",
   "target_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case1",
   "agent_type": "openclaw",
   "findings": [
     {
-      "id": "4871ce0ab5a7",
+      "id": "0e09631a47bf",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -30,11 +30,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:00.858068Z",
+      "timestamp": "2026-02-17T00:24:01.685449Z",
       "fingerprint": "2b50aeffb8e832cb"
     },
     {
-      "id": "e8cbbdce7d0d",
+      "id": "ed5b3c41f3e4",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -58,11 +58,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:00.858115Z",
+      "timestamp": "2026-02-17T00:24:01.685496Z",
       "fingerprint": "b77e95f6ddaa5771"
     },
     {
-      "id": "6189954e18d3",
+      "id": "086e322381b2",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -85,13 +85,13 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:00.858213Z",
+      "timestamp": "2026-02-17T00:24:01.685597Z",
       "fingerprint": "24b68bfac5dcb29c"
     }
   ],
   "owasp_mappings": [
     {
-      "finding_id": "4871ce0ab5a7",
+      "finding_id": "0e09631a47bf",
       "categories": [
         "ASI05"
       ],
@@ -99,7 +99,7 @@
       "rationale": "Finding 'World-readable sensitive file: exec-approvals.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "e8cbbdce7d0d",
+      "finding_id": "ed5b3c41f3e4",
       "categories": [
         "ASI05"
       ],
@@ -107,7 +107,7 @@
       "rationale": "Finding 'World-readable sensitive file: openclaw.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "6189954e18d3",
+      "finding_id": "086e322381b2",
       "categories": [
         "ASI05"
       ],
@@ -129,7 +129,7 @@
       "credential"
     ],
     "files_scanned": 6,
-    "duration_seconds": 0.005579600001510698,
+    "duration_seconds": 0.005539999998291023,
     "owasp_categories_hit": [
       "ASI05"
     ]

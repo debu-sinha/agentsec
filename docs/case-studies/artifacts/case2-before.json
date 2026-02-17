@@ -1,12 +1,12 @@
 {
   "version": "0.4.0",
-  "scan_id": "f9f7a282194d",
-  "timestamp": "2026-02-17T00:04:17.215427Z",
+  "scan_id": "6d9d8fae22f6",
+  "timestamp": "2026-02-17T00:24:02.071448Z",
   "target_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2",
   "agent_type": "openclaw",
   "findings": [
     {
-      "id": "052ae14ce6e0",
+      "id": "76ecc8ac36ae",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -30,11 +30,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.210742Z",
+      "timestamp": "2026-02-17T00:24:02.066948Z",
       "fingerprint": "514d2df337288e18"
     },
     {
-      "id": "1173c871d66a",
+      "id": "cff26bfdabcf",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -58,11 +58,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.210790Z",
+      "timestamp": "2026-02-17T00:24:02.066997Z",
       "fingerprint": "62f5559559be4387"
     },
     {
-      "id": "88b7f85e99ad",
+      "id": "fb67546f453d",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -85,11 +85,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.210870Z",
+      "timestamp": "2026-02-17T00:24:02.067101Z",
       "fingerprint": "980a3a21c5082ae7"
     },
     {
-      "id": "bc6362d61ded",
+      "id": "888889ddc899",
       "scanner": "installation",
       "category": "plaintext_secret",
       "severity": "critical",
@@ -116,11 +116,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.211255Z",
+      "timestamp": "2026-02-17T00:24:02.067449Z",
       "fingerprint": "d1a7242d47cc1547"
     },
     {
-      "id": "28ae2e7626f4",
+      "id": "801509051286",
       "scanner": "installation",
       "category": "network_exposure",
       "severity": "critical",
@@ -146,11 +146,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.211898Z",
+      "timestamp": "2026-02-17T00:24:02.068072Z",
       "fingerprint": "96a43b8431dd72b2"
     },
     {
-      "id": "00b93b9632db",
+      "id": "4eb8f2475f0d",
       "scanner": "installation",
       "category": "missing_auth",
       "severity": "high",
@@ -174,11 +174,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.211912Z",
+      "timestamp": "2026-02-17T00:24:02.068084Z",
       "fingerprint": "28fcfe2402997e8d"
     },
     {
-      "id": "3b1187e87e33",
+      "id": "4dcd8ee752cc",
       "scanner": "installation",
       "category": "missing_auth",
       "severity": "critical",
@@ -205,11 +205,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.211922Z",
+      "timestamp": "2026-02-17T00:24:02.068094Z",
       "fingerprint": "b75dd0bbd9bc02db"
     },
     {
-      "id": "11216e713cf2",
+      "id": "5f68882744ee",
       "scanner": "installation",
       "category": "insecure_config",
       "severity": "critical",
@@ -237,11 +237,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.211936Z",
+      "timestamp": "2026-02-17T00:24:02.068107Z",
       "fingerprint": "af62824d97ae73ac"
     },
     {
-      "id": "6bc69d8c8185",
+      "id": "43d2a589116a",
       "scanner": "installation",
       "category": "insecure_config",
       "severity": "critical",
@@ -266,11 +266,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.211945Z",
+      "timestamp": "2026-02-17T00:24:02.068117Z",
       "fingerprint": "6a6ba93bcd1d9852"
     },
     {
-      "id": "219ca8f5cde5",
+      "id": "29cd48a44ee9",
       "scanner": "installation",
       "category": "insecure_default",
       "severity": "critical",
@@ -299,11 +299,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.211957Z",
+      "timestamp": "2026-02-17T00:24:02.068129Z",
       "fingerprint": "de068c1c36c16687"
     },
     {
-      "id": "df6ff23c988e",
+      "id": "89535ab1015d",
       "scanner": "installation",
       "category": "insecure_default",
       "severity": "high",
@@ -330,11 +330,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.212078Z",
+      "timestamp": "2026-02-17T00:24:02.068245Z",
       "fingerprint": "409c1e96a6e708b7"
     },
     {
-      "id": "e58682127170",
+      "id": "ef224ac008b5",
       "scanner": "installation",
       "category": "missing_auth",
       "severity": "critical",
@@ -359,11 +359,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.212093Z",
+      "timestamp": "2026-02-17T00:24:02.068257Z",
       "fingerprint": "94fa3c119f72ceed"
     },
     {
-      "id": "b6e5c537b6cf",
+      "id": "2d4ad6cfa864",
       "scanner": "installation",
       "category": "insecure_default",
       "severity": "high",
@@ -392,11 +392,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.212463Z",
+      "timestamp": "2026-02-17T00:24:02.068639Z",
       "fingerprint": "1620997106227aad"
     },
     {
-      "id": "ee8393da9e47",
+      "id": "11b40da51661",
       "scanner": "mcp",
       "category": "mcp_no_auth",
       "severity": "high",
@@ -421,11 +421,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.213311Z",
+      "timestamp": "2026-02-17T00:24:02.069392Z",
       "fingerprint": "720fbdde93d7df12"
     },
     {
-      "id": "13a383f98432",
+      "id": "44bdd02b0440",
       "scanner": "credential",
       "category": "exposed_token",
       "severity": "critical",
@@ -451,13 +451,13 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:04:17.214196Z",
+      "timestamp": "2026-02-17T00:24:02.070199Z",
       "fingerprint": "ced3a1b0200373e8"
     }
   ],
   "owasp_mappings": [
     {
-      "finding_id": "052ae14ce6e0",
+      "finding_id": "76ecc8ac36ae",
       "categories": [
         "ASI05"
       ],
@@ -465,7 +465,7 @@
       "rationale": "Finding 'World-readable sensitive file: exec-approvals.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "1173c871d66a",
+      "finding_id": "cff26bfdabcf",
       "categories": [
         "ASI05"
       ],
@@ -473,7 +473,7 @@
       "rationale": "Finding 'World-readable sensitive file: openclaw.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "88b7f85e99ad",
+      "finding_id": "fb67546f453d",
       "categories": [
         "ASI05"
       ],
@@ -481,7 +481,7 @@
       "rationale": "Finding 'Agent config directory world-accessible: .openclaw' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "bc6362d61ded",
+      "finding_id": "888889ddc899",
       "categories": [
         "ASI05",
         "ASI03"
@@ -490,7 +490,7 @@
       "rationale": "Finding 'Plaintext Slack Token in env.json' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI03 (Supply Chain Vulnerabilities). Category: plaintext_secret."
     },
     {
-      "finding_id": "28ae2e7626f4",
+      "finding_id": "801509051286",
       "categories": [
         "ASI05",
         "ASI02"
@@ -499,7 +499,7 @@
       "rationale": "Finding 'Gateway bound to non-loopback interface' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: network_exposure."
     },
     {
-      "finding_id": "00b93b9632db",
+      "finding_id": "4eb8f2475f0d",
       "categories": [
         "ASI05",
         "ASI01"
@@ -508,7 +508,7 @@
       "rationale": "Finding 'No WebSocket origin validation configured' (high) maps to ASI05 (Privilege Compromise / Credential Theft), ASI01 (Agent Goal Hijack / Prompt Injection). Category: missing_auth."
     },
     {
-      "finding_id": "3b1187e87e33",
+      "finding_id": "4dcd8ee752cc",
       "categories": [
         "ASI05",
         "ASI02"
@@ -517,7 +517,7 @@
       "rationale": "Finding 'Gateway auth missing on non-loopback interface' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: missing_auth."
     },
     {
-      "finding_id": "11216e713cf2",
+      "finding_id": "5f68882744ee",
       "categories": [
         "ASI01",
         "ASI02",
@@ -527,7 +527,7 @@
       "rationale": "Finding 'DM policy set to 'open' \u2014 anyone can message the agent' (critical) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI02 (Excessive Agency / Overprivileged Agents), ASI10 (Misaligned Behaviors / Unintended Actions). Category: insecure_config."
     },
     {
-      "finding_id": "6bc69d8c8185",
+      "finding_id": "43d2a589116a",
       "categories": [
         "ASI01",
         "ASI02"
@@ -536,7 +536,7 @@
       "rationale": "Finding 'Group policy is 'open' \u2014 agent responds in any group' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI02 (Excessive Agency / Overprivileged Agents). Category: insecure_config."
     },
     {
-      "finding_id": "219ca8f5cde5",
+      "finding_id": "29cd48a44ee9",
       "categories": [
         "ASI02",
         "ASI01",
@@ -546,7 +546,7 @@
       "rationale": "Finding 'Full tool profile with open inbound access' (critical) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI01 (Agent Goal Hijack / Prompt Injection), ASI10 (Misaligned Behaviors / Unintended Actions). Category: insecure_default."
     },
     {
-      "finding_id": "df6ff23c988e",
+      "finding_id": "89535ab1015d",
       "categories": [
         "ASI02",
         "ASI08"
@@ -555,7 +555,7 @@
       "rationale": "Finding 'Sandboxing disabled with full tool access and open input' (high) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI08 (Uncontrolled Cascading / Runaway Agents). Category: insecure_default."
     },
     {
-      "finding_id": "e58682127170",
+      "finding_id": "ef224ac008b5",
       "categories": [
         "ASI05",
         "ASI02"
@@ -564,7 +564,7 @@
       "rationale": "Finding 'Authentication disabled on non-loopback agent' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: missing_auth."
     },
     {
-      "finding_id": "b6e5c537b6cf",
+      "finding_id": "2d4ad6cfa864",
       "categories": [
         "ASI05",
         "ASI02"
@@ -573,7 +573,7 @@
       "rationale": "Finding 'No SSRF protection configured for URL-based inputs' (high) maps to ASI05 (Privilege Compromise / Credential Theft), ASI02 (Excessive Agency / Overprivileged Agents). Category: insecure_default."
     },
     {
-      "finding_id": "ee8393da9e47",
+      "finding_id": "11b40da51661",
       "categories": [
         "ASI05"
       ],
@@ -581,7 +581,7 @@
       "rationale": "Finding 'MCP server 'remote-tools' has no authentication configured' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: mcp_no_auth."
     },
     {
-      "finding_id": "13a383f98432",
+      "finding_id": "44bdd02b0440",
       "categories": [
         "ASI05"
       ],
@@ -603,7 +603,7 @@
       "credential"
     ],
     "files_scanned": 9,
-    "duration_seconds": 0.004892200005997438,
+    "duration_seconds": 0.004618999999365769,
     "owasp_categories_hit": [
       "ASI01",
       "ASI02",

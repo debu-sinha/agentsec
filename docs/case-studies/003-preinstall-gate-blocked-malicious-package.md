@@ -1,4 +1,4 @@
-﻿# Case Study: Pre-Install Gate Blocks Known-Malicious Packages
+# Case Study: Pre-Install Gate Blocks Known-Malicious Packages
 
 - Date: 2026-02-16
 - Environment type: Developer workstation (Windows 11, Python 3.14.2)
@@ -20,8 +20,8 @@ Seven packages tested - five blocked, two allowed:
 | flatmap-stream | npm | BLOCKED | Blocklist hit | < 0.1 ms |
 | colourama | pip | BLOCKED | Blocklist hit | < 0.1 ms |
 | noblesse | pip | BLOCKED | Blocklist hit | < 0.1 ms |
-| express | npm | ALLOWED | Clean (npm not found -> non-blocking advisory finding) | 6.7 ms |
-| requests | pip | ALLOWED | Clean (downloaded + scanned, 0 findings) | 5.17 s |
+| express | npm | ALLOWED | Clean (npm not found -> non-blocking advisory finding) | ~5-20 ms |
+| requests | pip | ALLOWED | Clean (downloaded + scanned, 0 findings) | ~5 s |
 
 ## Repro Commands
 
