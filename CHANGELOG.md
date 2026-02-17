@@ -24,7 +24,7 @@ All notable changes to agentsec are documented here.
 ### Stats
 
 - 206 tests passing (1 Windows-only symlink skip)
-- All benchmark data verified by 8-expert swarm audit
+- Benchmark P/R/F1 recomputed and verified against checked-in JSON artifacts
 
 ## [0.4.0] - 2026-02-15
 

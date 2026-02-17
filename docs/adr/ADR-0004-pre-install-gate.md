@@ -13,7 +13,7 @@ agentsec currently offers two reactive mechanisms for detecting malicious skills
 All three share the same limitation: **the malicious code is already installed and potentially executed before agentsec sees it.** npm `postinstall` scripts run during `npm install`, meaning a malicious skill's install hook fires before agentsec's post-install scan. This is the difference between a smoke detector (reactive) and a firewall (preventive).
 
 The agentic AI ecosystem has documented supply chain attacks:
-- Koi Security found 341 malicious skills on ClawerHub with data exfiltration and reverse shells
+- Published research has identified hundreds of malicious skills in public agent marketplaces, including data exfiltration and reverse shell payloads
 - npm `preinstall`/`postinstall` hooks execute arbitrary code during installation
 - pip `setup.py` can run arbitrary code during `pip install`
 

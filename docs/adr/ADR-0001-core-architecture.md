@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-The agentic AI ecosystem (OpenClaw, MCP servers, skill marketplaces) has severe security gaps documented by Bitsight (42K+ exposed instances), Koi Security (341 malicious skills), Enkrypt AI (33% of MCP servers vulnerable), and multiple CVEs. Existing tools are fragmented: ClawSec covers config drift, mcp-scan covers MCP servers, Astrix covers detection-only. No tool provides comprehensive scanning across the full agent attack surface with OWASP-aligned scoring.
+The agentic AI ecosystem (OpenClaw, MCP servers, skill marketplaces) has severe security gaps. Published research reports indicate widespread exposure of agent installations, hundreds of malicious skills in public marketplaces, and a high proportion of MCP server configurations with authentication or authorization gaps. Multiple CVEs have been assigned against core agent platform components. Existing tools are fragmented: ClawSec covers config drift, mcp-scan covers MCP servers, Astrix covers detection-only. No tool provides comprehensive scanning across the full agent attack surface with OWASP-aligned scoring.
 
 We need to decide on the foundational architecture for a security scanner that covers installations, skills, MCP servers, and credentials holistically.
 
