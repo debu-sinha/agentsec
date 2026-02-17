@@ -13,7 +13,7 @@ Quickstart::
         print(f"{finding.severity.value}: {finding.title}")
 """
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 from agentsec.models.config import AgentsecConfig, ScannerConfig, ScanTarget
 from agentsec.models.findings import Finding, FindingCategory, FindingSeverity, Remediation

@@ -2,6 +2,26 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.4.1] - 2026-02-17
+
+### Fixes
+
+- Make severity escalation idempotent (guard against double-scoring mutation)
+- Add Python 3.10/3.11 fallback for tarfile `filter="data"` (3.12+ only feature)
+- Validate `install` subcommand in gate CLI to prevent silent no-op
+- Sanitize error messages to avoid leaking file system paths
+- Harden tar extraction on pre-3.12 with path traversal and symlink checks
+- Normalize severity display to uppercase in gate output
+- Fix inconsistent "critical" vs "CRITICAL" casing in watch command
+- Use em-dash consistently in gate command header
+- Fix blog post check count from "35+" to accurate "27 named checks + dynamic credential detection"
+- Use absolute GitHub URLs for images in README (fixes PyPI rendering)
+
+### Stats
+
+- 205 tests passing (1 Windows-only symlink skip)
+- All benchmark data verified by 6-expert swarm audit
+
 ## [0.4.0] - 2026-02-15
 
 ### New Features
