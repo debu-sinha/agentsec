@@ -14,11 +14,11 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 |--------|------:|
 | Repositories scanned | **50** |
 | Total findings | **219** |
-| Ã°Å¸â€Â´ Critical | **75** |
-| Ã°Å¸Å¸Â  High | **28** |
-| Ã°Å¸Å¸Â¡ Medium | **58** |
-| Ã°Å¸Å¸Â¢ Low | **8** |
-| Ã°Å¸â€Âµ Info | **50** |
+| Critical | **75** |
+| High | **28** |
+| Medium | **58** |
+| Low | **8** |
+| Info | **50** |
 | Repos with zero critical/high findings | **39** |
 | Repos with critical findings | **9** |
 
@@ -127,11 +127,11 @@ Info-severity findings are tracked but do not affect the score.
 
 | Grade | Score Range | Meaning |
 |:-----:|:----------:|---------|
-| Ã¢Å“â€¦ A | 90 -- 100 | Excellent -- minimal risk |
-| Ã°Å¸Å¸Â¢ B | 75 -- 89  | Good -- minor issues only |
-| Ã°Å¸Å¸Â¡ C | 60 -- 74  | Fair -- some high-severity issues |
-| Ã°Å¸Å¸Â  D | 40 -- 59  | Poor -- multiple high-severity issues |
-| Ã°Å¸â€Â´ F | 0 -- 39   | Critical -- immediate action required |
+| A | 90 -- 100 | Excellent -- minimal risk |
+| B | 75 -- 89  | Good -- minor issues only |
+| C | 60 -- 74  | Fair -- some high-severity issues |
+| D | 40 -- 59  | Poor -- multiple high-severity issues |
+| F | 0 -- 39   | Critical -- immediate action required |
 
 ### Scanner Coverage
 
