@@ -1,12 +1,12 @@
 {
-  "version": "0.4.0",
-  "scan_id": "512077ef6c60",
-  "timestamp": "2026-02-17T00:24:08.333805Z",
+  "version": "0.4.1",
+  "scan_id": "a98fafc0cbc6",
+  "timestamp": "2026-02-17T15:19:44.846236Z",
   "target_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case4",
   "agent_type": "openclaw",
   "findings": [
     {
-      "id": "07c69034dc52",
+      "id": "158a401deca6",
       "scanner": "skill",
       "category": "prompt_injection_vector",
       "severity": "critical",
@@ -32,11 +32,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.314144Z",
+      "timestamp": "2026-02-17T15:19:44.823231Z",
       "fingerprint": "fa8a51cc5f53bc3a"
     },
     {
-      "id": "2bdafdbc84ab",
+      "id": "289b2bfc4652",
       "scanner": "skill",
       "category": "dangerous_pattern",
       "severity": "high",
@@ -62,11 +62,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.314180Z",
+      "timestamp": "2026-02-17T15:19:44.823274Z",
       "fingerprint": "3a7cb0327eba41ed"
     },
     {
-      "id": "4bab8b6965ca",
+      "id": "df1677812d8b",
       "scanner": "skill",
       "category": "dangerous_pattern",
       "severity": "high",
@@ -91,11 +91,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321551Z",
+      "timestamp": "2026-02-17T15:19:44.831821Z",
       "fingerprint": "8a80290d05ee97c4"
     },
     {
-      "id": "f8395bb1636e",
+      "id": "8acb43620b3d",
       "scanner": "skill",
       "category": "dangerous_pattern",
       "severity": "low",
@@ -120,11 +120,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321568Z",
+      "timestamp": "2026-02-17T15:19:44.831842Z",
       "fingerprint": "80b09a94067512bf"
     },
     {
-      "id": "a8c21e6e8f52",
+      "id": "b0866359a651",
       "scanner": "skill",
       "category": "dangerous_pattern",
       "severity": "high",
@@ -149,11 +149,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321579Z",
+      "timestamp": "2026-02-17T15:19:44.831855Z",
       "fingerprint": "300a2d27b7bdfd56"
     },
     {
-      "id": "5c668e313442",
+      "id": "8d3a2a250357",
       "scanner": "skill",
       "category": "dangerous_pattern",
       "severity": "medium",
@@ -178,11 +178,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321611Z",
+      "timestamp": "2026-02-17T15:19:44.831894Z",
       "fingerprint": "ff678d684ce9ac75"
     },
     {
-      "id": "250d08aa4981",
+      "id": "75f4660011f1",
       "scanner": "skill",
       "category": "dangerous_pattern",
       "severity": "critical",
@@ -208,11 +208,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321645Z",
+      "timestamp": "2026-02-17T15:19:44.831934Z",
       "fingerprint": "acae5c5bf5e5494b"
     },
     {
-      "id": "c8906178529f",
+      "id": "e40e53f94d30",
       "scanner": "skill",
       "category": "data_exfiltration_risk",
       "severity": "medium",
@@ -228,11 +228,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321892Z",
+      "timestamp": "2026-02-17T15:19:44.832218Z",
       "fingerprint": "f1ae3ec98b26a779"
     },
     {
-      "id": "ab5d47f300bf",
+      "id": "13450aa2e69f",
       "scanner": "skill",
       "category": "data_exfiltration_risk",
       "severity": "high",
@@ -248,11 +248,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321911Z",
+      "timestamp": "2026-02-17T15:19:44.832241Z",
       "fingerprint": "bf16ed0dda1ea84c"
     },
     {
-      "id": "c9c3fb6386a5",
+      "id": "31133c2266eb",
       "scanner": "skill",
       "category": "data_exfiltration_risk",
       "severity": "high",
@@ -268,11 +268,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321920Z",
+      "timestamp": "2026-02-17T15:19:44.832254Z",
       "fingerprint": "bf16ed0dda1ea84c"
     },
     {
-      "id": "0a2a57a0ae2e",
+      "id": "b70a114db24f",
       "scanner": "skill",
       "category": "data_exfiltration_risk",
       "severity": "high",
@@ -288,11 +288,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321937Z",
+      "timestamp": "2026-02-17T15:19:44.832272Z",
       "fingerprint": "baeb073e5cd63205"
     },
     {
-      "id": "f8b7ad55621c",
+      "id": "54615b8d1f5c",
       "scanner": "skill",
       "category": "data_exfiltration_risk",
       "severity": "critical",
@@ -308,11 +308,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321959Z",
+      "timestamp": "2026-02-17T15:19:44.832300Z",
       "fingerprint": "67e023afcc00c0e3"
     },
     {
-      "id": "53358f0e6650",
+      "id": "a2bd97224d28",
       "scanner": "skill",
       "category": "data_exfiltration_risk",
       "severity": "critical",
@@ -328,11 +328,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.321973Z",
+      "timestamp": "2026-02-17T15:19:44.832316Z",
       "fingerprint": "2e92d0df56bffe3c"
     },
     {
-      "id": "28971a1de9e0",
+      "id": "50a8aad4b30d",
       "scanner": "skill",
       "category": "dependency_risk",
       "severity": "medium",
@@ -356,11 +356,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.322668Z",
+      "timestamp": "2026-02-17T15:19:44.833220Z",
       "fingerprint": "9b52ee27627a9b60"
     },
     {
-      "id": "06110b468d9e",
+      "id": "54b9f166594f",
       "scanner": "skill",
       "category": "dependency_risk",
       "severity": "medium",
@@ -384,11 +384,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.322680Z",
+      "timestamp": "2026-02-17T15:19:44.833236Z",
       "fingerprint": "9b52ee27627a9b60"
     },
     {
-      "id": "4807145b4b60",
+      "id": "416e9d42aa3f",
       "scanner": "skill",
       "category": "dependency_risk",
       "severity": "medium",
@@ -412,11 +412,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.322688Z",
+      "timestamp": "2026-02-17T15:19:44.833255Z",
       "fingerprint": "9b52ee27627a9b60"
     },
     {
-      "id": "e69627d816a4",
+      "id": "916783971111",
       "scanner": "skill",
       "category": "dangerous_pattern",
       "severity": "medium",
@@ -443,11 +443,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332152Z",
+      "timestamp": "2026-02-17T15:19:44.843993Z",
       "fingerprint": "4894997925b569be"
     },
     {
-      "id": "e93ac187b13d",
+      "id": "d16648009edb",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "critical",
@@ -474,11 +474,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332899Z",
+      "timestamp": "2026-02-17T15:19:44.844917Z",
       "fingerprint": "25bc3f0944a40195"
     },
     {
-      "id": "1b43aff9a6a1",
+      "id": "07f645b51217",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "critical",
@@ -505,11 +505,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332930Z",
+      "timestamp": "2026-02-17T15:19:44.844956Z",
       "fingerprint": "46bff54a615e4f1e"
     },
     {
-      "id": "c105b68a41d3",
+      "id": "0cf2858e8c14",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "high",
@@ -536,11 +536,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332951Z",
+      "timestamp": "2026-02-17T15:19:44.844995Z",
       "fingerprint": "0e69c5821a82648a"
     },
     {
-      "id": "96b0ba17e78e",
+      "id": "4e9309b2c4cb",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "high",
@@ -567,11 +567,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332960Z",
+      "timestamp": "2026-02-17T15:19:44.845005Z",
       "fingerprint": "0e69c5821a82648a"
     },
     {
-      "id": "1693ac2a8ce1",
+      "id": "e3b0a0dd1b11",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "high",
@@ -598,11 +598,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332970Z",
+      "timestamp": "2026-02-17T15:19:44.845017Z",
       "fingerprint": "0e69c5821a82648a"
     },
     {
-      "id": "0b4d4cc7c4a8",
+      "id": "d79c17ea3160",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "high",
@@ -629,11 +629,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332981Z",
+      "timestamp": "2026-02-17T15:19:44.845043Z",
       "fingerprint": "0e69c5821a82648a"
     },
     {
-      "id": "481f1bc06792",
+      "id": "d58a79801632",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "high",
@@ -660,11 +660,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.332992Z",
+      "timestamp": "2026-02-17T15:19:44.845056Z",
       "fingerprint": "5df31d0646c4b4fb"
     },
     {
-      "id": "9feddc44fbc6",
+      "id": "ac81a7745080",
       "scanner": "skill",
       "category": "malicious_skill",
       "severity": "high",
@@ -691,11 +691,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.333001Z",
+      "timestamp": "2026-02-17T15:19:44.845068Z",
       "fingerprint": "5df31d0646c4b4fb"
     },
     {
-      "id": "99a133264c01",
+      "id": "35aa45fcbc89",
       "scanner": "skill",
       "category": "prompt_injection_vector",
       "severity": "high",
@@ -711,13 +711,13 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:08.333036Z",
+      "timestamp": "2026-02-17T15:19:44.845110Z",
       "fingerprint": "089f91fd0bc33862"
     }
   ],
   "owasp_mappings": [
     {
-      "finding_id": "07c69034dc52",
+      "finding_id": "158a401deca6",
       "categories": [
         "ASI01",
         "ASI03"
@@ -726,7 +726,7 @@
       "rationale": "Finding 'Prompt injection in skill 'data-exporter' tool description' (critical) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: prompt_injection_vector."
     },
     {
-      "finding_id": "2bdafdbc84ab",
+      "finding_id": "289b2bfc4652",
       "categories": [
         "ASI02",
         "ASI03"
@@ -735,7 +735,7 @@
       "rationale": "Finding 'Excessive permissions requested by skill 'data-exporter'' (high) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI03 (Supply Chain Vulnerabilities). Category: dangerous_pattern."
     },
     {
-      "finding_id": "4bab8b6965ca",
+      "finding_id": "df1677812d8b",
       "categories": [
         "ASI02",
         "ASI03"
@@ -744,7 +744,7 @@
       "rationale": "Finding 'Dangerous import 'subprocess' in skill 'data-exporter'' (high) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI03 (Supply Chain Vulnerabilities). Category: dangerous_pattern."
     },
     {
-      "finding_id": "f8395bb1636e",
+      "finding_id": "8acb43620b3d",
       "categories": [
         "ASI02",
         "ASI03"
@@ -753,7 +753,7 @@
       "rationale": "Finding 'Dangerous import 'requests' in skill 'data-exporter'' (low) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI03 (Supply Chain Vulnerabilities). Category: dangerous_pattern."
     },
     {
-      "finding_id": "a8c21e6e8f52",
+      "finding_id": "b0866359a651",
       "categories": [
         "ASI02",
         "ASI03"
@@ -762,7 +762,7 @@
       "rationale": "Finding 'Dangerous import 'pickle' in skill 'data-exporter'' (high) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI03 (Supply Chain Vulnerabilities). Category: dangerous_pattern."
     },
     {
-      "finding_id": "5c668e313442",
+      "finding_id": "8d3a2a250357",
       "categories": [
         "ASI02",
         "ASI03"
@@ -771,7 +771,7 @@
       "rationale": "Finding 'Dangerous import 'socket' in skill 'data-exporter'' (medium) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI03 (Supply Chain Vulnerabilities). Category: dangerous_pattern."
     },
     {
-      "finding_id": "250d08aa4981",
+      "finding_id": "75f4660011f1",
       "categories": [
         "ASI02",
         "ASI03"
@@ -780,7 +780,7 @@
       "rationale": "Finding 'Dangerous call 'exec()' in skill 'data-exporter'' (critical) maps to ASI02 (Excessive Agency / Overprivileged Agents), ASI03 (Supply Chain Vulnerabilities). Category: dangerous_pattern."
     },
     {
-      "finding_id": "c8906178529f",
+      "finding_id": "e40e53f94d30",
       "categories": [
         "ASI03",
         "ASI05"
@@ -789,7 +789,7 @@
       "rationale": "Finding 'Base64 encoded payload in skill 'data-exporter'' (medium) maps to ASI03 (Supply Chain Vulnerabilities), ASI05 (Privilege Compromise / Credential Theft). Category: data_exfiltration_risk."
     },
     {
-      "finding_id": "ab5d47f300bf",
+      "finding_id": "13450aa2e69f",
       "categories": [
         "ASI03",
         "ASI05"
@@ -798,7 +798,7 @@
       "rationale": "Finding 'Environment variable harvesting in skill 'data-exporter'' (high) maps to ASI03 (Supply Chain Vulnerabilities), ASI05 (Privilege Compromise / Credential Theft). Category: data_exfiltration_risk."
     },
     {
-      "finding_id": "c9c3fb6386a5",
+      "finding_id": "31133c2266eb",
       "categories": [
         "ASI03",
         "ASI05"
@@ -807,7 +807,7 @@
       "rationale": "Finding 'Environment variable harvesting in skill 'data-exporter'' (high) maps to ASI03 (Supply Chain Vulnerabilities), ASI05 (Privilege Compromise / Credential Theft). Category: data_exfiltration_risk."
     },
     {
-      "finding_id": "0a2a57a0ae2e",
+      "finding_id": "b70a114db24f",
       "categories": [
         "ASI03",
         "ASI05"
@@ -816,7 +816,7 @@
       "rationale": "Finding 'File read of sensitive paths in skill 'data-exporter'' (high) maps to ASI03 (Supply Chain Vulnerabilities), ASI05 (Privilege Compromise / Credential Theft). Category: data_exfiltration_risk."
     },
     {
-      "finding_id": "f8b7ad55621c",
+      "finding_id": "54615b8d1f5c",
       "categories": [
         "ASI03",
         "ASI05"
@@ -825,7 +825,7 @@
       "rationale": "Finding 'Reverse shell pattern in skill 'data-exporter'' (critical) maps to ASI03 (Supply Chain Vulnerabilities), ASI05 (Privilege Compromise / Credential Theft). Category: data_exfiltration_risk."
     },
     {
-      "finding_id": "53358f0e6650",
+      "finding_id": "a2bd97224d28",
       "categories": [
         "ASI03",
         "ASI05"
@@ -834,7 +834,7 @@
       "rationale": "Finding 'Data exfiltration via HTTP in skill 'data-exporter'' (critical) maps to ASI03 (Supply Chain Vulnerabilities), ASI05 (Privilege Compromise / Credential Theft). Category: data_exfiltration_risk."
     },
     {
-      "finding_id": "28971a1de9e0",
+      "finding_id": "50a8aad4b30d",
       "categories": [
         "ASI03"
       ],
@@ -842,7 +842,7 @@
       "rationale": "Finding 'Unpinned dependency in skill 'data-exporter'' (medium) maps to ASI03 (Supply Chain Vulnerabilities). Category: dependency_risk."
     },
     {
-      "finding_id": "06110b468d9e",
+      "finding_id": "54b9f166594f",
       "categories": [
         "ASI03"
       ],
@@ -850,7 +850,7 @@
       "rationale": "Finding 'Unpinned dependency in skill 'data-exporter'' (medium) maps to ASI03 (Supply Chain Vulnerabilities). Category: dependency_risk."
     },
     {
-      "finding_id": "4807145b4b60",
+      "finding_id": "416e9d42aa3f",
       "categories": [
         "ASI03"
       ],
@@ -858,7 +858,7 @@
       "rationale": "Finding 'Unpinned dependency in skill 'data-exporter'' (medium) maps to ASI03 (Supply Chain Vulnerabilities). Category: dependency_risk."
     },
     {
-      "finding_id": "e69627d816a4",
+      "finding_id": "916783971111",
       "categories": [
         "ASI01",
         "ASI02"
@@ -867,7 +867,7 @@
       "rationale": "Finding 'Skill 'quick-setup' has dangerous caps without disable-model-invocation' (medium) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI02 (Excessive Agency / Overprivileged Agents). Category: dangerous_pattern."
     },
     {
-      "finding_id": "e93ac187b13d",
+      "finding_id": "d16648009edb",
       "categories": [
         "ASI01",
         "ASI03"
@@ -876,7 +876,7 @@
       "rationale": "Finding 'Remote pipe to shell in skill 'quick-setup'' (critical) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "1b43aff9a6a1",
+      "finding_id": "07f645b51217",
       "categories": [
         "ASI01",
         "ASI03"
@@ -885,7 +885,7 @@
       "rationale": "Finding 'PowerShell remote execution in skill 'quick-setup'' (critical) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "c105b68a41d3",
+      "finding_id": "0cf2858e8c14",
       "categories": [
         "ASI01",
         "ASI03"
@@ -894,7 +894,7 @@
       "rationale": "Finding 'Credential path targeting in skill 'quick-setup'' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "96b0ba17e78e",
+      "finding_id": "4e9309b2c4cb",
       "categories": [
         "ASI01",
         "ASI03"
@@ -903,7 +903,7 @@
       "rationale": "Finding 'Credential path targeting in skill 'quick-setup'' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "1693ac2a8ce1",
+      "finding_id": "e3b0a0dd1b11",
       "categories": [
         "ASI01",
         "ASI03"
@@ -912,7 +912,7 @@
       "rationale": "Finding 'Credential path targeting in skill 'quick-setup'' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "0b4d4cc7c4a8",
+      "finding_id": "d79c17ea3160",
       "categories": [
         "ASI01",
         "ASI03"
@@ -921,7 +921,7 @@
       "rationale": "Finding 'Credential path targeting in skill 'quick-setup'' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "481f1bc06792",
+      "finding_id": "d58a79801632",
       "categories": [
         "ASI01",
         "ASI03"
@@ -930,7 +930,7 @@
       "rationale": "Finding 'Remote script install in skill 'quick-setup'' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "9feddc44fbc6",
+      "finding_id": "ac81a7745080",
       "categories": [
         "ASI01",
         "ASI03"
@@ -939,7 +939,7 @@
       "rationale": "Finding 'Remote script install in skill 'quick-setup'' (high) maps to ASI01 (Agent Goal Hijack / Prompt Injection), ASI03 (Supply Chain Vulnerabilities). Category: malicious_skill."
     },
     {
-      "finding_id": "99a133264c01",
+      "finding_id": "35aa45fcbc89",
       "categories": [
         "ASI01",
         "ASI03"
@@ -959,7 +959,7 @@
       "skill"
     ],
     "files_scanned": 4,
-    "duration_seconds": 0.020270900000468828,
+    "duration_seconds": 0.023713600006885827,
     "owasp_categories_hit": [
       "ASI01",
       "ASI02",

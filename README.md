@@ -169,7 +169,7 @@ Weekly automated security scan of the top 50 MCP server repositories, graded A t
 
 ## Benchmarks and Studies
 
-- [Fixture benchmark (v0.4.0, dated 2026-02-15)](docs/benchmarks/results/2026-02-15-v0.4.0.md)  
+- [Fixture benchmark (artifact filename keeps v0.4.0; refreshed 2026-02-17 with agentsec v0.4.1)](docs/benchmarks/results/2026-02-15-v0.4.0.md)  
   Precision/recall/F1 over a 20-fixture suite.
 - [Top-50 MCP study (snapshot 2026-02-16)](docs/benchmarks/2026-02-top50-mcp-security-study.md)  
   Agentsec-only repro run with normalized findings output.

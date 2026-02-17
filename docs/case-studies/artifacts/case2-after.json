@@ -1,12 +1,12 @@
 {
-  "version": "0.4.0",
-  "scan_id": "346e9efae127",
-  "timestamp": "2026-02-17T00:24:02.825735Z",
+  "version": "0.4.1",
+  "scan_id": "bc1f1b43c9a2",
+  "timestamp": "2026-02-17T15:19:37.655425Z",
   "target_path": "C:\\Users\\dsinh\\agentsec-dev\\agentsec\\.tmp\\repro-case2",
   "agent_type": "openclaw",
   "findings": [
     {
-      "id": "4de90680a487",
+      "id": "7f44e7d2bffc",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -30,11 +30,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:02.818856Z",
+      "timestamp": "2026-02-17T15:19:37.643631Z",
       "fingerprint": "514d2df337288e18"
     },
     {
-      "id": "9d55623a25f0",
+      "id": "692c9275ac6e",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -58,11 +58,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:02.818904Z",
+      "timestamp": "2026-02-17T15:19:37.643683Z",
       "fingerprint": "62f5559559be4387"
     },
     {
-      "id": "11d05cc22610",
+      "id": "4024f174b3df",
       "scanner": "installation",
       "category": "insecure_permissions",
       "severity": "high",
@@ -85,11 +85,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:02.819002Z",
+      "timestamp": "2026-02-17T15:19:37.643799Z",
       "fingerprint": "980a3a21c5082ae7"
     },
     {
-      "id": "ea64c2df57a7",
+      "id": "7d26ec23f40b",
       "scanner": "installation",
       "category": "plaintext_secret",
       "severity": "critical",
@@ -116,11 +116,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:02.819355Z",
+      "timestamp": "2026-02-17T15:19:37.644207Z",
       "fingerprint": "d1a7242d47cc1547"
     },
     {
-      "id": "6edabac0a929",
+      "id": "068798f92c64",
       "scanner": "mcp",
       "category": "mcp_no_auth",
       "severity": "high",
@@ -145,11 +145,11 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:02.821279Z",
+      "timestamp": "2026-02-17T15:19:37.646708Z",
       "fingerprint": "720fbdde93d7df12"
     },
     {
-      "id": "56693faa5eff",
+      "id": "20fc4b6f07af",
       "scanner": "credential",
       "category": "exposed_token",
       "severity": "critical",
@@ -175,13 +175,13 @@
       ],
       "cve_ids": [],
       "metadata": {},
-      "timestamp": "2026-02-17T00:24:02.824817Z",
+      "timestamp": "2026-02-17T15:19:37.653731Z",
       "fingerprint": "ced3a1b0200373e8"
     }
   ],
   "owasp_mappings": [
     {
-      "finding_id": "4de90680a487",
+      "finding_id": "7f44e7d2bffc",
       "categories": [
         "ASI05"
       ],
@@ -189,7 +189,7 @@
       "rationale": "Finding 'World-readable sensitive file: exec-approvals.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "9d55623a25f0",
+      "finding_id": "692c9275ac6e",
       "categories": [
         "ASI05"
       ],
@@ -197,7 +197,7 @@
       "rationale": "Finding 'World-readable sensitive file: openclaw.json' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "11d05cc22610",
+      "finding_id": "4024f174b3df",
       "categories": [
         "ASI05"
       ],
@@ -205,7 +205,7 @@
       "rationale": "Finding 'Agent config directory world-accessible: .openclaw' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: insecure_permissions."
     },
     {
-      "finding_id": "ea64c2df57a7",
+      "finding_id": "7d26ec23f40b",
       "categories": [
         "ASI05",
         "ASI03"
@@ -214,7 +214,7 @@
       "rationale": "Finding 'Plaintext Slack Token in env.json' (critical) maps to ASI05 (Privilege Compromise / Credential Theft), ASI03 (Supply Chain Vulnerabilities). Category: plaintext_secret."
     },
     {
-      "finding_id": "6edabac0a929",
+      "finding_id": "068798f92c64",
       "categories": [
         "ASI05"
       ],
@@ -222,7 +222,7 @@
       "rationale": "Finding 'MCP server 'remote-tools' has no authentication configured' (high) maps to ASI05 (Privilege Compromise / Credential Theft). Category: mcp_no_auth."
     },
     {
-      "finding_id": "56693faa5eff",
+      "finding_id": "20fc4b6f07af",
       "categories": [
         "ASI05"
       ],
@@ -244,7 +244,7 @@
       "credential"
     ],
     "files_scanned": 11,
-    "duration_seconds": 0.007105000004230533,
+    "duration_seconds": 0.011676100009935908,
     "owasp_categories_hit": [
       "ASI03",
       "ASI05"

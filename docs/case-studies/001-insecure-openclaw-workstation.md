@@ -1,9 +1,9 @@
-﻿# Case Study: Insecure OpenClaw Developer Workstation
+# Case Study: Insecure OpenClaw Developer Workstation
 
 - Date: 2026-02-16
 - Environment type: OpenClaw developer workstation
 - Scope: installation
-- Tool version: agentsec 0.4.0
+- Tool version: agentsec 0.4.1
 
 ## Starting Risk Posture
 

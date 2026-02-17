@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.4.1",
   "date": "2026-02-15",
   "platform": "Windows 11",
   "python": "3.14.2",
@@ -12,8 +12,8 @@
     "recall": 1.0,
     "f1": 0.9032,
     "critical_recall": 1.0,
-    "runtime_p50_ms": 3.4,
-    "runtime_p95_ms": 11.4
+    "runtime_p50_ms": 4.8,
+    "runtime_p95_ms": 27.3
   },
   "module_metrics": {
     "installation": {
@@ -70,7 +70,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 11.4,
+      "runtime_ms": 27.3,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -109,7 +109,7 @@
       "fp": 2,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.0,
+      "runtime_ms": 3.7,
       "expected": [
         "Gateway bound to non-loopback interface",
         "Gateway auth missing on non-loopback interface"
@@ -175,15 +175,15 @@
       "fp": 2,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.0,
+      "runtime_ms": 3.4,
       "expected": [
-        "Full tool profile with open inbound access",
         "Sandboxing disabled with full tool access and open input",
+        "Full tool profile with open inbound access",
         "DM policy set to 'open'"
       ],
       "matched": [
-        "Full tool profile with open inbound access",
         "Sandboxing disabled with full tool access and open input",
+        "Full tool profile with open inbound access",
         "DM policy set to 'open'"
       ],
       "missed": [],
@@ -249,7 +249,7 @@
       "fp": 2,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 4.3,
+      "runtime_ms": 3.9,
       "expected": [
         "Exec approvals defaults.security set to 'full'"
       ],
@@ -313,20 +313,20 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 3.2,
+      "runtime_ms": 3.8,
       "expected": [
-        "CVE-2026-25157",
-        "CVE-2026-25593",
-        "CVE-2026-25475",
         "CVE-2026-24763",
-        "CVE-2026-25253"
+        "CVE-2026-25593",
+        "CVE-2026-25157",
+        "CVE-2026-25253",
+        "CVE-2026-25475"
       ],
       "matched": [
-        "CVE-2026-25157",
         "CVE-2026-25593",
         "CVE-2026-25253",
         "CVE-2026-25475",
-        "CVE-2026-24763"
+        "CVE-2026-24763",
+        "CVE-2026-25157"
       ],
       "missed": [],
       "false_positives": [],
@@ -388,7 +388,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 10.9,
+      "runtime_ms": 13.2,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -421,7 +421,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 8.2,
+      "runtime_ms": 11.6,
       "expected": [
         "Remote pipe to shell"
       ],
@@ -464,7 +464,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 8.5,
+      "runtime_ms": 10.6,
       "expected": [
         "Credential path targeting"
       ],
@@ -519,7 +519,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 8.6,
+      "runtime_ms": 12.7,
       "expected": [
         "Base64 encoded payload"
       ],
@@ -562,16 +562,16 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 8.5,
+      "runtime_ms": 15.1,
       "expected": [
+        "Dangerous import 'subprocess'",
         "Dangerous call 'eval()'",
-        "Dangerous call 'exec()'",
-        "Dangerous import 'subprocess'"
+        "Dangerous call 'exec()'"
       ],
       "matched": [
         "Dangerous call 'eval()'",
-        "Dangerous call 'exec()'",
-        "Dangerous import 'subprocess'"
+        "Dangerous import 'subprocess'",
+        "Dangerous call 'exec()'"
       ],
       "missed": [],
       "false_positives": [],
@@ -621,7 +621,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.4,
+      "runtime_ms": 6.4,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -654,7 +654,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.3,
+      "runtime_ms": 6.4,
       "expected": [
         "MCP server 'remote-api' has no authentication",
         "Remote MCP server"
@@ -705,15 +705,15 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.5,
+      "runtime_ms": 7.3,
       "expected": [
-        "Tool poisoning",
         "Dangerous parameter 'shell_command'",
+        "Tool poisoning",
         "Dangerous parameter 'file_path'"
       ],
       "matched": [
-        "Tool poisoning",
         "Dangerous parameter 'shell_command'",
+        "Tool poisoning",
         "Dangerous parameter 'file_path'"
       ],
       "missed": [],
@@ -764,7 +764,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.3,
+      "runtime_ms": 4.7,
       "expected": [
         "npx with unverified package"
       ],
@@ -807,7 +807,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.2,
+      "runtime_ms": 4.6,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -840,16 +840,16 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 3,
-      "runtime_ms": 3.5,
+      "runtime_ms": 4.9,
       "expected": [
-        "OpenAI API Key",
         "GitHub Personal Access Token",
-        "AWS Access Key"
+        "AWS Access Key",
+        "OpenAI API Key"
       ],
       "matched": [
-        "OpenAI API Key",
         "GitHub Personal Access Token",
-        "AWS Access Key"
+        "AWS Access Key",
+        "OpenAI API Key"
       ],
       "missed": [],
       "false_positives": [],
@@ -923,7 +923,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 2,
-      "runtime_ms": 3.0,
+      "runtime_ms": 3.8,
       "expected": [],
       "matched": [],
       "missed": [],
@@ -956,7 +956,7 @@
       "fp": 0,
       "fn": 0,
       "perm_excluded": 0,
-      "runtime_ms": 1.1,
+      "runtime_ms": 1.6,
       "expected": [
         "npm install hook"
       ],
@@ -967,13 +967,13 @@
       "false_positives": [],
       "all_findings": [
         {
-          "title": "npm install hook: preinstall",
+          "title": "npm install hook: postinstall",
           "severity": "high",
           "category": "supply_chain",
           "scanner": "gate"
         },
         {
-          "title": "npm install hook: postinstall",
+          "title": "npm install hook: preinstall",
           "severity": "high",
           "category": "supply_chain",
           "scanner": "gate"

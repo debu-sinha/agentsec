@@ -1,9 +1,9 @@
-﻿# Case Study: Public OpenClaw Bot Hardening on VPS
+# Case Study: Public OpenClaw Bot Hardening on VPS
 
 - Date: 2026-02-16
 - Environment type: Public bot on internet-exposed VPS
 - Scope: installation + mcp + credential
-- Tool version: agentsec 0.4.0
+- Tool version: agentsec 0.4.1
 
 ## Starting Risk Posture
 
