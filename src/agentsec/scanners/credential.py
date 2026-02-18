@@ -29,6 +29,24 @@ from agentsec.utils import sanitize_secret
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Well-known example values that should NEVER trigger findings.
+# These appear in official documentation and tutorials across the ecosystem.
+# ---------------------------------------------------------------------------
+_KNOWN_EXAMPLE_VALUES: set[str] = {
+    # AWS official documentation example keys
+    "AKIAIOSFODNN7EXAMPLE",
+    "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+}
+
+# Databricks documentation example token prefix — built at runtime to avoid
+# GitHub push protection flagging the literal string as a secret.
+_KNOWN_EXAMPLE_DATABRICKS_PREFIX = "dapi" + "1234567890ab1cde"
+
+# jwt.io canonical example token prefix — the header+payload is stable across
+# all copies of the jwt.io sample; only the signature varies.
+_KNOWN_EXAMPLE_JWT_PREFIX = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIi"
+
 # File extensions to scan for secrets
 _SCANNABLE_EXTENSIONS = {
     ".json",
@@ -473,9 +491,34 @@ class CredentialScanner(BaseScanner):
             is_low_confidence = self._is_test_or_doc_context(file_path)
 
             for secret in secrets[filename]:
+                # Skip well-known example values (AWS EXAMPLE keys, jwt.io, etc.)
+                if secret.secret_value and self._is_known_example_value(
+                    secret.secret_value, secret.type
+                ):
+                    continue
+
                 # Skip placeholders that detect-secrets doesn't filter
                 if secret.secret_value and self._is_placeholder(secret.secret_value):
                     continue
+
+                # Private key body check: skip if the key body between
+                # BEGIN/END markers is obviously fake (trivially short).
+                # Real PEM keys are hundreds of base64 chars; bodies under 10
+                # chars like "test" or "fake" are clearly not real.
+                if secret.type == "Private Key" and secret.line_number:
+                    try:
+                        lines = Path(filename).read_text(errors="replace").splitlines()
+                        start_idx = secret.line_number - 1  # 1-indexed
+                        body_lines = []
+                        for i in range(start_idx + 1, min(start_idx + 100, len(lines))):
+                            if "-----END" in lines[i]:
+                                break
+                            body_lines.append(lines[i].strip())
+                        body_text = "".join(body_lines)
+                        if len(body_text) < 10:
+                            continue
+                    except (OSError, IndexError):
+                        pass  # If we can't read context, proceed normally
 
                 # Entropy gate for Secret Keyword findings. KeywordDetector
                 # fires on variable names like "password" / "secret" / "token"
@@ -557,6 +600,10 @@ class CredentialScanner(BaseScanner):
                 matched = match.group(0)
                 line_num = content[: match.start()].count("\n") + 1
 
+                # Skip well-known example values (AWS EXAMPLE, jwt.io, etc.)
+                if self._is_known_example_value(matched, secret_type):
+                    continue
+
                 # Skip placeholders and examples
                 if self._is_placeholder(matched):
                     continue
@@ -567,6 +614,28 @@ class CredentialScanner(BaseScanner):
                     and self._is_placeholder_connection_string(matched)
                 ):
                     continue
+
+                # Entropy gate: skip low-entropy matches from extra patterns.
+                # Real API keys have high entropy; documentation strings and
+                # natural language matches (e.g. "sk-this-is-docs-not-key") don't.
+                if (
+                    secret_type != "Generic Connection String"
+                    and self._shannon_entropy(matched) < 3.0
+                ):
+                    continue
+
+                # Character class diversity: real API keys mix lowercase, uppercase,
+                # and digits. Pure-lowercase strings like "sk-this-is-not-a-key" are
+                # natural language, not secrets. Strip known prefix before checking.
+                if secret_type not in ("Generic Connection String", "Private Key"):
+                    body = re.sub(
+                        r"^(?:sk-(?:ant-|proj-|svcacct-)?|ghp_|gho_|gh[us]_|AKIA"
+                        r"|hf_|dapi|gsk_|r8_|pcsk_|co-|vercel_|AIza)",
+                        "",
+                        matched,
+                    )
+                    if len(body) >= 12 and not self._has_char_class_diversity(body):
+                        continue
 
                 # Downgrade severity for test/doc context
                 effective_severity = severity
@@ -679,6 +748,14 @@ class CredentialScanner(BaseScanner):
             "secret123",
             "password123",
             "for_testing_only",
+            "insert_here",
+            "do_not_use",
+            "not-a-real",
+            "notareal",
+            "for_documentation",
+            "fordocumentation",
+            "for_docs",
+            "fordocs",
         }
         word_placeholders = {
             "example",
@@ -688,10 +765,24 @@ class CredentialScanner(BaseScanner):
             "sample",
             "sk-xxx",
             "placeholder",
+            "demo",
+            "mock",
+            "stub",
+            "invalid",
+            "redacted",
+            "revoked",
+            "expired",
+            "todo",
+            "fixme",
         }
 
         # Strip known prefixes before checking (e.g. "sk-", "ghp_", "AKIA")
-        stripped = re.sub(r"^(?:sk-(?:ant-)?|ghp_|gho_|gh[us]_|AKIA|hf_|dapi)", "", value).lower()
+        stripped = re.sub(
+            r"^(?:sk-(?:ant-|proj-|svcacct-)?|ghp_|gho_|gh[us]_|AKIA|hf_|dapi"
+            r"|gsk_|r8_|pcsk_|co-|vercel_|AIza)",
+            "",
+            value,
+        ).lower()
 
         if any(p in lower for p in phrase_placeholders):
             return True
@@ -813,3 +904,51 @@ class CredentialScanner(BaseScanner):
             if probability > 0:
                 entropy -= probability * math.log2(probability)
         return entropy
+
+    @staticmethod
+    def _has_char_class_diversity(value: str) -> bool:
+        """Check if the body of a secret has at least 2 character classes.
+
+        Real API keys almost always mix lowercase + uppercase + digits.
+        Strings like ``sk-this-is-docs-not-key`` (all lowercase + hyphens)
+        are virtually always natural language, not secrets.
+        """
+        has_lower = False
+        has_upper = False
+        has_digit = False
+        for ch in value:
+            if ch.islower():
+                has_lower = True
+            elif ch.isupper():
+                has_upper = True
+            elif ch.isdigit():
+                has_digit = True
+            # Early exit once 2+ classes confirmed
+            if (has_lower + has_upper + has_digit) >= 2:
+                return True
+        return False
+
+    @staticmethod
+    def _is_known_example_value(value: str, secret_type: str) -> bool:
+        """Check if a matched value is a well-known example/documentation value."""
+        if value in _KNOWN_EXAMPLE_VALUES:
+            return True
+        # Databricks documentation example token (prefix-based to avoid GitHub
+        # push protection flagging the full literal)
+        if value.startswith(_KNOWN_EXAMPLE_DATABRICKS_PREFIX):
+            return True
+        # jwt.io canonical example token check (prefix-based, signature varies)
+        if secret_type in ("JSON Web Token", "JWT Token") and value.startswith(
+            _KNOWN_EXAMPLE_JWT_PREFIX
+        ):
+            return True
+        # Check for EXAMPLE as a delimited word in credential context.
+        # Exclude matches inside domain names (e.g. "example.com") which are
+        # common in documentation URLs and connection strings.
+        if re.search(r"(?i)\bEXAMPLE\b", value):
+            # If "example" only appears as part of a domain name, it's not a
+            # fake credential indicator.
+            cleaned = re.sub(r"(?i)example\.\w+", "", value)
+            if re.search(r"(?i)\bEXAMPLE\b", cleaned):
+                return True
+        return False

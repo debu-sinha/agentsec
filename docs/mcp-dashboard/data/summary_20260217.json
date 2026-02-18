@@ -12,5 +12,5 @@
   "avg_findings_per_target": 10.53,
   "runtime_median_s": 2.66,
   "runtime_p95_s": 58.21,
-  "notes": "v0.4.3 Tier 2 noise reduction. Shannon entropy gate on KeywordDetector (threshold 3.0) eliminated 287 low-entropy FPs. LOW scoring cap at 15pts prevents test/doc findings from tanking grades. IBM/mcp-context-forge removed at maintainer request (all findings were known example keys)."
+  "notes": "v0.4.3 Tier 2 noise reduction. Shannon entropy gate on KeywordDetector (threshold 3.0) eliminated 287 low-entropy FPs. LOW scoring cap at 15pts prevents test/doc findings from tanking grades. One repo removed at maintainer request (all findings were known example keys)."
 }
