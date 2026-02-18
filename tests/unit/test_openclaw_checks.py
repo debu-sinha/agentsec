@@ -407,8 +407,9 @@ def test_hardener_apply(tmp_path):
     assert data["gateway"]["bind"] == "loopback"
     assert data["dmPolicy"] == "paired"
 
-    # Backup should exist
-    assert config_path.with_suffix(".json.bak").exists()
+    # Timestamped backup should exist
+    backups = list(config_path.parent.glob("openclaw.json.bak.*"))
+    assert len(backups) == 1
 
 
 def test_hardener_already_hardened(tmp_path):

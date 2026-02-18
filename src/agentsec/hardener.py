@@ -17,6 +17,7 @@ import os
 import shutil
 import stat
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -247,8 +248,9 @@ def harden(
     # Write updated config
     if not dry_run and result.applied:
         try:
-            # Backup first
-            backup = config_path.with_suffix(".json.bak")
+            # Backup with timestamp to prevent overwriting previous backups
+            ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
+            backup = config_path.parent / f"{config_path.name}.bak.{ts}"
             shutil.copy2(config_path, backup)
             config_path.write_text(json.dumps(config_data, indent=2) + "\n")
             logger.info("Config updated: %s (backup: %s)", config_path, backup)

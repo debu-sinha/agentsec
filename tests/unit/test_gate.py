@@ -1,13 +1,21 @@
 """Tests for the pre-install security gate."""
 
 import json
+import os
+import tarfile
+import zipfile
+
+import pytest
 
 from agentsec.gate import (
     GateResult,
     _check_blocklist,
     _check_npm_install_hooks,
     _extract_package_names,
+    _extract_tar_archive,
+    _extract_zip_archive,
     _run_scanners_on_dir,
+    _validate_package_name,
     gate_check,
 )
 from agentsec.models.findings import FindingSeverity
@@ -213,3 +221,105 @@ def test_gate_result_structure():
     assert result.findings == []
     assert result.blocklist_hit is False
     assert result.error is None
+
+
+# -----------------------------------------------------------------------
+# Package name validation (argument injection prevention)
+# -----------------------------------------------------------------------
+
+
+def test_validate_safe_package_names():
+    """Valid package names should not raise."""
+    _validate_package_name("express")
+    _validate_package_name("@scope/my-pkg")
+    _validate_package_name("my_package.v2")
+    _validate_package_name("react-dom")
+
+
+def test_validate_rejects_argument_injection():
+    """Package names with leading dashes (argument injection) should be rejected."""
+    with pytest.raises(ValueError, match="unsafe characters"):
+        _validate_package_name("--target=/tmp/evil")
+
+
+def test_validate_rejects_shell_metacharacters():
+    """Package names with shell metacharacters should be rejected."""
+    with pytest.raises(ValueError, match="unsafe characters"):
+        _validate_package_name("pkg; rm -rf /")
+    with pytest.raises(ValueError, match="unsafe characters"):
+        _validate_package_name("pkg$(whoami)")
+    with pytest.raises(ValueError, match="unsafe characters"):
+        _validate_package_name("pkg`id`")
+
+
+def test_validate_rejects_too_long_name():
+    """Package names exceeding max length should be rejected."""
+    with pytest.raises(ValueError, match="too long"):
+        _validate_package_name("a" * 300)
+
+
+def test_validate_rejects_empty_name():
+    """Empty package names should be rejected."""
+    with pytest.raises(ValueError, match="unsafe characters"):
+        _validate_package_name("")
+
+
+# -----------------------------------------------------------------------
+# Tar/zip extraction (path traversal on case-insensitive FS)
+# -----------------------------------------------------------------------
+
+
+def test_tar_traversal_blocked(tmp_path):
+    """Tar members with path traversal should be blocked."""
+    extract_dir = tmp_path / "extract"
+    extract_dir.mkdir()
+
+    tar_path = tmp_path / "evil.tar.gz"
+    with tarfile.open(tar_path, "w:gz") as tar:
+        import io
+
+        data = b"pwned"
+        info = tarfile.TarInfo(name="../../../etc/passwd")
+        info.size = len(data)
+        tar.addfile(info, io.BytesIO(data))
+
+    with tarfile.open(tar_path, "r:gz") as tar:
+        # Python 3.12+ raises OutsideDestinationError (via filter="data"),
+        # older versions raise our ValueError
+        with pytest.raises((ValueError, tarfile.OutsideDestinationError)):
+            _extract_tar_archive(tar, extract_dir)
+
+
+def test_zip_traversal_blocked(tmp_path):
+    """Zip members with path traversal should be blocked."""
+    extract_dir = tmp_path / "extract"
+    extract_dir.mkdir()
+
+    zip_path = tmp_path / "evil.zip"
+    with zipfile.ZipFile(zip_path, "w") as zf:
+        zf.writestr("../../../etc/passwd", "pwned")
+
+    with pytest.raises(ValueError, match="path traversal"):
+        _extract_zip_archive(zip_path, extract_dir)
+
+
+def test_tar_symlink_blocked(tmp_path):
+    """Tar members with symlinks should be blocked on Python < 3.12."""
+    import sys
+
+    if sys.version_info >= (3, 12):
+        pytest.skip("Python 3.12+ uses built-in tar filter")
+
+    extract_dir = tmp_path / "extract"
+    extract_dir.mkdir()
+
+    tar_path = tmp_path / "symlink.tar.gz"
+    with tarfile.open(tar_path, "w:gz") as tar:
+        info = tarfile.TarInfo(name="evil_link")
+        info.type = tarfile.SYMTYPE
+        info.linkname = "/etc/passwd"
+        tar.addfile(info)
+
+    with tarfile.open(tar_path, "r:gz") as tar:
+        with pytest.raises(ValueError, match="link entry"):
+            _extract_tar_archive(tar, extract_dir)
