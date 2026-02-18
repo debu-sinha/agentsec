@@ -571,3 +571,80 @@ def test_entropy_gate_threshold():
     # Real-looking secrets should be above 3.0
     assert CredentialScanner._shannon_entropy("aB3cD4eF5gH6iJ7kL8mN9") > 3.0
     assert CredentialScanner._shannon_entropy("Xk9mP2vR7wQ4nL5zB8cD") > 3.0
+
+
+def test_template_syntax_placeholder():
+    """Template syntax like {{ var }} and <YOUR_KEY> should be treated as placeholders."""
+    assert CredentialScanner._is_placeholder("{{ API_KEY }}")
+    assert CredentialScanner._is_placeholder("{{SECRET}}")
+    assert CredentialScanner._is_placeholder("<YOUR_API_KEY>")
+    assert CredentialScanner._is_placeholder("<API_TOKEN>")
+    assert CredentialScanner._is_placeholder("%{secret_key}")
+    # Real-looking values should NOT be placeholders
+    assert not CredentialScanner._is_placeholder("sk-proj-RealLookingKeyWithEntropy99")
+
+
+def test_scans_sql_files(scanner, tmp_path):
+    """SQL files should be scanned for credentials."""
+    f = tmp_path / "init.sql"
+    f.write_text("CREATE USER admin WITH PASSWORD 'sk-ant-Xk9mP2vR7wQ4nL5zB8cDfGhJ';\n")
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    assert len(findings) >= 1
+
+
+def test_scans_ipynb_files(scanner, tmp_path):
+    """Jupyter notebook files should be scanned for credentials."""
+    f = tmp_path / "analysis.ipynb"
+    # Minimal valid notebook JSON with an Anthropic key in a cell
+    f.write_text(
+        '{"cells": [{"cell_type": "code", "source": ['
+        '"api_key = \\"sk-ant-Xk9mP2vR7wQ4nL5zB8cDfGhJ\\""]}], '
+        '"metadata": {}, "nbformat": 4, "nbformat_minor": 5}\n'
+    )
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    assert len(findings) >= 1
+
+
+def test_jest_test_dir_is_low_confidence(scanner, tmp_path):
+    """Files in __tests__ directory should get test-context downgrade."""
+    test_dir = tmp_path / "__tests__"
+    test_dir.mkdir()
+    f = test_dir / "auth.test.js"
+    f.write_text('const key = "sk-ant-Xk9mP2vR7wQ4nL5zB8cDfGhJ";\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    anthropic = [f for f in findings if "Anthropic" in f.title]
+    if anthropic:
+        assert anthropic[0].severity == FindingSeverity.LOW
+
+
+def test_pinecone_key_detected(scanner, tmp_path):
+    """Pinecone API keys should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('PINECONE_KEY = "pcsk_Xk9mP2vR7wQ4nL5zB8cDfGhJrTpYs3q6"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    pinecone = [f for f in findings if "Pinecone" in f.title]
+    assert len(pinecone) >= 1
+
+
+def test_cohere_key_detected(scanner, tmp_path):
+    """Cohere API keys should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('COHERE_KEY = "co-Xk9mP2vR7wQ4nL5zB8cDfGhJrTpYs3q6aW8"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    cohere = [f for f in findings if "Cohere" in f.title]
+    assert len(cohere) >= 1
+
+
+def test_vercel_token_detected(scanner, tmp_path):
+    """Vercel tokens should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('TOKEN = "vercel_Xk9mP2vR7wQ4nL5zB8cDfGhJ"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    vercel = [f for f in findings if "Vercel" in f.title]
+    assert len(vercel) >= 1

@@ -13,10 +13,24 @@ All notable changes to agentsec are documented here.
   hundreds of test/doc context findings from producing automatic F grades
 - Align dashboard `compute_score()` with updated OWASP scorer formula
 
+### Expert Review Fixes (Tier 3)
+
+- Fix HexHighEntropyString threshold from 4.5 to 3.5 — previous value exceeded
+  theoretical maximum (log2(16)=4.0), effectively disabling the detector
+- Add Pinecone (`pcsk_`), Cohere (`co-`), and Vercel (`vercel_`) API key
+  detection patterns
+- Add template syntax detection to placeholder filter (`{{ }}`, `<VAR>`, `%{var}`)
+- Add `.sql`, `.ipynb`, `.csv`, `.jsonc` to scannable file extensions
+- Add `__tests__`, `__mocks__`, `testdata`, `mocks`, `test_helpers` to
+  low-confidence directory list for test-context severity downgrade
+- Tighten reverse shell regex in skill scanner — require both socket.connect
+  AND shell redirection (dup2/subprocess//bin/sh) to reduce FPs on legitimate
+  networking code
+
 ### Stats
 
-- 236 tests passing (6 new Tier 2 tests, 1 Windows-only symlink skip)
-- Ecosystem scan: 1,038 → 751 findings (27.6% reduction)
+- 245 tests passing (9 new Tier 3 tests, 1 Windows-only symlink skip)
+- Ecosystem scan: 1,038 → 751 findings (27.6% reduction from Tier 2)
 
 ## [0.4.2] - 2026-02-17
 

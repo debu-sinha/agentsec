@@ -66,6 +66,10 @@ _SCANNABLE_EXTENSIONS = {
     ".cs",
     ".swift",
     ".r",
+    ".sql",
+    ".ipynb",
+    ".csv",
+    ".jsonc",
 }
 
 # Files to always skip (binary or too large)
@@ -121,7 +125,7 @@ _DETECT_SECRETS_PLUGINS = [
     {"name": "GitHubTokenDetector"},
     {"name": "GitLabTokenDetector"},
     {"name": "Base64HighEntropyString", "limit": 5.0},
-    {"name": "HexHighEntropyString", "limit": 4.5},
+    {"name": "HexHighEntropyString", "limit": 3.5},
     {"name": "IbmCloudIamDetector"},
     {"name": "IbmCosHmacDetector"},
     {"name": "JwtTokenDetector"},
@@ -236,6 +240,24 @@ _EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
         "Rotate at https://replicate.com/account/api-tokens",
     ),
     (
+        "Pinecone API Key",
+        re.compile(r"pcsk_[a-zA-Z0-9_]{30,200}"),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://app.pinecone.io/organizations/-/projects/-/keys",
+    ),
+    (
+        "Cohere API Key",
+        re.compile(r"co-[a-zA-Z0-9]{35,200}"),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://dashboard.cohere.com/api-keys",
+    ),
+    (
+        "Vercel Token",
+        re.compile(r"vercel_[a-zA-Z0-9]{20,200}"),
+        FindingSeverity.HIGH,
+        "Rotate at https://vercel.com/account/tokens",
+    ),
+    (
         "Generic Connection String",
         re.compile(
             r"(?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?|rediss?|amqps?|mariadb|mssql)"
@@ -311,6 +333,13 @@ _LOW_CONFIDENCE_DIRS: set[str] = {
     "fixtures",
     "test",
     "tests",
+    "__tests__",
+    "__mocks__",
+    "testdata",
+    "test_data",
+    "mocks",
+    "testutils",
+    "test_helpers",
 }
 
 
@@ -684,6 +713,14 @@ class CredentialScanner(BaseScanner):
             return True
         # Check if it's a common pattern like "xxx...xxx"
         if re.match(r"^[x\*\.]+$", value, re.I):
+            return True
+
+        # Template syntax: {{ var }}, <YOUR_KEY>, %{var}
+        if re.search(r"\{\{.*?\}\}", value):
+            return True
+        if re.match(r"^<[A-Z_]+>$", value):
+            return True
+        if re.search(r"%\{.+?\}", value):
             return True
 
         # Detect sequential/obviously-fake patterns

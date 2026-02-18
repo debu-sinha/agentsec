@@ -93,7 +93,8 @@ _SUSPICIOUS_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = 
     (
         "Reverse shell pattern",
         re.compile(
-            r"(?:socket\.socket|subprocess\.Popen)[^;]{0,300}(?:connect|shell|/bin/(?:ba)?sh)",
+            r"(?:socket\.socket)[^;]{0,300}(?:connect)[^;]{0,300}(?:/bin/(?:ba)?sh|cmd\.exe|"
+            r"dup2|makefile|subprocess)",
             re.I,
         ),
         FindingSeverity.CRITICAL,
