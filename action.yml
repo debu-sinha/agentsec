@@ -28,7 +28,7 @@ inputs:
     required: false
     default: ''
   version:
-    description: 'agentsec-ai version to install (e.g. "0.4.1"). Empty = latest.'
+    description: 'agentsec-ai version to install (e.g. "0.4.4"). Empty = latest.'
     required: false
     default: ''
   python-version:

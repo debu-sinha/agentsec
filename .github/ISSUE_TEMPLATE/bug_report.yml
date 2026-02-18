@@ -24,7 +24,7 @@ body:
     attributes:
       label: Environment
       description: OS, Python version, agentsec version.
-      placeholder: Windows 11, Python 3.14.2, agentsec 0.4.1
+      placeholder: Windows 11, Python 3.14.2, agentsec 0.4.4
     validations:
       required: true
   - type: textarea

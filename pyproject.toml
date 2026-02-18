@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "agentsec-ai"
 version = "0.4.4"
-description = "Security scanner and hardener for agentic AI installations — OpenClaw, MCP servers, and AI agent skill ecosystems"
+description = "Security scanner for AI agents and MCP servers. OWASP Agentic Top 10 mapping, SARIF output, CI/CD ready."
 readme = {file = "README.md", content-type = "text/markdown"}
 license = "Apache-2.0"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ authors = [
     { name = "Debu Sinha", email = "debusinha2009@gmail.com" },
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: Apache Software License",
@@ -22,6 +22,8 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
     "Topic :: Security",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: System :: Systems Administration",
@@ -30,12 +32,20 @@ classifiers = [
 keywords = [
     "security",
     "agentic-ai",
+    "ai-agent",
     "openclaw",
     "mcp",
     "model-context-protocol",
     "vulnerability-scanner",
     "owasp",
     "ai-security",
+    "sast",
+    "credential-scanner",
+    "secret-detection",
+    "sarif",
+    "supply-chain-security",
+    "claude-code",
+    "llm-security",
 ]
 dependencies = [
     "click>=8.1,<9",
@@ -71,6 +81,7 @@ Homepage = "https://github.com/debu-sinha/agentsec"
 Documentation = "https://github.com/debu-sinha/agentsec#readme"
 Repository = "https://github.com/debu-sinha/agentsec"
 Issues = "https://github.com/debu-sinha/agentsec/issues"
+Changelog = "https://github.com/debu-sinha/agentsec/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/agentsec"]
