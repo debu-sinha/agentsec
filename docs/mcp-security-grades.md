@@ -1,64 +1,59 @@
 # MCP Ecosystem Security Dashboard
 
-![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-87%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026-02-17-grey?style=for-the-badge)
+![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-89%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-49-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026-02-17-grey?style=for-the-badge)
 
 Automated weekly security scan of the top MCP server repositories, powered by [agentsec](https://github.com/debu-sinha/agentsec). Findings are mapped to the [OWASP Top 10 for Agentic Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/).
 
 **Jump to:** [Summary](#at-a-glance) | [Grades](#grade-distribution) | [Repos Requiring Attention](#repos-requiring-attention) | [All Repos](#all-scanned-repos) | [Methodology](#methodology) | [Disclaimer](#disclaimer)
 
-> **10 repos** scored below B. **IBM/mcp-context-forge** alone has **14 critical** and **235 total findings**.
+> **9 repos** scored below B and may benefit from review.
 
 ## At a Glance
 
 | Metric | Value |
 |--------|------:|
-| Repositories scanned | **50** |
-| Total findings | **751** |
-| 🔴 Critical | **23** |
-| 🟠 High | **14** |
-| 🟡 Medium | **159** |
-| 🟢 Low | **506** |
-| 🔵 Info | **49** |
+| Repositories scanned | **49** |
+| Total findings | **516** |
+| 🔴 Critical | **9** |
+| 🟠 High | **4** |
+| 🟡 Medium | **92** |
+| 🟢 Low | **363** |
+| 🔵 Info | **48** |
 | Repos with zero critical/high findings | **42** |
-| Repos with critical findings | **6** |
+| Repos with critical findings | **5** |
 
 ## Grade Distribution
 
-**A** `██████████████████░░░░░░░░░░░░` 31 repos (62%)
+**A** `██████████████████░░░░░░░░░░░░` 31 repos (63%)
 **B** `█████░░░░░░░░░░░░░░░░░░░░░░░░░` 9 repos (18%)
 **C** `█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 3 repos (6%)
 **D** `█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 3 repos (6%)
-**F** `██░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 4 repos (8%)
+**F** `█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 3 repos (6%)
 
 ## Most Common Finding Categories
 
 | # | Category | OWASP | Findings | Share |
 |--:|----------|:-----:|--------:|------:|
-| 1 | Exposed Token | ASI05 | 660 | 88% |
-| 2 | Outdated Version | ASI03 | 49 | 7% |
-| 3 | Dangerous Pattern | ASI02 | 25 | 3% |
-| 4 | Data Exfiltration | ASI05 | 5 | 1% |
-| 5 | Prompt Injection | ASI01 | 5 | 1% |
-| 6 | Config Drift | ASI10 | 4 | 1% |
-| 7 | Malicious Skill | ASI03 | 1 | 0% |
-| 8 | Plaintext Secret | ASI05 | 1 | 0% |
+| 1 | Exposed Token | ASI05 | 465 | 90% |
+| 2 | Outdated Version | ASI03 | 48 | 9% |
+| 3 | Config Drift | ASI10 | 2 | 0% |
+| 4 | Insecure Permissions | ASI05 | 1 | 0% |
 
 ## Repos Requiring Attention
 
-> 10 repositories scored below B and have actionable findings.
+> 9 repositories scored below B and have actionable findings.
 
 | # | Repository | Grade | Score | Critical | High | Medium | Low | Total |
 |--:|------------|:-----:|------:|---------:|-----:|-------:|----:|------:|
-| 1 | [IBM/mcp-context-forge](https://github.com/IBM/mcp-context-forge) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **14** | **10** | 67 | 143 | 235 |
-| 2 | [mindsdb/mindsdb](https://github.com/mindsdb/mindsdb) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **4** | **1** | 16 | 123 | 145 |
-| 3 | [jlowin/fastmcp](https://github.com/jlowin/fastmcp) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 55 | 0 | 0 | 10 | 25 | 36 |
-| 4 | [opensumi/core](https://github.com/opensumi/core) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 55 | **2** | 0 | 5 | 0 | 8 |
-| 5 | [BeehiveInnovations/pal-mcp-server](https://github.com/BeehiveInnovations/pal-mcp-server) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 60 | 0 | **1** | 6 | 47 | 55 |
-| 6 | [awslabs/mcp](https://github.com/awslabs/mcp) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 64 | 0 | 0 | 7 | 61 | 69 |
-| 7 | [steipete/Peekaboo](https://github.com/steipete/Peekaboo) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 67 | **1** | **1** | 3 | 2 | 8 |
-| 8 | [AmoyLab/Unla](https://github.com/AmoyLab/Unla) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 70 | 0 | 0 | 10 | 0 | 10 |
-| 9 | [googleapis/genai-toolbox](https://github.com/googleapis/genai-toolbox) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 73 | 0 | 0 | 4 | 18 | 23 |
-| 10 | [kreuzberg-dev/kreuzberg](https://github.com/kreuzberg-dev/kreuzberg) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 76 | **1** | 0 | 2 | 3 | 7 |
+| 1 | [mindsdb/mindsdb](https://github.com/mindsdb/mindsdb) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | **4** | **1** | 16 | 123 | 145 |
+| 2 | [jlowin/fastmcp](https://github.com/jlowin/fastmcp) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 55 | 0 | 0 | 10 | 25 | 36 |
+| 3 | [opensumi/core](https://github.com/opensumi/core) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 55 | **2** | 0 | 5 | 0 | 8 |
+| 4 | [BeehiveInnovations/pal-mcp-server](https://github.com/BeehiveInnovations/pal-mcp-server) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 60 | 0 | **1** | 6 | 47 | 55 |
+| 5 | [awslabs/mcp](https://github.com/awslabs/mcp) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 64 | 0 | 0 | 7 | 61 | 69 |
+| 6 | [steipete/Peekaboo](https://github.com/steipete/Peekaboo) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 67 | **1** | **1** | 3 | 2 | 8 |
+| 7 | [AmoyLab/Unla](https://github.com/AmoyLab/Unla) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 70 | 0 | 0 | 10 | 0 | 10 |
+| 8 | [googleapis/genai-toolbox](https://github.com/googleapis/genai-toolbox) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 73 | 0 | 0 | 4 | 18 | 23 |
+| 9 | [kreuzberg-dev/kreuzberg](https://github.com/kreuzberg-dev/kreuzberg) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 76 | **1** | 0 | 2 | 3 | 7 |
 
 ## All Scanned Repos
 
@@ -117,11 +112,13 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 ### Scoring Formula
 
 ```
-Score = 100 - (Critical x 15) - (High x 7) - (Medium x 3) - (Low x 1)
+Score = 100 - (Critical x 15) - (High x 7) - (Medium x 3) - min(Low x 1, 15)
 Score is clamped to [5, 100]
 ```
 
-Info-severity findings are tracked but do not affect the score.
+- LOW penalty is capped at 15 points to prevent test/documentation findings from dominating scores
+- Info-severity findings are tracked but do not affect the score
+- Findings in test files, documentation, and example code are automatically downgraded to LOW severity
 
 ### Grade Scale
 
@@ -137,12 +134,22 @@ Info-severity findings are tracked but do not affect the score.
 
 Each repository is scanned with [agentsec](https://pypi.org/project/agentsec-ai/) which runs 27 named security checks + dynamic credential detection across the OWASP Agentic Top 10 categories (ASI01 -- ASI10).
 
+### False Positive Handling
+
+agentsec applies multiple layers of false positive reduction:
+- **Known example values**: AWS `EXAMPLEKEY`, jwt.io tokens, and other well-known documentation keys are allowlisted
+- **Placeholder detection**: Values like `changeme`, `password`, `your-api-key`, template syntax (`{{ }}`), and sequential patterns are suppressed
+- **Entropy gating**: Low-entropy keyword matches (e.g., `password: foobar`) are filtered at Shannon entropy < 3.0
+- **File context awareness**: Findings in test files, docs, fixtures, and example code are downgraded to LOW severity
+
+Despite these measures, false positives may still occur. **Grades are indicative, not definitive.**
+
 ### Limitations
 
 - Static analysis only; no runtime or dynamic testing
-- Findings may include false positives that require manual triage
+- Remaining false positives may require manual triage
 - Star count is a rough proxy for popularity and may bias the sample
-- Some test fixtures may contain intentional dummy credentials
+- Test fixtures with intentional dummy credentials may still generate LOW findings
 
 ## How to Improve Your Grade
 
@@ -156,17 +163,26 @@ If your repository appears on this dashboard, here is how to improve your score:
 
 > Findings are point-in-time snapshots. Your grade will update automatically in the next weekly scan.
 
+## Opt Out
+
+Maintainers who wish to have their repository removed from this dashboard can:
+1. Open an issue at [agentsec/issues](https://github.com/debu-sinha/agentsec/issues) requesting removal
+2. Add `agentsec-opt-out` as a GitHub topic on their repository
+
+Removal requests are honored immediately, no questions asked.
+
 ## Responsible Disclosure
 
 - All targets are **public** open-source repositories
 - No exploit payloads are included in this report
 - Credential evidence is redacted (first 4 + last 4 characters only)
-- This dashboard is intended to improve ecosystem security, not to shame maintainers
-- **Contest a finding**: open an issue at [agentsec/issues](https://github.com/debu-sinha/agentsec/issues) with the repo name and finding ID
+- This dashboard is intended to help improve ecosystem security posture
+- We do **not** file issues on scanned repositories — maintainers are free to use or ignore these findings
+- **Contest a finding or request removal**: open an issue at [agentsec/issues](https://github.com/debu-sinha/agentsec/issues)
 
 ## Disclaimer
 
-This dashboard is provided **as-is** for informational purposes only. It is generated by automated static analysis and may contain false positives or miss certain vulnerability classes. Grades reflect a point-in-time snapshot and do not constitute a comprehensive security audit. No warranty of accuracy, completeness, or fitness for any purpose is expressed or implied. Repository maintainers are encouraged to run their own security assessments.
+This dashboard is provided **as-is** for informational purposes only. It is generated by automated static analysis and **may contain false positives** or miss certain vulnerability classes. Grades reflect a point-in-time snapshot and do not constitute a comprehensive security audit. No warranty of accuracy, completeness, or fitness for any purpose is expressed or implied. Repository maintainers are encouraged to run their own security assessments.
 
 ---
 

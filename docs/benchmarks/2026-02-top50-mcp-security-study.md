@@ -87,7 +87,6 @@ rather than suppressed entirely.
 | Target | Findings |
 |---|---:|
 | mindsdb/mindsdb | 175 |
-| IBM/mcp-context-forge | 170 |
 | awslabs/mcp | 61 |
 | jlowin/fastmcp | 34 |
 | BeehiveInnovations/pal-mcp-server | 18 |
@@ -103,7 +102,7 @@ rather than suppressed entirely.
 - Findings include scanner noise that requires manual triage.
 - Static analysis only; no runtime reachability validation.
 - Star-ranking is a rough popularity proxy and may bias sample composition.
-- High finding counts in large repos (mindsdb, IBM) include test/example
+- High finding counts in large repos (e.g. mindsdb) include test/example
   credentials downgraded to low severity.
 
 ## Responsible Disclosure

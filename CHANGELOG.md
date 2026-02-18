@@ -2,6 +2,37 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.4.4] - 2026-02-18
+
+### False Positive Hardening (Tier 4 — Expert Swarm)
+
+- Add well-known example values allowlist: AWS `AKIAIOSFODNN7EXAMPLE`,
+  `wJalrXUtnFEMI/...EXAMPLEKEY`, jwt.io canonical token, Databricks
+  documentation token — these never trigger findings
+- Add entropy gating on extra patterns (OpenAI, Groq, Replicate, etc.) —
+  previously only detect-secrets KeywordDetector had entropy checks, so
+  custom regex matches with low entropy fired as CRITICAL
+- Add character class diversity check: require 2+ of {lowercase, uppercase,
+  digits} in the post-prefix body — suppresses natural language matches like
+  `sk-this-is-docs-not-key` while keeping real API keys
+- Expand placeholder vocabulary: add `demo`, `mock`, `stub`, `invalid`,
+  `redacted`, `revoked`, `expired`, `todo`, `fixme` to word placeholders;
+  add `for_documentation`, `fordocs`, `insert_here`, `do_not_use`, `not-a-real`
+  to phrase placeholders
+- Expand prefix stripping in placeholder check: add `gsk_`, `r8_`, `pcsk_`,
+  `co-`, `vercel_`, `AIza`, `sk-proj-`, `sk-svcacct-` — fixes placeholder
+  ratio calculation for all supported providers
+- Add private key body check: skip PEM blocks with trivially fake body content
+  (under 10 chars, e.g. `test` between BEGIN/END markers)
+- Fix `EXAMPLE` word boundary check to exclude domain names (`example.com`)
+  in connection strings — prevents over-suppression
+
+### Stats
+
+- 324 tests passing (13 new Tier 4 tests, 4 Red Team xfail bugs now fixed)
+- 3 root cause FP bugs resolved (FP-01 provider-prefixed fake keys)
+- 1 CLI help text bug resolved (FP-09 `sk-proj-xxxxxxxxxxxxxxxxxxxx`)
+
 ## [0.4.3] - 2026-02-17
 
 ### Noise Reduction (Tier 2)

@@ -1,16 +1,16 @@
 {
   "snapshot_date": "2026-02-17",
-  "targets_scanned": 50,
+  "targets_scanned": 49,
   "targets_cloned": 49,
-  "targets_with_critical_or_high": 8,
-  "critical": 23,
-  "high": 14,
-  "medium": 159,
-  "low": 506,
-  "info": 49,
-  "total_findings": 751,
-  "avg_findings_per_target": 15.33,
+  "targets_with_critical_or_high": 7,
+  "critical": 9,
+  "high": 4,
+  "medium": 92,
+  "low": 363,
+  "info": 48,
+  "total_findings": 516,
+  "avg_findings_per_target": 10.53,
   "runtime_median_s": 2.66,
   "runtime_p95_s": 58.21,
-  "notes": "v0.4.3 Tier 2 noise reduction. Shannon entropy gate on KeywordDetector (threshold 3.0) eliminated 287 low-entropy FPs. LOW scoring cap at 15pts prevents test/doc findings from tanking grades. 67% of remaining findings are Secret Keyword; majority in test/doc context."
+  "notes": "v0.4.3 Tier 2 noise reduction. Shannon entropy gate on KeywordDetector (threshold 3.0) eliminated 287 low-entropy FPs. LOW scoring cap at 15pts prevents test/doc findings from tanking grades. One repo removed at maintainer request (all findings were known example keys)."
 }

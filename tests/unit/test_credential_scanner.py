@@ -360,8 +360,9 @@ def test_detects_anthropic_key(scanner, tmp_path):
 
 def test_detects_databricks_token(scanner, tmp_path):
     """Databricks dapi tokens should be detected as CRITICAL."""
-    # Build token dynamically to avoid GitHub push protection flagging test data
-    token = "d" + "api" + "0" * 32
+    # Build token dynamically to avoid GitHub push protection flagging test data.
+    # Use high-entropy hex chars (not all zeros) so the entropy gate doesn't suppress it.
+    token = "d" + "api" + "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
     f = tmp_path / "config.py"
     f.write_text(f'TOKEN = "{token}"\n')
 
@@ -648,3 +649,162 @@ def test_vercel_token_detected(scanner, tmp_path):
     findings = scanner.scan(context)
     vercel = [f for f in findings if "Vercel" in f.title]
     assert len(vercel) >= 1
+
+
+# --- Tier 4: Expert swarm FP fixes ---
+
+
+def test_skips_aws_example_key_in_secret_value(scanner, tmp_path):
+    """AWS official wJalrXUtn... EXAMPLE key should not trigger findings."""
+    f = tmp_path / "config.py"
+    f.write_text(
+        'secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"\n'  # gitleaks:allow
+    )
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    # Should be suppressed via known example values allowlist
+    aws = [f for f in findings if "AWS" in f.title]
+    assert len(aws) == 0
+
+
+def test_skips_jwt_io_example_token(scanner, tmp_path):
+    """jwt.io canonical example token should not trigger findings."""
+    f = tmp_path / "test_auth.py"
+    f.write_text(
+        'TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+        ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZXhwIjoxNTE2MjM5MDIyfQ"
+        '.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"\n'
+    )
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    jwt_findings = [f for f in findings if "JWT" in f.title or "JSON Web Token" in f.title]
+    assert len(jwt_findings) == 0
+
+
+def test_skips_databricks_example_token(scanner, tmp_path):
+    """Databricks documentation example token should not trigger findings."""
+    # Concatenate to avoid GitHub push protection flagging the literal
+    token = "dapi" + "1234567890ab1cde2f3ab456c7d89efa"
+    f = tmp_path / "config.py"
+    f.write_text(f'TOKEN = "{token}"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    db = [f for f in findings if "Databricks" in f.title]
+    assert len(db) == 0
+
+
+def test_skips_natural_language_openai_pattern(scanner, tmp_path):
+    """sk- followed by natural language should not fire as OpenAI key."""
+    f = tmp_path / "docs.py"
+    f.write_text('comment = "sk-this-is-docs-not-a-real-key"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) == 0, "Natural language after sk- should be suppressed"
+
+
+def test_skips_fake_groq_key(scanner, tmp_path):
+    """Groq gsk_FakeGroqKeyForDocumentation... should be skipped."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "gsk_FakeGroqKeyForDocumentation12345"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    groq = [f for f in findings if "Groq" in f.title]
+    assert len(groq) == 0, "Placeholder word 'Fake' + 'Documentation' should suppress"
+
+
+def test_skips_fake_replicate_token(scanner, tmp_path):
+    """Replicate r8_FakeReplicateTokenForDocs... should be skipped."""
+    f = tmp_path / "config.py"
+    f.write_text('TOKEN = "r8_FakeReplicateTokenForDocs12345678"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    rep = [f for f in findings if "Replicate" in f.title]
+    assert len(rep) == 0, "Placeholder word 'Fake' should suppress"
+
+
+def test_skips_fake_private_key_body(scanner, tmp_path):
+    """Private key blocks with trivially fake body should be skipped."""
+    f = tmp_path / "test_tls.py"
+    f.write_text("-----BEGIN PRIVATE KEY-----\ntest\n-----END PRIVATE KEY-----\n")
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    key_findings = [f for f in findings if "Private Key" in f.title]
+    assert len(key_findings) == 0
+
+
+def test_extra_pattern_entropy_gate(scanner, tmp_path):
+    """Extra patterns with low-entropy matches should be suppressed."""
+    f = tmp_path / "config.py"
+    # All same char after prefix = extremely low entropy
+    f.write_text('KEY = "sk-aaaaaaaaaaaaaaaaaaaaaaaa"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) == 0, "Low-entropy extra pattern match should be suppressed"
+
+
+def test_char_class_diversity_check():
+    """Character class diversity correctly identifies real vs fake secrets."""
+    assert CredentialScanner._has_char_class_diversity("aB3cD4eF5gH6")
+    assert CredentialScanner._has_char_class_diversity("ABCDEF123456")
+    assert CredentialScanner._has_char_class_diversity("abc123def456")
+    assert not CredentialScanner._has_char_class_diversity("this-is-all-lowercase")
+    assert not CredentialScanner._has_char_class_diversity("THISISALLUPPERCASE")
+
+
+def test_known_example_value_detection():
+    """Known example values are correctly identified."""
+    assert CredentialScanner._is_known_example_value("AKIAIOSFODNN7EXAMPLE", "AWS Access Key")
+    assert CredentialScanner._is_known_example_value(
+        "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "AWS Secret"
+    )
+    # jwt.io example
+    assert CredentialScanner._is_known_example_value(
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0"
+        ".SomeSignature",
+        "JSON Web Token",
+    )
+    # "example" in domain names should NOT trigger
+    assert not CredentialScanner._is_known_example_value(
+        "postgresql://admin:secret@db.example.com:5432/app",
+        "Generic Connection String",
+    )
+    # Real-looking key should NOT be flagged
+    assert not CredentialScanner._is_known_example_value(
+        "sk-aB3cD4eF5gH6iJ7kL8mN9", "OpenAI API Key"
+    )
+
+
+def test_expanded_placeholder_words():
+    """Expanded placeholder vocabulary catches more FPs."""
+    # Multiple placeholder words trigger the 2+ hit rule
+    assert CredentialScanner._is_placeholder("sk-demo-value-for-testing")
+    assert CredentialScanner._is_placeholder("mock-api-key-placeholder")
+    assert CredentialScanner._is_placeholder("stub-value-for-tests")
+    # Single placeholder word must dominate (>= 40% of stripped length)
+    assert CredentialScanner._is_placeholder("sk-redacted-value")
+    assert CredentialScanner._is_placeholder("sk-expired-token")
+    assert CredentialScanner._is_placeholder("invalid-key")
+    # Real-looking values should NOT be treated as placeholders
+    assert not CredentialScanner._is_placeholder("aB3cD4eF5gH6iJ7kL8mN9")
+
+
+def test_expanded_prefix_stripping():
+    """Prefix stripping handles all provider prefixes for placeholder check."""
+    # With gsk_ prefix, "FakeGroqKey" should dominate stripped length
+    assert CredentialScanner._is_placeholder("gsk_FakeValue")
+    assert CredentialScanner._is_placeholder("r8_FakeToken")
+    assert CredentialScanner._is_placeholder("vercel_TestToken")
+    assert CredentialScanner._is_placeholder("pcsk_FakeKeyForDocs")
+
+
+def test_connection_string_example_domain_not_suppressed(scanner, tmp_path):
+    """Connection strings with example.com domain but real password should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('DB = "postgresql://admin:Xk9mP2vR7wQ4nL@prod.db.example.com:5432/myapp"\n')
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    conn = [f for f in findings if "Connection String" in f.title]
+    assert len(conn) >= 1, "example.com in domain should not suppress real password detection"
