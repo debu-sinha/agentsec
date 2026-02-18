@@ -1,7 +1,6 @@
 """Tests for the pre-install security gate."""
 
 import json
-import os
 import tarfile
 import zipfile
 
@@ -283,11 +282,13 @@ def test_tar_traversal_blocked(tmp_path):
         info.size = len(data)
         tar.addfile(info, io.BytesIO(data))
 
-    with tarfile.open(tar_path, "r:gz") as tar:
-        # Python 3.12+ raises OutsideDestinationError (via filter="data"),
-        # older versions raise our ValueError
-        with pytest.raises((ValueError, tarfile.OutsideDestinationError)):
-            _extract_tar_archive(tar, extract_dir)
+    # Python 3.12+ raises OutsideDestinationError (via filter="data"),
+    # older versions raise our ValueError
+    with (
+        tarfile.open(tar_path, "r:gz") as tar,
+        pytest.raises((ValueError, tarfile.OutsideDestinationError)),
+    ):
+        _extract_tar_archive(tar, extract_dir)
 
 
 def test_zip_traversal_blocked(tmp_path):
@@ -320,6 +321,8 @@ def test_tar_symlink_blocked(tmp_path):
         info.linkname = "/etc/passwd"
         tar.addfile(info)
 
-    with tarfile.open(tar_path, "r:gz") as tar:
-        with pytest.raises(ValueError, match="link entry"):
-            _extract_tar_archive(tar, extract_dir)
+    with (
+        tarfile.open(tar_path, "r:gz") as tar,
+        pytest.raises(ValueError, match="link entry"),
+    ):
+        _extract_tar_archive(tar, extract_dir)

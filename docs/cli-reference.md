@@ -27,6 +27,7 @@ agentsec --version
 - `watch` - watch files and re-scan on relevant changes.
 - `show-profile` - inspect profile changes before hardening.
 - `hook` - generate shell wrappers for auto post-install scans.
+- `pin-tools` - pin MCP tool descriptions for rug-pull detection.
 - `list-scanners` - show available scanner modules.
 
 ## scan
@@ -208,6 +209,31 @@ Behavior summary:
 - Blocks immediately on known-malicious blocklist hits.
 - Blocks findings at/above `--fail-on` unless `--force` is used.
 - If allowed and not dry-run, executes the real package-manager command.
+
+## pin-tools
+
+Pin MCP tool descriptions to detect rug-pull attacks (tool description drift).
+
+```bash
+agentsec pin-tools [TARGET]
+```
+
+Creates or updates `.agentsec-pins.json` with SHA-256 hashes of current tool descriptions. Subsequent scans compare live descriptions against pinned hashes and flag changes.
+
+Examples:
+
+```bash
+# Pin tool descriptions in current directory
+agentsec pin-tools
+
+# Pin tools for a specific installation
+agentsec pin-tools ~/.openclaw
+```
+
+Findings produced on drift:
+
+- **Description changed** (HIGH): tool description differs from pinned hash.
+- **Tool removed** (MEDIUM): a previously pinned tool is no longer present.
 
 ## JSON and SARIF
 

@@ -8,9 +8,9 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 
 | ID | Check | Default Severity | OWASP | Detection |
 |----|-------|:---:|-------|-----------|
-| CGW-001 | Gateway bound to non-loopback interface | Critical | ASI05, ASI02 | Checks `gatewayHostname` for 0.0.0.0, LAN, or public bind addresses |
+| CGW-001 | Gateway bound to non-loopback interface | Critical | ASI05, ASI02 | Checks `gateway.bind` for LAN, public, or non-loopback bind addresses |
 | CGW-002 | Gateway auth missing on exposed interface | Critical | ASI05, ASI02 | Detects non-loopback bind without `authRequired: true` |
-| CGW-003 | Control UI insecure auth / dangerouslyDisable flags | Critical | ASI05 | Flags `dangerouslyDisableDeviceAuth`, `dangerouslyDisableAuth`, and `allowInsecureAuth` on control UI |
+| CGW-003 | Control UI insecure auth / dangerouslyDisable flags | Critical | ASI05, ASI10 | Flags `dangerouslyDisableDeviceAuth`, `dangerouslyDisableAuth`, and `allowInsecureAuth` on control UI |
 | CGW-004 | Reverse proxy without trustedProxies | Medium | ASI05 | Detects proxy headers without `trustedProxies` allowlist |
 | CGW-005 | No SSRF protection for URL-based inputs | High | ASI05, ASI02 | Checks for missing SSRF deny policies on tools that accept URLs |
 
@@ -27,15 +27,15 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 | ID | Check | Default Severity | OWASP | Detection |
 |----|-------|:---:|-------|-----------|
 | CTO-001 | Full tool profile with open inbound | Critical | ASI02, ASI01 | Detects `toolProfile: full` combined with open DM/group policy |
-| CTO-002 | group:runtime enabled for untrusted routes | High | ASI02 | Flags `group:runtime` tools available to non-paired conversations |
-| CTO-003 | Sandbox disabled with full tools + open input | High | ASI02 | Detects disabled sandbox (`sandbox: false`) when full tools and open input are present |
+| CTO-002 | group:runtime enabled for untrusted routes | High | ASI02, ASI08 | Flags `group:runtime` tools available to non-paired conversations |
+| CTO-003 | Sandbox disabled with full tools + open input | High | ASI02, ASI08 | Detects disabled sandbox (`sandbox: false`) when full tools and open input are present |
 
 ## Exec Approvals (CEX)
 
 | ID | Check | Default Severity | OWASP | Detection |
 |----|-------|:---:|-------|-----------|
 | CEX-001 | Exec approvals file missing | High | ASI08, ASI02 | No `exec-approvals.json` found -- host execution is uncontrolled. Only fires when an OpenClaw config (`openclaw.json` or `clawdbot.json`) is present. |
-| CEX-002 | Exec approvals defaults too permissive | High | ASI08 | Detects `defaultApproval: always` or overly broad approval rules |
+| CEX-002 | Exec approvals defaults too permissive | High | ASI08 | Detects `defaults.security: full` or `askFallback: full` in exec approvals |
 | CEX-003 | safeBins expanded beyond defaults | Medium | ASI08, ASI02 | Flags additional binaries added to `safeBins` beyond the default set |
 
 ## Skill and Plugin Analysis (CSK)
@@ -78,10 +78,11 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 
 ## Credential Detection (dynamic)
 
-The credential scanner does not use fixed check IDs. It generates findings dynamically based on:
+The credential scanner does not use fixed check IDs. It generates findings dynamically using a two-engine approach:
 
-- **17 regex patterns** covering: OpenAI, Anthropic, AWS, GitHub (PAT, OAuth, App), Slack (Bot, User), Stripe, Telegram, Discord, Google, Databricks, HuggingFace, Private Key (PEM), JWT, Generic Connection String (Postgres/MySQL/MongoDB/Redis/AMQP)
-- **Shannon entropy detection**: Strings with entropy >= 4.5 in secret-adjacent contexts
+- **detect-secrets engine** (23 plugins): ArtifactoryDetector, AWSKeyDetector, AzureStorageKeyDetector, BasicAuthDetector, CloudantDetector, DiscordBotTokenDetector, GitHubTokenDetector, HexHighEntropyString, Base64HighEntropyString, IbmCloudIamDetector, IbmCosHmacDetector, JwtTokenDetector, KeywordDetector, MailchimpDetector, NpmDetector, OpenAIDetector (built-in), PrivateKeyDetector, PypiTokenDetector, SlackDetector, SoftlayerDetector, SquareOAuthDetector, StripeDetector, TwilioKeyDetector
+- **11 custom regex patterns**: OpenAI (`sk-`), Anthropic (`sk-ant-`), Databricks (`dapi`), HuggingFace (`hf_`), Google (`AIza`), Groq (`gsk_`), Replicate (`r8_`), Pinecone (`pcsk_`), Cohere (`co-`), Vercel (`vercel_`), Generic Connection String
+- **Shannon entropy detection**: Thresholds vary by plugin (3.0 for Base64, 4.5 for Hex)
 - **Git config credentials**: Plaintext passwords in `.gitconfig` or `.git-credentials`
 
 All credential findings map to ASI05 (Insecure Output Handling / Secret Exposure).
@@ -114,6 +115,6 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 ## Summary
 
 - **27 named checks** across 9 check families
-- **Dynamic credential detection** covering 17 regex patterns + entropy heuristics
+- **Dynamic credential detection** using detect-secrets (23 plugins) + 11 custom patterns + entropy heuristics
 - **5 known CVE detections** (CVE-2026-25253, CVE-2026-24763, CVE-2026-25157, CVE-2026-25593, CVE-2026-25475)
 - All findings map to OWASP Agentic Top 10 (ASI01-ASI10)
