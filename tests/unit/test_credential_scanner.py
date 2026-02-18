@@ -531,3 +531,43 @@ def test_scans_env_variants(scanner, tmp_path):
     assert context.files_scanned >= 1
     openai = [f for f in findings if "OpenAI" in f.title]
     assert len(openai) >= 1
+
+
+# --- Tier 2: KeywordDetector entropy gating tests ---
+
+
+def test_keyword_detector_low_entropy_suppressed(scanner, tmp_path):
+    """Secret Keyword findings with low-entropy values should be suppressed."""
+    f = tmp_path / "config.yaml"
+    # KeywordDetector fires on "password:" key, captures the value.
+    # Low-entropy values like "changeme" or "test" are noise.
+    f.write_text("password: foobar123\ntoken: abcabc\nsecret: hello\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    keyword = [f for f in findings if f.metadata.get("detector") == "Secret Keyword"]
+    assert len(keyword) == 0, "Low-entropy Secret Keyword values should be suppressed"
+
+
+def test_keyword_detector_high_entropy_kept(scanner, tmp_path):
+    """Secret Keyword findings with high-entropy values should be kept."""
+    f = tmp_path / "config.yaml"
+    # High-entropy value that looks like a real secret
+    f.write_text("password: aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    keyword = [f for f in findings if f.metadata.get("detector") == "Secret Keyword"]
+    assert len(keyword) >= 1, "High-entropy Secret Keyword values should be kept"
+
+
+def test_entropy_gate_threshold():
+    """Verify the 3.0 entropy threshold separates noise from signal."""
+    # Common FP values should be below 3.0
+    assert CredentialScanner._shannon_entropy("changeme") < 3.0
+    assert CredentialScanner._shannon_entropy("test123") < 3.0
+    assert CredentialScanner._shannon_entropy("password") < 3.0
+    assert CredentialScanner._shannon_entropy("foobar") < 3.0
+    # Real-looking secrets should be above 3.0
+    assert CredentialScanner._shannon_entropy("aB3cD4eF5gH6iJ7kL8mN9") > 3.0
+    assert CredentialScanner._shannon_entropy("Xk9mP2vR7wQ4nL5zB8cD") > 3.0

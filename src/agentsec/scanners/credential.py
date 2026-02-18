@@ -448,6 +448,16 @@ class CredentialScanner(BaseScanner):
                 if secret.secret_value and self._is_placeholder(secret.secret_value):
                     continue
 
+                # Entropy gate for Secret Keyword findings. KeywordDetector
+                # fires on variable names like "password" / "secret" / "token"
+                # and captures their values — but low-entropy values (e.g.,
+                # "changeme", "test123", short words) are almost always FPs.
+                if secret.type == "Secret Keyword":
+                    if not secret.secret_value:
+                        continue
+                    if self._shannon_entropy(secret.secret_value) < 3.0:
+                        continue
+
                 severity = _SEVERITY_MAP.get(secret.type, FindingSeverity.MEDIUM)
                 rotation = _ROTATION_ADVICE.get(
                     secret.type,

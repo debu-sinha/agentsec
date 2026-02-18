@@ -37,9 +37,9 @@ def compute_score(critical: int, high: int, medium: int, low: int) -> int:
     """Compute a 0-100 security score from severity counts.
 
     Uses the same formula as the OWASP scorer (owasp_scorer.py):
-    critical*15, high*7, medium*3, low*1, floor=5.
+    critical*15, high*7, medium*3, low*1 (LOW capped at 15), floor=5.
     """
-    raw = 100 - (critical * 15) - (high * 7) - (medium * 3) - (low * 1)
+    raw = 100 - (critical * 15) - (high * 7) - (medium * 3) - min(low * 1, 15)
     return max(5, min(100, raw))
 
 

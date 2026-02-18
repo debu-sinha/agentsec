@@ -2,6 +2,22 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.4.3] - 2026-02-17
+
+### Noise Reduction (Tier 2)
+
+- Wire up Shannon entropy gate for KeywordDetector findings — values below
+  entropy 3.0 are suppressed as false positives (eliminates ~287 findings from
+  ecosystem scan, 27.6% total reduction)
+- Cap LOW finding penalty at 15 points in OWASP scoring formula — prevents
+  hundreds of test/doc context findings from producing automatic F grades
+- Align dashboard `compute_score()` with updated OWASP scorer formula
+
+### Stats
+
+- 236 tests passing (6 new Tier 2 tests, 1 Windows-only symlink skip)
+- Ecosystem scan: 1,038 → 751 findings (27.6% reduction)
+
 ## [0.4.2] - 2026-02-17
 
 ### Changed

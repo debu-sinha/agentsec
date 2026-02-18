@@ -220,6 +220,46 @@ def test_three_criticals_caps_at_20(scorer):
     assert posture["overall_score"] <= 20.0
 
 
+def test_low_findings_capped_at_15_penalty(scorer):
+    """Hundreds of LOW findings should not tank the score below 85.
+
+    The LOW penalty is capped at 15 points total. This prevents ecosystem
+    scans from producing automatic F grades when repos have many
+    test/doc context findings at LOW severity.
+    """
+    findings = [
+        _make_finding(FindingCategory.EXPOSED_TOKEN, FindingSeverity.LOW) for _ in range(500)
+    ]
+    posture = scorer.compute_posture_score(findings)
+    # 100 - min(500*1, 15) = 85
+    assert posture["overall_score"] == 85.0
+    assert posture["grade"] == "B"
+
+
+def test_moderate_lows_still_penalized(scorer):
+    """A small number of LOW findings should still reduce the score."""
+    findings = [
+        _make_finding(FindingCategory.EXPOSED_TOKEN, FindingSeverity.LOW) for _ in range(10)
+    ]
+    posture = scorer.compute_posture_score(findings)
+    # 100 - min(10*1, 15) = 90
+    assert posture["overall_score"] == 90.0
+    assert posture["grade"] == "A"
+
+
+def test_mixed_severity_with_many_lows(scorer):
+    """LOW cap should not mask real issues from higher severities."""
+    findings = [
+        _make_finding(FindingCategory.PLAINTEXT_SECRET, FindingSeverity.CRITICAL),
+        _make_finding(FindingCategory.NETWORK_EXPOSURE, FindingSeverity.HIGH),
+        *[_make_finding(FindingCategory.EXPOSED_TOKEN, FindingSeverity.LOW) for _ in range(200)],
+    ]
+    posture = scorer.compute_posture_score(findings)
+    # 100 - 15 (crit) - 7 (high) - 15 (LOW cap) = 63, then capped at 55 by 1-crit rule
+    assert posture["overall_score"] <= 55.0
+    assert posture["grade"] in ("D", "F")
+
+
 def test_owasp_category_metadata():
     cat = OwaspAgenticCategory.ASI01_AGENT_GOAL_HIJACK
     assert cat.value == "ASI01"

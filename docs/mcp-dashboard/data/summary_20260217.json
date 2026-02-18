@@ -2,15 +2,15 @@
   "snapshot_date": "2026-02-17",
   "targets_scanned": 50,
   "targets_cloned": 49,
-  "targets_with_critical_or_high": 7,
-  "critical": 22,
+  "targets_with_critical_or_high": 8,
+  "critical": 23,
   "high": 14,
-  "medium": 217,
-  "low": 737,
-  "info": 48,
-  "total_findings": 1038,
-  "avg_findings_per_target": 21.18,
+  "medium": 159,
+  "low": 506,
+  "info": 49,
+  "total_findings": 751,
+  "avg_findings_per_target": 15.33,
   "runtime_median_s": 2.66,
   "runtime_p95_s": 58.21,
-  "notes": "v0.4.2 expert-reviewed hardening. Expanded file coverage (+16 extensions, all .env.* variants). 77% of findings are Secret Keyword (detect-secrets KeywordDetector); 71% in test/doc context at LOW severity."
+  "notes": "v0.4.3 Tier 2 noise reduction. Shannon entropy gate on KeywordDetector (threshold 3.0) eliminated 287 low-entropy FPs. LOW scoring cap at 15pts prevents test/doc findings from tanking grades. 67% of remaining findings are Secret Keyword; majority in test/doc context."
 }

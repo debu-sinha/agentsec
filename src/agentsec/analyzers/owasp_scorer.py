@@ -220,7 +220,11 @@ class OwaspScorer:
         overall -= critical * 15.0
         overall -= high * 7.0
         overall -= medium * 3.0
-        overall -= low * 1.0
+        # Cap LOW penalty at 15 points. Test/doc context findings (which
+        # dominate LOW counts in ecosystem scans) should not tank grades —
+        # hundreds of informational findings in test fixtures shouldn't
+        # produce an automatic F grade.
+        overall -= min(low * 1.0, 15.0)
 
         # Clamp to 5-100. Floor of 5 distinguishes "has some controls"
         # from a hypothetical system with zero security whatsoever.
