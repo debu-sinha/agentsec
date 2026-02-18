@@ -27,9 +27,23 @@ All notable changes to agentsec are documented here.
 - Fix `EXAMPLE` word boundary check to exclude domain names (`example.com`)
   in connection strings — prevents over-suppression
 
+### New Features
+
+- **Tool pinning / rug pull detection**: `agentsec pin-tools` saves SHA-256
+  hashes of MCP tool descriptions to `.agentsec-pins.json`. Subsequent scans
+  detect description changes (HIGH severity) and removed tools (MEDIUM),
+  mapped to OWASP ASI03 (Supply Chain) + ASI01 (Agent Goal Hijack)
+- **Multi-platform agent discovery**: auto-detect Cursor (`.cursor/mcp.json`),
+  Windsurf (`.windsurf/mcp.json`, `.codeium`), and Gemini CLI (`.gemini/`)
+  installations alongside existing OpenClaw and Claude Code support
+- **Confidence field on Finding model**: `FindingConfidence` enum (HIGH/MEDIUM/LOW)
+  indicates true positive likelihood. Credential scanner sets LOW confidence for
+  test/doc context findings. SARIF reporter maps confidence to `precision` field.
+  Terminal reporter shows non-HIGH confidence in verbose mode
+
 ### Stats
 
-- 324 tests passing (13 new Tier 4 tests, 4 Red Team xfail bugs now fixed)
+- 348 tests passing (19 new tests for tool pinning, multi-platform, confidence)
 - 3 root cause FP bugs resolved (FP-01 provider-prefixed fake keys)
 - 1 CLI help text bug resolved (FP-09 `sk-proj-xxxxxxxxxxxxxxxxxxxx`)
 

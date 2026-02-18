@@ -14,7 +14,7 @@ from rich.table import Table
 from rich.text import Text
 
 from agentsec import __version__
-from agentsec.models.findings import FindingSeverity
+from agentsec.models.findings import FindingConfidence, FindingSeverity
 from agentsec.models.report import ScanReport
 
 # Brand colors
@@ -340,6 +340,11 @@ class TerminalReporter:
                 f"{finding.title}[/{sev_color}]"
             )
             self.console.print(f"   {finding.description}")
+            if finding.confidence != FindingConfidence.HIGH:
+                conf_style = "yellow" if finding.confidence == FindingConfidence.MEDIUM else "dim"
+                self.console.print(
+                    f"   Confidence: [{conf_style}]{finding.confidence.value}[/{conf_style}]"
+                )
             if finding.evidence:
                 self.console.print(f"   Evidence: {finding.evidence}")
             if finding.owasp_ids:

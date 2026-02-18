@@ -2,7 +2,7 @@
 
 import pytest
 
-from agentsec.models.findings import FindingCategory, FindingSeverity
+from agentsec.models.findings import FindingCategory, FindingConfidence, FindingSeverity
 from agentsec.scanners.base import ScanContext
 from agentsec.scanners.credential import CredentialScanner
 
@@ -808,3 +808,61 @@ def test_connection_string_example_domain_not_suppressed(scanner, tmp_path):
     findings = scanner.scan(context)
     conn = [f for f in findings if "Connection String" in f.title]
     assert len(conn) >= 1, "example.com in domain should not suppress real password detection"
+
+
+# --- Confidence field tests ---
+
+
+def test_high_confidence_for_real_key(scanner, tmp_path):
+    """Real-looking keys in source code should have HIGH confidence."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) >= 1
+    assert openai[0].confidence == FindingConfidence.HIGH
+
+
+def test_low_confidence_in_test_dir(scanner, tmp_path):
+    """Findings in tests/ directory should have LOW confidence."""
+    test_dir = tmp_path / "tests"
+    test_dir.mkdir()
+    f = test_dir / "test_auth.py"
+    f.write_text('KEY = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    if openai:
+        assert openai[0].confidence == FindingConfidence.LOW
+
+
+def test_low_confidence_in_readme(scanner, tmp_path):
+    """Findings in README.md should have LOW confidence."""
+    f = tmp_path / "README.md"
+    f.write_text("Use your key: sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a\n")
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    if openai:
+        assert openai[0].confidence == FindingConfidence.LOW
+
+
+def test_confidence_field_serialized_in_json(scanner, tmp_path):
+    """Confidence field should be present in JSON serialization."""
+    from agentsec.models.findings import Finding
+
+    finding = Finding(
+        scanner="credential",
+        category=FindingCategory.EXPOSED_TOKEN,
+        severity=FindingSeverity.CRITICAL,
+        confidence=FindingConfidence.LOW,
+        title="Test finding",
+        description="Test",
+    )
+    data = finding.model_dump()
+    assert "confidence" in data
+    assert data["confidence"] == "low"

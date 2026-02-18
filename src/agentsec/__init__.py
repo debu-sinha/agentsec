@@ -16,7 +16,13 @@ Quickstart::
 __version__ = "0.4.4"
 
 from agentsec.models.config import AgentsecConfig, ScannerConfig, ScanTarget
-from agentsec.models.findings import Finding, FindingCategory, FindingSeverity, Remediation
+from agentsec.models.findings import (
+    Finding,
+    FindingCategory,
+    FindingConfidence,
+    FindingSeverity,
+    Remediation,
+)
 from agentsec.models.report import ScanReport, ScanSummary
 from agentsec.orchestrator import run_scan
 
@@ -29,6 +35,7 @@ __all__ = [
     "ScanSummary",
     "Finding",
     "FindingCategory",
+    "FindingConfidence",
     "FindingSeverity",
     "Remediation",
     "__version__",

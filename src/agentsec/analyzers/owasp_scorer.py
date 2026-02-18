@@ -82,6 +82,10 @@ _CATEGORY_TO_OWASP: dict[FindingCategory, list[OwaspAgenticCategory]] = {
     FindingCategory.MCP_EXCESSIVE_PERMISSIONS: [
         OwaspAgenticCategory.ASI02_EXCESSIVE_AGENCY,
     ],
+    FindingCategory.MCP_TOOL_DRIFT: [
+        OwaspAgenticCategory.ASI03_SUPPLY_CHAIN_VULNERABILITIES,
+        OwaspAgenticCategory.ASI01_AGENT_GOAL_HIJACK,
+    ],
     # Credential findings
     FindingCategory.PLAINTEXT_SECRET: [
         OwaspAgenticCategory.ASI05_PRIVILEGE_COMPROMISE,

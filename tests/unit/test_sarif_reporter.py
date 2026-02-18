@@ -8,6 +8,7 @@ import pytest
 from agentsec.models.findings import (
     Finding,
     FindingCategory,
+    FindingConfidence,
     FindingSeverity,
     Remediation,
 )
@@ -166,3 +167,27 @@ def test_write_to_file(reporter, tmp_path):
     assert output_path.exists()
     content = json.loads(output_path.read_text())
     assert content["version"] == "2.1.0"
+
+
+def test_precision_from_confidence(reporter):
+    """SARIF precision field should map from Finding confidence."""
+    confidences = {
+        FindingConfidence.HIGH: "very-high",
+        FindingConfidence.MEDIUM: "high",
+        FindingConfidence.LOW: "medium",
+    }
+
+    for confidence, expected_precision in confidences.items():
+        finding = Finding(
+            scanner="credential",
+            category=FindingCategory.EXPOSED_TOKEN,
+            severity=FindingSeverity.CRITICAL,
+            confidence=confidence,
+            title=f"Test {confidence.value}",
+            description="Test finding",
+        )
+        report = _make_report([finding])
+        result = json.loads(reporter.render(report))
+
+        rule = result["runs"][0]["tool"]["driver"]["rules"][0]
+        assert rule["properties"]["precision"] == expected_precision

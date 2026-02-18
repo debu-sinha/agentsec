@@ -526,9 +526,10 @@ class TestFN03_LargeFileBypass:
         # 10MB + 1KB of padding, then the secret
         try:
             padding = "# padding\n" * 1_000_100  # ~11MB of comment lines
-        except MemoryError:
-            pytest.skip("Not enough memory to allocate 10MB+ test file")
-        f.write_text(padding + 'KEY = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"\n')
+            f.write_text(padding + 'KEY = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"\n')
+            del padding
+        except (MemoryError, OSError):
+            pytest.skip("Not enough memory or disk space for 10MB+ test file")
         ctx = ScanContext(target_path=tmp_path)
         findings = scanner.scan(ctx)
         # File > 10MB is skipped entirely
@@ -856,8 +857,8 @@ class TestEdgeCases:
         padding_size = 10_000_000 - key_line_bytes
         try:
             f.write_bytes(b"x" * padding_size + key_line.encode("utf-8"))
-        except MemoryError:
-            pytest.skip("Not enough memory to allocate 10MB test file")
+        except (MemoryError, OSError):
+            pytest.skip("Not enough memory or disk space for 10MB test file")
         actual_size = f.stat().st_size
         assert actual_size == 10_000_000, f"File is {actual_size} bytes, expected 10000000"
         ctx = ScanContext(target_path=tmp_path)
@@ -872,8 +873,8 @@ class TestEdgeCases:
         padding_size = 10_000_001 - key_line_bytes
         try:
             f.write_bytes(b"x" * padding_size + key_line.encode("utf-8"))
-        except MemoryError:
-            pytest.skip("Not enough memory to allocate 10MB test file")
+        except (MemoryError, OSError):
+            pytest.skip("Not enough memory or disk space for 10MB test file")
         actual_size = f.stat().st_size
         assert actual_size == 10_000_001, f"File is {actual_size} bytes"
         ctx = ScanContext(target_path=tmp_path)

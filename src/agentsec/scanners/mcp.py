@@ -2,6 +2,7 @@
 
 Detects:
 - Tool poisoning (malicious instructions hidden in tool descriptions)
+- Tool description drift / rug pull (descriptions changed since last pinned)
 - Missing authentication on MCP endpoints
 - Schema violations and overly permissive tool definitions
 - Cross-origin escalation risks
@@ -11,6 +12,7 @@ Detects:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import re
@@ -26,6 +28,9 @@ from agentsec.models.findings import (
 from agentsec.scanners.base import BaseScanner, ScanContext
 
 logger = logging.getLogger(__name__)
+
+# Default filename for tool description pins
+_PINS_FILENAME = ".agentsec-pins.json"
 
 # Tool descriptions that attempt to manipulate the LLM
 _TOOL_POISONING_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity]] = [
@@ -99,8 +104,9 @@ class McpScanner(BaseScanner):
     @property
     def description(self) -> str:
         return (
-            "Analyzes MCP server configurations for tool poisoning, missing "
-            "authentication, schema violations, and prompt injection vectors."
+            "Analyzes MCP server configurations for tool poisoning, tool "
+            "description drift (rug pulls), missing authentication, schema "
+            "violations, and prompt injection vectors."
         )
 
     def scan(self, context: ScanContext) -> list[Finding]:
@@ -113,9 +119,20 @@ class McpScanner(BaseScanner):
             logger.info("No MCP configurations found in %s", target)
             return findings
 
+        # Collect all tool hashes for pin verification
+        current_tool_hashes: dict[str, str] = {}
+
         for config_path, config_data in mcp_configs:
             context.files_scanned += 1
             findings.extend(self._analyze_mcp_config(config_path, config_data))
+            # Collect tool hashes from this config
+            self._collect_tool_hashes(config_data, current_tool_hashes)
+
+        # Verify against pinned tool descriptions (rug pull detection)
+        findings.extend(self._verify_tool_pins(target, current_tool_hashes))
+
+        # Store current hashes in context metadata for the pin command
+        context.metadata["mcp_tool_hashes"] = current_tool_hashes
 
         return findings
 
@@ -134,6 +151,13 @@ class McpScanner(BaseScanner):
             target / ".config" / "mcp" / "config.json",
             target / "claude_desktop_config.json",
             target / ".claude" / "mcp_servers.json",
+            # Cursor
+            target / ".cursor" / "mcp.json",
+            # Windsurf / Codeium
+            target / ".windsurf" / "mcp.json",
+            target / ".codeium" / "mcp.json",
+            # Gemini CLI
+            target / ".gemini" / "settings.json",
         ]
 
         # Also check main config files for embedded MCP config
@@ -371,6 +395,140 @@ class McpScanner(BaseScanner):
                 )
 
         return findings
+
+    # -----------------------------------------------------------------------
+    # Tool pinning / rug pull detection
+    # -----------------------------------------------------------------------
+
+    def _collect_tool_hashes(
+        self,
+        config_data: dict[str, Any],
+        hashes: dict[str, str],
+    ) -> None:
+        """Collect SHA-256 hashes of tool descriptions for pin comparison."""
+        servers = (
+            config_data.get("mcpServers", {})
+            or config_data.get("mcp_servers", {})
+            or config_data.get("servers", {})
+        )
+        if not isinstance(servers, dict):
+            return
+
+        for server_name, server_config in servers.items():
+            if not isinstance(server_config, dict):
+                continue
+            tools = server_config.get("tools", [])
+            if not isinstance(tools, list):
+                continue
+            for tool in tools:
+                if not isinstance(tool, dict):
+                    continue
+                tool_name = tool.get("name", "")
+                description = tool.get("description", "")
+                if tool_name and description:
+                    key = f"{server_name}/{tool_name}"
+                    digest = hashlib.sha256(description.encode()).hexdigest()
+                    hashes[key] = digest
+
+    def _verify_tool_pins(
+        self,
+        target: Path,
+        current_hashes: dict[str, str],
+    ) -> list[Finding]:
+        """Compare current tool descriptions against pinned hashes."""
+        findings: list[Finding] = []
+        pins_path = target / _PINS_FILENAME
+
+        if not pins_path.exists() or not current_hashes:
+            return findings
+
+        try:
+            pins_data = json.loads(pins_path.read_text())
+        except (json.JSONDecodeError, OSError):
+            logger.debug("Could not read pins file: %s", pins_path)
+            return findings
+
+        pinned_tools = pins_data.get("tools", {})
+        if not isinstance(pinned_tools, dict):
+            return findings
+
+        for tool_key, current_hash in current_hashes.items():
+            pinned_hash = pinned_tools.get(tool_key, {}).get("hash")
+            if pinned_hash and pinned_hash != current_hash:
+                server_name, tool_name = (
+                    tool_key.split("/", 1) if "/" in tool_key else (tool_key, "unknown")
+                )
+                findings.append(
+                    Finding(
+                        scanner=self.name,
+                        category=FindingCategory.MCP_TOOL_DRIFT,
+                        severity=FindingSeverity.HIGH,
+                        title=(f"Tool description changed: '{tool_key}'"),
+                        description=(
+                            f"The description for tool '{tool_name}' in MCP server "
+                            f"'{server_name}' has changed since it was last pinned. "
+                            f"This could indicate a rug pull attack where a trusted "
+                            f"tool's description is modified to inject malicious "
+                            f"instructions after the user has approved it."
+                        ),
+                        evidence=(f"Pinned: {pinned_hash[:12]}... Current: {current_hash[:12]}..."),
+                        file_path=pins_path,
+                        remediation=Remediation(
+                            summary=(f"Review the changed tool description for '{tool_name}'"),
+                            steps=[
+                                "Compare the current tool description against "
+                                "the previously approved version",
+                                "If the change is legitimate, update pins with: agentsec pin-tools",
+                                "If unexpected, disable the MCP server and investigate the source",
+                                "Consider running the MCP server in a sandboxed environment",
+                            ],
+                        ),
+                        owasp_ids=["ASI03", "ASI01"],
+                    )
+                )
+
+        # Also flag tools that were pinned but are now missing
+        for tool_key in pinned_tools:
+            if tool_key not in current_hashes:
+                findings.append(
+                    Finding(
+                        scanner=self.name,
+                        category=FindingCategory.MCP_TOOL_DRIFT,
+                        severity=FindingSeverity.MEDIUM,
+                        title=f"Pinned tool removed: '{tool_key}'",
+                        description=(
+                            f"Tool '{tool_key}' was previously pinned but is no "
+                            f"longer present in any MCP configuration. This could "
+                            f"indicate configuration tampering."
+                        ),
+                        file_path=pins_path,
+                        remediation=Remediation(
+                            summary=f"Verify removal of '{tool_key}' was intentional",
+                            steps=[
+                                "Confirm the tool was deliberately removed",
+                                "Update pins with: agentsec pin-tools",
+                            ],
+                        ),
+                        owasp_ids=["ASI03"],
+                    )
+                )
+
+        return findings
+
+    @staticmethod
+    def save_tool_pins(target: Path, tool_hashes: dict[str, str]) -> Path:
+        """Write current tool description hashes to the pins file.
+
+        Returns the path to the written pins file.
+        """
+        pins_path = target / _PINS_FILENAME
+        pins_data: dict[str, Any] = {"version": 1, "tools": {}}
+
+        for tool_key, digest in sorted(tool_hashes.items()):
+            pins_data["tools"][tool_key] = {"hash": digest}
+
+        pins_path.write_text(json.dumps(pins_data, indent=2) + "\n")
+        return pins_path
 
     def _check_tool_definition(
         self,

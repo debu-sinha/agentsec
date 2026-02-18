@@ -26,6 +26,14 @@ class FindingSeverity(str, Enum):
     INFO = "info"
 
 
+class FindingConfidence(str, Enum):
+    """Confidence that a finding is a true positive (not a false alarm)."""
+
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+
+
 class FindingCategory(str, Enum):
     """Top-level finding categories aligned with scanner modules."""
 
@@ -51,6 +59,7 @@ class FindingCategory(str, Enum):
     MCP_SCHEMA_VIOLATION = "mcp_schema_violation"
     MCP_CROSS_ORIGIN = "mcp_cross_origin"
     MCP_EXCESSIVE_PERMISSIONS = "mcp_excessive_permissions"
+    MCP_TOOL_DRIFT = "mcp_tool_drift"
 
     # Credential vault
     PLAINTEXT_SECRET = "plaintext_secret"
@@ -97,6 +106,10 @@ class Finding(BaseModel):
     scanner: str = Field(description="Scanner module that produced this finding")
     category: FindingCategory
     severity: FindingSeverity
+    confidence: FindingConfidence = Field(
+        default=FindingConfidence.HIGH,
+        description="Confidence this is a true positive (high/medium/low)",
+    )
     title: str = Field(description="Short description of the finding", max_length=200)
     description: str = Field(description="Detailed explanation of the risk")
     evidence: str | None = Field(

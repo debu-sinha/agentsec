@@ -36,6 +36,20 @@ _AGENT_MARKERS: dict[str, list[str]] = {
         "claude_desktop_config.json",
         ".claude/settings.json",
     ],
+    "cursor": [
+        ".cursor",
+        ".cursor/mcp.json",
+        ".cursorrc",
+    ],
+    "windsurf": [
+        ".windsurf",
+        ".windsurf/mcp.json",
+        ".codeium",
+    ],
+    "gemini-cli": [
+        ".gemini",
+        ".gemini/settings.json",
+    ],
 }
 
 # Legacy agent types that map to their modern equivalents

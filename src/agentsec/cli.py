@@ -58,6 +58,7 @@ class _WorkflowGroup(click.Group):
         "scan",
         "harden",
         "gate",
+        "pin-tools",
         "watch",
         "show-profile",
         "hook",
@@ -885,6 +886,62 @@ def gate(
     console.print()
     exit_code = subprocess.run([pm, *args]).returncode
     raise SystemExit(exit_code)
+
+
+@main.command("pin-tools")
+@click.argument("target", default=".", type=click.Path(exists=True))
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
+def pin_tools(target: str, verbose: bool) -> None:
+    """Pin MCP tool descriptions to detect rug pull attacks.
+
+    Creates or updates .agentsec-pins.json with SHA-256 hashes of all
+    tool descriptions found in MCP server configurations. Subsequent
+    scans will detect changes to pinned tool descriptions.
+
+    \b
+    Examples:
+        agentsec pin-tools              # pin tools in current directory
+        agentsec pin-tools ~/.openclaw  # pin tools for specific install
+        agentsec scan                   # next scan detects description changes
+    """
+    from agentsec.scanners.base import ScanContext
+    from agentsec.scanners.mcp import McpScanner
+
+    _configure_logging(verbose)
+    target_path = Path(target).expanduser().resolve()
+
+    scanner = McpScanner()
+    context = ScanContext(target_path=target_path)
+
+    # Run the MCP scanner to collect tool hashes
+    scanner.scan(context)
+
+    tool_hashes = context.metadata.get("mcp_tool_hashes", {})
+    if not tool_hashes:
+        console.print(
+            "[yellow]No MCP tool definitions found.[/yellow]\n"
+            "[dim]Make sure the target directory contains MCP configurations "
+            "with tool definitions.[/dim]"
+        )
+        return
+
+    # Save pins
+    pins_path = McpScanner.save_tool_pins(target_path, tool_hashes)
+
+    console.print(f"\n[bold green]Pinned {len(tool_hashes)} tool(s)[/bold green]")
+    console.print(f"  Pins file: [cyan]{pins_path}[/cyan]\n")
+
+    table = Table(title="Pinned Tools")
+    table.add_column("Server / Tool", style="cyan")
+    table.add_column("Description Hash", style="dim")
+
+    for tool_key, digest in sorted(tool_hashes.items()):
+        table.add_row(tool_key, digest[:16] + "...")
+
+    console.print(table)
+    console.print(
+        "\n[dim]Subsequent scans will alert if any pinned tool description changes.[/dim]\n"
+    )
 
 
 if __name__ == "__main__":

@@ -21,6 +21,7 @@ from detect_secrets.settings import transient_settings
 from agentsec.models.findings import (
     Finding,
     FindingCategory,
+    FindingConfidence,
     FindingSeverity,
     Remediation,
 )
@@ -537,6 +538,7 @@ class CredentialScanner(BaseScanner):
                 )
 
                 # Downgrade severity for test/doc context
+                confidence = FindingConfidence.HIGH
                 metadata: dict[str, str] = {"detector": secret.type}
                 if is_low_confidence:
                     if severity in (
@@ -545,6 +547,7 @@ class CredentialScanner(BaseScanner):
                         FindingSeverity.MEDIUM,
                     ):
                         severity = FindingSeverity.LOW
+                    confidence = FindingConfidence.LOW
                     metadata["context"] = "test_or_doc"
 
                 # Build sanitized evidence from the secret hash (we don't
@@ -559,6 +562,7 @@ class CredentialScanner(BaseScanner):
                         scanner=self.name,
                         category=FindingCategory.EXPOSED_TOKEN,
                         severity=severity,
+                        confidence=confidence,
                         title=f"{secret.type} found in {file_path.name}",
                         description=(
                             f"A {secret.type} was found in '{file_path.name}' at line "
@@ -639,6 +643,7 @@ class CredentialScanner(BaseScanner):
 
                 # Downgrade severity for test/doc context
                 effective_severity = severity
+                confidence = FindingConfidence.HIGH
                 metadata: dict[str, str] = {}
                 if is_low_confidence:
                     if severity in (
@@ -647,6 +652,7 @@ class CredentialScanner(BaseScanner):
                         FindingSeverity.MEDIUM,
                     ):
                         effective_severity = FindingSeverity.LOW
+                    confidence = FindingConfidence.LOW
                     metadata["context"] = "test_or_doc"
 
                 sanitized = sanitize_secret(matched)
@@ -656,6 +662,7 @@ class CredentialScanner(BaseScanner):
                         scanner=self.name,
                         category=FindingCategory.EXPOSED_TOKEN,
                         severity=effective_severity,
+                        confidence=confidence,
                         title=f"{secret_type} found in {file_path.name}",
                         description=(
                             f"A {secret_type} was found in '{file_path.name}' at line "

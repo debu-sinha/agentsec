@@ -10,8 +10,14 @@ import json
 from pathlib import Path
 from typing import Any
 
-from agentsec.models.findings import FindingSeverity
+from agentsec.models.findings import FindingConfidence, FindingSeverity
 from agentsec.models.report import ScanReport
+
+_CONFIDENCE_TO_SARIF_PRECISION = {
+    FindingConfidence.HIGH: "very-high",
+    FindingConfidence.MEDIUM: "high",
+    FindingConfidence.LOW: "medium",
+}
 
 _SEVERITY_TO_SARIF_LEVEL = {
     FindingSeverity.CRITICAL: "error",
@@ -98,6 +104,7 @@ class SarifReporter:
                 "properties": {
                     "tags": tags,
                     "security-severity": str(_SEVERITY_TO_SARIF_RANK[finding.severity]),
+                    "precision": _CONFIDENCE_TO_SARIF_PRECISION.get(finding.confidence, "high"),
                 },
             }
 
