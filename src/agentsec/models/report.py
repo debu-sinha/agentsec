@@ -18,7 +18,7 @@ def _get_version() -> str:
 
         return version("agentsec")
     except Exception:
-        return "0.4.1"
+        return "0.4.4"
 
 
 class ScanSummary(BaseModel):

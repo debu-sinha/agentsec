@@ -186,4 +186,4 @@ This dashboard is provided **as-is** for informational purposes only. It is gene
 
 ---
 
-*Generated on 2026-02-17 by [agentsec](https://github.com/debu-sinha/agentsec) v0.4.2 | [Install](https://pypi.org/project/agentsec-ai/) | [Report an issue](https://github.com/debu-sinha/agentsec/issues)*
+*Generated on 2026-02-18 by [agentsec](https://github.com/debu-sinha/agentsec) v0.4.4 | [Install](https://pypi.org/project/agentsec-ai/) | [Report an issue](https://github.com/debu-sinha/agentsec/issues)*

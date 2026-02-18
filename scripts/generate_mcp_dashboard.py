@@ -482,7 +482,7 @@ def render_dashboard(
     lines.append("")
     lines.append(
         f"*Generated on {snapshot_date} by "
-        f"[agentsec](https://github.com/debu-sinha/agentsec) v0.4.2 "
+        f"[agentsec](https://github.com/debu-sinha/agentsec) v0.4.4 "
         f"| [Install](https://pypi.org/project/agentsec-ai/) "
         f"| [Report an issue](https://github.com/debu-sinha/agentsec/issues)*"
     )
