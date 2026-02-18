@@ -96,8 +96,9 @@ def test_harden_apply(tmp_path):
     updated = json.loads((tmp_path / "openclaw.json").read_text())
     assert updated["gateway"]["bind"] == "loopback"
 
-    # Backup should exist
-    assert (tmp_path / "openclaw.json.bak").exists()
+    # Timestamped backup should exist
+    backups = list(tmp_path.glob("openclaw.json.bak.*"))
+    assert len(backups) == 1
 
 
 def test_harden_skips_already_set(tmp_path):

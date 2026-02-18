@@ -15,7 +15,12 @@ from pathlib import Path
 from typing import Any
 
 from agentsec.models.config import ScannerConfig
-from agentsec.models.findings import Finding
+from agentsec.models.findings import (
+    Finding,
+    FindingCategory,
+    FindingSeverity,
+    Remediation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +97,20 @@ class BaseScanner(ABC):
             findings = self.scan(context)
         except (OSError, PermissionError, ValueError, json.JSONDecodeError) as e:
             logger.warning("Scanner '%s' skipped: %s: %s", self.name, type(e).__name__, e)
-            return []
+            return [
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.INSECURE_CONFIG,
+                    severity=FindingSeverity.LOW,
+                    title=f"Scanner '{self.name}' skipped due to error",
+                    description=(
+                        f"The {self.name} scanner could not complete: {type(e).__name__}: {e}"
+                    ),
+                    remediation=Remediation(
+                        summary="Investigate the error and re-run the scan",
+                    ),
+                )
+            ]
         except Exception as e:
             logger.error(
                 "Scanner '%s' failed unexpectedly: %s: %s",
@@ -101,7 +119,21 @@ class BaseScanner(ABC):
                 e,
             )
             logger.debug("Scanner '%s' traceback:", self.name, exc_info=True)
-            return []
+            return [
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.INSECURE_CONFIG,
+                    severity=FindingSeverity.MEDIUM,
+                    title=f"Scanner '{self.name}' failed unexpectedly",
+                    description=(
+                        f"The {self.name} scanner encountered an unexpected error: "
+                        f"{type(e).__name__}: {e}. Results may be incomplete."
+                    ),
+                    remediation=Remediation(
+                        summary="Check scanner logs and report the issue",
+                    ),
+                )
+            ]
 
         elapsed = time.monotonic() - start
         logger.info(

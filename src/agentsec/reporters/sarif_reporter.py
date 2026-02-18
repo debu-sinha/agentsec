@@ -46,6 +46,7 @@ class SarifReporter:
         output_path: Path | None = None,
     ) -> str:
         """Render the report as a SARIF JSON string."""
+        self._source_root = Path(report.target_path).resolve()
         rules = self._build_rules(report)
         rule_index = {rule["id"]: i for i, rule in enumerate(rules)}
 
@@ -133,10 +134,11 @@ class SarifReporter:
         }
 
         if finding.file_path:
+            file_uri = self._to_relative_uri(finding.file_path)
             location: dict[str, Any] = {
                 "physicalLocation": {
                     "artifactLocation": {
-                        "uri": str(finding.file_path),
+                        "uri": file_uri,
                         "uriBaseId": "%SRCROOT%",
                     }
                 }
@@ -155,6 +157,19 @@ class SarifReporter:
             ]
 
         return result
+
+    def _to_relative_uri(self, file_path: str) -> str:
+        """Convert a file path to a URI relative to the source root.
+
+        Prevents leaking absolute paths (usernames, directory structure)
+        in SARIF output shared with CI/CD or external tools.
+        """
+        try:
+            rel = Path(file_path).resolve().relative_to(self._source_root)
+            return str(rel).replace("\\", "/")
+        except (ValueError, TypeError):
+            # Path not under source root — use filename only as safe fallback
+            return Path(file_path).name
 
     @staticmethod
     def _remediation_markdown(finding: Any) -> str:

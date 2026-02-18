@@ -191,3 +191,25 @@ def test_precision_from_confidence(reporter):
 
         rule = result["runs"][0]["tool"]["driver"]["rules"][0]
         assert rule["properties"]["precision"] == expected_precision
+
+
+def test_file_paths_are_relative(reporter):
+    """SARIF output should use relative paths, not absolute."""
+    finding = Finding(
+        scanner="credential",
+        category=FindingCategory.EXPOSED_TOKEN,
+        severity=FindingSeverity.CRITICAL,
+        title="Key found",
+        description="Key detected",
+        file_path=Path("/tmp/test/src/config.py"),
+        line_number=10,
+    )
+    report = _make_report([finding])
+    result = json.loads(reporter.render(report))
+
+    uri = result["runs"][0]["results"][0]["locations"][0]["physicalLocation"][
+        "artifactLocation"
+    ]["uri"]
+    # Should be relative to /tmp/test (the target_path)
+    assert not uri.startswith("/tmp/test")
+    assert "src/config.py" in uri

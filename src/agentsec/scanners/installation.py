@@ -1541,7 +1541,7 @@ class InstallationScanner(BaseScanner):
                 "External data fetch instruction",
             ),
             (
-                re.compile(r"(?:eval|exec|__import__|subprocess)", re.I),
+                re.compile(r"\b(?:eval|exec|__import__|subprocess)\b", re.I),
                 "Code execution instruction",
             ),
         ]

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import shutil
 import subprocess
 import sys
@@ -25,6 +26,30 @@ from agentsec.models.findings import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Safe characters for package names: alphanumeric, dash, underscore, dot, slash (scoped npm), @
+_SAFE_PACKAGE_RE = __import__("re").compile(r"^@?[a-zA-Z0-9][a-zA-Z0-9._\-/]*$")
+
+# Maximum allowed length for package names (npm max is 214, pip has no strict limit)
+_MAX_PACKAGE_NAME_LEN = 214
+
+
+def _validate_package_name(package_name: str) -> None:
+    """Validate a package name before passing to subprocess.
+
+    Raises ValueError if the name contains unsafe characters that could
+    be used for argument injection (e.g., --target, shell metacharacters).
+    """
+    if len(package_name) > _MAX_PACKAGE_NAME_LEN:
+        raise ValueError(
+            f"Package name too long ({len(package_name)} chars, max {_MAX_PACKAGE_NAME_LEN})"
+        )
+    if not _SAFE_PACKAGE_RE.match(package_name):
+        raise ValueError(
+            f"Package name contains unsafe characters: {package_name!r}. "
+            f"Only alphanumeric, dash, underscore, dot, slash, and @ are allowed."
+        )
+
 
 # Known-malicious packages compiled from npm advisories, Phylum, Socket.dev,
 # and Checkmarx supply-chain research. This is a local blocklist; a future
@@ -267,6 +292,7 @@ def _download_and_scan(pm: str, package_name: str) -> list[Finding]:
 
 def _download_and_scan_npm(package_name: str, temp_dir: str) -> list[Finding]:
     """Download an npm package and scan its contents."""
+    _validate_package_name(package_name)
     findings: list[Finding] = []
 
     # Use npm pack to download tarball without running install scripts
@@ -305,6 +331,7 @@ def _download_and_scan_npm(package_name: str, temp_dir: str) -> list[Finding]:
 
 def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
     """Download a pip package and scan its contents."""
+    _validate_package_name(package_name)
     findings: list[Finding] = []
 
     # Use pip download to fetch without installing
@@ -368,11 +395,11 @@ def _extract_tar_archive(tar: tarfile.TarFile, extract_dir: Path) -> None:
         tar.extractall(extract_dir, filter="data")
         return
 
-    base_dir = extract_dir.resolve()
+    base_dir = os.path.normcase(os.path.realpath(extract_dir))
     safe_members: list[tarfile.TarInfo] = []
     for member in tar.getmembers():
-        target = (base_dir / member.name).resolve()
-        if not str(target).startswith(str(base_dir)):
+        target = os.path.normcase(os.path.realpath(os.path.join(base_dir, member.name)))
+        if not target.startswith(base_dir + os.sep) and target != base_dir:
             raise ValueError(f"Tar path traversal blocked: {member.name}")
         if member.issym() or member.islnk():
             raise ValueError(f"Tar link entry blocked: {member.name}")
@@ -387,11 +414,11 @@ def _extract_zip_archive(archive: Path, extract_dir: Path) -> None:
     Extracts members one at a time after path-traversal validation to
     avoid TOCTOU between a bulk validation pass and a bulk extractall.
     """
-    base_dir = extract_dir.resolve()
+    base_dir = os.path.normcase(os.path.realpath(extract_dir))
     with zipfile.ZipFile(archive, "r") as zf:
         for info in zf.infolist():
-            target = (base_dir / info.filename).resolve()
-            if not str(target).startswith(str(base_dir)):
+            target = os.path.normcase(os.path.realpath(os.path.join(base_dir, info.filename)))
+            if not target.startswith(base_dir + os.sep) and target != base_dir:
                 raise ValueError(f"Zip path traversal blocked: {info.filename}")
             zf.extract(info, extract_dir)  # noqa: S202
 
