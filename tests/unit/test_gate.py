@@ -284,9 +284,10 @@ def test_tar_traversal_blocked(tmp_path):
 
     # Python 3.12+ raises OutsideDestinationError (via filter="data"),
     # older versions raise our ValueError
+    _outside_err = getattr(tarfile, "OutsideDestinationError", ValueError)
     with (
         tarfile.open(tar_path, "r:gz") as tar,
-        pytest.raises((ValueError, tarfile.OutsideDestinationError)),
+        pytest.raises((ValueError, _outside_err)),
     ):
         _extract_tar_archive(tar, extract_dir)
 
