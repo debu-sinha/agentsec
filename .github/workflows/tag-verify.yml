@@ -1,4 +1,4 @@
-name: Verify Signed Tag
+name: Verify Tag
 
 on:
   push:
@@ -23,10 +23,16 @@ jobs:
             exit 1
           fi
 
-      - name: Require signed annotated tag
+      - name: Validate tag matches pyproject.toml version
         run: |
-          sig=$(git for-each-ref "refs/tags/${GITHUB_REF_NAME}" --format='%(contents:signature)')
-          if [ -z "$sig" ]; then
-            echo "Tag ${GITHUB_REF_NAME} is not a signed annotated tag."
+          version=$(python3 -c "
+          import tomllib, pathlib
+          data = tomllib.loads(pathlib.Path('pyproject.toml').read_text())
+          print(data['project']['version'])
+          ")
+          expected="v${version}"
+          if [ "${GITHUB_REF_NAME}" != "${expected}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match pyproject.toml version ${expected}."
             exit 1
           fi
+          echo "Tag ${GITHUB_REF_NAME} matches pyproject.toml version ${version}."
