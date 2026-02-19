@@ -502,6 +502,18 @@ def test_skips_lock_files(scanner, tmp_path):
     assert context.files_scanned == 0
 
 
+def test_skips_agentsec_output_files(scanner, tmp_path):
+    """Agentsec scan output files should be excluded to avoid self-scan FPs."""
+    for name in ["scan-before.json", "scan-after.json", "agentsec-report.json"]:
+        f = tmp_path / name
+        f.write_text('{"fingerprint": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"}\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    assert len(findings) == 0
+    assert context.files_scanned == 0
+
+
 # --- Expert review: Distinct secrets in same file not collapsed ---
 
 

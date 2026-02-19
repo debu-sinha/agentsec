@@ -427,13 +427,14 @@ def test_hardener_already_hardened(tmp_path):
                 "dangerouslyDisableDeviceAuth": False,
                 "dangerouslyDisableAuth": False,
                 "groupPolicy": "allowlist",
+                "sandbox": {"mode": "non-main"},
             }
         )
     )
 
     result = harden(tmp_path, "workstation", dry_run=True)
     assert len(result.applied) == 0
-    assert len(result.skipped) == 8
+    assert len(result.skipped) == 9
 
 
 def test_hardener_no_config(tmp_path):
@@ -454,6 +455,22 @@ def test_hardener_public_bot_profile(tmp_path):
     assert data["tools"]["deny"] == ["exec", "browser", "web"]
     assert data["sandbox"]["mode"] == "all"
     assert data["tools"]["profile"] == "minimal"
+
+
+def test_hardener_warnings_for_credentials(tmp_path):
+    from agentsec.hardener import harden
+
+    config_path = tmp_path / "openclaw.json"
+    config_path.write_text(
+        json.dumps({"mcp": {"servers": {"search": {"env": {"API_KEY": "sk-realkey123456789"}}}}})
+    )
+    env_file = tmp_path / ".env"
+    env_file.write_text("SECRET=value\n")
+
+    result = harden(tmp_path, "workstation", dry_run=True)
+    assert len(result.warnings) >= 2
+    assert any("MCP server" in w for w in result.warnings)
+    assert any(".env" in w for w in result.warnings)
 
 
 def test_hardener_profiles_list():

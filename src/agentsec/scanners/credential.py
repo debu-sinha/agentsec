@@ -133,6 +133,9 @@ _TEMPLATE_CONFIG_FILES = {
     "config.sample.yml",
 }
 
+# Agentsec output file prefixes — skip to avoid FPs from our own scan results
+_AGENTSEC_OUTPUT_PREFIXES = ("scan-", "agentsec-report")
+
 # detect-secrets plugin configuration
 _DETECT_SECRETS_PLUGINS = [
     {"name": "AWSKeyDetector"},
@@ -144,7 +147,7 @@ _DETECT_SECRETS_PLUGINS = [
     {"name": "GitHubTokenDetector"},
     {"name": "GitLabTokenDetector"},
     {"name": "Base64HighEntropyString", "limit": 5.0},
-    {"name": "HexHighEntropyString", "limit": 3.5},
+    {"name": "HexHighEntropyString", "limit": 4.5},
     {"name": "IbmCloudIamDetector"},
     {"name": "IbmCosHmacDetector"},
     {"name": "JwtTokenDetector"},
@@ -435,6 +438,13 @@ class CredentialScanner(BaseScanner):
                 if item.name.lower() in _LOCK_FILE_NAMES:
                     continue
 
+                # Skip agentsec output files (contain hashes from our own scan)
+                name_lower = item.name.lower()
+                if name_lower.startswith(_AGENTSEC_OUTPUT_PREFIXES) and name_lower.endswith(
+                    (".json", ".sarif")
+                ):
+                    continue
+
                 # Check extension (also allow .env* files and key extensionless files)
                 name_lower = item.name.lower()
                 if (
@@ -579,6 +589,8 @@ class CredentialScanner(BaseScanner):
                                 f"Remove the plaintext value from {file_path.name}",
                                 "Store in OS keychain or environment variable",
                                 "Add file to .gitignore if not already excluded",
+                                "Check git history with git log -p --all -S '<value>'; "
+                                "purge with git filter-repo if committed",
                             ],
                         ),
                         owasp_ids=["ASI05"],
@@ -679,6 +691,8 @@ class CredentialScanner(BaseScanner):
                                 f"Remove the plaintext value from {file_path.name}",
                                 "Store in OS keychain or environment variable",
                                 "Add file to .gitignore if not already excluded",
+                                "Check git history with git log -p --all -S '<value>'; "
+                                "purge with git filter-repo if committed",
                             ],
                         ),
                         owasp_ids=["ASI05"],
@@ -723,6 +737,7 @@ class CredentialScanner(BaseScanner):
                             "Or: git config credential.helper store  # Linux (less secure)",
                             "Update remote URL to remove credentials",
                             "Rotate the exposed credential",
+                            "Purge from git history with git filter-repo if previously committed",
                         ],
                     ),
                     owasp_ids=["ASI05"],

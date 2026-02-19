@@ -43,6 +43,7 @@ _CATEGORY_TO_OWASP: dict[FindingCategory, list[OwaspAgenticCategory]] = {
     ],
     # Skill findings
     FindingCategory.MALICIOUS_SKILL: [
+        OwaspAgenticCategory.ASI01_AGENT_GOAL_HIJACK,
         OwaspAgenticCategory.ASI03_SUPPLY_CHAIN_VULNERABILITIES,
     ],
     FindingCategory.DANGEROUS_PATTERN: [
@@ -230,6 +231,10 @@ class OwaspScorer:
         # produce an automatic F grade.
         overall -= min(low * 1.0, 15.0)
 
+        # Keep raw score before clamping/capping — surfaces improvement
+        # even when both pre/post scores hit the floor (e.g., 5.0/F → 5.0/F).
+        raw_score = round(overall, 1)
+
         # Clamp to 5-100. Floor of 5 distinguishes "has some controls"
         # from a hypothetical system with zero security whatsoever.
         overall = max(min(overall, 100.0), 5.0)
@@ -246,8 +251,15 @@ class OwaspScorer:
 
         return {
             "overall_score": round(overall, 1),
+            "raw_score": raw_score,
             "category_scores": category_scores,
             "grade": grade,
+            "severity_counts": {
+                "critical": critical,
+                "high": high,
+                "medium": medium,
+                "low": low,
+            },
         }
 
     def _map_finding(self, finding: Finding) -> list[OwaspAgenticCategory]:

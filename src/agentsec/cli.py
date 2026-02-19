@@ -413,6 +413,11 @@ def harden(target: str, profile: str, do_apply: bool, verbose: bool) -> None:
     if result.skipped:
         console.print(f"\n[dim]{len(result.skipped)} settings already at target value.[/dim]")
 
+    if result.warnings:
+        console.print()
+        for warning in result.warnings:
+            console.print(f"  [bold yellow]Warning:[/bold yellow] {warning}")
+
     if is_dry_run and result.applied:
         # Show impact preview
         if pre_report and pre_posture:
@@ -499,6 +504,15 @@ def _render_harden_delta(
     score_delta = post_score - pre_score
     delta_str = f"+{score_delta:.1f}" if score_delta > 0 else f"{score_delta:.1f}"
     delta_style = "green" if score_delta > 0 else ("red" if score_delta < 0 else "dim")
+
+    # When overall_score is capped (both at floor), show raw_score improvement
+    pre_raw = pre_posture.get("raw_score", pre_score)
+    post_raw = post_posture.get("raw_score", post_score)
+    if score_delta == 0 and pre_raw != post_raw:
+        raw_delta = post_raw - pre_raw
+        sign = "+" if raw_delta > 0 else ""
+        delta_str = f"raw: {pre_raw:.0f} \u2192 {post_raw:.0f} ({sign}{raw_delta:.0f} pts)"
+        delta_style = "green" if raw_delta > 0 else "dim"
 
     fixed_count = pre_s.total_findings - post_s.total_findings
     fixed_str = f"-{fixed_count} fixed" if fixed_count > 0 else "no change"

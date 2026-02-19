@@ -42,6 +42,7 @@ class HardenResult:
     applied: list[HardenAction] = field(default_factory=list)
     skipped: list[HardenAction] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
     config_path: Path | None = None
     dry_run: bool = True
 
@@ -92,6 +93,11 @@ _PROFILES: dict[str, list[HardenAction]] = {
             value="allowlist",
             reason="Restrict to explicitly allowed groups only",
         ),
+        HardenAction(
+            key="sandbox.mode",
+            value="non-main",
+            reason="Sandbox non-primary sessions for defense-in-depth",
+        ),
     ],
     "vps": [
         HardenAction(
@@ -125,9 +131,21 @@ _PROFILES: dict[str, list[HardenAction]] = {
             reason="Isolate per user for multi-tenant safety",
         ),
         HardenAction(
+            key="sandbox.mode",
+            value="all",
+            reason="Sandbox all sessions — unattended remote server",
+            severity="critical",
+        ),
+        HardenAction(
             key="dangerouslyDisableDeviceAuth",
             value=False,
             reason="Never disable device auth on remote systems",
+            severity="critical",
+        ),
+        HardenAction(
+            key="dangerouslyDisableAuth",
+            value=False,
+            reason="Never disable auth on remote systems",
             severity="critical",
         ),
     ],
@@ -252,6 +270,11 @@ def harden(
             ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
             backup = config_path.parent / f"{config_path.name}.bak.{ts}"
             shutil.copy2(config_path, backup)
+            # Restrict backup permissions (backup contains pre-hardening secrets)
+            try:
+                os.chmod(backup, stat.S_IRUSR | stat.S_IWUSR)
+            except OSError:
+                logger.debug("Could not restrict backup permissions: %s", backup)
             config_path.write_text(json.dumps(config_data, indent=2) + "\n")
             logger.info("Config updated: %s (backup: %s)", config_path, backup)
         except OSError as e:
@@ -260,6 +283,9 @@ def harden(
     # Tighten file permissions (always safe)
     if not dry_run:
         _tighten_permissions(target)
+
+    # Warn about issues the hardener cannot fix automatically
+    _add_warnings(target, config_data, result)
 
     return result
 
@@ -329,3 +355,34 @@ def _tighten_permissions(target: Path) -> None:
                     logger.info("Set %s to 600", fpath)
                 except OSError:
                     logger.debug("Could not chmod %s", fpath)
+
+
+def _add_warnings(target: Path, config_data: dict, result: HardenResult) -> None:
+    """Add warnings for issues that require manual remediation."""
+    # Check for hardcoded credentials in MCP config
+    mcp = config_data.get("mcp", {}).get("servers", config_data.get("mcpServers", {}))
+    if isinstance(mcp, dict):
+        for name, server in mcp.items():
+            env = server.get("env", {})
+            for key, val in env.items():
+                if isinstance(val, str) and not val.startswith("$") and len(val) > 8:
+                    result.warnings.append(
+                        f"MCP server '{name}' has hardcoded value in env.{key} — "
+                        f"move to .env file or secrets manager"
+                    )
+
+    # Check for .env files with credentials
+    for env_name in [".env", ".env.local", ".env.production"]:
+        env_path = target / env_name
+        if env_path.is_file():
+            result.warnings.append(
+                f"Credentials in {env_name} require manual rotation and secure storage"
+            )
+
+    # Check for skills directory (potential malicious skills)
+    skills_dir = target / "skills"
+    if skills_dir.is_dir() and any(skills_dir.iterdir()):
+        result.warnings.append(
+            "Skills directory detected — review skills for malicious patterns "
+            "(use: agentsec scan --scanner skill)"
+        )

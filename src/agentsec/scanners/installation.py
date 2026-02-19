@@ -695,8 +695,11 @@ class InstallationScanner(BaseScanner):
                     ),
                     file_path=config_path,
                     remediation=Remediation(
-                        summary="Configure allowed origins",
-                        steps=["Set 'allowed_origins' to specific trusted domains"],
+                        summary="Configure allowed origins or restrict to loopback",
+                        steps=[
+                            "Set 'allowed_origins' to specific trusted domains",
+                            "Or bind gateway to loopback (workstation profile does this)",
+                        ],
                         automated=True,
                         command="agentsec harden ~ -p workstation --apply",
                     ),
@@ -1242,7 +1245,12 @@ class InstallationScanner(BaseScanner):
         profile = tools_config.get("profile", "full")
         has_url_tools = profile in ("full", "")
 
-        if has_url_tools and not ssrf_deny and not hostname_allowlist:
+        # MCP servers can process URLs regardless of tool profile
+        mcp_servers = config_data.get("mcp", {}).get("servers", {})
+        mcp_servers = mcp_servers or config_data.get("mcpServers", {})
+        has_mcp = bool(mcp_servers)
+
+        if (has_url_tools or has_mcp) and not ssrf_deny and not hostname_allowlist:
             findings.append(
                 Finding(
                     scanner=self.name,
@@ -1266,7 +1274,9 @@ class InstallationScanner(BaseScanner):
                             "Enable audit logging for blocked fetch attempts",
                             "Update to OpenClaw v2026.2.12+ which includes built-in SSRF deny",
                         ],
-                        references=["https://nvd.nist.gov/vuln/detail/CVE-2026-25475"],
+                        references=[
+                            "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html"
+                        ],
                     ),
                     owasp_ids=["ASI05", "ASI02"],
                 )

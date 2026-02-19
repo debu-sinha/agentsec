@@ -166,7 +166,12 @@ class McpScanner(BaseScanner):
             if main_config and main_config.exists():
                 try:
                     data = json.loads(main_config.read_text())
-                    mcp_section = data.get("mcpServers", data.get("mcp_servers", {}))
+                    mcp_section = (
+                        data.get("mcpServers")
+                        or data.get("mcp_servers")
+                        or data.get("mcp", {}).get("servers")
+                        or {}
+                    )
                     if mcp_section:
                         configs.append((main_config, {"mcpServers": mcp_section}))
                 except (json.JSONDecodeError, OSError):
@@ -191,6 +196,7 @@ class McpScanner(BaseScanner):
             config_data.get("mcpServers", {})
             or config_data.get("mcp_servers", {})
             or config_data.get("servers", {})
+            or config_data.get("mcp", {}).get("servers", {})
         )
 
         if isinstance(servers, dict):
@@ -384,10 +390,10 @@ class McpScanner(BaseScanner):
                         remediation=Remediation(
                             summary="Move secret to environment variable or secrets manager",
                             steps=[
+                                "Rotate the exposed credential immediately",
                                 f"Remove hardcoded value for '{var_name}' from config",
                                 f"Set as environment variable: export {var_name}=...",
                                 "Or reference via ${{env:VAR_NAME}} syntax",
-                                "Rotate the exposed credential immediately",
                             ],
                         ),
                         owasp_ids=["ASI05", "ASI03"],

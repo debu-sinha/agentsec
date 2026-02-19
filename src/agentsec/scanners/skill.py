@@ -144,7 +144,7 @@ _INSTRUCTION_MALWARE_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity,
     (
         "Remote pipe to shell",
         re.compile(
-            r"(?:curl|wget)\s+[^\s|]+\s*\|\s*(?:sh|bash|zsh|sudo\s+(?:sh|bash))",
+            r"(?:curl|wget)\s+[^|]+\|\s*(?:sh|bash|zsh|sudo\s+(?:sh|bash))",
             re.I,
         ),
         FindingSeverity.CRITICAL,
@@ -335,7 +335,7 @@ class SkillAnalyzer(BaseScanner):
         """Check skill manifest for suspicious declarations."""
         findings: list[Finding] = []
 
-        manifest_candidates = ["manifest.json", "package.json", "skill.json", "skill.yaml"]
+        manifest_candidates = ["manifest.json", "package.json", "skill.json"]
         for manifest_name in manifest_candidates:
             manifest_path = (
                 skill_path / manifest_name
@@ -507,6 +507,20 @@ class SkillAnalyzer(BaseScanner):
         for pattern_name, pattern, severity, desc in _SUSPICIOUS_PATTERNS:
             for match in pattern.finditer(content):
                 line_num = content[: match.start()].count("\n") + 1
+                remediation_steps = [
+                    f"Remove the skill '{skill_name}' if not trusted",
+                    "Review whether this pattern is needed for the skill's stated purpose",
+                    "Report to ClawHub if the skill is from marketplace",
+                    "Check other skills from the same author",
+                ]
+                if severity == FindingSeverity.CRITICAL:
+                    remediation_steps = [
+                        "Do NOT run this skill — it may be malicious",
+                        f"Remove the skill: rm -rf ~/.openclaw/skills/{skill_name}",
+                        "Report to ClawHub if the skill is from marketplace",
+                        "Check other skills from the same author",
+                        "Audit your system for signs of compromise",
+                    ]
                 findings.append(
                     Finding(
                         scanner=self.name,
@@ -517,6 +531,10 @@ class SkillAnalyzer(BaseScanner):
                         evidence=f"Match: '{match.group(0)[:80]}' at line {line_num}",
                         file_path=file_path,
                         line_number=line_num,
+                        remediation=Remediation(
+                            summary=f"Review or remove skill '{skill_name}'",
+                            steps=remediation_steps,
+                        ),
                         owasp_ids=["ASI03", "ASI05"],
                     )
                 )

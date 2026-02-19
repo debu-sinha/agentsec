@@ -260,6 +260,25 @@ def test_mixed_severity_with_many_lows(scorer):
     assert posture["grade"] in ("D", "F")
 
 
+def test_posture_score_includes_raw_and_severity_counts(scorer):
+    """Raw score and severity counts should be present in posture output."""
+    findings = [
+        _make_finding(FindingCategory.PLAINTEXT_SECRET, FindingSeverity.CRITICAL),
+        _make_finding(FindingCategory.PLAINTEXT_SECRET, FindingSeverity.CRITICAL),
+        _make_finding(FindingCategory.PLAINTEXT_SECRET, FindingSeverity.CRITICAL),
+        _make_finding(FindingCategory.NETWORK_EXPOSURE, FindingSeverity.HIGH),
+    ]
+    posture = scorer.compute_posture_score(findings)
+    assert "raw_score" in posture
+    assert "severity_counts" in posture
+    assert posture["severity_counts"]["critical"] == 3
+    assert posture["severity_counts"]["high"] == 1
+    # Raw score should be unclamped (100 - 45 - 7 = 48)
+    assert posture["raw_score"] == 48.0
+    # Capped score should be <= 20 (3+ crits)
+    assert posture["overall_score"] <= 20.0
+
+
 def test_owasp_category_metadata():
     cat = OwaspAgenticCategory.ASI01_AGENT_GOAL_HIJACK
     assert cat.value == "ASI01"
