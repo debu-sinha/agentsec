@@ -111,6 +111,11 @@ class Finding(BaseModel):
         description="Confidence this is a true positive (high/medium/low)",
     )
     title: str = Field(description="Short description of the finding", max_length=200)
+    impact: str | None = Field(
+        default=None,
+        max_length=65,
+        description="Plain-language consequence for non-experts (max 65 chars)",
+    )
     description: str = Field(description="Detailed explanation of the risk")
     evidence: str | None = Field(
         default=None,

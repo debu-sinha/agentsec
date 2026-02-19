@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentsec-ai"
-version = "0.4.4"
+version = "0.4.5"
 description = "Security scanner for AI agents and MCP servers. OWASP Agentic Top 10 mapping, SARIF output, CI/CD ready."
 readme = {file = "README.md", content-type = "text/markdown"}
 license = "Apache-2.0"

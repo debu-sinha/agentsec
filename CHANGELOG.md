@@ -2,6 +2,32 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.4.5] - 2026-02-19
+
+### UX Improvements
+
+- Add `impact` field to Finding model — plain-language consequence descriptions
+  (max 65 chars) answering "who can do what" for each finding
+- Add centralized impact mapping with 70+ regex patterns covering all four
+  scanner modules (installation, skill, MCP, credential)
+- Terminal reporter: show impact sub-lines below each finding in the table
+- Terminal reporter: cap findings table at 10 rows in default mode; hide
+  LOW/INFO severity findings; show "and N more. Use --verbose to see all."
+- Terminal reporter: replace raw OWASP codes (ASI01-ASI10) with human-readable
+  labels (Hijack, Agency, Supply, Poison, Secrets, Memory, Multi, Cascade,
+  Audit, Misalign)
+- Terminal reporter: add "Top Risk" callout panel highlighting the worst
+  CRITICAL finding with its impact description
+- Terminal reporter: show projected grade after auto-fix when fixable findings
+  exist (e.g., "After auto-fix: A (100/100)")
+- SARIF reporter: prepend impact description to SARIF message text when present
+- Wire `apply_impacts()` into CLI pipeline as post-processing step after
+  scanners run, before scoring and reporting
+
+### Stats
+
+- 392 tests passing (33 new UX/impact tests), 2 skipped, 4 xfailed
+
 ## [0.4.4] - 2026-02-18
 
 ### False Positive Hardening (Tier 4 — Expert Swarm)

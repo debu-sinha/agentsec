@@ -123,11 +123,15 @@ class SarifReporter:
         """Convert a Finding to a SARIF result."""
         rule_id = f"agentsec/{finding.scanner}/{finding.category.value}"
 
+        message_text = finding.description
+        if finding.impact:
+            message_text = f"{finding.impact}. {message_text}"
+
         result: dict[str, Any] = {
             "ruleId": rule_id,
             "ruleIndex": rule_index.get(rule_id, 0),
             "level": _SEVERITY_TO_SARIF_LEVEL[finding.severity],
-            "message": {"text": finding.description},
+            "message": {"text": message_text},
             "fingerprints": {
                 "agentsec/v1": finding.fingerprint,
             },

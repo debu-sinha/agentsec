@@ -14,6 +14,7 @@ from rich.table import Table
 from rich.text import Text
 
 from agentsec import __version__
+from agentsec.impacts import OWASP_LABELS
 from agentsec.models.findings import FindingConfidence, FindingSeverity
 from agentsec.models.report import ScanReport
 
@@ -69,16 +70,19 @@ class TerminalReporter:
             # 3. Severity spectrum bar
             self._render_severity_bar(report)
 
-            # 4. Findings table
+            # 4. Top Risk callout (worst finding)
+            self._render_top_risk(report)
+
+            # 5. Findings table
             self._render_findings_table(report)
 
-            # 5. Verbose: detailed findings + OWASP posture
+            # 6. Verbose: detailed findings + OWASP posture
             if self.verbose:
                 self._render_details(report)
                 if posture:
                     self._render_posture(posture)
 
-            # 6. Next Steps — actionable remediation
+            # 7. Next Steps — actionable remediation
             self._render_next_steps(report)
         else:
             self._render_clean_scan()
@@ -103,10 +107,26 @@ class TerminalReporter:
         grade_color = _GRADE_COLORS.get(grade, "white")
         summary = report.summary
 
-        # Grade line
+        # Grade line with projected improvement
         grade_text = Text()
         grade_text.append("Security Grade: ", style=_DIM)
         grade_text.append(f" {grade} ", style=grade_color)
+
+        # Show projected grade after auto-fix if there are fixable findings
+        auto_fixable = [f for f in report.findings if f.remediation and f.remediation.automated]
+        if auto_fixable and grade != "A":
+            projected = self._compute_projected_grade(report, posture)
+            if projected and projected["grade"] != grade:
+                proj_color = _GRADE_COLORS.get(projected["grade"], "white")
+                grade_text.append(" -> After auto-fix: ", style=_DIM)
+                grade_text.append(
+                    f" {projected['grade']} ",
+                    style=proj_color,
+                )
+                grade_text.append(
+                    f" ({projected['overall_score']}/100)",
+                    style=proj_color,
+                )
         self.console.print(grade_text)
 
         # Score bar
@@ -169,17 +189,72 @@ class TerminalReporter:
         self.console.print("  ".join(legend_parts))
         self.console.print()
 
+    def _render_top_risk(self, report: ScanReport) -> None:
+        """Highlight the single worst finding in a prominent callout."""
+        critical_findings = [f for f in report.findings if f.severity == FindingSeverity.CRITICAL]
+        if not critical_findings:
+            return
+
+        worst = critical_findings[0]
+        msg = worst.title
+        if worst.impact:
+            msg += f"\n[{_DIM}]{worst.impact}[/{_DIM}]"
+
+        self.console.print(
+            Panel(
+                f"[bold red]{msg}[/bold red]",
+                title="[bold red]Top Risk[/bold red]",
+                border_style="red",
+                padding=(0, 1),
+            )
+        )
+
+    def _compute_projected_grade(
+        self, report: ScanReport, posture: dict[str, Any] | None
+    ) -> dict[str, Any] | None:
+        """Compute what the grade would be after running auto-fix."""
+        if not posture:
+            return None
+
+        remaining = [f for f in report.findings if not (f.remediation and f.remediation.automated)]
+        if not remaining:
+            return {"grade": "A", "overall_score": 100.0}
+
+        try:
+            from agentsec.analyzers.owasp_scorer import OwaspScorer
+
+            scorer = OwaspScorer()
+            return scorer.compute_posture_score(remaining)
+        except Exception:
+            return None
+
     def _render_findings_table(self, report: ScanReport) -> None:
-        """Compact findings table with OWASP tags and auto-fix indicator."""
+        """Compact findings table with impact sub-lines, OWASP labels, and overflow cap."""
         sorted_findings = sorted(report.findings, key=lambda f: f.severity_rank)
+
+        # In default mode, hide LOW/INFO and cap at 10 rows
+        max_rows = 10
+        if not self.verbose:
+            visible = [
+                f
+                for f in sorted_findings
+                if f.severity not in (FindingSeverity.LOW, FindingSeverity.INFO)
+            ]
+            overflow = len(sorted_findings) - len(visible)
+            if len(visible) > max_rows:
+                overflow += len(visible) - max_rows
+                visible = visible[:max_rows]
+        else:
+            visible = sorted_findings
+            overflow = 0
 
         table = Table(show_lines=False, pad_edge=True, box=None, show_header=True)
         table.add_column("Sev", width=4)
         table.add_column("Finding", min_width=40, no_wrap=False)
         table.add_column("Fix", width=4, justify="center")
-        table.add_column("OWASP", width=6, justify="right")
+        table.add_column("OWASP", width=8, justify="right")
 
-        for finding in sorted_findings:
+        for finding in visible:
             sev_color = _SEVERITY_COLORS[finding.severity]
             sev_text = Text(_SEVERITY_LABELS[finding.severity], style=sev_color)
 
@@ -195,13 +270,25 @@ class TerminalReporter:
             if finding.remediation and finding.remediation.automated:
                 fix_tag = "[green]AUTO[/green]"
 
+            # OWASP label instead of bare code
             owasp = ""
             if finding.owasp_ids:
-                owasp = f"[bold white on dark_red] {finding.owasp_ids[0]} [/bold white on dark_red]"
+                code = finding.owasp_ids[0]
+                label = OWASP_LABELS.get(code, code)
+                owasp = f"[bold white on dark_red] {label} [/bold white on dark_red]"
 
             table.add_row(sev_text, title, fix_tag, owasp)
 
+            # Impact sub-line
+            if finding.impact:
+                table.add_row("", f"[{_DIM}]-> {finding.impact}[/{_DIM}]", "", "")
+
         self.console.print(table)
+
+        if overflow > 0:
+            self.console.print(
+                f"  [{_DIM}]... and {overflow} more. Use --verbose to see all.[/{_DIM}]"
+            )
 
     def _render_next_steps(self, report: ScanReport) -> None:
         """Actionable next steps — split into auto-fixable and manual."""

@@ -23,6 +23,7 @@ from rich.table import Table
 from agentsec import __version__
 from agentsec.analyzers.owasp_scorer import OwaspScorer
 from agentsec.hardener import HardenResult
+from agentsec.impacts import apply_impacts
 from agentsec.models.config import AgentsecConfig, ScannerConfig, ScanTarget
 from agentsec.models.findings import FindingSeverity
 from agentsec.models.report import ScanReport
@@ -230,7 +231,8 @@ def scan(
         )
         sys.exit(3)
 
-    # Score posture
+    # Apply impact descriptions and score posture
+    apply_impacts(report.findings)
     scorer = OwaspScorer()
     posture = scorer.compute_posture_score(report.findings)
 
