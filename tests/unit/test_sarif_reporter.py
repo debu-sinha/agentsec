@@ -207,9 +207,9 @@ def test_file_paths_are_relative(reporter):
     report = _make_report([finding])
     result = json.loads(reporter.render(report))
 
-    uri = result["runs"][0]["results"][0]["locations"][0]["physicalLocation"][
-        "artifactLocation"
-    ]["uri"]
+    uri = result["runs"][0]["results"][0]["locations"][0]["physicalLocation"]["artifactLocation"][
+        "uri"
+    ]
     # Should be relative to /tmp/test (the target_path)
     assert not uri.startswith("/tmp/test")
     assert "src/config.py" in uri
