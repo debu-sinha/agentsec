@@ -285,7 +285,7 @@ class SkillAnalyzer(BaseScanner):
                         if p.is_dir():
                             dirs.append(p)
             except (json.JSONDecodeError, OSError):
-                pass
+                return dirs  # Cannot read config; use defaults
         return dirs
 
     def _analyze_skill(self, skill_path: Path, context: ScanContext) -> list[Finding]:
@@ -483,8 +483,10 @@ class SkillAnalyzer(BaseScanner):
                                     remediation=Remediation(
                                         summary=f"Review whether '{imp_name}' is necessary",
                                         steps=[
-                                            "Check if the skill's functionality "
-                                            "requires this import",
+                                            (
+                                                "Check if the skill's functionality "
+                                                "requires this import"
+                                            ),
                                             "Consider sandboxing the skill if the import is needed",
                                         ],
                                     ),
@@ -815,8 +817,10 @@ class SkillAnalyzer(BaseScanner):
                             remediation=Remediation(
                                 summary="Add disable-model-invocation: true to skill frontmatter",
                                 steps=[
-                                    "Add 'disable-model-invocation: true' "
-                                    "to the skill's YAML frontmatter",
+                                    (
+                                        "Add 'disable-model-invocation: true' "
+                                        "to the skill's YAML frontmatter"
+                                    ),
                                     "Or review whether the skill truly needs these capabilities",
                                 ],
                                 references=["https://docs.openclaw.ai/tools/skills"],

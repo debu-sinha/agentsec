@@ -64,13 +64,11 @@ class BaseScanner(ABC):
     @abstractmethod
     def name(self) -> str:
         """Unique scanner identifier used in reports and config."""
-        ...
 
     @property
     @abstractmethod
     def description(self) -> str:
         """Human-readable description of what this scanner checks."""
-        ...
 
     @abstractmethod
     def scan(self, context: ScanContext) -> list[Finding]:
@@ -82,7 +80,6 @@ class BaseScanner(ABC):
         Returns:
             List of Finding objects discovered by this scanner.
         """
-        ...
 
     def run(self, context: ScanContext) -> list[Finding]:
         """Execute scan with timing and error handling."""

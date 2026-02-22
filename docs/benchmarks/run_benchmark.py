@@ -11,7 +11,6 @@ Usage:
 from __future__ import annotations
 
 import json
-import os
 import platform
 import statistics
 import sys
@@ -24,11 +23,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
 from agentsec import __version__
-from agentsec.cli import main as cli_main
-from agentsec.gate import _check_blocklist, _check_npm_install_hooks, gate_check
+from agentsec.analyzers.owasp_scorer import OwaspScorer
+from agentsec.gate import _check_blocklist, _check_npm_install_hooks
 from agentsec.models.config import AgentsecConfig, ScannerConfig, ScanTarget
 from agentsec.orchestrator import run_scan
-from agentsec.analyzers.owasp_scorer import OwaspScorer
 
 
 # ---------------------------------------------------------------------------
@@ -756,9 +754,6 @@ def run_harden_test(base: Path) -> dict:
     pre_report = run_scan(pre_config)
     scorer = OwaspScorer()
     pre_posture = scorer.compute_posture_score(pre_report.findings)
-
-    pre_critical = sum(1 for f in pre_report.findings if f.severity.value == "critical")
-    pre_high = sum(1 for f in pre_report.findings if f.severity.value == "high")
 
     results = {}
     for profile in ["workstation", "vps", "public-bot"]:

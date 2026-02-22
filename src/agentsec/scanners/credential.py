@@ -589,8 +589,10 @@ class CredentialScanner(BaseScanner):
                                 f"Remove the plaintext value from {file_path.name}",
                                 "Store in OS keychain or environment variable",
                                 "Add file to .gitignore if not already excluded",
-                                "Check git history with git log -p --all -S '<value>'; "
-                                "purge with git filter-repo if committed",
+                                (
+                                    "Check git history with git log -p --all -S '<value>'; "
+                                    "purge with git filter-repo if committed"
+                                ),
                             ],
                         ),
                         owasp_ids=["ASI05"],
@@ -691,8 +693,10 @@ class CredentialScanner(BaseScanner):
                                 f"Remove the plaintext value from {file_path.name}",
                                 "Store in OS keychain or environment variable",
                                 "Add file to .gitignore if not already excluded",
-                                "Check git history with git log -p --all -S '<value>'; "
-                                "purge with git filter-repo if committed",
+                                (
+                                    "Check git history with git log -p --all -S '<value>'; "
+                                    "purge with git filter-repo if committed"
+                                ),
                             ],
                         ),
                         owasp_ids=["ASI05"],

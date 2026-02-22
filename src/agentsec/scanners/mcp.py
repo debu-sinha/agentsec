@@ -175,7 +175,7 @@ class McpScanner(BaseScanner):
                     if mcp_section:
                         configs.append((main_config, {"mcpServers": mcp_section}))
                 except (json.JSONDecodeError, OSError):
-                    pass
+                    continue  # Skip unreadable config files
 
         for candidate in candidates:
             if candidate.exists():
@@ -482,8 +482,10 @@ class McpScanner(BaseScanner):
                         remediation=Remediation(
                             summary=(f"Review the changed tool description for '{tool_name}'"),
                             steps=[
-                                "Compare the current tool description against "
-                                "the previously approved version",
+                                (
+                                    "Compare the current tool description against "
+                                    "the previously approved version"
+                                ),
                                 "If the change is legitimate, update pins with: agentsec pin-tools",
                                 "If unexpected, disable the MCP server and investigate the source",
                                 "Consider running the MCP server in a sandboxed environment",
@@ -603,8 +605,10 @@ class McpScanner(BaseScanner):
                                 remediation=Remediation(
                                     summary=f"Validate and restrict '{prop_name}' input",
                                     steps=[
-                                        "Add input validation with an allowlist "
-                                        "of permitted values",
+                                        (
+                                            "Add input validation with an allowlist "
+                                            "of permitted values"
+                                        ),
                                         "Implement sandboxing for command/code execution",
                                         "Add rate limiting and audit logging for this tool",
                                     ],

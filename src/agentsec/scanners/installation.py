@@ -412,7 +412,7 @@ class InstallationScanner(BaseScanner):
                             )
                         )
                 except OSError:
-                    pass
+                    continue  # Skip files we cannot stat
 
         return findings
 
@@ -1645,7 +1645,7 @@ class InstallationScanner(BaseScanner):
                     if version:
                         return str(version)
                 except (json.JSONDecodeError, OSError):
-                    pass
+                    return None  # Cannot read config; version unknown
 
         pkg_json = context.target_path / "node_modules" / "openclaw" / "package.json"
         if not pkg_json.exists():

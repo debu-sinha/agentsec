@@ -114,7 +114,7 @@ def _build_snapshot(paths: list[Path]) -> dict[Path, float]:
                     if child.is_file():
                         snapshot[child] = child.stat().st_mtime
             except OSError:
-                pass
+                continue  # Skip directories we cannot read
     return snapshot
 
 

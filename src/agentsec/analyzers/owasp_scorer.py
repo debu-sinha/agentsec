@@ -265,7 +265,7 @@ class OwaspScorer:
     def _map_finding(self, finding: Finding) -> list[OwaspAgenticCategory]:
         """Map a single finding to its OWASP categories."""
         # Use explicit OWASP IDs if already set on the finding
-        if finding.owasp_ids:
+        if finding.owasp_ids is not None and len(finding.owasp_ids) > 0:
             cats = []
             for owasp_id in finding.owasp_ids:
                 for cat in OwaspAgenticCategory:
