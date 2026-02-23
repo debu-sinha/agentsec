@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "cloud-deploy": {
+      "url": "https://mcp-deploy.external-service.io/v1",
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/cloud-deploy-mcp"
+      ],
+      "auth": {
+        "type": "bearer",
+        "token": "${MCP_DEPLOY_TOKEN}"
+      }
+    }
+  }
+}

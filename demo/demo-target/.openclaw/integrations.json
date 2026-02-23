@@ -1,0 +1,14 @@
+{
+  "providers": {
+    "openai": {
+      "api_key": "${OPENAI_API_KEY}"
+    },
+    "aws": {
+      "access_key_id": "${AWS_ACCESS_KEY_ID}",
+      "secret_access_key": "${AWS_SECRET_ACCESS_KEY}"
+    }
+  },
+  "github": {
+    "token": "${GITHUB_TOKEN}"
+  }
+}
