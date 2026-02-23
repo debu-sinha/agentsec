@@ -80,6 +80,7 @@ def run_scan(config: AgentsecConfig) -> ScanReport:
         agent_type=agent_type,
         scan_history=config.scan_history,
         history_depth=config.history_depth,
+        metadata={"verify": config.verify_secrets} if config.verify_secrets else {},
     )
 
     # Run all enabled scanners

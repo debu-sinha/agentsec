@@ -69,3 +69,7 @@ class AgentsecConfig(BaseModel):
         default=100,
         description="Number of git commits to scan when --scan-history is enabled",
     )
+    verify_secrets: bool = Field(
+        default=False,
+        description="Actively verify discovered credentials via read-only API probes",
+    )

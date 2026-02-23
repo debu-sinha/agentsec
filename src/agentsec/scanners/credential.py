@@ -28,6 +28,7 @@ from agentsec.models.findings import (
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
 from agentsec.utils import sanitize_secret
+from agentsec.utils.verifier import compute_passive_hints, verify_secret
 
 logger = logging.getLogger(__name__)
 
@@ -457,6 +458,20 @@ class CredentialScanner(BaseScanner):
             if f.fingerprint not in seen:
                 seen.add(f.fingerprint)
                 unique_findings.append(f)
+
+        # Phase 5: Enrich findings with passive verification hints
+        for f in unique_findings:
+            if f.category == FindingCategory.EXPOSED_TOKEN:
+                hints = compute_passive_hints(
+                    f.file_path,
+                    f.line_number,
+                    f.metadata.get("detector", f.title),
+                )
+                f.metadata.update(hints)
+
+        # Phase 6: Active verification (opt-in only via --verify)
+        if context.metadata.get("verify"):
+            self._run_active_verification(unique_findings, target)
 
         return unique_findings
 
@@ -944,6 +959,64 @@ class CredentialScanner(BaseScanner):
             findings.append(finding)
 
         return findings
+
+    def _run_active_verification(self, findings: list[Finding], target: Path) -> None:
+        """Probe discovered credentials against provider APIs (opt-in).
+
+        Mutates finding metadata in-place to add ``verified`` status.
+        Only checks credentials from the extra-pattern scanner (which
+        retains the plaintext value in the evidence field).
+        """
+        for f in findings:
+            if f.category != FindingCategory.EXPOSED_TOKEN:
+                continue
+            # Extract the secret type from metadata or title
+            secret_type = f.metadata.get("detector") or ""
+            for pattern_type, _, _, _ in _EXTRA_PATTERNS:
+                if pattern_type in f.title:
+                    secret_type = pattern_type
+                    break
+            if not secret_type:
+                continue
+
+            # Try to recover the plaintext from the evidence field
+            # Format: "Value: sk-pr...ngth99 (line 3)" or hash-based
+            evidence = f.evidence or ""
+            if not evidence.startswith("Value: "):
+                f.metadata["verified"] = "unknown"
+                f.metadata["verify_method"] = "no_plaintext_available"
+                continue
+
+            # We cannot recover the full secret from sanitized evidence.
+            # Active verification requires the raw secret, which we only have
+            # during scanning.  For now, re-read the file and extract.
+            if not f.file_path or not f.line_number:
+                f.metadata["verified"] = "unknown"
+                f.metadata["verify_method"] = "no_file_location"
+                continue
+
+            try:
+                file_path = Path(f.file_path)
+                if not file_path.is_absolute():
+                    file_path = target / file_path
+                content = file_path.read_text(errors="replace")
+                lines = content.splitlines()
+                if f.line_number - 1 < len(lines):
+                    line = lines[f.line_number - 1]
+                else:
+                    continue
+            except OSError:
+                continue
+
+            # Re-match the pattern on the specific line
+            for pattern_type, pattern, _, _ in _EXTRA_PATTERNS:
+                if pattern_type != secret_type:
+                    continue
+                m = pattern.search(line)
+                if m:
+                    result = verify_secret(secret_type, m.group(0))
+                    f.metadata.update(result)
+                    break
 
     @staticmethod
     def _is_placeholder(value: str) -> bool:

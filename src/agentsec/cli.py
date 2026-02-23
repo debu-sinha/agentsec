@@ -176,6 +176,12 @@ def main() -> None:
     show_default=True,
     help="Number of git commits to scan (requires --scan-history)",
 )
+@click.option(
+    "--verify",
+    is_flag=True,
+    default=False,
+    help="Actively verify discovered credentials via safe, read-only API probes",
+)
 def scan(
     target: str,
     output: str,
@@ -190,6 +196,7 @@ def scan(
     show_baseline: bool,
     scan_history: bool,
     history_depth: int,
+    verify: bool,
 ) -> None:
     """Scan an agent installation for security vulnerabilities.
 
@@ -243,6 +250,7 @@ def scan(
         policy_path=Path(policy) if policy else None,
         scan_history=scan_history,
         history_depth=history_depth,
+        verify_secrets=verify,
     )
 
     # Run the scan with progress spinner
