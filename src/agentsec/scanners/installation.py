@@ -989,12 +989,6 @@ class InstallationScanner(BaseScanner):
 
         # --- CTO-002: group:runtime enabled for untrusted routes ---
         allow_list = tools_config.get("allow", [])
-        groups_config = tools_config.get("groups", {})
-        if isinstance(groups_config, dict):
-            for group_name, enabled in groups_config.items():
-                if enabled and group_name.lower() in ("runtime", "all"):
-                    allow_list = list(allow_list) if isinstance(allow_list, list) else []
-                    allow_list.append(f"group:{group_name}")
         if isinstance(allow_list, list):
             runtime_groups = {"group:runtime", "group:all"}
             enabled_risky = runtime_groups & {str(x) for x in allow_list}

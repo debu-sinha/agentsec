@@ -76,13 +76,9 @@ _SUSPICIOUS_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = 
     ),
     (
         "Environment variable harvesting",
-        re.compile(
-            r"os\.environ(?:\[|\.get\s*\(|\.items\s*\(|\.keys\s*\(|\.values\s*\()"
-            r"|dict\s*\(\s*os\.environ\s*\)",
-            re.I,
-        ),
+        re.compile(r"os\.environ(?:\[|\.get\s*\().*(?:KEY|TOKEN|SECRET|PASSWORD|CRED)", re.I),
         FindingSeverity.HIGH,
-        "Accessing environment variables — may harvest credentials",
+        "Accessing credential environment variables",
     ),
     (
         "File read of sensitive paths",

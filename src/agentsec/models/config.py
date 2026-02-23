@@ -53,10 +53,6 @@ class AgentsecConfig(BaseModel):
         default="high",
         description="Exit non-zero if findings at this severity or above exist (CI mode)",
     )
-    policy_path: Path | None = Field(
-        default=None,
-        description="YAML policy file for enforcing organizational security rules",
-    )
     max_file_size_mb: int = Field(
         default=50,
         description="Skip files larger than this (avoids OOM on huge binaries)",
