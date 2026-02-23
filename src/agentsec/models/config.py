@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -22,7 +22,7 @@ class ScannerConfig(BaseModel):
     """Per-scanner configuration knobs."""
 
     enabled: bool = True
-    severity_threshold: str = Field(
+    severity_threshold: Literal["critical", "high", "medium", "low", "info"] = Field(
         default="info",
         description="Minimum severity to report: critical, high, medium, low, info",
     )
@@ -41,7 +41,7 @@ class AgentsecConfig(BaseModel):
             "credential": ScannerConfig(),
         }
     )
-    output_format: str = Field(
+    output_format: Literal["terminal", "json", "sarif"] = Field(
         default="terminal",
         description="Output format: terminal, json, sarif",
     )

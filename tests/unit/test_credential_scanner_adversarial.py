@@ -594,7 +594,7 @@ class TestFN05_NewProviderFormats:
         ("provider", "key"),
         [
             ("Mistral AI", "mist_aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT"),
-            ("Fireworks AI", "fw_aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT"),
+            # Fireworks AI now detected via fw_ prefix pattern (resolved in v0.4.5)
             ("Deepseek", "dsk_aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT"),
             ("Together AI", "tok_aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT"),
             ("Perplexity", "pplx-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT"),
@@ -604,7 +604,6 @@ class TestFN05_NewProviderFormats:
         ],
         ids=[
             "mistral",
-            "fireworks",
             "deepseek",
             "together",
             "perplexity",

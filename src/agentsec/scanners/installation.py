@@ -204,6 +204,13 @@ class InstallationScanner(BaseScanner):
         findings.extend(self._scan_plugin_config(context))
         findings.extend(self._scan_ssrf_config(context))
         findings.extend(self._scan_safety_scanner_config(context))
+        findings.extend(self._scan_memory_config(context))
+        findings.extend(self._scan_multi_agent_config(context))
+        findings.extend(self._scan_audit_config(context))
+
+        # Pick up deferred findings (e.g., malformed JSON detected during config loading)
+        deferred = context.metadata.pop("_deferred_findings", [])
+        findings.extend(deferred)
 
         return findings
 
@@ -1605,6 +1612,310 @@ class InstallationScanner(BaseScanner):
         return findings
 
     # -----------------------------------------------------------------------
+    # Memory config checks — ASI06 (CMM-001, CMM-002)
+    # -----------------------------------------------------------------------
+
+    def _scan_memory_config(self, context: ScanContext) -> list[Finding]:
+        """Check memory file permissions and integrity settings."""
+        findings: list[Finding] = []
+        target = context.target_path
+
+        # --- CMM-001: Memory files writable by non-owner processes ---
+        memory_files = ["memory.md", "memory.json", "conversation_history.json"]
+        memory_dirs = [".openclaw", ".clawdbot"]
+
+        for dir_name in memory_dirs:
+            mem_dir = target / dir_name
+            if not mem_dir.is_dir():
+                continue
+            for mem_name in memory_files:
+                mem_path = mem_dir / mem_name
+                if not mem_path.exists():
+                    continue
+                try:
+                    mode = mem_path.stat().st_mode
+                    world_writable = bool(mode & stat.S_IWOTH)
+                    group_writable = bool(mode & stat.S_IWGRP)
+                    if world_writable:
+                        findings.append(
+                            Finding(
+                                scanner=self.name,
+                                category=FindingCategory.INSECURE_PERMISSIONS,
+                                severity=FindingSeverity.HIGH,
+                                title=f"Memory file world-writable: {dir_name}/{mem_name}",
+                                description=(
+                                    f"The memory file '{mem_path}' is writable by all users. "
+                                    f"Any local process can inject false memories or instructions "
+                                    f"into the agent's persistent context, enabling delayed "
+                                    f"prompt injection attacks."
+                                ),
+                                check_id="CMM-001",
+                                evidence=f"Permissions: {oct(mode)[-3:]}",
+                                file_path=mem_path,
+                                remediation=Remediation(
+                                    summary="Restrict memory file to owner-only write",
+                                    steps=[f"chmod 600 {shlex.quote(str(mem_path))}"],
+                                    automated=True,
+                                    command=f"chmod 600 {shlex.quote(str(mem_path))}",
+                                ),
+                                owasp_ids=["ASI06", "ASI04"],
+                            )
+                        )
+                    elif group_writable:
+                        findings.append(
+                            Finding(
+                                scanner=self.name,
+                                category=FindingCategory.INSECURE_PERMISSIONS,
+                                severity=FindingSeverity.MEDIUM,
+                                title=f"Memory file group-writable: {dir_name}/{mem_name}",
+                                description=(
+                                    f"The memory file '{mem_path}' is writable by group members. "
+                                    f"Group users can modify agent memory to influence behavior."
+                                ),
+                                check_id="CMM-001",
+                                evidence=f"Permissions: {oct(mode)[-3:]}",
+                                file_path=mem_path,
+                                remediation=Remediation(
+                                    summary="Restrict memory file to owner-only write",
+                                    steps=[f"chmod 600 {shlex.quote(str(mem_path))}"],
+                                    automated=True,
+                                    command=f"chmod 600 {shlex.quote(str(mem_path))}",
+                                ),
+                                owasp_ids=["ASI06"],
+                            )
+                        )
+                except OSError:
+                    continue
+
+        # --- CMM-002: Memory persistence without integrity verification ---
+        config_data = self._load_main_config(context)
+        if config_data is not None:
+            config_path = self._get_main_config_path(context)
+            memory_cfg = config_data.get("memory", {})
+            persistence_raw = memory_cfg.get("persistence", memory_cfg.get("store", {}))
+            persistence = persistence_raw if isinstance(persistence_raw, dict) else {}
+
+            has_memory = bool(memory_cfg) or any(
+                (target / d / m).exists() for d in memory_dirs for m in memory_files
+            )
+
+            if has_memory:
+                integrity = memory_cfg.get("integrity", persistence.get("integrity", {}))
+                checksums = integrity.get("checksums", integrity.get("verify", False))
+                if not checksums:
+                    findings.append(
+                        Finding(
+                            scanner=self.name,
+                            category=FindingCategory.CONFIG_DRIFT,
+                            severity=FindingSeverity.MEDIUM,
+                            title="Memory persistence without integrity verification",
+                            description=(
+                                "Agent memory files are persisted but no integrity "
+                                "verification (checksums) is configured. Memory can be "
+                                "silently tampered with to plant delayed instructions or "
+                                "false context that activates in future sessions."
+                            ),
+                            check_id="CMM-002",
+                            file_path=config_path,
+                            remediation=Remediation(
+                                summary="Enable memory integrity checksums",
+                                steps=[
+                                    "Set memory.integrity.checksums to true in config",
+                                    "Use file integrity monitoring for memory files",
+                                    "Consider version-controlling memory files",
+                                ],
+                            ),
+                            owasp_ids=["ASI06", "ASI04"],
+                        )
+                    )
+
+        return findings
+
+    # -----------------------------------------------------------------------
+    # Multi-agent config checks — ASI07 (CMA-001, CMA-002)
+    # -----------------------------------------------------------------------
+
+    def _scan_multi_agent_config(self, context: ScanContext) -> list[Finding]:
+        """Check multi-agent authentication and spawning policies."""
+        findings: list[Finding] = []
+        config_data = self._load_main_config(context)
+        if config_data is None:
+            return findings
+
+        config_path = self._get_main_config_path(context)
+        agents_cfg = config_data.get("agents", {})
+
+        # Only check multi-agent settings if agents are configured
+        if not agents_cfg:
+            return findings
+
+        # --- CMA-001: No inter-agent authentication configured ---
+        agent_auth = agents_cfg.get("auth", agents_cfg.get("authentication", {}))
+        message_signing = agents_cfg.get("messageSigning", agents_cfg.get("message_signing", {}))
+
+        if not agent_auth and not message_signing:
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.MISSING_AUTH,
+                    severity=FindingSeverity.HIGH,
+                    title="No inter-agent authentication configured",
+                    description=(
+                        "Multi-agent configuration is present but no authentication "
+                        "or message signing is configured between agents. A compromised "
+                        "agent can impersonate trusted peers to escalate privileges or "
+                        "propagate malicious instructions laterally."
+                    ),
+                    check_id="CMA-001",
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary="Configure inter-agent authentication",
+                        steps=[
+                            "Enable agents.auth with token or certificate-based auth",
+                            "Enable agents.messageSigning for tamper-evident messages",
+                            "Apply zero-trust principles between agents",
+                        ],
+                    ),
+                    owasp_ids=["ASI07", "ASI02"],
+                )
+            )
+
+        # --- CMA-002: Unrestricted agent spawning policy ---
+        spawn_policy = agents_cfg.get("spawnPolicy", agents_cfg.get("spawn_policy", ""))
+        max_agents = agents_cfg.get("maxAgents", agents_cfg.get("max_agents", None))
+
+        if spawn_policy in ("open", "unrestricted", ""):
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.INSECURE_DEFAULT,
+                    severity=FindingSeverity.HIGH,
+                    title="Unrestricted agent spawning policy",
+                    description=(
+                        "The agent spawning policy is unrestricted, allowing any agent "
+                        "to create new sub-agents without limit. An attacker who "
+                        "compromises one agent can spawn additional agents to amplify "
+                        "the attack surface or consume resources."
+                    ),
+                    check_id="CMA-002",
+                    evidence=f"agents.spawnPolicy={spawn_policy or 'unset'}",
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary="Restrict agent spawning policy",
+                        steps=[
+                            "Set agents.spawnPolicy to 'allowlist' or 'restricted'",
+                            "Set agents.maxAgents to a reasonable limit",
+                            "Define explicit agent roles and capabilities",
+                        ],
+                    ),
+                    owasp_ids=["ASI07", "ASI08"],
+                )
+            )
+
+        if max_agents is None:
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.INSECURE_DEFAULT,
+                    severity=FindingSeverity.MEDIUM,
+                    title="No maximum agent count configured",
+                    description=(
+                        "No agents.maxAgents limit is configured. Without a cap, a "
+                        "compromised or runaway agent can spawn unlimited sub-agents, "
+                        "consuming system resources and amplifying attack blast radius."
+                    ),
+                    check_id="CMA-002",
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary="Set a maximum agent count",
+                        steps=["Set agents.maxAgents to a reasonable limit (e.g., 5-10)"],
+                    ),
+                    owasp_ids=["ASI07", "ASI08"],
+                )
+            )
+
+        return findings
+
+    # -----------------------------------------------------------------------
+    # Audit logging checks — ASI09 (CAL-001, CAL-002)
+    # -----------------------------------------------------------------------
+
+    def _scan_audit_config(self, context: ScanContext) -> list[Finding]:
+        """Check audit logging and log integrity settings."""
+        findings: list[Finding] = []
+        config_data = self._load_main_config(context)
+        if config_data is None:
+            return findings
+
+        config_path = self._get_main_config_path(context)
+
+        # --- CAL-001: Audit logging disabled or not configured ---
+        logging_cfg = config_data.get("logging", config_data.get("audit", {}))
+        audit_enabled = logging_cfg.get("enabled", logging_cfg.get("audit", None))
+        audit_level = logging_cfg.get("level", "")
+
+        if audit_enabled is False or (not logging_cfg and not audit_level):
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.INSECURE_CONFIG,
+                    severity=FindingSeverity.HIGH,
+                    title="Audit logging disabled or not configured",
+                    description=(
+                        "Audit logging is not enabled. Without audit logs, agent actions "
+                        "cannot be attributed, investigated, or used for incident response. "
+                        "Attackers can exploit the agent with no forensic trail."
+                    ),
+                    check_id="CAL-001",
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary="Enable audit logging for all agent actions",
+                        steps=[
+                            "Set logging.enabled to true",
+                            "Set logging.level to 'info' or 'debug'",
+                            "Configure log output to a persistent, tamper-resistant store",
+                        ],
+                    ),
+                    owasp_ids=["ASI09"],
+                )
+            )
+
+        # --- CAL-002: No log integrity protection ---
+        if logging_cfg:
+            integrity = logging_cfg.get("integrity", {})
+            signing = integrity.get("signing", integrity.get("sign", False))
+            append_only = integrity.get("appendOnly", integrity.get("append_only", False))
+            remote_store = logging_cfg.get("remote", logging_cfg.get("destination", ""))
+
+            if not signing and not append_only and not remote_store:
+                findings.append(
+                    Finding(
+                        scanner=self.name,
+                        category=FindingCategory.INSECURE_CONFIG,
+                        severity=FindingSeverity.MEDIUM,
+                        title="No log integrity protection configured",
+                        description=(
+                            "Audit logs have no integrity protection (no signing, no "
+                            "append-only mode, no remote forwarding). An attacker who "
+                            "gains access can delete or modify logs to cover their tracks."
+                        ),
+                        check_id="CAL-002",
+                        file_path=config_path,
+                        remediation=Remediation(
+                            summary="Add log integrity protection",
+                            steps=[
+                                "Enable logging.integrity.signing for tamper evidence",
+                                "Enable logging.integrity.appendOnly for immutable logs",
+                                "Forward logs to a remote SIEM or log aggregator",
+                            ],
+                        ),
+                        owasp_ids=["ASI09"],
+                    )
+                )
+
+        return findings
+
+    # -----------------------------------------------------------------------
     # Helper methods
     # -----------------------------------------------------------------------
 
@@ -1630,7 +1941,39 @@ class InstallationScanner(BaseScanner):
             data: dict = json.loads(config_path.read_text())
             context.metadata[cache_key] = data
             return data
-        except (json.JSONDecodeError, OSError):
+        except json.JSONDecodeError:
+            logger.warning("Malformed JSON in config: %s", config_path)
+            # Record a finding for malformed config (possible tampering)
+            malformed_key = "_malformed_config_reported"
+            if malformed_key not in context.metadata:
+                context.metadata[malformed_key] = True
+                context.metadata.setdefault("_deferred_findings", []).append(
+                    Finding(
+                        scanner="installation",
+                        category=FindingCategory.CONFIG_DRIFT,
+                        severity=FindingSeverity.MEDIUM,
+                        title=f"Malformed JSON in config: {config_path.name}",
+                        description=(
+                            f"The config file '{config_path.name}' contains invalid JSON "
+                            f"and could not be parsed. A corrupted config file may indicate "
+                            f"tampering or incomplete edits. All config-dependent checks are "
+                            f"skipped for this file."
+                        ),
+                        file_path=config_path,
+                        remediation=Remediation(
+                            summary="Fix or regenerate the config file",
+                            steps=[
+                                f"Validate JSON syntax: python -m json.tool {config_path.name}",
+                                "Compare against a known-good backup",
+                                "Regenerate with: openclaw config reset",
+                            ],
+                        ),
+                        owasp_ids=["ASI04", "ASI06"],
+                    )
+                )
+            context.metadata[cache_key] = None
+            return None
+        except OSError:
             context.metadata[cache_key] = None
             return None
 

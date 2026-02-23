@@ -298,7 +298,7 @@ def _download_and_scan_npm(package_name: str, temp_dir: str) -> list[Finding]:
     # Use npm pack to download tarball without running install scripts
     try:
         result = subprocess.run(
-            ["npm", "pack", package_name, "--pack-destination", temp_dir],
+            ["npm", "pack", "--", package_name, "--pack-destination", temp_dir],
             capture_output=True,
             text=True,
             timeout=60,
@@ -345,6 +345,7 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
                 ":all:",
                 "-d",
                 temp_dir,
+                "--",
                 package_name,
             ],
             capture_output=True,
@@ -355,7 +356,7 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
         if result.returncode != 0:
             # Try with binary wheels as fallback
             result = subprocess.run(
-                ["pip", "download", "--no-deps", "-d", temp_dir, package_name],
+                ["pip", "download", "--no-deps", "-d", temp_dir, "--", package_name],
                 capture_output=True,
                 text=True,
                 timeout=120,
@@ -385,19 +386,36 @@ def _download_and_scan_pip(package_name: str, temp_dir: str) -> list[Finding]:
     return findings
 
 
+_MAX_EXTRACT_SIZE = 500 * 1024 * 1024  # 500 MB
+_MAX_EXTRACT_MEMBERS = 50_000
+
+
 def _extract_tar_archive(tar: tarfile.TarFile, extract_dir: Path) -> None:
     """Extract tar archive safely across supported Python versions.
 
     Python 3.12+ supports tarfile's built-in filter-based extraction.
     For older runtimes, validate members manually to block traversal and links.
+    Also enforces total extracted size and member count limits (tar bomb protection).
     """
-    if sys.version_info >= (3, 12):
-        tar.extractall(extract_dir, filter="data")
-        return
-
     base_dir = os.path.normcase(os.path.realpath(extract_dir))
     safe_members: list[tarfile.TarInfo] = []
+    total_size = 0
+
     for member in tar.getmembers():
+        if len(safe_members) >= _MAX_EXTRACT_MEMBERS:
+            raise ValueError(
+                f"Archive exceeds {_MAX_EXTRACT_MEMBERS} member limit (possible tar bomb)"
+            )
+        total_size += member.size
+        if total_size > _MAX_EXTRACT_SIZE:
+            raise ValueError(
+                f"Archive exceeds {_MAX_EXTRACT_SIZE} byte extraction limit (possible tar bomb)"
+            )
+
+        if sys.version_info >= (3, 12):
+            safe_members.append(member)
+            continue
+
         target = os.path.normcase(os.path.realpath(os.path.join(base_dir, member.name)))
         if not target.startswith(base_dir + os.sep) and target != base_dir:
             raise ValueError(f"Tar path traversal blocked: {member.name}")
@@ -405,7 +423,10 @@ def _extract_tar_archive(tar: tarfile.TarFile, extract_dir: Path) -> None:
             raise ValueError(f"Tar link entry blocked: {member.name}")
         safe_members.append(member)
 
-    tar.extractall(extract_dir, members=safe_members)  # noqa: S202
+    if sys.version_info >= (3, 12):
+        tar.extractall(extract_dir, members=safe_members, filter="data")
+    else:
+        tar.extractall(extract_dir, members=safe_members)  # noqa: S202
 
 
 def _extract_zip_archive(archive: Path, extract_dir: Path) -> None:

@@ -205,6 +205,23 @@ _DANGEROUS_SKILL_FRONTMATTER = {
 }
 
 
+# Directories that indicate test/documentation/example context for skills
+_LOW_RISK_DIRS: set[str] = {
+    "test",
+    "tests",
+    "__tests__",
+    "examples",
+    "example",
+    "fixtures",
+    "docs",
+    "doc",
+    "documentation",
+    "testdata",
+    "test_data",
+    "__mocks__",
+}
+
+
 class SkillAnalyzer(BaseScanner):
     """Analyzes agent skills and plugins for malicious patterns."""
 
@@ -261,10 +278,14 @@ class SkillAnalyzer(BaseScanner):
         for candidate in candidate_paths:
             if candidate.is_dir():
                 for child in candidate.iterdir():
+                    if child.is_symlink():
+                        continue
                     if child.is_dir():
                         skill_dirs.append(child)
                 for ext in ("*.py", "*.js", "*.ts", "*.md"):
                     for child in candidate.glob(ext):
+                        if child.is_symlink():
+                            continue
                         skill_dirs.append(child)
 
         return skill_dirs
@@ -292,10 +313,30 @@ class SkillAnalyzer(BaseScanner):
                 return dirs  # Cannot read config; use defaults
         return dirs
 
+    @staticmethod
+    def _is_test_or_doc_skill(skill_path: Path) -> bool:
+        """Check if a skill is in a test/documentation/example directory."""
+        parts_lower = {p.lower() for p in skill_path.parts}
+        return bool(_LOW_RISK_DIRS & parts_lower)
+
+    @staticmethod
+    def _downgrade_findings(findings: list[Finding]) -> list[Finding]:
+        """Downgrade severity for findings in test/doc context."""
+        for f in findings:
+            if f.severity in (
+                FindingSeverity.CRITICAL,
+                FindingSeverity.HIGH,
+                FindingSeverity.MEDIUM,
+            ):
+                f.severity = FindingSeverity.LOW
+            f.metadata["context"] = "test_or_doc"
+        return findings
+
     def _analyze_skill(self, skill_path: Path, context: ScanContext) -> list[Finding]:
         """Analyze a single skill for security issues."""
         findings: list[Finding] = []
         skill_name = skill_path.name
+        is_test_context = self._is_test_or_doc_skill(skill_path)
 
         # Analyze manifest if present
         findings.extend(self._check_manifest(skill_path, skill_name))
@@ -313,10 +354,23 @@ class SkillAnalyzer(BaseScanner):
             source_files.extend(skill_path.rglob("*.ts"))
 
         for source_file in source_files:
+            if source_file.is_symlink():
+                continue
+            try:
+                if source_file.stat().st_size > 10_000_000:  # 10 MB
+                    logger.debug("Skipping large file: %s", source_file)
+                    continue
+            except OSError:
+                continue
             context.files_scanned += 1
+            # Read file once and pass content to both analysis methods
+            try:
+                content = source_file.read_text(errors="replace")
+            except OSError:
+                continue
             if source_file.suffix == ".py":
-                findings.extend(self._analyze_python_source(source_file, skill_name))
-            findings.extend(self._scan_regex_patterns(source_file, skill_name))
+                findings.extend(self._analyze_python_source(source_file, skill_name, content))
+            findings.extend(self._scan_regex_patterns(source_file, skill_name, content))
 
         # Scan markdown/instruction files for instruction malware
         md_files: list[Path] = []
@@ -327,11 +381,23 @@ class SkillAnalyzer(BaseScanner):
             md_files.extend(skill_path.rglob("*.txt"))
 
         for md_file in md_files:
+            if md_file.is_symlink():
+                continue
+            try:
+                if md_file.stat().st_size > 10_000_000:
+                    logger.debug("Skipping large file: %s", md_file)
+                    continue
+            except OSError:
+                continue
             context.files_scanned += 1
             findings.extend(self._scan_instruction_malware(md_file, skill_name))
 
         # Check dependencies
         findings.extend(self._check_dependencies(skill_path, skill_name))
+
+        # Downgrade severity for findings in test/documentation context
+        if is_test_context:
+            self._downgrade_findings(findings)
 
         return findings
 
@@ -425,12 +491,14 @@ class SkillAnalyzer(BaseScanner):
 
         return findings
 
-    def _analyze_python_source(self, file_path: Path, skill_name: str) -> list[Finding]:
+    def _analyze_python_source(
+        self, file_path: Path, skill_name: str, content: str | None = None
+    ) -> list[Finding]:
         """AST-based analysis of Python source files."""
         findings: list[Finding] = []
 
         try:
-            source = file_path.read_text(errors="replace")
+            source = content if content is not None else file_path.read_text(errors="replace")
             tree = ast.parse(source, filename=str(file_path))
         except (SyntaxError, OSError):
             return findings
@@ -501,14 +569,17 @@ class SkillAnalyzer(BaseScanner):
 
         return findings
 
-    def _scan_regex_patterns(self, file_path: Path, skill_name: str) -> list[Finding]:
+    def _scan_regex_patterns(
+        self, file_path: Path, skill_name: str, content: str | None = None
+    ) -> list[Finding]:
         """Regex-based pattern matching for suspicious constructs."""
         findings: list[Finding] = []
 
-        try:
-            content = file_path.read_text(errors="replace")
-        except OSError:
-            return findings
+        if content is None:
+            try:
+                content = file_path.read_text(errors="replace")
+            except OSError:
+                return findings
 
         for pattern_name, pattern, severity, desc in _SUSPICIOUS_PATTERNS:
             for match in pattern.finditer(content):

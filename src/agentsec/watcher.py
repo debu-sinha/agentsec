@@ -185,8 +185,18 @@ def watch_and_scan(
         )
 
     iterations = 0
+    consecutive_failures = 0
+    max_backoff = 300.0  # 5 minutes
     while max_iterations is None or iterations < max_iterations:
-        time.sleep(interval)
+        # Apply exponential backoff on consecutive failures
+        current_interval = min(interval * (2**consecutive_failures), max_backoff)
+        if consecutive_failures > 0:
+            logger.warning(
+                "Backoff active: waiting %.1fs after %d consecutive failures",
+                current_interval,
+                consecutive_failures,
+            )
+        time.sleep(current_interval)
         iterations += 1
 
         # Rebuild watch paths (new dirs may have appeared)
@@ -201,9 +211,15 @@ def watch_and_scan(
         for event in events:
             logger.info("  %s: %s", event.event_type, event.path)
 
-        # Re-scan
-        report = run_scan(config)
-        posture = scorer.compute_posture_score(report.findings)
+        # Re-scan with failure tracking
+        try:
+            report = run_scan(config)
+            posture = scorer.compute_posture_score(report.findings)
+            consecutive_failures = 0  # Reset on success
+        except Exception:
+            consecutive_failures += 1
+            logger.exception("Scan failed (attempt %d)", consecutive_failures)
+            continue
 
         for event in events:
             result = WatchResult(

@@ -269,3 +269,203 @@ def test_version_gte():
     assert InstallationScanner._version_gte("2026.2.12", "2026.2.6")
     assert not InstallationScanner._version_gte("2026.1.29", "2026.2.6")
     assert InstallationScanner._version_gte("2026.3.0", "2026.2.6")
+
+
+# -----------------------------------------------------------------------
+# ASI06: Memory config checks (CMM-001, CMM-002)
+# -----------------------------------------------------------------------
+
+
+def test_detects_world_writable_memory_file(scanner, tmp_path):
+    """CMM-001: Memory files writable by non-owner should flag."""
+    oc_dir = tmp_path / ".openclaw"
+    oc_dir.mkdir()
+    mem_file = oc_dir / "memory.md"
+    mem_file.write_text("Agent memory content")
+    os.chmod(mem_file, stat.S_IRUSR | stat.S_IWUSR | stat.S_IROTH | stat.S_IWOTH)
+
+    # Need a config so _load_main_config doesn't return None for CMM-002
+    (tmp_path / "openclaw.json").write_text(json.dumps({"version": "2026.2.12"}))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    mem_findings = [f for f in findings if (f.check_id or "") == "CMM-001"]
+    assert len(mem_findings) >= 1
+    assert mem_findings[0].severity == FindingSeverity.HIGH
+    assert "ASI06" in mem_findings[0].owasp_ids
+
+
+def test_memory_integrity_missing(scanner, tmp_path):
+    """CMM-002: Memory without integrity verification should flag."""
+    oc_dir = tmp_path / ".openclaw"
+    oc_dir.mkdir()
+    (oc_dir / "memory.md").write_text("Some memory")
+
+    config = {"version": "2026.2.12", "memory": {"store": "file"}}
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    integrity_findings = [f for f in findings if (f.check_id or "") == "CMM-002"]
+    assert len(integrity_findings) >= 1
+    assert integrity_findings[0].severity == FindingSeverity.MEDIUM
+
+
+def test_memory_integrity_configured_no_finding(scanner, tmp_path):
+    """Memory with integrity checksums configured should not flag CMM-002."""
+    oc_dir = tmp_path / ".openclaw"
+    oc_dir.mkdir()
+    (oc_dir / "memory.md").write_text("Some memory")
+
+    config = {
+        "version": "2026.2.12",
+        "memory": {"integrity": {"checksums": True}},
+    }
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    integrity_findings = [f for f in findings if (f.check_id or "") == "CMM-002"]
+    assert len(integrity_findings) == 0
+
+
+# -----------------------------------------------------------------------
+# ASI07: Multi-agent config checks (CMA-001, CMA-002)
+# -----------------------------------------------------------------------
+
+
+def test_detects_missing_inter_agent_auth(scanner, tmp_path):
+    """CMA-001: Multi-agent config without auth should flag."""
+    config = {
+        "version": "2026.2.12",
+        "agents": {"enabled": True, "spawnPolicy": "restricted"},
+    }
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    auth_findings = [f for f in findings if (f.check_id or "") == "CMA-001"]
+    assert len(auth_findings) >= 1
+    assert auth_findings[0].severity == FindingSeverity.HIGH
+    assert "ASI07" in auth_findings[0].owasp_ids
+
+
+def test_inter_agent_auth_configured_no_finding(scanner, tmp_path):
+    """Multi-agent config with auth should not flag CMA-001."""
+    config = {
+        "version": "2026.2.12",
+        "agents": {
+            "enabled": True,
+            "auth": {"type": "token", "secret": "***"},
+            "spawnPolicy": "restricted",
+            "maxAgents": 5,
+        },
+    }
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    auth_findings = [f for f in findings if (f.check_id or "") == "CMA-001"]
+    assert len(auth_findings) == 0
+
+
+def test_detects_unrestricted_agent_spawning(scanner, tmp_path):
+    """CMA-002: Open spawn policy should flag."""
+    config = {
+        "version": "2026.2.12",
+        "agents": {"enabled": True, "spawnPolicy": "open"},
+    }
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    spawn_findings = [f for f in findings if (f.check_id or "") == "CMA-002"]
+    assert len(spawn_findings) >= 1
+    # Should have both "unrestricted spawning" and "no max agents"
+    titles = [f.title for f in spawn_findings]
+    assert any("spawning" in t.lower() for t in titles)
+    assert any("maximum agent" in t.lower() for t in titles)
+
+
+def test_no_multi_agent_findings_without_agents_config(scanner, tmp_path):
+    """No agents config means no CMA findings."""
+    config = {"version": "2026.2.12"}
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    cma_findings = [f for f in findings if (f.check_id or "").startswith("CMA")]
+    assert len(cma_findings) == 0
+
+
+# -----------------------------------------------------------------------
+# ASI09: Audit logging checks (CAL-001, CAL-002)
+# -----------------------------------------------------------------------
+
+
+def test_detects_audit_logging_disabled(scanner, tmp_path):
+    """CAL-001: Audit logging disabled should flag."""
+    config = {
+        "version": "2026.2.12",
+        "logging": {"enabled": False},
+    }
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    audit_findings = [f for f in findings if (f.check_id or "") == "CAL-001"]
+    assert len(audit_findings) >= 1
+    assert audit_findings[0].severity == FindingSeverity.HIGH
+    assert "ASI09" in audit_findings[0].owasp_ids
+
+
+def test_detects_missing_log_integrity(scanner, tmp_path):
+    """CAL-002: Logging without integrity protection should flag."""
+    config = {
+        "version": "2026.2.12",
+        "logging": {"enabled": True, "level": "info"},
+    }
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    integrity_findings = [f for f in findings if (f.check_id or "") == "CAL-002"]
+    assert len(integrity_findings) >= 1
+    assert integrity_findings[0].severity == FindingSeverity.MEDIUM
+
+
+def test_log_integrity_configured_no_finding(scanner, tmp_path):
+    """Logging with integrity signing should not flag CAL-002."""
+    config = {
+        "version": "2026.2.12",
+        "logging": {
+            "enabled": True,
+            "level": "info",
+            "integrity": {"signing": True},
+        },
+    }
+    (tmp_path / "openclaw.json").write_text(json.dumps(config))
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    integrity_findings = [f for f in findings if (f.check_id or "") == "CAL-002"]
+    assert len(integrity_findings) == 0
+
+
+def test_no_audit_findings_without_config(scanner, tmp_path):
+    """No openclaw.json means no CAL findings."""
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    cal_findings = [f for f in findings if (f.check_id or "").startswith("CAL")]
+    assert len(cal_findings) == 0

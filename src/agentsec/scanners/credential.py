@@ -280,6 +280,42 @@ _EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
         "Rotate at https://vercel.com/account/tokens",
     ),
     (
+        "Mistral API Key",
+        re.compile(
+            r"(?:mistral|MISTRAL)[_-]?(?:API[_-]?)?KEY\s*[:=]\s*['\"]?([a-zA-Z0-9]{32,})",
+            re.I,
+        ),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://console.mistral.ai/api-keys",
+    ),
+    (
+        "Together AI API Key",
+        re.compile(
+            r"(?:together|TOGETHER)[_-]?(?:API[_-]?)?KEY\s*[:=]\s*['\"]?([a-zA-Z0-9]{40,})",
+            re.I,
+        ),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://api.together.xyz/settings/api-keys",
+    ),
+    (
+        "Fireworks AI API Key",
+        re.compile(r"fw_[a-zA-Z0-9]{20,200}"),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://fireworks.ai/account/api-keys",
+    ),
+    (
+        "Perplexity API Key",
+        re.compile(r"pplx-[a-zA-Z0-9]{40,200}"),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://www.perplexity.ai/settings/api",
+    ),
+    (
+        "DeepSeek API Key",
+        re.compile(r"sk-[a-f0-9]{48,}"),
+        FindingSeverity.CRITICAL,
+        "Rotate at https://platform.deepseek.com/api_keys",
+    ),
+    (
         "Generic Connection String",
         re.compile(
             r"(?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?|rediss?|amqps?|mariadb|mssql)"
@@ -393,6 +429,8 @@ class CredentialScanner(BaseScanner):
             return findings
 
         scannable_files = self._iter_scannable_files(target)
+        # Filter out files matching .agentsecignore patterns
+        scannable_files = [f for f in scannable_files if not context.is_ignored(f)]
         context.files_scanned += len(scannable_files)
 
         # Phase 1: detect-secrets scanning (battle-tested FP handling)
@@ -805,7 +843,7 @@ class CredentialScanner(BaseScanner):
         # Strip known prefixes before checking (e.g. "sk-", "ghp_", "AKIA")
         stripped = re.sub(
             r"^(?:sk-(?:ant-|proj-|svcacct-)?|ghp_|gho_|gh[us]_|AKIA|hf_|dapi"
-            r"|gsk_|r8_|pcsk_|co-|vercel_|AIza)",
+            r"|gsk_|r8_|pcsk_|co-|vercel_|AIza|fw_|pplx-)",
             "",
             value,
         ).lower()

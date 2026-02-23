@@ -135,7 +135,15 @@ class Finding(BaseModel):
         default_factory=list,
         description="Related CVE identifiers",
     )
+    check_id: str | None = Field(
+        default=None,
+        description="Scanner-specific check identifier (e.g., CMM-001, CAL-002)",
+    )
     metadata: dict[str, Any] = Field(default_factory=dict)
+    escalated: bool = Field(default=False, description="Whether severity was escalated by scorer")
+    original_severity: FindingSeverity | None = Field(
+        default=None, description="Original severity before escalation"
+    )
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     @computed_field  # type: ignore[prop-decorator]

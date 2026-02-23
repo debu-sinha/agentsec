@@ -6,6 +6,7 @@ this interface so the orchestrator can run them uniformly.
 
 from __future__ import annotations
 
+import fnmatch
 import json
 import logging
 import time
@@ -24,6 +25,33 @@ from agentsec.models.findings import (
 
 logger = logging.getLogger(__name__)
 
+_IGNOREFILE_NAME = ".agentsecignore"
+
+
+def _load_ignore_patterns(target: Path) -> list[str]:
+    """Load glob patterns from .agentsecignore file.
+
+    Format (same conventions as .gitignore):
+    - One pattern per line
+    - Lines starting with # are comments
+    - Empty lines are skipped
+    - Patterns are matched with fnmatch against relative paths
+    """
+    ignore_file = target / _IGNOREFILE_NAME
+    if not ignore_file.exists():
+        return []
+    try:
+        lines = ignore_file.read_text().splitlines()
+    except OSError:
+        return []
+    patterns: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        patterns.append(stripped)
+    return patterns
+
 
 @dataclass
 class ScanContext:
@@ -39,6 +67,7 @@ class ScanContext:
     discovered_secrets_locations: list[Path] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
     files_scanned: int = 0
+    _ignore_patterns: list[str] | None = field(default=None, repr=False)
 
     def register_config_file(self, name: str, path: Path) -> None:
         """Register a discovered config file for other scanners to use."""
@@ -48,6 +77,24 @@ class ScanContext:
         """Register a path known to contain secrets."""
         if path not in self.discovered_secrets_locations:
             self.discovered_secrets_locations.append(path)
+
+    @property
+    def ignore_patterns(self) -> list[str]:
+        """Lazily load .agentsecignore patterns from the target directory."""
+        if self._ignore_patterns is None:
+            self._ignore_patterns = _load_ignore_patterns(self.target_path)
+        return self._ignore_patterns
+
+    def is_ignored(self, path: Path) -> bool:
+        """Check if a path should be ignored based on .agentsecignore."""
+        if not self.ignore_patterns:
+            return False
+        try:
+            rel = path.relative_to(self.target_path)
+        except ValueError:
+            return False
+        rel_posix = rel.as_posix()
+        return any(fnmatch.fnmatch(rel_posix, p) for p in self.ignore_patterns)
 
 
 class BaseScanner(ABC):

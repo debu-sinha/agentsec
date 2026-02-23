@@ -225,6 +225,9 @@ class McpScanner(BaseScanner):
                 self._check_server_command(config_path, server_name, command, full_command)
             )
 
+        # CMCP-004: Check for HTTP (non-TLS) transport
+        findings.extend(self._check_http_transport(config_path, server_name, server_config))
+
         # Check for authentication
         findings.extend(self._check_server_auth(config_path, server_name, server_config))
 
@@ -311,6 +314,50 @@ class McpScanner(BaseScanner):
                 )
             )
 
+        return findings
+
+    def _check_http_transport(
+        self,
+        config_path: Path,
+        server_name: str,
+        server_config: dict[str, Any],
+    ) -> list[Finding]:
+        """Check for non-TLS HTTP connections to MCP servers (CMCP-004)."""
+        findings: list[Finding] = []
+        url = server_config.get("url", "")
+
+        if not url or not url.startswith("http://"):
+            return findings
+
+        # Exclude localhost / loopback — local HTTP is acceptable
+        localhost_patterns = ("http://localhost", "http://127.0.0.1", "http://[::1]")
+        if any(url.startswith(p) for p in localhost_patterns):
+            return findings
+
+        findings.append(
+            Finding(
+                scanner=self.name,
+                category=FindingCategory.MCP_CROSS_ORIGIN,
+                severity=FindingSeverity.HIGH,
+                title=f"MCP server '{server_name}' uses unencrypted HTTP",
+                description=(
+                    f"MCP server '{server_name}' connects to '{url}' over plain HTTP "
+                    f"without TLS encryption. Credentials, tool calls, and responses "
+                    f"can be intercepted or tampered with by network attackers."
+                ),
+                evidence=f"url = {url}",
+                file_path=config_path,
+                remediation=Remediation(
+                    summary="Use HTTPS for all remote MCP server connections",
+                    steps=[
+                        "Change the URL scheme from http:// to https://",
+                        "Ensure the MCP server has a valid TLS certificate",
+                        "If the server doesn't support HTTPS, use an SSH tunnel or VPN",
+                    ],
+                ),
+                owasp_ids=["ASI05", "ASI03"],
+            )
+        )
         return findings
 
     def _check_server_auth(

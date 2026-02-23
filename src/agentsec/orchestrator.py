@@ -23,6 +23,39 @@ from agentsec.utils.detection import detect_agent_type
 
 logger = logging.getLogger(__name__)
 
+_SUPPRESS_MARKER = "agentsec:ignore"
+
+
+def _filter_inline_suppressed(findings: list) -> list:
+    """Remove findings where the source line contains ``# agentsec:ignore``.
+
+    Only applies to findings that have both a file_path and line_number.
+    Uses a cache to avoid re-reading the same file multiple times.
+    """
+    file_cache: dict[Path, list[str]] = {}
+    kept: list = []
+
+    for finding in findings:
+        if finding.file_path and finding.line_number:
+            fpath = Path(finding.file_path)
+            if fpath not in file_cache:
+                try:
+                    file_cache[fpath] = fpath.read_text(errors="replace").splitlines()
+                except OSError:
+                    file_cache[fpath] = []
+            lines = file_cache[fpath]
+            line_idx = finding.line_number - 1
+            if 0 <= line_idx < len(lines) and _SUPPRESS_MARKER in lines[line_idx]:
+                logger.debug(
+                    "Suppressed finding '%s' at %s:%d (inline marker)",
+                    finding.title,
+                    fpath,
+                    finding.line_number,
+                )
+                continue
+        kept.append(finding)
+    return kept
+
 
 def run_scan(config: AgentsecConfig) -> ScanReport:
     """Execute a full scan against all configured targets.
@@ -61,6 +94,9 @@ def run_scan(config: AgentsecConfig) -> ScanReport:
         scanners_run.append(scanner_name)
 
     elapsed = time.monotonic() - start_time
+
+    # Filter out inline-suppressed findings (# agentsec:ignore on the finding line)
+    all_findings = _filter_inline_suppressed(all_findings)
 
     # Score findings against OWASP
     scorer = OwaspScorer()
