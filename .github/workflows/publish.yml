@@ -32,12 +32,11 @@ jobs:
         run: |
           pip install -e .
           cyclonedx-py environment -o sbom.cdx.json
-          cp sbom.cdx.json dist/
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@92c65d2898f1f53cfdc910b962cecff86e7f8fcc # v1
         with:
-          subject-path: "dist/*"
+          subject-path: "dist/*.whl dist/*.tar.gz"
 
       - name: Upload SBOM as release asset
         env:
