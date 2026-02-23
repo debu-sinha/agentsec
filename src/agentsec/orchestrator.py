@@ -75,7 +75,12 @@ def run_scan(config: AgentsecConfig) -> ScanReport:
     logger.info("Scanning target: %s (agent type: %s)", target_path, agent_type)
 
     # Build scan context
-    context = ScanContext(target_path=target_path, agent_type=agent_type)
+    context = ScanContext(
+        target_path=target_path,
+        agent_type=agent_type,
+        scan_history=config.scan_history,
+        history_depth=config.history_depth,
+    )
 
     # Run all enabled scanners
     all_findings = []

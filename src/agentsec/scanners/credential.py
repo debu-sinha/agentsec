@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import logging
 import re
+import subprocess
 from pathlib import Path
 
 from detect_secrets import SecretsCollection
@@ -445,6 +446,10 @@ class CredentialScanner(BaseScanner):
         if git_config.exists():
             findings.extend(self._scan_git_config(git_config))
 
+        # Phase 4: Scan git history for credentials committed then removed
+        if context.scan_history and (target / ".git").is_dir():
+            findings.extend(self._scan_git_history(target, context.history_depth))
+
         # Deduplicate findings by fingerprint
         seen: set[str] = set()
         unique_findings: list[Finding] = []
@@ -785,6 +790,158 @@ class CredentialScanner(BaseScanner):
                     owasp_ids=["ASI05"],
                 )
             )
+
+        return findings
+
+    def _scan_git_history(self, target: Path, depth: int) -> list[Finding]:
+        """Scan git history for credentials that were committed then removed.
+
+        Runs ``git log -p`` to extract diffs, then checks added lines against
+        the custom credential patterns.  Findings are tagged with
+        ``metadata.source = "git_history"`` and the commit SHA.
+
+        Deduplicates by (secret_type, matched_value): if the same secret
+        appears in multiple commits only one finding is emitted, annotated
+        with the first and last commit SHAs.
+        """
+        findings: list[Finding] = []
+
+        try:
+            result = subprocess.run(
+                [
+                    "git",
+                    "log",
+                    "--all",
+                    "-p",
+                    "-U0",
+                    f"--max-count={depth}",
+                    "--no-color",
+                    "--diff-filter=ACMR",
+                ],
+                capture_output=True,
+                text=True,
+                cwd=str(target),
+                timeout=120,
+            )
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            logger.debug("git not available or timed out; skipping history scan")
+            return findings
+        except OSError:
+            logger.debug("Failed to run git log; skipping history scan")
+            return findings
+
+        if result.returncode != 0:
+            logger.debug("git log failed (rc=%d); skipping history scan", result.returncode)
+            return findings
+
+        # Parse the diff output, tracking current commit and file
+        current_commit: str | None = None
+        current_file: str | None = None
+        # Dedup key: (secret_type, matched_value) -> finding + commit list
+        seen: dict[tuple[str, str], tuple[Finding, list[str]]] = {}
+
+        for line in result.stdout.splitlines():
+            # Track commit boundaries
+            if line.startswith("commit "):
+                current_commit = line.split()[1][:12]
+                continue
+
+            # Track file names from diff headers
+            if line.startswith("+++ b/"):
+                current_file = line[6:]
+                continue
+
+            # Only scan added lines (lines starting with single +, not +++)
+            if not line.startswith("+") or line.startswith("+++"):
+                continue
+
+            added_content = line[1:]  # Strip leading +
+            if not added_content.strip():
+                continue
+
+            # Run extra patterns against the added content
+            for secret_type, pattern, severity, rotation_advice in _EXTRA_PATTERNS:
+                for match in pattern.finditer(added_content):
+                    matched = match.group(0)
+
+                    # Apply the same FP filters as the live scanner
+                    if self._is_known_example_value(matched, secret_type):
+                        continue
+                    if self._is_placeholder(matched):
+                        continue
+                    if (
+                        secret_type == "Generic Connection String"
+                        and self._is_placeholder_connection_string(matched)
+                    ):
+                        continue
+                    if (
+                        secret_type != "Generic Connection String"
+                        and self._shannon_entropy(matched) < 3.0
+                    ):
+                        continue
+                    if secret_type not in ("Generic Connection String", "Private Key"):
+                        body = re.sub(
+                            r"^(?:sk-(?:ant-|proj-|svcacct-)?|ghp_|gho_|gh[us]_|AKIA"
+                            r"|hf_|dapi|gsk_|r8_|pcsk_|co-|vercel_|AIza)",
+                            "",
+                            matched,
+                        )
+                        if len(body) >= 12 and not self._has_char_class_diversity(body):
+                            continue
+
+                    dedup_key = (secret_type, matched)
+                    if dedup_key in seen:
+                        # Update last-seen commit
+                        _, commits = seen[dedup_key]
+                        if current_commit and current_commit not in commits:
+                            commits.append(current_commit)
+                        continue
+
+                    sanitized = sanitize_secret(matched)
+                    file_display = current_file or "unknown"
+                    commit_display = current_commit or "unknown"
+
+                    finding = Finding(
+                        scanner=self.name,
+                        category=FindingCategory.EXPOSED_TOKEN,
+                        severity=severity,
+                        confidence=FindingConfidence.MEDIUM,
+                        title=f"{secret_type} found in git history ({file_display})",
+                        description=(
+                            f"A {secret_type} was found in git history, commit "
+                            f"{commit_display}. Even though the credential may have been "
+                            f"removed from the working tree, it remains in the repository "
+                            f"history and can be recovered by anyone with clone access."
+                        ),
+                        evidence=f"Value: {sanitized} (commit {commit_display})",
+                        file_path=Path(file_display) if current_file else None,
+                        remediation=Remediation(
+                            summary=f"Rotate the {secret_type} and purge from git history",
+                            steps=[
+                                rotation_advice,
+                                "Purge from history: git filter-repo --invert-paths "
+                                f"--path '{file_display}'",
+                                "Or use BFG Repo Cleaner: bfg --replace-text passwords.txt",
+                                "Force-push all branches after purging",
+                                "Notify affected team members to re-clone",
+                            ],
+                        ),
+                        owasp_ids=["ASI05"],
+                        metadata={
+                            "source": "git_history",
+                            "commit": commit_display,
+                        },
+                    )
+
+                    seen[dedup_key] = (finding, [commit_display])
+
+        # Annotate findings with commit span info
+        for (_, _), (finding, commits) in seen.items():
+            if len(commits) > 1:
+                finding.metadata["first_seen"] = commits[-1]  # oldest
+                finding.metadata["last_seen"] = commits[0]  # newest
+                finding.metadata["commit_count"] = str(len(commits))
+            findings.append(finding)
 
         return findings
 

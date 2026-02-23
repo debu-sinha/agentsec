@@ -163,6 +163,19 @@ def main() -> None:
     default=False,
     help="Show all findings including baselined ones (with [baseline] marker)",
 )
+@click.option(
+    "--scan-history",
+    is_flag=True,
+    default=False,
+    help="Scan git history for credentials that were committed then removed",
+)
+@click.option(
+    "--history-depth",
+    type=int,
+    default=100,
+    show_default=True,
+    help="Number of git commits to scan (requires --scan-history)",
+)
 def scan(
     target: str,
     output: str,
@@ -175,6 +188,8 @@ def scan(
     baseline: str | None,
     create_baseline: bool,
     show_baseline: bool,
+    scan_history: bool,
+    history_depth: int,
 ) -> None:
     """Scan an agent installation for security vulnerabilities.
 
@@ -226,6 +241,8 @@ def scan(
         output_path=Path(output_file) if output_file else None,
         fail_on_severity=fail_on if fail_on != "none" else None,
         policy_path=Path(policy) if policy else None,
+        scan_history=scan_history,
+        history_depth=history_depth,
     )
 
     # Run the scan with progress spinner

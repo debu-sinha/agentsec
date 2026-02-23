@@ -67,6 +67,8 @@ class ScanContext:
     discovered_secrets_locations: list[Path] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
     files_scanned: int = 0
+    scan_history: bool = False
+    history_depth: int = 100
     _ignore_patterns: list[str] | None = field(default=None, repr=False)
 
     def register_config_file(self, name: str, path: Path) -> None:

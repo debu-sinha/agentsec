@@ -61,3 +61,11 @@ class AgentsecConfig(BaseModel):
         default=50,
         description="Skip files larger than this (avoids OOM on huge binaries)",
     )
+    scan_history: bool = Field(
+        default=False,
+        description="Scan git history for credentials that were committed then removed",
+    )
+    history_depth: int = Field(
+        default=100,
+        description="Number of git commits to scan when --scan-history is enabled",
+    )
