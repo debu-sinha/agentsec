@@ -31,7 +31,7 @@ jobs:
       - name: Generate SBOM (CycloneDX)
         run: |
           pip install -e .
-          cyclonedx-py environment --outfile sbom.cdx.json
+          cyclonedx-py environment -o sbom.cdx.json
           cp sbom.cdx.json dist/
 
       - name: Attest build provenance
