@@ -68,10 +68,7 @@ def get_repos():
         text=True,
     )
     all_repos = json.loads(result.stdout)
-    filtered = [
-        r for r in all_repos
-        if not any(p in r["fullName"] for p in SKIP_PATTERNS)
-    ]
+    filtered = [r for r in all_repos if not any(p in r["fullName"] for p in SKIP_PATTERNS)]
     return filtered[:50]
 
 
@@ -307,7 +304,7 @@ def main():
         target_path = work_dir / safe_name
 
         print(
-            f'[{i:>2}/{len(repos)}] {name} ({r["stargazersCount"]} stars)... ',
+            f"[{i:>2}/{len(repos)}] {name} ({r['stargazersCount']} stars)... ",
             end="",
             flush=True,
         )
@@ -316,7 +313,9 @@ def main():
         try:
             clone_result = subprocess.run(
                 ["git", "clone", "--depth", "1", "--quiet", r["url"], str(target_path)],
-                capture_output=True, text=True, timeout=60,
+                capture_output=True,
+                text=True,
+                timeout=60,
             )
             if clone_result.returncode != 0:
                 print(f"CLONE FAILED: {clone_result.stderr[:80]}")
@@ -329,7 +328,9 @@ def main():
         try:
             sha_result = subprocess.run(
                 ["git", "rev-parse", "HEAD"],
-                capture_output=True, text=True, cwd=str(target_path),
+                capture_output=True,
+                text=True,
+                cwd=str(target_path),
             )
             commit_sha = sha_result.stdout.strip()[:12]
         except Exception:
