@@ -132,10 +132,14 @@ def render_dashboard(
     targets_findings: dict[str, dict],
     snapshot_date: str,
     total_findings: int,
+    historical_scores: dict[str, list[tuple[str, int]]] | None = None,
 ) -> str:
     """Render the full markdown dashboard."""
 
     # Build per-target rows
+    if historical_scores is None:
+        historical_scores = {}
+
     rows = []
     for tid, meta in targets_meta.items():
         stats = targets_findings.get(
@@ -152,6 +156,8 @@ def render_dashboard(
         )
         score = compute_score(stats["critical"], stats["high"], stats["medium"], stats["low"])
         grade = score_to_grade(score)
+        trend = compute_trend(historical_scores.get(tid, []))
+        sparkline = render_sparkline(historical_scores.get(tid, []))
         rows.append(
             {
                 "target_id": tid,
@@ -163,6 +169,8 @@ def render_dashboard(
                 "medium": stats["medium"],
                 "low": stats["low"],
                 "total": stats["total"],
+                "trend": trend,
+                "sparkline": sparkline,
             }
         )
 
@@ -307,6 +315,44 @@ def render_dashboard(
     lines.append(f"| Repos with critical findings | **{targets_critical}** |")
     lines.append("")
 
+    # -- Ecosystem Trend (#10) --
+    if historical_scores:
+        # Compute ecosystem-wide average score history
+        all_dates = sorted({d for scores in historical_scores.values() for d, _ in scores})
+        if len(all_dates) >= 2:
+            lines.append("## Ecosystem Trend")
+            lines.append("")
+            lines.append("| Date | Avg Score | Grade | Repos Improving | Repos Degrading |")
+            lines.append("|------|----------:|:-----:|----------------:|----------------:|")
+            for date in all_dates[-8:]:  # Last 8 snapshots
+                date_scores = []
+                for tid, scores in historical_scores.items():
+                    for d, s in scores:
+                        if d == date:
+                            date_scores.append(s)
+                if date_scores:
+                    avg = round(sum(date_scores) / len(date_scores))
+                    g = score_to_grade(avg)
+                    # Count improving/degrading vs previous snapshot
+                    improving = degrading = 0
+                    prev_idx = all_dates.index(date) - 1
+                    if prev_idx >= 0:
+                        prev_date = all_dates[prev_idx]
+                        for tid, scores in historical_scores.items():
+                            prev_s = next((s for d, s in scores if d == prev_date), None)
+                            curr_s = next((s for d, s in scores if d == date), None)
+                            if prev_s is not None and curr_s is not None:
+                                if curr_s > prev_s:
+                                    improving += 1
+                                elif curr_s < prev_s:
+                                    degrading += 1
+                    fmt_date = f"{date[:4]}-{date[4:6]}-{date[6:]}"
+                    lines.append(
+                        f"| {fmt_date} | {avg} | {GRADE_EMOJI.get(g, '')} {g} | "
+                        f"{improving} | {degrading} |"
+                    )
+            lines.append("")
+
     # -- Grade Distribution --
     lines.append("## Grade Distribution")
     lines.append("")
@@ -342,20 +388,26 @@ def render_dashboard(
             f"> {len(attention_rows)} repositories scored below B and have actionable findings."
         )
         lines.append("")
-        lines.append("| # | Repository | Grade | Score | Critical | High | Medium | Low | Total |")
-        lines.append("|--:|------------|:-----:|------:|---------:|-----:|-------:|----:|------:|")
+        lines.append(
+            "| # | Repository | Grade | Score | Trend | Critical | High | Medium | Low | Total |"
+        )
+        lines.append(
+            "|--:|------------|:-----:|------:|:-----:|---------:|-----:|-------:|----:|------:|"
+        )
         for i, r in enumerate(attention_rows, 1):
             tid = r["target_id"]
+            safe_name = tid.replace("/", "-")
             color = GRADE_COLORS[r["grade"]]
             badge = (
                 f"![{r['grade']}](https://img.shields.io/badge/"
                 f"{r['grade']}-{color}?style=flat-square)"
             )
-            repo_link = f"[{tid}](https://github.com/{tid})"
+            detail_link = f"[{tid}](mcp-dashboard/repos/{safe_name}.md)"
             crit_fmt = f"**{r['critical']}**" if r["critical"] > 0 else "0"
             high_fmt = f"**{r['high']}**" if r["high"] > 0 else "0"
+            trend = r.get("trend", "")
             lines.append(
-                f"| {i} | {repo_link} | {badge} | {r['score']} | "
+                f"| {i} | {detail_link} | {badge} | {r['score']} | {trend} | "
                 f"{crit_fmt} | {high_fmt} | {r['medium']} "
                 f"| {r['low']} | {r['total']} |"
             )
@@ -372,17 +424,19 @@ def render_dashboard(
     lines.append("<details>")
     lines.append(f"<summary>View all {len(clean_rows)} clean repos</summary>")
     lines.append("")
-    lines.append("| Repository | Stars | Grade | Score |")
-    lines.append("|------------|------:|:-----:|------:|")
+    lines.append("| Repository | Stars | Grade | Score | Trend |")
+    lines.append("|------------|------:|:-----:|------:|:-----:|")
     for r in clean_rows:
         tid = r["target_id"]
+        safe_name = tid.replace("/", "-")
         color = GRADE_COLORS[r["grade"]]
         badge = (
             f"![{r['grade']}](https://img.shields.io/badge/{r['grade']}-{color}?style=flat-square)"
         )
-        repo_link = f"[{tid}](https://github.com/{tid})"
+        detail_link = f"[{tid}](mcp-dashboard/repos/{safe_name}.md)"
         stars_fmt = f"{r['stars']:,}"
-        lines.append(f"| {repo_link} | {stars_fmt} | {badge} | {r['score']} |")
+        trend = r.get("trend", "")
+        lines.append(f"| {detail_link} | {stars_fmt} | {badge} | {r['score']} | {trend} |")
     lines.append("")
     lines.append("</details>")
     lines.append("")
@@ -413,16 +467,45 @@ def render_dashboard(
     lines.append("")
     lines.append(
         "Each repository is scanned with [agentsec](https://pypi.org/project/agentsec-ai/) "
-        "which runs 27 named security checks + dynamic credential detection across "
-        "the OWASP Agentic Top 10 categories (ASI01 -- ASI10)."
+        "which runs 33 named security checks + 16 custom credential patterns + "
+        "detect-secrets (23 plugins) across the OWASP Agentic Top 10 categories (ASI01 -- ASI10)."
     )
     lines.append("")
-    lines.append("### Limitations")
+    lines.append("### Sampling Methodology & Known Bias")
     lines.append("")
-    lines.append("- Static analysis only; no runtime or dynamic testing")
-    lines.append("- Findings may include false positives that require manual triage")
-    lines.append("- Star count is a rough proxy for popularity and may bias the sample")
-    lines.append("- Some test fixtures may contain intentional dummy credentials")
+    lines.append(
+        "**Current approach:** The top 50 MCP repositories are selected by GitHub star count. "
+        "This is a convenience sample that favors popular, well-maintained projects."
+    )
+    lines.append("")
+    lines.append("**Known limitations:**")
+    lines.append("")
+    lines.append(
+        "- **Popularity bias**: High-star repos tend to have more contributors, code review, "
+        "and security practices. The long tail of less-popular MCP servers (which users still "
+        "install) may have worse security posture but is invisible in this dashboard."
+    )
+    lines.append(
+        "- **Survivorship bias**: Abandoned or deleted repos are not tracked, even if they "
+        "were once widely installed."
+    )
+    lines.append(
+        "- **Static analysis only**: No runtime or dynamic testing is performed. "
+        "Some vulnerability classes (e.g., SSRF, logic bugs) cannot be detected statically."
+    )
+    lines.append(
+        "- **False positives**: Findings may include false positives (e.g., test fixtures "
+        "with intentional dummy credentials). Manual triage is recommended."
+    )
+    lines.append("")
+    lines.append("**Future improvements:**")
+    lines.append("")
+    lines.append(
+        "- Stratified sampling: include repos from different popularity tiers "
+        "(e.g., top 25 by stars + 25 random from 100-1000 stars)"
+    )
+    lines.append("- npm/pip download counts as alternative popularity signal")
+    lines.append("- Expand sample size to 100+ repositories")
     lines.append("")
 
     # -- How to Improve --
@@ -482,7 +565,7 @@ def render_dashboard(
     lines.append("")
     lines.append(
         f"*Generated on {snapshot_date} by "
-        f"[agentsec](https://github.com/debu-sinha/agentsec) v0.4.4 "
+        f"[agentsec](https://github.com/debu-sinha/agentsec) v0.4.5 "
         f"| [Install](https://pypi.org/project/agentsec-ai/) "
         f"| [Report an issue](https://github.com/debu-sinha/agentsec/issues)*"
     )
@@ -713,6 +796,179 @@ def run_fresh_scan(date_stamp: str) -> tuple[Path, Path, Path]:
 
 
 # ---------------------------------------------------------------------------
+# Historical trend tracking (#10)
+# ---------------------------------------------------------------------------
+
+
+def load_historical_scores(data_dir: Path) -> dict[str, list[tuple[str, int]]]:
+    """Load per-target score history from all summary files.
+
+    Returns {target_id: [(date_stamp, score), ...]} sorted oldest-first.
+    """
+    history: dict[str, list[tuple[str, int]]] = {}
+
+    for summary_file in sorted(data_dir.glob("summary_*.json")):
+        date_stamp = summary_file.stem.replace("summary_", "")
+        # Load corresponding findings to compute per-target scores
+        findings_file = data_dir / f"findings_{date_stamp}.jsonl"
+        if not findings_file.exists():
+            continue
+
+        findings = load_findings(findings_file)
+        by_target = aggregate_by_target(findings)
+
+        for tid, stats in by_target.items():
+            score = compute_score(stats["critical"], stats["high"], stats["medium"], stats["low"])
+            if tid not in history:
+                history[tid] = []
+            history[tid].append((date_stamp, score))
+
+    # Sort each target's history oldest-first
+    for tid in history:
+        history[tid].sort(key=lambda x: x[0])
+
+    return history
+
+
+def compute_trend(scores: list[tuple[str, int]]) -> str:
+    """Compute trend arrow from score history.
+
+    Returns: ↑ (improving), ↓ (degrading), → (stable), or empty string.
+    """
+    if len(scores) < 2:
+        return ""
+    latest = scores[-1][1]
+    previous = scores[-2][1]
+    diff = latest - previous
+    if diff >= 5:
+        return "\u2191"  # ↑
+    elif diff <= -5:
+        return "\u2193"  # ↓
+    return "\u2192"  # →
+
+
+def render_sparkline(scores: list[tuple[str, int]], width: int = 8) -> str:
+    """Render a simple ASCII sparkline from score history."""
+    if len(scores) < 2:
+        return ""
+    values = [s[1] for s in scores[-width:]]
+    chars = " \u2581\u2582\u2583\u2584\u2585\u2586\u2587\u2588"
+    lo, hi = min(values), max(values)
+    rng = hi - lo if hi != lo else 1
+    return "".join(chars[min(int((v - lo) / rng * 7), 7)] for v in values)
+
+
+# ---------------------------------------------------------------------------
+# Per-repo detail pages (#9)
+# ---------------------------------------------------------------------------
+
+
+def render_repo_detail(
+    target_id: str,
+    meta: dict,
+    stats: dict,
+    findings: list[dict],
+    snapshot_date: str,
+) -> str:
+    """Render a per-repo detail page with full findings breakdown."""
+    score = compute_score(stats["critical"], stats["high"], stats["medium"], stats["low"])
+    grade = score_to_grade(score)
+
+    lines = []
+    lines.append(f"# {target_id}")
+    lines.append("")
+    color = GRADE_COLORS[grade]
+    lines.append(
+        f"![Grade](https://img.shields.io/badge/Grade-{grade}-{color}?style=for-the-badge) "
+        f"![Score](https://img.shields.io/badge/Score-{score}%2F100-{color}?style=for-the-badge)"
+    )
+    lines.append("")
+    lines.append(f"**Repository:** [{target_id}](https://github.com/{target_id})")
+    lines.append(f"**Stars:** {int(meta.get('stars', 0)):,}")
+    lines.append(f"**Last scan:** {snapshot_date}")
+    lines.append("")
+
+    # Severity summary
+    lines.append("## Severity Summary")
+    lines.append("")
+    lines.append("| Severity | Count |")
+    lines.append("|----------|------:|")
+    for sev in ("critical", "high", "medium", "low", "info"):
+        count = stats.get(sev, 0)
+        if count > 0:
+            lines.append(f"| {SEV_EMOJI.get(sev, '')} {sev.title()} | **{count}** |")
+    lines.append(f"| **Total** | **{stats.get('total', 0)}** |")
+    lines.append("")
+
+    # Full findings table
+    repo_findings = [f for f in findings if f["target_id"] == target_id]
+    if repo_findings:
+        lines.append("## Findings")
+        lines.append("")
+        lines.append("| # | Severity | Category | Title | Remediation |")
+        lines.append("|--:|:--------:|----------|-------|-------------|")
+        for i, f in enumerate(repo_findings, 1):
+            sev = f.get("severity", "info").lower()
+            emoji = SEV_EMOJI.get(sev, "")
+            cat = f.get("category", "other").replace("_", " ").title()
+            title = f.get("title", "Unknown")
+            remediation = f.get("remediation") or "---"
+            lines.append(f"| {i} | {emoji} {sev.title()} | {cat} | {title} | {remediation} |")
+        lines.append("")
+    else:
+        lines.append("## Findings")
+        lines.append("")
+        lines.append("No findings detected.")
+        lines.append("")
+
+    # Category breakdown
+    cats = stats.get("categories", {})
+    if cats:
+        lines.append("## Categories")
+        lines.append("")
+        lines.append("| Category | Count |")
+        lines.append("|----------|------:|")
+        for cat, count in sorted(cats.items(), key=lambda x: -x[1]):
+            label = cat.replace("_", " ").title()
+            lines.append(f"| {label} | {count} |")
+        lines.append("")
+
+    lines.append("---")
+    lines.append("")
+    lines.append(
+        f"[Back to Dashboard](../mcp-security-grades.md) | "
+        f"*Scanned on {snapshot_date} by "
+        f"[agentsec](https://github.com/debu-sinha/agentsec)*"
+    )
+    lines.append("")
+    return "\n".join(lines)
+
+
+def generate_detail_pages(
+    targets_meta: dict[str, dict],
+    targets_findings: dict[str, dict],
+    findings: list[dict],
+    snapshot_date: str,
+) -> int:
+    """Generate per-repo detail pages under docs/mcp-dashboard/repos/."""
+    repos_dir = REPO_ROOT / "docs" / "mcp-dashboard" / "repos"
+    repos_dir.mkdir(parents=True, exist_ok=True)
+
+    count = 0
+    for tid, meta in targets_meta.items():
+        stats = targets_findings.get(
+            tid,
+            {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0, "total": 0, "categories": {}},
+        )
+        safe_name = tid.replace("/", "-")
+        page = render_repo_detail(tid, meta, stats, findings, snapshot_date)
+        (repos_dir / f"{safe_name}.md").write_text(page, encoding="utf-8")
+        count += 1
+
+    return count
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -761,17 +1017,28 @@ def main():
     targets_meta = load_selection(selection_path)
     targets_findings = aggregate_by_target(findings)
 
+    # Load historical scores for trend tracking (#10)
+    data_dir = REPO_ROOT / "docs" / "mcp-dashboard" / "data"
+    historical_scores = load_historical_scores(data_dir) if data_dir.exists() else {}
+
     snapshot_date = f"{date_stamp[:4]}-{date_stamp[4:6]}-{date_stamp[6:]}"
     dashboard_md = render_dashboard(
         targets_meta,
         targets_findings,
         snapshot_date,
         len(findings),
+        historical_scores=historical_scores,
     )
 
     output_path = REPO_ROOT / "docs" / "mcp-security-grades.md"
     output_path.write_text(dashboard_md, encoding="utf-8")
     print(f"Dashboard written to {output_path}")
+
+    # Generate per-repo detail pages (#9)
+    detail_count = generate_detail_pages(
+        targets_meta, targets_findings, findings, snapshot_date
+    )
+    print(f"Generated {detail_count} per-repo detail pages")
 
 
 if __name__ == "__main__":

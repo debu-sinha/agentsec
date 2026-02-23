@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/mcp-security-grades.md docs/mcp-dashboard/
+          git add docs/mcp-security-grades.md docs/mcp-dashboard/ docs/mcp-dashboard/repos/
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
