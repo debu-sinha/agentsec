@@ -36,7 +36,9 @@ jobs:
       - name: Attest build provenance
         uses: actions/attest-build-provenance@92c65d2898f1f53cfdc910b962cecff86e7f8fcc # v1
         with:
-          subject-path: "dist/*.whl dist/*.tar.gz"
+          subject-path: |
+            dist/*.whl
+            dist/*.tar.gz
 
       - name: Upload SBOM as release asset
         env:
