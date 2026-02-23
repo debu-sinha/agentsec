@@ -76,12 +76,33 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 | CMCP-002 | Remote MCP endpoint without authentication | High | ASI03, ASI05 | Detects `https://` MCP servers and URL-based servers missing `auth` or `headers` config |
 | CMCP-003 | Unpinned MCP dependencies / unverified npx | Medium | ASI03 | Flags `npx` invocations not from `@anthropic/` or `@modelcontextprotocol/` namespaces |
 
+## Memory Manipulation (CMM)
+
+| ID | Check | Default Severity | OWASP | Detection |
+|----|-------|:---:|-------|-----------|
+| CMM-001 | Memory file world/group-writable | High | ASI06 | Checks permissions on memory.md, memory.json, conversation_history.json in agent config dirs |
+| CMM-002 | Memory persistence without integrity checksums | Medium | ASI06 | Detects memory persistence configured without `memory.integrity.checksums` |
+
+## Multi-Agent Exploitation (CMA)
+
+| ID | Check | Default Severity | OWASP | Detection |
+|----|-------|:---:|-------|-----------|
+| CMA-001 | No inter-agent authentication | High | ASI07 | Multi-agent config present without `agents.auth` or `agents.messageSigning` |
+| CMA-002 | Unrestricted agent spawning | Medium | ASI07 | No `agents.spawnPolicy` or `agents.maxAgents` configured when multi-agent is enabled |
+
+## Audit Logging (CAL)
+
+| ID | Check | Default Severity | OWASP | Detection |
+|----|-------|:---:|-------|-----------|
+| CAL-001 | Audit logging disabled | High | ASI09 | Logging not configured or explicitly disabled (`logging.enabled: false`) |
+| CAL-002 | No log integrity protection | Medium | ASI09 | Logging enabled without `logging.integrity.signing`, `appendOnly`, or `remote` |
+
 ## Credential Detection (dynamic)
 
 The credential scanner does not use fixed check IDs. It generates findings dynamically using a two-engine approach:
 
 - **detect-secrets engine** (23 plugins): ArtifactoryDetector, AWSKeyDetector, AzureStorageKeyDetector, BasicAuthDetector, CloudantDetector, DiscordBotTokenDetector, GitHubTokenDetector, HexHighEntropyString, Base64HighEntropyString, IbmCloudIamDetector, IbmCosHmacDetector, JwtTokenDetector, KeywordDetector, MailchimpDetector, NpmDetector, OpenAIDetector (built-in), PrivateKeyDetector, PypiTokenDetector, SlackDetector, SoftlayerDetector, SquareOAuthDetector, StripeDetector, TwilioKeyDetector
-- **11 custom regex patterns**: OpenAI (`sk-`), Anthropic (`sk-ant-`), Databricks (`dapi`), HuggingFace (`hf_`), Google (`AIza`), Groq (`gsk_`), Replicate (`r8_`), Pinecone (`pcsk_`), Cohere (`co-`), Vercel (`vercel_`), Generic Connection String
+- **16 custom regex patterns**: OpenAI (`sk-`), Anthropic (`sk-ant-`), Databricks (`dapi`), HuggingFace (`hf_`), Google (`AIza`), Groq (`gsk_`), Replicate (`r8_`), Pinecone (`pcsk_`), Cohere (`co-`), Vercel (`vercel_`), Mistral, Together AI, Fireworks AI (`fw_`), Perplexity (`pplx-`), DeepSeek, Generic Connection String
 - **Shannon entropy detection**: Thresholds vary by plugin (3.0 for Base64, 4.5 for Hex)
 - **Git config credentials**: Plaintext passwords in `.gitconfig` or `.git-credentials`
 
@@ -106,15 +127,15 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 | ASI03 - Supply Chain | CSK-001, CSK-002, CSK-004, CSK-005, CPL-001, CSF-001, CMCP-001, CMCP-002, CMCP-003 |
 | ASI05 - Insecure Output / Secrets | CGW-001, CGW-002, CGW-003, CGW-004, CGW-005, CFS-001, CFS-002, CSF-002, CMCP-002, credentials |
 | ASI04 - Knowledge Poisoning / Data Integrity | installation (workspace integrity) |
-| ASI06 - Memory & Context Manipulation | installation (workspace integrity) |
-| ASI07 - Multi-Agent Exploitation | CID-003 |
+| ASI06 - Memory & Context Manipulation | CMM-001, CMM-002 |
+| ASI07 - Multi-Agent Exploitation | CID-003, CMA-001, CMA-002 |
 | ASI08 - Uncontrolled Cascading | CEX-001, CEX-002, CEX-003 |
-| ASI09 - Repudiation / Insufficient Audit | installation (discovery config) |
+| ASI09 - Repudiation / Insufficient Audit | CAL-001, CAL-002 |
 | ASI10 - Misaligned Behaviors / Unintended Actions | CID-001, CGW-003, CTO-001, CSF-001 |
 
 ## Summary
 
-- **27 named checks** across 9 check families
-- **Dynamic credential detection** using detect-secrets (23 plugins) + 11 custom patterns + entropy heuristics
+- **33 named checks** across 12 check families
+- **Dynamic credential detection** using detect-secrets (23 plugins) + 16 custom patterns + entropy heuristics
 - **5 known CVE detections** (CVE-2026-25253, CVE-2026-24763, CVE-2026-25157, CVE-2026-25593, CVE-2026-25475)
 - All findings map to OWASP Agentic Top 10 (ASI01-ASI10)

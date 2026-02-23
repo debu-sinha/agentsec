@@ -145,6 +145,24 @@ def main() -> None:
 )
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
 @click.option("--quiet", "-q", is_flag=True, help="Suppress terminal output, exit code only")
+@click.option(
+    "--baseline",
+    type=click.Path(),
+    default=None,
+    help="Baseline file — only fail on NEW findings not in the baseline",
+)
+@click.option(
+    "--create-baseline",
+    is_flag=True,
+    default=False,
+    help="Create a baseline file from current scan results",
+)
+@click.option(
+    "--show-baseline",
+    is_flag=True,
+    default=False,
+    help="Show all findings including baselined ones (with [baseline] marker)",
+)
 def scan(
     target: str,
     output: str,
@@ -154,6 +172,9 @@ def scan(
     policy: str | None,
     verbose: bool,
     quiet: bool,
+    baseline: str | None,
+    create_baseline: bool,
+    show_baseline: bool,
 ) -> None:
     """Scan an agent installation for security vulnerabilities.
 
@@ -242,6 +263,38 @@ def scan(
 
     # Apply impact descriptions and score posture
     apply_impacts(report.findings)
+
+    # Baseline: create or apply
+    from agentsec.utils.baseline import (
+        apply_baseline,
+        load_baseline,
+    )
+    from agentsec.utils.baseline import (
+        create_baseline as _create_baseline,
+    )
+
+    if create_baseline:
+        baseline_path = Path(baseline) if baseline else Path(".agentsec-baseline.json")
+        _create_baseline(report.findings, baseline_path)
+        if not quiet:
+            console.print(
+                f"[green]Baseline created:[/green] {baseline_path} "
+                f"({len(report.findings)} findings captured)\n"
+            )
+        sys.exit(0)
+
+    new_findings = report.findings
+    baselined_findings: list = []
+    if baseline:
+        baseline_data = load_baseline(Path(baseline))
+        if baseline_data:
+            new_findings, baselined_findings = apply_baseline(report.findings, baseline_data)
+            if not quiet and output == "terminal":
+                console.print(
+                    f"[dim]Baseline: {len(baselined_findings)} known, "
+                    f"{len(new_findings)} new[/dim]\n"
+                )
+
     scorer = OwaspScorer()
     posture = scorer.compute_posture_score(report.findings)
 
@@ -307,7 +360,9 @@ def scan(
                 FindingSeverity.INFO: 4,
             }[threshold]
 
-            failing_count = sum(1 for f in report.findings if f.severity_rank <= threshold_rank)
+            # When baseline is active, only count non-baselined findings
+            check_findings = new_findings if baseline else report.findings
+            failing_count = sum(1 for f in check_findings if f.severity_rank <= threshold_rank)
             if failing_count > 0:
                 if not quiet:
                     console.print(

@@ -39,10 +39,10 @@ agentsec scan ~/.openclaw
 | `installation` | Gateway exposure, auth posture, DM/group policy, tool/sandbox settings, SSRF and safety checks, known CVE version checks, sensitive file/dir permissions |
 | `skill` | Instruction malware, risky code patterns (`eval/exec/subprocess`), prompt-injection patterns, frontmatter capability risk, dependency/install-hook risk |
 | `mcp` | Tool poisoning patterns, auth gaps on remote endpoints, dangerous schema/permissions, unverified `npx` usage |
-| `credential` | detect-secrets engine (23 plugins) + 11 custom patterns (OpenAI, Anthropic, AWS, Databricks, HuggingFace, etc.), high-entropy detection, git credential leakage |
+| `credential` | detect-secrets engine (23 plugins) + 16 custom patterns (OpenAI, Anthropic, AWS, Databricks, HuggingFace, Groq, Mistral, etc.), high-entropy detection, git credential leakage |
 
 Reference catalog:
-- [Checks Catalog](https://github.com/debu-sinha/agentsec/blob/main/docs/checks-catalog.md) (27 named checks + dynamic credential findings)
+- [Checks Catalog](https://github.com/debu-sinha/agentsec/blob/main/docs/checks-catalog.md) (33 named checks + dynamic credential findings)
 - [CLI Reference](https://github.com/debu-sinha/agentsec/blob/main/docs/cli-reference.md) (full command/options guide)
 
 ## Core Commands
@@ -129,7 +129,7 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-      - uses: debu-sinha/agentsec@v0.4.4
+      - uses: debu-sinha/agentsec@v0.4.5
         with:
           fail-on: high
           output: sarif

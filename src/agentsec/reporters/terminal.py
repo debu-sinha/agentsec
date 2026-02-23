@@ -259,6 +259,8 @@ class TerminalReporter:
             sev_text = Text(_SEVERITY_LABELS[finding.severity], style=sev_color)
 
             title = finding.title
+            if finding.metadata.get("baseline"):
+                title = f"[dim][baseline][/dim] {title}"
             if finding.file_path:
                 loc = str(finding.file_path.name)
                 if finding.line_number:
