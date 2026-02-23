@@ -136,6 +136,13 @@ def main() -> None:
     default="high",
     help="Exit non-zero if findings at this severity or above (default: high)",
 )
+@click.option(
+    "--policy",
+    "-p",
+    type=click.Path(exists=True),
+    default=None,
+    help="YAML policy file for enforcing organizational security rules",
+)
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
 @click.option("--quiet", "-q", is_flag=True, help="Suppress terminal output, exit code only")
 def scan(
@@ -144,6 +151,7 @@ def scan(
     output_file: str | None,
     scanners: str | None,
     fail_on: str,
+    policy: str | None,
     verbose: bool,
     quiet: bool,
 ) -> None:
@@ -196,6 +204,7 @@ def scan(
         output_format=output,
         output_path=Path(output_file) if output_file else None,
         fail_on_severity=fail_on if fail_on != "none" else None,
+        policy_path=Path(policy) if policy else None,
     )
 
     # Run the scan with progress spinner
@@ -235,6 +244,20 @@ def scan(
     apply_impacts(report.findings)
     scorer = OwaspScorer()
     posture = scorer.compute_posture_score(report.findings)
+
+    # Evaluate policy (if provided)
+    policy_violations = []
+    policy_fail = False
+    if config.policy_path:
+        from agentsec.policy import PolicyEvaluator
+
+        evaluator = PolicyEvaluator.load(config.policy_path)
+        policy_violations = evaluator.evaluate(report.findings, posture)
+        policy_fail = evaluator.should_fail(policy_violations)
+
+        # Add policy violation findings to the report
+        for v in policy_violations:
+            report.findings.append(v.to_finding())
 
     # Render output (skip if quiet mode unless writing to file)
     if not quiet or config.output_path:
@@ -292,6 +315,18 @@ def scan(
                         f"severity '{config.fail_on_severity}' or above.\n"
                     )
                 sys.exit(1)
+
+    # Policy-based exit code (can fail even if severity threshold passes)
+    if policy_fail:
+        if not quiet:
+            fail_rules = [v for v in policy_violations if v.action == "fail"]
+            console.print(
+                f"\n[bold red]POLICY FAIL[/bold red]: {len(fail_rules)} policy rule(s) violated:"
+            )
+            for v in fail_rules:
+                console.print(f"  [{v.rule_id}] {v.message}")
+            console.print()
+        sys.exit(1)
 
 
 @main.command("list-scanners")
