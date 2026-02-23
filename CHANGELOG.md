@@ -2,7 +2,33 @@
 
 All notable changes to agentsec are documented here.
 
-## [0.4.5] - 2026-02-19
+## [0.4.5] - 2026-02-23
+
+### New Features
+
+- **Policy-as-code engine**: Declarative YAML security policies for CI/CD enforcement
+  - 7 condition types: severity, severity_min, category, owasp_id, scanner, title_regex, posture grade/score
+  - Exemptions with expiration dates and fingerprint matching
+  - `--policy` / `-p` CLI flag with fail/warn/info actions
+  - Example policies: `examples/policies/corporate.yaml`, `examples/policies/strict.yaml`
+- **SBOM generation**: CycloneDX SBOM generated and uploaded as release asset on every PyPI publish
+- **Red-team benchmark**: 30 adversarial fixtures across 4 categories (skill evasion, MCP poisoning,
+  config attacks, credential FP stress) — F1=0.98, P=0.96, R=1.00
+- **Threat model document**: STRIDE-based formal threat model with 5 adversary profiles
+  and 21 mapped threat scenarios
+- **Whitepaper outline**: arXiv-targeted paper outline for cs.CR
+
+### Scanner Improvements
+
+- Skill scanner: detect `os.environ.items()`, `.keys()`, `.values()`, `dict(os.environ)`
+  bulk environment variable harvesting patterns
+- Installation scanner: detect `tools.groups.runtime: true` boolean config key
+  (previously only detected `tools.allow: ["group:runtime"]`)
+
+### Stats
+
+- 415 tests passing (23 new policy tests), 2 skipped, 4 xfailed
+- Red-team benchmark: 55 TP, 2 FP, 0 FN across 30 adversarial fixtures
 
 ### UX Improvements
 

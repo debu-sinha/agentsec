@@ -5,7 +5,7 @@ on:
     types: [published]
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
   attestations: write
 
@@ -23,15 +23,27 @@ jobs:
           python-version: "3.12"
 
       - name: Install build tools
-        run: python -m pip install --upgrade pip -c requirements/constraints-dev.txt build
+        run: python -m pip install --upgrade pip -c requirements/constraints-dev.txt build cyclonedx-bom
 
       - name: Build package
         run: python -m build
+
+      - name: Generate SBOM (CycloneDX)
+        run: |
+          pip install -e .
+          cyclonedx-py environment --output sbom.cdx.json --output-format json
+          cp sbom.cdx.json dist/
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: "dist/*"
+
+      - name: Upload SBOM as release asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" sbom.cdx.json --clobber
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

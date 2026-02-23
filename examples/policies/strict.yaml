@@ -1,0 +1,81 @@
+# agentsec security policy — strict / public-facing
+#
+# For internet-facing agents and high-security environments.
+# Zero tolerance for critical and high, minimum grade A.
+
+name: strict
+version: "1.0"
+description: >
+  Strict security policy for public-facing agents.
+  No critical or high findings, grade A required, score 90+.
+
+rules:
+  - id: STR-001
+    name: Zero critical findings
+    condition:
+      severity: critical
+      max_count: 0
+    action: fail
+
+  - id: STR-002
+    name: Zero high findings
+    condition:
+      severity: high
+      max_count: 0
+    action: fail
+
+  - id: STR-003
+    name: No credentials in any file
+    condition:
+      category: plaintext_secret
+      max_count: 0
+    action: fail
+
+  - id: STR-004
+    name: No exposed tokens
+    condition:
+      category: exposed_token
+      max_count: 0
+    action: fail
+
+  - id: STR-005
+    name: No hardcoded credentials
+    condition:
+      category: hardcoded_credential
+      max_count: 0
+    action: fail
+
+  - id: STR-006
+    name: Minimum grade A
+    condition:
+      type: posture_grade
+      min_grade: A
+    action: fail
+
+  - id: STR-007
+    name: Minimum score 90
+    condition:
+      type: posture_score
+      min_score: 90
+    action: fail
+
+  - id: STR-008
+    name: No supply chain risks
+    condition:
+      category: supply_chain
+      max_count: 0
+    action: fail
+
+  - id: STR-009
+    name: No MCP tool poisoning
+    condition:
+      category: mcp_tool_poisoning
+      max_count: 0
+    action: fail
+
+  - id: STR-010
+    name: No missing authentication
+    condition:
+      category: missing_auth
+      max_count: 0
+    action: fail
