@@ -1,9 +1,9 @@
-# haris-musa/excel-mcp-server
+# Coding-Solo/godot-mcp
 
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
-**Repository:** [haris-musa/excel-mcp-server](https://github.com/haris-musa/excel-mcp-server)
-**Stars:** 3,465
+**Repository:** [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp)
+**Stars:** 2,376
 **Last scan:** 2026-03-16
 
 ## Severity Summary

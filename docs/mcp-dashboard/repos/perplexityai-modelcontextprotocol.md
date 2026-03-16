@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-93%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [perplexityai/modelcontextprotocol](https://github.com/perplexityai/modelcontextprotocol)
-**Stars:** 1,956
-**Last scan:** 2026-02-17
+**Stars:** 2,020
+**Last scan:** 2026-03-16
 
 ## Severity Summary
 
@@ -19,10 +19,10 @@
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
-| 1 | 🟡 Medium | Exposed Token | Secret Keyword found in test.yml | Rotate and secure the Secret Keyword |
+| 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
 | 2 | 🟢 Low | Exposed Token | Secret Keyword found in transport.test.ts | Rotate and secure the Secret Keyword |
 | 3 | 🟡 Medium | Exposed Token | Secret Keyword found in vitest.config.ts | Rotate and secure the Secret Keyword |
-| 4 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in test.yml | Rotate and secure the Secret Keyword |
 
 ## Categories
 
@@ -33,4 +33,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-02-17 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-16 by [agentsec](https://github.com/debu-sinha/agentsec)*

@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [antvis/mcp-server-chart](https://github.com/antvis/mcp-server-chart)
-**Stars:** 3,677
-**Last scan:** 2026-02-17
+**Stars:** 3,821
+**Last scan:** 2026-03-16
 
 ## Severity Summary
 
@@ -27,4 +27,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-02-17 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-16 by [agentsec](https://github.com/debu-sinha/agentsec)*

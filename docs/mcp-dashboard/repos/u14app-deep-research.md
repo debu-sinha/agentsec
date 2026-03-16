@@ -1,33 +1,52 @@
 # u14app/deep-research
 
-![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-85%2F100-green?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-40%2F100-red?style=for-the-badge)
 
 **Repository:** [u14app/deep-research](https://github.com/u14app/deep-research)
-**Stars:** 4,430
-**Last scan:** 2026-02-17
+**Stars:** 4,517
+**Last scan:** 2026-03-16
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🔴 Critical | **1** |
+| 🟡 Medium | **20** |
 | 🔵 Info | **1** |
-| **Total** | **2** |
+| **Total** | **21** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
-| 1 | 🔴 Critical | Exposed Token | Private Key found in vertexAuth.ts | Rotate and secure the Private Key |
-| 2 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.json | Rotate and secure the Secret Keyword |
+| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.json | Rotate and secure the Secret Keyword |
+| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.json | Rotate and secure the Secret Keyword |
+| 5 | 🟡 Medium | Exposed Token | Secret Keyword found in es-ES.json | Rotate and secure the Secret Keyword |
+| 6 | 🟡 Medium | Exposed Token | Secret Keyword found in es-ES.json | Rotate and secure the Secret Keyword |
+| 7 | 🟡 Medium | Exposed Token | Secret Keyword found in es-ES.json | Rotate and secure the Secret Keyword |
+| 8 | 🟡 Medium | Exposed Token | Secret Keyword found in es-ES.json | Rotate and secure the Secret Keyword |
+| 9 | 🟡 Medium | Exposed Token | Secret Keyword found in es-ES.json | Rotate and secure the Secret Keyword |
+| 10 | 🟡 Medium | Exposed Token | Secret Keyword found in es-ES.json | Rotate and secure the Secret Keyword |
+| 11 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.json | Rotate and secure the Secret Keyword |
+| 12 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.json | Rotate and secure the Secret Keyword |
+| 13 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.json | Rotate and secure the Secret Keyword |
+| 14 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.json | Rotate and secure the Secret Keyword |
+| 15 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.json | Rotate and secure the Secret Keyword |
+| 16 | 🟡 Medium | Exposed Token | Secret Keyword found in vi-VN.json | Rotate and secure the Secret Keyword |
+| 17 | 🟡 Medium | Exposed Token | Secret Keyword found in vi-VN.json | Rotate and secure the Secret Keyword |
+| 18 | 🟡 Medium | Exposed Token | Secret Keyword found in vi-VN.json | Rotate and secure the Secret Keyword |
+| 19 | 🟡 Medium | Exposed Token | Secret Keyword found in vi-VN.json | Rotate and secure the Secret Keyword |
+| 20 | 🟡 Medium | Exposed Token | Secret Keyword found in vi-VN.json | Rotate and secure the Secret Keyword |
+| 21 | 🟡 Medium | Exposed Token | Secret Keyword found in vi-VN.json | Rotate and secure the Secret Keyword |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 1 |
+| Exposed Token | 20 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-02-17 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-16 by [agentsec](https://github.com/debu-sinha/agentsec)*

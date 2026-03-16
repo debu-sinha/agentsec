@@ -1,40 +1,45 @@
 # opensumi/core
 
-![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-55%2F100-red?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-D-orange?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-61%2F100-orange?style=for-the-badge)
 
 **Repository:** [opensumi/core](https://github.com/opensumi/core)
-**Stars:** 3,598
-**Last scan:** 2026-02-17
+**Stars:** 3,609
+**Last scan:** 2026-03-16
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🔴 Critical | **2** |
-| 🟡 Medium | **5** |
+| 🟡 Medium | **13** |
 | 🔵 Info | **1** |
-| **Total** | **8** |
+| **Total** | **14** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
-| 1 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in md5.wasm.json | Rotate and secure the Base64 High Entropy String |
-| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in crypto.server.ts | Rotate and secure the Secret Keyword |
-| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in ai-native.ts | Rotate and secure the Secret Keyword |
-| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in ai-native.ts | Rotate and secure the Secret Keyword |
+| 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.lang.ts | Rotate and secure the Secret Keyword |
+| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.lang.ts | Rotate and secure the Secret Keyword |
+| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in en-US.lang.ts | Rotate and secure the Secret Keyword |
 | 5 | 🟡 Medium | Exposed Token | Secret Keyword found in ai-native.ts | Rotate and secure the Secret Keyword |
-| 6 | 🔴 Critical | Exposed Token | OpenAI API Key found in problem-line-matcher.ts | Rotate and secure the OpenAI API Key |
-| 7 | 🔴 Critical | Exposed Token | OpenAI API Key found in problem-matcher.ts | Rotate and secure the OpenAI API Key |
-| 8 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 6 | 🟡 Medium | Exposed Token | Secret Keyword found in ai-native.ts | Rotate and secure the Secret Keyword |
+| 7 | 🟡 Medium | Exposed Token | Secret Keyword found in ai-native.ts | Rotate and secure the Secret Keyword |
+| 8 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.lang.ts | Rotate and secure the Secret Keyword |
+| 9 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.lang.ts | Rotate and secure the Secret Keyword |
+| 10 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.lang.ts | Rotate and secure the Secret Keyword |
+| 11 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in md5.wasm.json | Rotate and secure the Base64 High Entropy String |
+| 12 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in interface-navigation.contribution.ts | Rotate and secure the Base64 High Entropy String |
+| 13 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in interface-navigation.contribution.ts | Rotate and secure the Base64 High Entropy String |
+| 14 | 🟡 Medium | Exposed Token | Secret Keyword found in crypto.server.ts | Rotate and secure the Secret Keyword |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 7 |
+| Exposed Token | 13 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-02-17 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-16 by [agentsec](https://github.com/debu-sinha/agentsec)*
