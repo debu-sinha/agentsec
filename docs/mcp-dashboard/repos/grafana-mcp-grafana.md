@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-82%2F100-green?style=for-the-badge)
 
 **Repository:** [grafana/mcp-grafana](https://github.com/grafana/mcp-grafana)
-**Stars:** 2,556
-**Last scan:** 2026-03-16
+**Stars:** 2,618
+**Last scan:** 2026-03-23
 
 ## Severity Summary
 
@@ -19,10 +19,10 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in integration.yml | Rotate and secure the Secret Keyword |
-| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in e2e.yml | Rotate and secure the Secret Keyword |
-| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in mcpgrafana.go | Rotate and secure the Secret Keyword |
-| 5 | 🟡 Medium | Exposed Token | Secret Keyword found in mcpgrafana.go | Rotate and secure the Secret Keyword |
+| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in mcpgrafana.go | Rotate and secure the Secret Keyword |
+| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in mcpgrafana.go | Rotate and secure the Secret Keyword |
+| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in integration.yml | Rotate and secure the Secret Keyword |
+| 5 | 🟡 Medium | Exposed Token | Secret Keyword found in e2e.yml | Rotate and secure the Secret Keyword |
 | 6 | 🟡 Medium | Exposed Token | Secret Keyword found in token-check.yml | Rotate and secure the Secret Keyword |
 | 7 | 🟡 Medium | Exposed Token | Secret Keyword found in token-baseline.yml | Rotate and secure the Secret Keyword |
 
@@ -35,4 +35,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-16 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-23 by [agentsec](https://github.com/debu-sinha/agentsec)*
