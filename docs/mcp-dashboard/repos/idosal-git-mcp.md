@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-97%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [idosal/git-mcp](https://github.com/idosal/git-mcp)
-**Stars:** 7,816
-**Last scan:** 2026-03-23
+**Stars:** 7,846
+**Last scan:** 2026-03-30
 
 ## Severity Summary
 
@@ -30,4 +30,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-23 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-30 by [agentsec](https://github.com/debu-sinha/agentsec)*

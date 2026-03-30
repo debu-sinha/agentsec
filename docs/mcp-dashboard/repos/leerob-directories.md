@@ -4,7 +4,7 @@
 
 **Repository:** [leerob/directories](https://github.com/leerob/directories)
 **Stars:** 3,919
-**Last scan:** 2026-03-23
+**Last scan:** 2026-03-30
 
 ## Severity Summary
 
@@ -27,4 +27,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-23 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-03-30 by [agentsec](https://github.com/debu-sinha/agentsec)*
