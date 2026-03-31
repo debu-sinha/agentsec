@@ -2162,7 +2162,7 @@ class InstallationScanner(BaseScanner):
                         findings.append(
                             Finding(
                                 check_id="CHK-001",
-                        scanner=self.name,
+                                scanner=self.name,
                                 title=f"Project-level security override: {override}",
                                 description=(
                                     f"Project settings at {project_settings} set "
@@ -2190,7 +2190,7 @@ class InstallationScanner(BaseScanner):
                     findings.append(
                         Finding(
                             check_id="CHK-002",
-                        scanner=self.name,
+                            scanner=self.name,
                             title="Project grants unrestricted bash access",
                             description=(
                                 f"Project settings at {project_settings} allow "
@@ -2206,7 +2206,7 @@ class InstallationScanner(BaseScanner):
                                 summary="Restrict Bash permissions to specific commands",
                                 steps=[
                                     f"Edit {project_settings}",
-                                    "Replace Bash(*) with specific prefixes: Bash(git:*), Bash(npm:*)",
+                                    "Replace Bash(*) with specific prefixes",
                                     "Use deny rules for dangerous commands",
                                 ],
                             ),
@@ -2251,7 +2251,7 @@ class InstallationScanner(BaseScanner):
                             summary="Remove or audit network commands in hooks",
                             steps=[
                                 f"Review hook in {source_file}",
-                                f"Remove or replace the network command",
+                                "Remove or replace the network command",
                                 "Hooks should not make external network requests",
                             ],
                         ),
@@ -2310,7 +2310,7 @@ class InstallationScanner(BaseScanner):
                             summary="Remove security config modifications from hooks",
                             steps=[
                                 f"Review hook in {source_file}",
-                                "Hooks must not modify autoApprove, bypassPermissions, or sandbox settings",
+                                "Hooks must not modify security settings",
                                 "See CVE-2025-53773 for the attack pattern",
                             ],
                         ),
