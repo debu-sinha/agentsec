@@ -57,7 +57,8 @@ def load_baseline(path: Path) -> dict[str, dict[str, str]]:
         data = json.loads(path.read_text())
         if not isinstance(data, dict):
             return {}
-        return data.get("findings", {})
+        result: dict[str, dict[str, str]] = data.get("findings", {})
+        return result
     except (json.JSONDecodeError, OSError):
         return {}
 

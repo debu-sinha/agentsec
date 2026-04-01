@@ -146,7 +146,8 @@ def verify_secret(secret_type: str, secret_value: str) -> dict[str, str]:
         return {"verified": "unknown", "verify_method": "verifier_not_implemented"}
 
     try:
-        return fn(secret_value)
+        result: dict[str, str] = fn(secret_value)
+        return result
     except Exception as e:
         logger.debug("Verification failed for %s: %s", secret_type, e)
         return {"verified": "error", "verify_method": f"exception:{type(e).__name__}"}
