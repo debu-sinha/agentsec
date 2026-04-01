@@ -45,7 +45,8 @@ _PROJECT_RULE_DIRS = [
 def _read_json(path: Path) -> dict[str, Any] | None:
     """Read and parse a JSON file, returning None on any error."""
     try:
-        return json.loads(path.read_text())
+        data: dict[str, Any] = json.loads(path.read_text())
+        return data
     except json.JSONDecodeError:
         logger.debug("Malformed JSON in %s", path)
         return None
