@@ -1224,9 +1224,7 @@ def discover(target: str, detect_versions: bool, output_json: bool) -> None:
 
     supported_count = sum(1 for a in agents if a.supported)
     unsupported_count = len(agents) - supported_count
-    console.print(
-        f"\n[dim]{supported_count} supported, {unsupported_count} unsupported (detection only)[/dim]"
-    )
+    console.print(f"\n[dim]{supported_count} supported, {unsupported_count} unsupported[/dim]")
     console.print(
         "[dim]Use [cyan]agentsec scan --all[/cyan] to scan all discovered agents.[/dim]\n"
     )
