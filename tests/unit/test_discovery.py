@@ -20,7 +20,9 @@ def mock_home_with_claude(tmp_path, monkeypatch):
     (fake_home / ".claude").mkdir()
     (fake_home / ".claude" / "settings.json").write_text("{}")
     monkeypatch.setenv("HOME", str(fake_home))
+    monkeypatch.setenv("USERPROFILE", str(fake_home))
     monkeypatch.setattr("pathlib.Path.home", lambda: fake_home)
+    monkeypatch.setattr("os.path.expanduser", lambda p: p.replace("~", str(fake_home)))
     return fake_home
 
 
@@ -30,7 +32,9 @@ def mock_home_empty(tmp_path, monkeypatch):
     fake_home = tmp_path / "fake_home"
     fake_home.mkdir()
     monkeypatch.setenv("HOME", str(fake_home))
+    monkeypatch.setenv("USERPROFILE", str(fake_home))
     monkeypatch.setattr("pathlib.Path.home", lambda: fake_home)
+    monkeypatch.setattr("os.path.expanduser", lambda p: p.replace("~", str(fake_home)))
     return fake_home
 
 
@@ -134,6 +138,8 @@ def test_discover_results_sorted(mock_home_with_claude, tmp_path, monkeypatch):
 
 def test_expand_path_tilde(tmp_path, monkeypatch):
     monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    monkeypatch.setattr("os.path.expanduser", lambda p: p.replace("~", str(tmp_path)))
     result = _expand_path("~/test")
     assert str(tmp_path) in result
 
