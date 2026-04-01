@@ -1162,8 +1162,15 @@ class CredentialScanner(BaseScanner):
         # Go test files: *_test.go
         if name_lower.endswith("_test.go"):
             return True
-        # Mock/stub/fixture files
+        # Rust test files: *_tests.rs, *_test.rs
+        if name_lower.endswith(("_tests.rs", "_test.rs")):
+            return True
+        # Mock/stub/fixture/dummy/example files
         if "mock" in name_lower or "stub" in name_lower or "fixture" in name_lower:
+            return True
+        if "dummy" in name_lower or "fake" in name_lower:
+            return True
+        if name_lower.startswith("example") or name_lower.startswith("sample"):
             return True
         # Known config template files
         if name_lower in _TEMPLATE_CONFIG_FILES:
