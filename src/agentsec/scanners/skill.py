@@ -135,7 +135,10 @@ _PROMPT_INJECTION_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("System prompt marker", re.compile(r"<\|(?:im_start|system|endoftext)\|>", re.I)),
     (
         "Hidden instruction",
-        re.compile(r"<!--.*(?:execute|run|send|forward|ignore).*-->", re.I | re.DOTALL),
+        re.compile(
+            r"<!--[^>]*\b(?:execute|send|forward|ignore)\b[^>]*-->",
+            re.I | re.DOTALL,
+        ),
     ),
     ("Invisible unicode", re.compile(r"[\u200b\u200c\u200d\u2060\ufeff]")),
     ("Encoded instruction", re.compile(r"(?:&#x|\\u|%[0-9a-f]{2}){5,}", re.I)),
