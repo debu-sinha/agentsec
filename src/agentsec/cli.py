@@ -56,6 +56,7 @@ class _WorkflowGroup(click.Group):
     """Click group that lists commands in workflow order instead of alphabetical."""
 
     _COMMAND_ORDER = [
+        "discover",
         "scan",
         "harden",
         "gate",
@@ -182,6 +183,13 @@ def main() -> None:
     default=False,
     help="Actively verify discovered credentials via safe, read-only API probes",
 )
+@click.option(
+    "--all",
+    "scan_all",
+    is_flag=True,
+    default=False,
+    help="Auto-discover all installed agents and scan each one",
+)
 def scan(
     target: str,
     output: str,
@@ -197,6 +205,7 @@ def scan(
     scan_history: bool,
     history_depth: int,
     verify: bool,
+    scan_all: bool,
 ) -> None:
     """Scan an agent installation for security vulnerabilities.
 
@@ -219,6 +228,53 @@ def scan(
         agentsec scan -s installation,mcp        # run specific scanners
     """
     _configure_logging(verbose)
+
+    # When --all is passed, discover agents and scan each install path
+    if scan_all:
+        from agentsec.discovery import discover_agents
+
+        agents = discover_agents(target=Path(target).expanduser().resolve())
+        if not agents:
+            console.print("[yellow]No installed agents found.[/yellow]")
+            sys.exit(0)
+
+        if not quiet:
+            console.print(f"[bold]Discovered {len(agents)} agent(s).[/bold] Scanning each...\n")
+
+        combined_exit = 0
+        for agent in agents:
+            scan_path = agent.install_path or agent.config_dir
+            if not scan_path or not scan_path.exists():
+                continue
+            if not quiet:
+                console.print(f"[cyan]{agent.display_name}[/cyan]: {scan_path}")
+            # Re-invoke the scan command context without --all to avoid recursion
+            ctx = click.get_current_context()
+            try:
+                ctx.invoke(
+                    scan,
+                    target=str(scan_path),
+                    output=output,
+                    output_file=output_file,
+                    scanners=scanners,
+                    fail_on=fail_on,
+                    policy=policy,
+                    verbose=verbose,
+                    quiet=quiet,
+                    baseline=baseline,
+                    create_baseline=create_baseline,
+                    show_baseline=show_baseline,
+                    scan_history=scan_history,
+                    history_depth=history_depth,
+                    verify=verify,
+                    scan_all=False,
+                )
+            except SystemExit as e:
+                if e.code and int(e.code) > combined_exit:
+                    combined_exit = int(e.code)
+            if not quiet:
+                console.print()
+        sys.exit(combined_exit)
 
     target_path = Path(target).expanduser().resolve()
 
@@ -1072,6 +1128,105 @@ def pin_tools(target: str, verbose: bool) -> None:
     console.print(table)
     console.print(
         "\n[dim]Subsequent scans will alert if any pinned tool description changes.[/dim]\n"
+    )
+
+
+@main.command()
+@click.argument("target", default=".", required=False, type=click.Path())
+@click.option(
+    "--detect-versions",
+    is_flag=True,
+    default=False,
+    help="Try to detect installed agent versions via their CLI binaries",
+)
+@click.option(
+    "--json",
+    "output_json",
+    is_flag=True,
+    default=False,
+    help="Output results as JSON instead of a Rich table",
+)
+def discover(target: str, detect_versions: bool, output_json: bool) -> None:
+    """Discover AI agents installed on this system.
+
+    Checks for known agent installations (Claude Code, Cursor, Windsurf,
+    VS Code Copilot, etc.) by looking for marker files, config directories,
+    and MCP configuration files.
+
+    If TARGET is provided, also checks for project-level agent configs
+    under that directory.
+
+    \b
+    Examples:
+        agentsec discover                    # find all installed agents
+        agentsec discover --detect-versions  # also detect version strings
+        agentsec discover --json             # machine-readable output
+        agentsec discover ~/my-project       # include project-level configs
+    """
+    import json as json_mod
+
+    from agentsec.discovery import discover_agents
+
+    target_path = Path(target).expanduser().resolve() if target != "." else None
+
+    agents = discover_agents(target=target_path, detect_versions=detect_versions)
+
+    if output_json:
+        records = []
+        for agent in agents:
+            records.append(
+                {
+                    "name": agent.name,
+                    "display_name": agent.display_name,
+                    "agent_type": agent.agent_type,
+                    "install_path": str(agent.install_path) if agent.install_path else None,
+                    "config_dir": str(agent.config_dir) if agent.config_dir else None,
+                    "version": agent.version,
+                    "mcp_config_paths": [str(p) for p in agent.mcp_config_paths],
+                    "config_files_found": [str(p) for p in agent.config_files_found],
+                    "scope": agent.scope,
+                    "supported": agent.supported,
+                }
+            )
+        click.echo(json_mod.dumps(records, indent=2))
+        return
+
+    if not agents:
+        console.print("[yellow]No AI agents found on this system.[/yellow]")
+        return
+
+    table = Table(title=f"Discovered Agents ({len(agents)} found)")
+    table.add_column("Agent", style="bold cyan")
+    table.add_column("Scope", width=8)
+    table.add_column("Config Files", min_width=20)
+    table.add_column("MCP Configs", min_width=20)
+    if detect_versions:
+        table.add_column("Version")
+
+    for agent in agents:
+        config_str = "\n".join(str(p) for p in agent.config_files_found) or "[dim]none[/dim]"
+        mcp_str = "\n".join(str(p) for p in agent.mcp_config_paths) or "[dim]none[/dim]"
+        supported_marker = "" if agent.supported else " [dim](unsupported)[/dim]"
+
+        row = [
+            f"{agent.display_name}{supported_marker}",
+            agent.scope,
+            config_str,
+            mcp_str,
+        ]
+        if detect_versions:
+            row.append(agent.version or "[dim]unknown[/dim]")
+
+        table.add_row(*row)
+
+    console.print()
+    console.print(table)
+
+    supported_count = sum(1 for a in agents if a.supported)
+    unsupported_count = len(agents) - supported_count
+    console.print(f"\n[dim]{supported_count} supported, {unsupported_count} unsupported[/dim]")
+    console.print(
+        "[dim]Use [cyan]agentsec scan --all[/cyan] to scan all discovered agents.[/dim]\n"
     )
 
 
