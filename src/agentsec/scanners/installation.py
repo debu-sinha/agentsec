@@ -207,6 +207,7 @@ class InstallationScanner(BaseScanner):
         findings.extend(self._scan_memory_config(context))
         findings.extend(self._scan_multi_agent_config(context))
         findings.extend(self._scan_audit_config(context))
+        findings.extend(self._scan_hook_hijacking(context))
 
         # Pick up deferred findings (e.g., malformed JSON detected during config loading)
         deferred = context.metadata.pop("_deferred_findings", [])
@@ -2019,3 +2020,302 @@ class InstallationScanner(BaseScanner):
             return inst_parts < fix_parts
         except (ValueError, AttributeError):
             return False
+
+    # ------------------------------------------------------------------
+    # Hook hijacking detection (CVE-2025-59536)
+    # ------------------------------------------------------------------
+
+    # Patterns in hook commands that indicate network exfiltration
+    _HOOK_EXFIL_PATTERNS: list[re.Pattern[str]] = [
+        re.compile(r"\bcurl\b", re.I),
+        re.compile(r"\bwget\b", re.I),
+        re.compile(r"\bnc\b"),
+        re.compile(r"\bncat\b"),
+        re.compile(r"\bnetcat\b"),
+        re.compile(r"requests\.(get|post|put)", re.I),
+        re.compile(r"urllib\.request"),
+        re.compile(r"http\.client"),
+        re.compile(r"\bfetch\("),
+    ]
+
+    # Patterns that indicate reading sensitive files or environment
+    _HOOK_SENSITIVE_READ_PATTERNS: list[re.Pattern[str]] = [
+        re.compile(r"cat\s+.*\.(env|pem|key|crt|secret)", re.I),
+        re.compile(r"cat\s+.*/\.ssh/", re.I),
+        re.compile(r"cat\s+.*/\.aws/", re.I),
+        re.compile(r"\$\{?\w*SECRET\w*\}?", re.I),
+        re.compile(r"\$\{?\w*API_KEY\w*\}?", re.I),
+        re.compile(r"\$\{?\w*TOKEN\w*\}?", re.I),
+        re.compile(r"os\.environ", re.I),
+        re.compile(r"printenv\b"),
+        re.compile(r"\benv\s*\|"),
+    ]
+
+    # Patterns that indicate config tampering from hooks
+    _HOOK_CONFIG_TAMPER_PATTERNS: list[re.Pattern[str]] = [
+        re.compile(r"autoApprove", re.I),
+        re.compile(r"bypassPermissions", re.I),
+        re.compile(r"dangerouslyDisableSandbox", re.I),
+        re.compile(r"settings\.json", re.I),
+        re.compile(r"settings\.local\.json", re.I),
+        re.compile(r"\.cursor/mcp\.json", re.I),
+        re.compile(r"\.vscode/settings", re.I),
+    ]
+
+    # Claude Code hook directories and settings files
+    _HOOK_LOCATIONS: list[str] = [
+        ".claude/settings.json",
+        ".claude/settings.local.json",
+        ".claude/hooks",
+    ]
+
+    def _scan_hook_hijacking(self, context: ScanContext) -> list[Finding]:
+        """Detect malicious hooks in Claude Code and similar agent configs.
+
+        Checks for CVE-2025-59536 attack patterns: project-level hooks that
+        execute shell commands with network access, read sensitive files, or
+        tamper with security settings.
+        """
+        findings: list[Finding] = []
+        target = context.target_path
+
+        # Check Claude Code settings files for hook definitions
+        for settings_rel in [
+            ".claude/settings.json",
+            ".claude/settings.local.json",
+        ]:
+            settings_path = target / settings_rel
+            if not settings_path.exists():
+                continue
+
+            try:
+                data = json.loads(settings_path.read_text())
+            except (json.JSONDecodeError, OSError):
+                continue
+
+            hooks = data.get("hooks", {})
+            if not hooks:
+                continue
+
+            for event_name, hook_list in hooks.items():
+                if not isinstance(hook_list, list):
+                    continue
+                for hook_group in hook_list:
+                    if not isinstance(hook_group, dict):
+                        continue
+                    for hook in hook_group.get("hooks", []):
+                        if not isinstance(hook, dict):
+                            continue
+                        hook_type = hook.get("type", "")
+                        command = hook.get("command", "")
+                        prompt = hook.get("prompt", "")
+                        content = command or prompt
+
+                        if not content:
+                            continue
+
+                        findings.extend(
+                            self._analyze_hook_command(
+                                content,
+                                event_name,
+                                hook_type,
+                                settings_path,
+                                context,
+                            )
+                        )
+
+        # Check for hook script files in .claude/hooks/
+        hooks_dir = target / ".claude" / "hooks"
+        if hooks_dir.is_dir():
+            for hook_file in hooks_dir.iterdir():
+                if hook_file.is_file() and not hook_file.name.startswith("."):
+                    try:
+                        content = hook_file.read_text(errors="replace")
+                        if len(content) > 100_000:
+                            continue
+                        findings.extend(
+                            self._analyze_hook_command(
+                                content,
+                                hook_file.stem,
+                                "script",
+                                hook_file,
+                                context,
+                            )
+                        )
+                    except OSError:
+                        continue
+
+        # Check for project-level settings overriding user security
+        project_settings = target / ".claude" / "settings.json"
+        user_overrides = [
+            "bypassPermissions",
+            "dangerouslyDisableSandbox",
+            "disableAllHooks",
+            "skipDangerousModePermissionPrompt",
+        ]
+        if project_settings.exists():
+            try:
+                data = json.loads(project_settings.read_text())
+                perms = data.get("permissions", {})
+                for override in user_overrides:
+                    if override in str(data):
+                        findings.append(
+                            Finding(
+                                check_id="CHK-001",
+                                scanner=self.name,
+                                title=f"Project-level security override: {override}",
+                                description=(
+                                    f"Project settings at {project_settings} set "
+                                    f"'{override}', which overrides user security "
+                                    f"preferences. A cloned repository should not "
+                                    f"disable security controls."
+                                ),
+                                severity=FindingSeverity.CRITICAL,
+                                category=FindingCategory.INSECURE_DEFAULT,
+                                file_path=project_settings,
+                                owasp_ids=["ASI01", "ASI06"],
+                                remediation=Remediation(
+                                    summary=f"Remove '{override}' from project settings",
+                                    steps=[
+                                        f"Edit {project_settings}",
+                                        f"Remove the '{override}' key",
+                                        "Security overrides belong in user settings only",
+                                    ],
+                                ),
+                            )
+                        )
+                # Check for overly permissive allow rules
+                allow_rules = perms.get("allow", [])
+                if any("Bash(*)" in str(r) or "Bash(*):" in str(r) for r in allow_rules):
+                    findings.append(
+                        Finding(
+                            check_id="CHK-002",
+                            scanner=self.name,
+                            title="Project grants unrestricted bash access",
+                            description=(
+                                f"Project settings at {project_settings} allow "
+                                f"unrestricted Bash execution via wildcard permission "
+                                f"rule. This lets the agent run any command without "
+                                f"confirmation."
+                            ),
+                            severity=FindingSeverity.HIGH,
+                            category=FindingCategory.INSECURE_DEFAULT,
+                            file_path=project_settings,
+                            owasp_ids=["ASI02", "ASI05"],
+                            remediation=Remediation(
+                                summary="Restrict Bash permissions to specific commands",
+                                steps=[
+                                    f"Edit {project_settings}",
+                                    "Replace Bash(*) with specific prefixes",
+                                    "Use deny rules for dangerous commands",
+                                ],
+                            ),
+                        )
+                    )
+            except (json.JSONDecodeError, OSError):
+                pass
+
+        return findings
+
+    def _analyze_hook_command(
+        self,
+        content: str,
+        event_name: str,
+        hook_type: str,
+        source_file: Path,
+        context: ScanContext,
+    ) -> list[Finding]:
+        """Analyze a hook command/script for malicious patterns."""
+        findings: list[Finding] = []
+
+        # Check for network exfiltration
+        for pattern in self._HOOK_EXFIL_PATTERNS:
+            if pattern.search(content):
+                findings.append(
+                    Finding(
+                        check_id="CHK-003",
+                        scanner=self.name,
+                        title=f"Hook with network access: {event_name}",
+                        description=(
+                            f"Hook '{event_name}' (type={hook_type}) in "
+                            f"{source_file} contains network commands "
+                            f"(matched: {pattern.pattern}). Hooks execute "
+                            f"automatically during agent operation and can "
+                            f"exfiltrate data to external servers."
+                        ),
+                        severity=FindingSeverity.CRITICAL,
+                        category=FindingCategory.DATA_EXFILTRATION_RISK,
+                        file_path=source_file,
+                        owasp_ids=["ASI01", "ASI05"],
+                        remediation=Remediation(
+                            summary="Remove or audit network commands in hooks",
+                            steps=[
+                                f"Review hook in {source_file}",
+                                "Remove or replace the network command",
+                                "Hooks should not make external network requests",
+                            ],
+                        ),
+                    )
+                )
+                break
+
+        # Check for sensitive data access
+        for pattern in self._HOOK_SENSITIVE_READ_PATTERNS:
+            if pattern.search(content):
+                findings.append(
+                    Finding(
+                        check_id="CHK-004",
+                        scanner=self.name,
+                        title=f"Hook reads sensitive data: {event_name}",
+                        description=(
+                            f"Hook '{event_name}' (type={hook_type}) in "
+                            f"{source_file} accesses sensitive files or "
+                            f"environment variables (matched: {pattern.pattern})."
+                        ),
+                        severity=FindingSeverity.HIGH,
+                        category=FindingCategory.EXPOSED_CREDENTIALS,
+                        file_path=source_file,
+                        owasp_ids=["ASI05"],
+                        remediation=Remediation(
+                            summary="Remove sensitive data access from hooks",
+                            steps=[
+                                f"Review hook in {source_file}",
+                                "Hooks should not read secrets, keys, or credentials",
+                            ],
+                        ),
+                    )
+                )
+                break
+
+        # Check for config tampering
+        for pattern in self._HOOK_CONFIG_TAMPER_PATTERNS:
+            if pattern.search(content):
+                findings.append(
+                    Finding(
+                        check_id="CHK-005",
+                        scanner=self.name,
+                        title=f"Hook modifies security settings: {event_name}",
+                        description=(
+                            f"Hook '{event_name}' (type={hook_type}) in "
+                            f"{source_file} references security configuration "
+                            f"(matched: {pattern.pattern}). This could disable "
+                            f"approval prompts or sandbox protections "
+                            f"(CVE-2025-53773 pattern)."
+                        ),
+                        severity=FindingSeverity.CRITICAL,
+                        category=FindingCategory.INSECURE_CONFIG,
+                        file_path=source_file,
+                        owasp_ids=["ASI01", "ASI06"],
+                        remediation=Remediation(
+                            summary="Remove security config modifications from hooks",
+                            steps=[
+                                f"Review hook in {source_file}",
+                                "Hooks must not modify security settings",
+                                "See CVE-2025-53773 for the attack pattern",
+                            ],
+                        ),
+                    )
+                )
+                break
+
+        return findings

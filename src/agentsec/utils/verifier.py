@@ -102,9 +102,8 @@ def compute_passive_hints(
             pass
 
     # --- Overall risk level ---
-    if (
-        hints.get("hint_file_type") == "template"
-        or hints.get("hint_context", "").startswith("near_revocation_word")
+    if hints.get("hint_file_type") == "template" or hints.get("hint_context", "").startswith(
+        "near_revocation_word"
     ):
         hints["hint_risk_level"] = "low"
     elif hints.get("hint_file_age") == "stale":
@@ -147,7 +146,8 @@ def verify_secret(secret_type: str, secret_value: str) -> dict[str, str]:
         return {"verified": "unknown", "verify_method": "verifier_not_implemented"}
 
     try:
-        return fn(secret_value)
+        result: dict[str, str] = fn(secret_value)
+        return result
     except Exception as e:
         logger.debug("Verification failed for %s: %s", secret_type, e)
         return {"verified": "error", "verify_method": f"exception:{type(e).__name__}"}

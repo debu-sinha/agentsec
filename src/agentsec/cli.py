@@ -244,7 +244,7 @@ def scan(
     config = AgentsecConfig(
         targets=[ScanTarget(path=target_path)],
         scanners=scanner_configs,
-        output_format=output,
+        output_format=output,  # type: ignore[arg-type]
         output_path=Path(output_file) if output_file else None,
         fail_on_severity=fail_on if fail_on != "none" else None,
         policy_path=Path(policy) if policy else None,
