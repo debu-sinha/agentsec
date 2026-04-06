@@ -1,9 +1,9 @@
-# makenotion/notion-mcp-server
+# Gentleman-Programming/engram
 
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
-**Repository:** [makenotion/notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
-**Stars:** 4,175
+**Repository:** [Gentleman-Programming/engram](https://github.com/Gentleman-Programming/engram)
+**Stars:** 2,280
 **Last scan:** 2026-04-06
 
 ## Severity Summary
