@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-94%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [firecrawl/firecrawl-mcp-server](https://github.com/firecrawl/firecrawl-mcp-server)
-**Stars:** 5,954
-**Last scan:** 2026-04-06
+**Stars:** 6,029
+**Last scan:** 2026-04-13
 
 ## Severity Summary
 
@@ -31,4 +31,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-06 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-13 by [agentsec](https://github.com/debu-sinha/agentsec)*

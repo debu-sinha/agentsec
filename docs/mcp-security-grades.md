@@ -1,24 +1,24 @@
 # MCP Ecosystem Security Dashboard
 
-![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-87%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026-04-06-grey?style=for-the-badge)
+![Ecosystem Grade](https://img.shields.io/badge/Ecosystem_Grade-B-green?style=for-the-badge) ![Avg Score](https://img.shields.io/badge/Avg_Score-88%2F100-green?style=for-the-badge) ![Repos Scanned](https://img.shields.io/badge/Repos_Scanned-50-blue?style=for-the-badge) ![Last Updated](https://img.shields.io/badge/Last_Scan-2026-04-13-grey?style=for-the-badge)
 
 Automated weekly security scan of the top MCP server repositories, powered by [agentsec](https://github.com/debu-sinha/agentsec). Findings are mapped to the [OWASP Top 10 for Agentic Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/).
 
 **Jump to:** [Summary](#at-a-glance) | [Grades](#grade-distribution) | [Repos Requiring Attention](#repos-requiring-attention) | [All Repos](#all-scanned-repos) | [Methodology](#methodology) | [Disclaimer](#disclaimer)
 
-> **10 repos** scored below B. **agentgateway/agentgateway** alone has **5 critical** and **103 total findings**.
+> **9 repos** scored below B. **agentgateway/agentgateway** alone has **5 critical** and **103 total findings**.
 
 ## At a Glance
 
 | Metric | Value |
 |--------|------:|
 | Repositories scanned | **50** |
-| Total findings | **536** |
+| Total findings | **474** |
 | 🔴 Critical | **6** |
-| 🟠 High | **12** |
-| 🟡 Medium | **108** |
-| 🟢 Low | **362** |
-| 🔵 Info | **48** |
+| 🟠 High | **8** |
+| 🟡 Medium | **103** |
+| 🟢 Low | **310** |
+| 🔵 Info | **47** |
 | Repos with zero critical/high findings | **44** |
 | Repos with critical findings | **2** |
 
@@ -31,91 +31,92 @@ Automated weekly security scan of the top MCP server repositories, powered by [a
 | 2026-03-23 | 88 | 🟢 B | 1 | 0 |
 | 2026-03-30 | 88 | 🟢 B | 0 | 1 |
 | 2026-04-06 | 87 | 🟢 B | 1 | 2 |
+| 2026-04-13 | 88 | 🟢 B | 1 | 2 |
 
 ## Grade Distribution
 
-**A** `███████████████████░░░░░░░░░░░` 33 repos (66%)
+**A** `████████████████████░░░░░░░░░░` 34 repos (68%)
 **B** `████░░░░░░░░░░░░░░░░░░░░░░░░░░` 7 repos (14%)
 **C** `█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 2 repos (4%)
 **D** `██░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 4 repos (8%)
-**F** `██░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 4 repos (8%)
+**F** `█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░` 3 repos (6%)
 
 ## Most Common Finding Categories
 
 | # | Category | OWASP | Findings | Share |
 |--:|----------|:-----:|--------:|------:|
-| 1 | Exposed Token | ASI05 | 476 | 89% |
-| 2 | Outdated Version | ASI03 | 48 | 9% |
-| 3 | Config Drift | ASI10 | 10 | 2% |
+| 1 | Exposed Token | ASI05 | 419 | 88% |
+| 2 | Outdated Version | ASI03 | 47 | 10% |
+| 3 | Config Drift | ASI10 | 6 | 1% |
 | 4 | Data Exfiltration | ASI05 | 1 | 0% |
 | 5 | Insecure Permissions | ASI05 | 1 | 0% |
 
 ## Repos Requiring Attention
 
-> 10 repositories scored below B and have actionable findings.
+> 9 repositories scored below B and have actionable findings.
 
 | # | Repository | Grade | Score | Trend | Critical | High | Medium | Low | Total |
 |--:|------------|:-----:|------:|:-----:|---------:|-----:|-------:|----:|------:|
 | 1 | [agentgateway/agentgateway](mcp-dashboard/repos/agentgateway-agentgateway.md) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 5 | → | **5** | 0 | 13 | 84 | 103 |
-| 2 | [homeassistant-ai/ha-mcp](mcp-dashboard/repos/homeassistant-ai-ha-mcp.md) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 32 |  | 0 | **9** | 0 | 5 | 15 |
-| 3 | [PrefectHQ/fastmcp](mcp-dashboard/repos/PrefectHQ-fastmcp.md) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 34 | ↓ | **1** | 0 | 12 | 31 | 45 |
-| 4 | [u14app/deep-research](mcp-dashboard/repos/u14app-deep-research.md) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 40 | → | 0 | 0 | 20 | 0 | 21 |
+| 2 | [PrefectHQ/fastmcp](mcp-dashboard/repos/PrefectHQ-fastmcp.md) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 34 | → | **1** | 0 | 12 | 31 | 45 |
+| 3 | [u14app/deep-research](mcp-dashboard/repos/u14app-deep-research.md) | ![F](https://img.shields.io/badge/F-red?style=flat-square) | 40 | → | 0 | 0 | 20 | 0 | 21 |
+| 4 | [homeassistant-ai/ha-mcp](mcp-dashboard/repos/homeassistant-ai-ha-mcp.md) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 60 | ↑ | 0 | **5** | 0 | 5 | 11 |
 | 5 | [opensumi/core](mcp-dashboard/repos/opensumi-core.md) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 61 | → | 0 | 0 | 13 | 0 | 14 |
 | 6 | [BeehiveInnovations/pal-mcp-server](mcp-dashboard/repos/BeehiveInnovations-pal-mcp-server.md) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 67 | → | 0 | 0 | 6 | 42 | 49 |
-| 7 | [awslabs/mcp](mcp-dashboard/repos/awslabs-mcp.md) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 67 | → | 0 | 0 | 6 | 54 | 61 |
-| 8 | [googleapis/genai-toolbox](mcp-dashboard/repos/googleapis-genai-toolbox.md) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 69 | → | 0 | **1** | 3 | 21 | 26 |
-| 9 | [wonderwhy-er/DesktopCommanderMCP](mcp-dashboard/repos/wonderwhy-er-DesktopCommanderMCP.md) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 72 | → | 0 | **1** | 7 | 0 | 9 |
-| 10 | [webiny/webiny-js](mcp-dashboard/repos/webiny-webiny-js.md) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 76 |  | 0 | 0 | 4 | 12 | 17 |
+| 7 | [googleapis/mcp-toolbox](mcp-dashboard/repos/googleapis-mcp-toolbox.md) | ![D](https://img.shields.io/badge/D-orange?style=flat-square) | 69 |  | 0 | **1** | 3 | 21 | 26 |
+| 8 | [wonderwhy-er/DesktopCommanderMCP](mcp-dashboard/repos/wonderwhy-er-DesktopCommanderMCP.md) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 72 | → | 0 | **1** | 7 | 0 | 9 |
+| 9 | [webiny/webiny-js](mcp-dashboard/repos/webiny-webiny-js.md) | ![C](https://img.shields.io/badge/C-yellow?style=flat-square) | 76 | → | 0 | 0 | 4 | 12 | 17 |
 
 ## All Scanned Repos
 
-> 40 repositories scored A or B.
+> 41 repositories scored A or B.
 
 <details>
-<summary>View all 40 clean repos</summary>
+<summary>View all 41 clean repos</summary>
 
 | Repository | Stars | Grade | Score | Trend |
 |------------|------:|:-----:|------:|:-----:|
-| [BrowserMCP/mcp](mcp-dashboard/repos/BrowserMCP-mcp.md) | 6,236 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [Coding-Solo/godot-mcp](mcp-dashboard/repos/Coding-Solo-godot-mcp.md) | 2,876 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [Gentleman-Programming/engram](mcp-dashboard/repos/Gentleman-Programming-engram.md) | 2,280 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 |  |
-| [Jpisnice/shadcn-ui-mcp-server](mcp-dashboard/repos/Jpisnice-shadcn-ui-mcp-server.md) | 2,745 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [LaurieWired/GhidraMCP](mcp-dashboard/repos/LaurieWired-GhidraMCP.md) | 8,158 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [MarkusPfundstein/mcp-obsidian](mcp-dashboard/repos/MarkusPfundstein-mcp-obsidian.md) | 3,219 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [Minidoracat/mcp-feedback-enhanced](mcp-dashboard/repos/Minidoracat-mcp-feedback-enhanced.md) | 3,707 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [Pimzino/spec-workflow-mcp](mcp-dashboard/repos/Pimzino-spec-workflow-mcp.md) | 4,092 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [activepieces/activepieces](mcp-dashboard/repos/activepieces-activepieces.md) | 21,583 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 |  |
-| [antvis/mcp-server-chart](mcp-dashboard/repos/antvis-mcp-server-chart.md) | 3,922 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [blazickjp/arxiv-mcp-server](mcp-dashboard/repos/blazickjp-arxiv-mcp-server.md) | 2,481 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [brightdata/brightdata-mcp](mcp-dashboard/repos/brightdata-brightdata-mcp.md) | 2,268 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [hangwin/mcp-chrome](mcp-dashboard/repos/hangwin-mcp-chrome.md) | 11,098 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [haris-musa/excel-mcp-server](mcp-dashboard/repos/haris-musa-excel-mcp-server.md) | 3,641 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [jamubc/gemini-mcp-tool](mcp-dashboard/repos/jamubc-gemini-mcp-tool.md) | 2,133 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [kreuzberg-dev/kreuzberg](mcp-dashboard/repos/kreuzberg-dev-kreuzberg.md) | 7,383 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 |  |
-| [laravel/boost](mcp-dashboard/repos/laravel-boost.md) | 3,383 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [leerob/directories](mcp-dashboard/repos/leerob-directories.md) | 3,916 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [lharries/whatsapp-mcp](mcp-dashboard/repos/lharries-whatsapp-mcp.md) | 5,490 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [makenotion/notion-mcp-server](mcp-dashboard/repos/makenotion-notion-mcp-server.md) | 4,175 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
-| [GLips/Figma-Context-MCP](mcp-dashboard/repos/GLips-Figma-Context-MCP.md) | 14,161 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 99 | → |
-| [getsentry/XcodeBuildMCP](mcp-dashboard/repos/getsentry-XcodeBuildMCP.md) | 5,045 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 99 | → |
-| [microsoft/playwright-mcp](mcp-dashboard/repos/microsoft-playwright-mcp.md) | 30,331 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 98 | → |
-| [0x4m4/hexstrike-ai](mcp-dashboard/repos/0x4m4-hexstrike-ai.md) | 7,886 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
-| [21st-dev/magic-mcp](mcp-dashboard/repos/21st-dev-magic-mcp.md) | 4,644 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
-| [cloudflare/mcp-server-cloudflare](mcp-dashboard/repos/cloudflare-mcp-server-cloudflare.md) | 3,587 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
-| [idosal/git-mcp](mcp-dashboard/repos/idosal-git-mcp.md) | 7,887 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
-| [steipete/Peekaboo](mcp-dashboard/repos/steipete-Peekaboo.md) | 3,075 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 96 | → |
-| [CursorTouch/Windows-MCP](mcp-dashboard/repos/CursorTouch-Windows-MCP.md) | 5,016 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 94 | → |
-| [firecrawl/firecrawl-mcp-server](mcp-dashboard/repos/firecrawl-firecrawl-mcp-server.md) | 5,954 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 94 | → |
-| [epiral/bb-browser](mcp-dashboard/repos/epiral-bb-browser.md) | 4,131 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 93 | ↑ |
-| [CodeGraphContext/CodeGraphContext](mcp-dashboard/repos/CodeGraphContext-CodeGraphContext.md) | 2,765 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 91 | → |
-| [exa-labs/exa-mcp-server](mcp-dashboard/repos/exa-labs-exa-mcp-server.md) | 4,161 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 91 | → |
-| [github/github-mcp-server](mcp-dashboard/repos/github-github-mcp-server.md) | 28,578 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 89 | → |
-| [browserbase/mcp-server-browserbase](mcp-dashboard/repos/browserbase-mcp-server-browserbase.md) | 3,226 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 88 | → |
-| [bytebase/dbhub](mcp-dashboard/repos/bytebase-dbhub.md) | 2,502 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 85 | → |
-| [punkpeye/fastmcp](mcp-dashboard/repos/punkpeye-fastmcp.md) | 3,030 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 85 | → |
-| [sooperset/mcp-atlassian](mcp-dashboard/repos/sooperset-mcp-atlassian.md) | 4,821 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 85 | → |
-| [aipotheosis-labs/aci](mcp-dashboard/repos/aipotheosis-labs-aci.md) | 4,749 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 82 | → |
-| [grafana/mcp-grafana](mcp-dashboard/repos/grafana-mcp-grafana.md) | 2,718 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 82 | → |
+| [BrowserMCP/mcp](mcp-dashboard/repos/BrowserMCP-mcp.md) | 6,301 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [Coding-Solo/godot-mcp](mcp-dashboard/repos/Coding-Solo-godot-mcp.md) | 3,024 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [Gentleman-Programming/engram](mcp-dashboard/repos/Gentleman-Programming-engram.md) | 2,483 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [Jpisnice/shadcn-ui-mcp-server](mcp-dashboard/repos/Jpisnice-shadcn-ui-mcp-server.md) | 2,747 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [LaurieWired/GhidraMCP](mcp-dashboard/repos/LaurieWired-GhidraMCP.md) | 8,353 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [MarkusPfundstein/mcp-obsidian](mcp-dashboard/repos/MarkusPfundstein-mcp-obsidian.md) | 3,323 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [Minidoracat/mcp-feedback-enhanced](mcp-dashboard/repos/Minidoracat-mcp-feedback-enhanced.md) | 3,738 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [Pimzino/spec-workflow-mcp](mcp-dashboard/repos/Pimzino-spec-workflow-mcp.md) | 4,111 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [activepieces/activepieces](mcp-dashboard/repos/activepieces-activepieces.md) | 21,687 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 |  |
+| [antvis/mcp-server-chart](mcp-dashboard/repos/antvis-mcp-server-chart.md) | 3,952 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [awslabs/mcp](mcp-dashboard/repos/awslabs-mcp.md) | 8,753 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [blazickjp/arxiv-mcp-server](mcp-dashboard/repos/blazickjp-arxiv-mcp-server.md) | 2,528 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [brightdata/brightdata-mcp](mcp-dashboard/repos/brightdata-brightdata-mcp.md) | 2,288 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [hangwin/mcp-chrome](mcp-dashboard/repos/hangwin-mcp-chrome.md) | 11,192 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [haris-musa/excel-mcp-server](mcp-dashboard/repos/haris-musa-excel-mcp-server.md) | 3,677 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [jamubc/gemini-mcp-tool](mcp-dashboard/repos/jamubc-gemini-mcp-tool.md) | 2,151 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [kreuzberg-dev/kreuzberg](mcp-dashboard/repos/kreuzberg-dev-kreuzberg.md) | 7,520 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 |  |
+| [laravel/boost](mcp-dashboard/repos/laravel-boost.md) | 3,395 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [leerob/directories](mcp-dashboard/repos/leerob-directories.md) | 3,914 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [lharries/whatsapp-mcp](mcp-dashboard/repos/lharries-whatsapp-mcp.md) | 5,499 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [makenotion/notion-mcp-server](mcp-dashboard/repos/makenotion-notion-mcp-server.md) | 4,207 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 100 | → |
+| [getsentry/XcodeBuildMCP](mcp-dashboard/repos/getsentry-XcodeBuildMCP.md) | 5,171 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 99 | → |
+| [0x4m4/hexstrike-ai](mcp-dashboard/repos/0x4m4-hexstrike-ai.md) | 8,042 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
+| [21st-dev/magic-mcp](mcp-dashboard/repos/21st-dev-magic-mcp.md) | 4,709 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
+| [cloudflare/mcp-server-cloudflare](mcp-dashboard/repos/cloudflare-mcp-server-cloudflare.md) | 3,605 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
+| [idosal/git-mcp](mcp-dashboard/repos/idosal-git-mcp.md) | 7,908 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
+| [microsoft/playwright-mcp](mcp-dashboard/repos/microsoft-playwright-mcp.md) | 30,733 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 97 | → |
+| [GLips/Figma-Context-MCP](mcp-dashboard/repos/GLips-Figma-Context-MCP.md) | 14,298 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 96 | → |
+| [steipete/Peekaboo](mcp-dashboard/repos/steipete-Peekaboo.md) | 3,112 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 96 | → |
+| [CursorTouch/Windows-MCP](mcp-dashboard/repos/CursorTouch-Windows-MCP.md) | 5,096 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 94 | → |
+| [firecrawl/firecrawl-mcp-server](mcp-dashboard/repos/firecrawl-firecrawl-mcp-server.md) | 6,029 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 94 | → |
+| [epiral/bb-browser](mcp-dashboard/repos/epiral-bb-browser.md) | 4,412 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 93 | → |
+| [CodeGraphContext/CodeGraphContext](mcp-dashboard/repos/CodeGraphContext-CodeGraphContext.md) | 2,929 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 91 | → |
+| [exa-labs/exa-mcp-server](mcp-dashboard/repos/exa-labs-exa-mcp-server.md) | 4,231 | ![A](https://img.shields.io/badge/A-brightgreen?style=flat-square) | 91 | → |
+| [github/github-mcp-server](mcp-dashboard/repos/github-github-mcp-server.md) | 28,809 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 89 | → |
+| [browserbase/mcp-server-browserbase](mcp-dashboard/repos/browserbase-mcp-server-browserbase.md) | 3,253 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 88 | → |
+| [bytebase/dbhub](mcp-dashboard/repos/bytebase-dbhub.md) | 2,559 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 85 | → |
+| [punkpeye/fastmcp](mcp-dashboard/repos/punkpeye-fastmcp.md) | 3,037 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 85 | → |
+| [sooperset/mcp-atlassian](mcp-dashboard/repos/sooperset-mcp-atlassian.md) | 4,910 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 85 | → |
+| [aipotheosis-labs/aci](mcp-dashboard/repos/aipotheosis-labs-aci.md) | 4,753 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 82 | → |
+| [grafana/mcp-grafana](mcp-dashboard/repos/grafana-mcp-grafana.md) | 2,785 | ![B](https://img.shields.io/badge/B-green?style=flat-square) | 82 | → |
 
 </details>
 
@@ -187,4 +188,4 @@ This dashboard is provided **as-is** for informational purposes only. It is gene
 
 ---
 
-*Generated on 2026-04-06 by [agentsec](https://github.com/debu-sinha/agentsec) v0.4.5 | [Install](https://pypi.org/project/agentsec-ai/) | [Report an issue](https://github.com/debu-sinha/agentsec/issues)*
+*Generated on 2026-04-13 by [agentsec](https://github.com/debu-sinha/agentsec) v0.4.5 | [Install](https://pypi.org/project/agentsec-ai/) | [Report an issue](https://github.com/debu-sinha/agentsec/issues)*

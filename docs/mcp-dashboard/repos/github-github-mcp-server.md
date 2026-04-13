@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-89%2F100-green?style=for-the-badge)
 
 **Repository:** [github/github-mcp-server](https://github.com/github/github-mcp-server)
-**Stars:** 28,578
-**Last scan:** 2026-04-06
+**Stars:** 28,809
+**Last scan:** 2026-04-13
 
 ## Severity Summary
 
@@ -39,4 +39,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-06 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-13 by [agentsec](https://github.com/debu-sinha/agentsec)*
