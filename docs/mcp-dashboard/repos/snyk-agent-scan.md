@@ -1,17 +1,16 @@
-# steipete/Peekaboo
+# snyk/agent-scan
 
-![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-96%2F100-brightgreen?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-98%2F100-brightgreen?style=for-the-badge)
 
-**Repository:** [steipete/Peekaboo](https://github.com/steipete/Peekaboo)
-**Stars:** 3,151
+**Repository:** [snyk/agent-scan](https://github.com/snyk/agent-scan)
+**Stars:** 2,193
 **Last scan:** 2026-04-20
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟡 Medium | **1** |
-| 🟢 Low | **1** |
+| 🟢 Low | **2** |
 | 🔵 Info | **1** |
 | **Total** | **3** |
 
@@ -20,8 +19,8 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in SettingsServiceTests.swift | Rotate and secure the Secret Keyword |
-| 3 | 🟢 Low | Exposed Token | Secret Keyword found in ConfigurationTests.swift | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Secret Keyword found in test_redact.py | Rotate and secure the Secret Keyword |
+| 3 | 🟢 Low | Exposed Token | Base64 High Entropy String found in SKILL.md | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 

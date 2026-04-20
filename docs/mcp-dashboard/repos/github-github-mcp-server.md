@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-89%2F100-green?style=for-the-badge)
 
 **Repository:** [github/github-mcp-server](https://github.com/github/github-mcp-server)
-**Stars:** 28,809
-**Last scan:** 2026-04-13
+**Stars:** 29,088
+**Last scan:** 2026-04-20
 
 ## Severity Summary
 
@@ -20,15 +20,15 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in tools.go | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | GitHub Token found in pat_scope_test.go | Rotate and secure the GitHub Token |
 | 3 | 🟢 Low | Exposed Token | GitHub Token found in pat_scope_test.go | Rotate and secure the GitHub Token |
-| 4 | 🟢 Low | Exposed Token | GitHub Token found in pat_scope_test.go | Rotate and secure the GitHub Token |
-| 5 | 🟢 Low | Exposed Token | GitHub Token found in token_test.go | Rotate and secure the GitHub Token |
-| 6 | 🟢 Low | Exposed Token | GitHub Token found in token_test.go | Rotate and secure the GitHub Token |
+| 4 | 🟢 Low | Exposed Token | Secret Keyword found in helper_test.go | Rotate and secure the Secret Keyword |
+| 5 | 🟢 Low | Exposed Token | Secret Keyword found in helper_test.go | Rotate and secure the Secret Keyword |
+| 6 | 🟡 Medium | Exposed Token | Secret Keyword found in tools.go | Rotate and secure the Secret Keyword |
 | 7 | 🟢 Low | Exposed Token | GitHub Token found in token_test.go | Rotate and secure the GitHub Token |
 | 8 | 🟢 Low | Exposed Token | GitHub Token found in token_test.go | Rotate and secure the GitHub Token |
-| 9 | 🟢 Low | Exposed Token | Secret Keyword found in helper_test.go | Rotate and secure the Secret Keyword |
-| 10 | 🟢 Low | Exposed Token | Secret Keyword found in helper_test.go | Rotate and secure the Secret Keyword |
+| 9 | 🟢 Low | Exposed Token | GitHub Token found in token_test.go | Rotate and secure the GitHub Token |
+| 10 | 🟢 Low | Exposed Token | GitHub Token found in token_test.go | Rotate and secure the GitHub Token |
 
 ## Categories
 
@@ -39,4 +39,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-13 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-20 by [agentsec](https://github.com/debu-sinha/agentsec)*

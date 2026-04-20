@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [hangwin/mcp-chrome](https://github.com/hangwin/mcp-chrome)
-**Stars:** 11,192
-**Last scan:** 2026-04-13
+**Stars:** 11,266
+**Last scan:** 2026-04-20
 
 ## Severity Summary
 
@@ -27,4 +27,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-13 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-20 by [agentsec](https://github.com/debu-sinha/agentsec)*

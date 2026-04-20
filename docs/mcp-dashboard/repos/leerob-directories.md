@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [leerob/directories](https://github.com/leerob/directories)
-**Stars:** 3,914
-**Last scan:** 2026-04-13
+**Stars:** 3,916
+**Last scan:** 2026-04-20
 
 ## Severity Summary
 
@@ -27,4 +27,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-13 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-20 by [agentsec](https://github.com/debu-sinha/agentsec)*

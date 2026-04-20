@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-96%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [GLips/Figma-Context-MCP](https://github.com/GLips/Figma-Context-MCP)
-**Stars:** 14,298
-**Last scan:** 2026-04-13
+**Stars:** 14,435
+**Last scan:** 2026-04-20
 
 ## Severity Summary
 
@@ -32,4 +32,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-13 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-20 by [agentsec](https://github.com/debu-sinha/agentsec)*
