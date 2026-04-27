@@ -1,32 +1,29 @@
-# 0x4m4/hexstrike-ai
+# google-labs-code/stitch-skills
 
-![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-97%2F100-brightgreen?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
-**Repository:** [0x4m4/hexstrike-ai](https://github.com/0x4m4/hexstrike-ai)
-**Stars:** 8,305
+**Repository:** [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills)
+**Stars:** 4,960
 **Last scan:** 2026-04-27
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟡 Medium | **1** |
 | 🔵 Info | **1** |
-| **Total** | **2** |
+| **Total** | **1** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in hexstrike_server.py | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
 | Outdated Version | 1 |
-| Exposed Token | 1 |
 
 ---
 

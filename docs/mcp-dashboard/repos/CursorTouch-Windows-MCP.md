@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-94%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [CursorTouch/Windows-MCP](https://github.com/CursorTouch/Windows-MCP)
-**Stars:** 5,212
-**Last scan:** 2026-04-20
+**Stars:** 5,366
+**Last scan:** 2026-04-27
 
 ## Severity Summary
 
@@ -19,8 +19,8 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in enums.py | Rotate and secure the Secret Keyword |
-| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in analytics.py | Rotate and secure the Secret Keyword |
+| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in analytics.py | Rotate and secure the Secret Keyword |
+| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in enums.py | Rotate and secure the Secret Keyword |
 
 ## Categories
 
@@ -31,4 +31,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-20 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-04-27 by [agentsec](https://github.com/debu-sinha/agentsec)*
