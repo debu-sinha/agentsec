@@ -1,9 +1,9 @@
-# Pimzino/spec-workflow-mcp
+# Manavarya09/design-extract
 
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
-**Repository:** [Pimzino/spec-workflow-mcp](https://github.com/Pimzino/spec-workflow-mcp)
-**Stars:** 4,169
+**Repository:** [Manavarya09/design-extract](https://github.com/Manavarya09/design-extract)
+**Stars:** 2,446
 **Last scan:** 2026-05-11
 
 ## Severity Summary
