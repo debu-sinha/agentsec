@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [Manavarya09/design-extract](https://github.com/Manavarya09/design-extract)
-**Stars:** 2,446
-**Last scan:** 2026-05-11
+**Stars:** 2,681
+**Last scan:** 2026-05-18
 
 ## Severity Summary
 
@@ -27,4 +27,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-11 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-18 by [agentsec](https://github.com/debu-sinha/agentsec)*

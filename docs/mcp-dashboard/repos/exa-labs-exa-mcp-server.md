@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-93%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [exa-labs/exa-mcp-server](https://github.com/exa-labs/exa-mcp-server)
-**Stars:** 4,408
-**Last scan:** 2026-05-11
+**Stars:** 4,440
+**Last scan:** 2026-05-18
 
 ## Severity Summary
 
@@ -20,9 +20,9 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Secret Keyword found in mcp.test.ts | Rotate and secure the Secret Keyword |
+| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in llm_mcp_docs.txt | Rotate and secure the Secret Keyword |
 | 3 | 🟡 Medium | Exposed Token | Secret Keyword found in llm_mcp_docs.txt | Rotate and secure the Secret Keyword |
-| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in llm_mcp_docs.txt | Rotate and secure the Secret Keyword |
+| 4 | 🟢 Low | Exposed Token | Secret Keyword found in mcp.test.ts | Rotate and secure the Secret Keyword |
 
 ## Categories
 
@@ -33,4 +33,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-11 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-18 by [agentsec](https://github.com/debu-sinha/agentsec)*

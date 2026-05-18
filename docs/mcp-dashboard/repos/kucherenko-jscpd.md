@@ -1,33 +1,34 @@
-# GLips/Figma-Context-MCP
+# kucherenko/jscpd
 
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-96%2F100-brightgreen?style=for-the-badge)
 
-**Repository:** [GLips/Figma-Context-MCP](https://github.com/GLips/Figma-Context-MCP)
-**Stars:** 14,782
+**Repository:** [kucherenko/jscpd](https://github.com/kucherenko/jscpd)
+**Stars:** 5,661
 **Last scan:** 2026-05-18
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟡 Medium | **1** |
-| 🟢 Low | **1** |
+| 🟢 Low | **4** |
 | 🔵 Info | **1** |
-| **Total** | **3** |
+| **Total** | **5** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Secret Keyword found in server.test.ts | Rotate and secure the Secret Keyword |
-| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in client.ts | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Secret Keyword found in file2.toml | Rotate and secure the Secret Keyword |
+| 3 | 🟢 Low | Exposed Token | Secret Keyword found in file1.toml | Rotate and secure the Secret Keyword |
+| 4 | 🟢 Low | Exposed Token | Secret Keyword found in file1.ini | Rotate and secure the Secret Keyword |
+| 5 | 🟢 Low | Exposed Token | Secret Keyword found in file2.ini | Rotate and secure the Secret Keyword |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 2 |
+| Exposed Token | 4 |
 | Outdated Version | 1 |
 
 ---
