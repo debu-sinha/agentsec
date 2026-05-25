@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-D-orange?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-60%2F100-orange?style=for-the-badge)
 
 **Repository:** [Gentleman-Programming/engram](https://github.com/Gentleman-Programming/engram)
-**Stars:** 3,578
-**Last scan:** 2026-05-18
+**Stars:** 3,746
+**Last scan:** 2026-05-25
 
 ## Severity Summary
 
@@ -22,16 +22,16 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Secret Keyword found in docker-compose.cloud.yml | Rotate and secure the Secret Keyword |
-| 3 | 🟢 Low | Exposed Token | Secret Keyword found in docker-compose.cloud.yml | Rotate and secure the Secret Keyword |
-| 4 | 🟢 Low | Exposed Token | Basic Auth Credentials found in docker-compose.cloud.yml | Rotate and secure the Basic Auth Credentials |
-| 5 | 🟢 Low | Exposed Token | Basic Auth Credentials found in quickstart.md | Rotate and secure the Basic Auth Credentials |
-| 6 | 🟢 Low | Exposed Token | Secret Keyword found in quickstart.md | Rotate and secure the Secret Keyword |
-| 7 | 🟢 Low | Exposed Token | Basic Auth Credentials found in quickstart.md | Rotate and secure the Basic Auth Credentials |
+| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in config.go | Rotate and secure the Secret Keyword |
+| 3 | 🟠 High | Exposed Token | Basic Auth Credentials found in config.go | Rotate and secure the Basic Auth Credentials |
+| 4 | 🟢 Low | Exposed Token | Basic Auth Credentials found in quickstart.md | Rotate and secure the Basic Auth Credentials |
+| 5 | 🟢 Low | Exposed Token | Secret Keyword found in quickstart.md | Rotate and secure the Secret Keyword |
+| 6 | 🟢 Low | Exposed Token | Basic Auth Credentials found in quickstart.md | Rotate and secure the Basic Auth Credentials |
+| 7 | 🟢 Low | Exposed Token | Basic Auth Credentials found in docker-compose.beta.yml | Rotate and secure the Basic Auth Credentials |
 | 8 | 🟢 Low | Exposed Token | Secret Keyword found in docker-compose.beta.yml | Rotate and secure the Secret Keyword |
-| 9 | 🟢 Low | Exposed Token | Basic Auth Credentials found in docker-compose.beta.yml | Rotate and secure the Basic Auth Credentials |
-| 10 | 🟡 Medium | Exposed Token | Secret Keyword found in config.go | Rotate and secure the Secret Keyword |
-| 11 | 🟠 High | Exposed Token | Basic Auth Credentials found in config.go | Rotate and secure the Basic Auth Credentials |
+| 9 | 🟢 Low | Exposed Token | Secret Keyword found in docker-compose.cloud.yml | Rotate and secure the Secret Keyword |
+| 10 | 🟢 Low | Exposed Token | Basic Auth Credentials found in docker-compose.cloud.yml | Rotate and secure the Basic Auth Credentials |
+| 11 | 🟢 Low | Exposed Token | Secret Keyword found in docker-compose.cloud.yml | Rotate and secure the Secret Keyword |
 | 12 | 🟢 Low | Exposed Token | Basic Auth Credentials found in DOCS.md | Rotate and secure the Basic Auth Credentials |
 | 13 | 🟢 Low | Exposed Token | Secret Keyword found in DOCS.md | Rotate and secure the Secret Keyword |
 | 14 | 🟢 Low | Exposed Token | Generic Connection String found in docker-compose.beta.yml | Rotate and secure the Generic Connection String |
@@ -50,4 +50,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-18 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-25 by [agentsec](https://github.com/debu-sinha/agentsec)*

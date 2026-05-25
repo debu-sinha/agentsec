@@ -4,7 +4,7 @@
 
 **Repository:** [Minidoracat/mcp-feedback-enhanced](https://github.com/Minidoracat/mcp-feedback-enhanced)
 **Stars:** 3,783
-**Last scan:** 2026-05-18
+**Last scan:** 2026-05-25
 
 ## Severity Summary
 
@@ -27,4 +27,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-18 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-05-25 by [agentsec](https://github.com/debu-sinha/agentsec)*
