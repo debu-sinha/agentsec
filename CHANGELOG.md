@@ -2,6 +2,53 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.5.0] - 2026-06-04
+
+Threat-coverage refresh aligned with the 2026 MCP and agent-skill disclosure wave.
+
+### New Detections
+
+- **MCP launch-command injection (CMCP-005)**: flags shell wrappers (`bash -c`,
+  `cmd /c`, `powershell -Command`), pipe-to-interpreter (`... | sh`), and chained
+  operators (`;`, `&&`, `$(...)`, backticks) in an MCP server launch command.
+  Covers the OX Security STDIO RCE class disclosed April 2026, where the command
+  runs verbatim even if the server never starts.
+- **Known-vulnerable MCP package denylist (CMCP-006)**: flags MCP servers that
+  launch packages with disclosed critical CVEs, with version-aware suppression
+  for patched pins. Seeded (verified against NVD) with `@modelcontextprotocol/inspector`
+  (CVE-2025-49596, < 0.14.1), `praisonai` (CVE-2026-41497, < 4.6.9), and
+  `aws-mcp-server` (CVE-2026-5059).
+- **Encoded-secret detection**: the credential scanner now decodes embedded
+  base64 and hex blobs and re-runs provider patterns on the plaintext, catching
+  secrets that hide from plain pattern matching. Closes two previously documented
+  false negatives.
+- **Agent identity-file tampering (OWASP Agentic Skills AST04)**: skill scanner
+  flags writes to `MEMORY.md`, `AGENTS.md`, `SOUL.md`, `CLAUDE.md`, and `TOOLS.md`,
+  a persistent context-poisoning vector.
+- **JavaScript / TypeScript dangerous patterns**: the skill scanner previously
+  applied dangerous-call detection only to Python. It now flags JS/TS dynamic
+  code execution (`eval`, `new Function`), `child_process` spawning, dynamic
+  `require()`, and `process.env` enumeration.
+
+### Scanner Improvements
+
+- OpenAI key pattern now covers `sk-admin-` (org-admin scope) in addition to
+  `sk-proj-` and `sk-svcacct-`.
+- Google `AIza` keys raised to CRITICAL: since February 2026, enabling the Gemini
+  API can grant any existing project key Gemini access (Truffle Security).
+
+### Hardening
+
+- Rewrote the generic connection-string regex with explicit, non-overlapping
+  character classes to remove a ReDoS risk.
+- Narrowed four broad `except Exception` handlers (credential scan, harden
+  preview/re-scan, version lookup) so silently skipped files and failures are
+  now logged instead of swallowed.
+
+### Stats
+
+- 480 tests passing (22 new), 2 skipped, 4 xfailed
+
 ## [0.4.5] - 2026-02-23
 
 ### New Features

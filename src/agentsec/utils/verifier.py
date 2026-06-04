@@ -102,9 +102,8 @@ def compute_passive_hints(
             pass
 
     # --- Overall risk level ---
-    if (
-        hints.get("hint_file_type") == "template"
-        or hints.get("hint_context", "").startswith("near_revocation_word")
+    if hints.get("hint_file_type") == "template" or hints.get("hint_context", "").startswith(
+        "near_revocation_word"
     ):
         hints["hint_risk_level"] = "low"
     elif hints.get("hint_file_age") == "stale":

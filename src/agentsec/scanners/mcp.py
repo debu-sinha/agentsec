@@ -8,6 +8,8 @@ Detects:
 - Cross-origin escalation risks
 - Excessive permission grants
 - Prompt injection vectors in tool metadata
+- Shell invocation / command injection in the server launch command (CMCP-005)
+- References to MCP packages with known critical CVEs (CMCP-006)
 """
 
 from __future__ import annotations
@@ -31,6 +33,71 @@ logger = logging.getLogger(__name__)
 
 # Default filename for tool description pins
 _PINS_FILENAME = ".agentsec-pins.json"
+
+# Shell invocation, pipe-to-interpreter, and command chaining in an MCP launch
+# command. The STDIO transport runs the command verbatim, so any of these turns
+# a config edit into arbitrary code execution (CMCP-005).
+_SHELL_INJECTION_PATTERN = re.compile(
+    r"""
+    \b(?:bash|sh|zsh|dash|ksh)\b\s+-[A-Za-z]*c\b   # bash -c / sh -lc style
+    | \b(?:cmd(?:\.exe)?)\b\s+/[a-zA-Z]            # cmd /c, cmd /k
+    | \b(?:powershell|pwsh)(?:\.exe)?\b\s+         # powershell -Command/-EncodedCommand
+        -(?:c|e|enc|command|encodedcommand)\b
+    | \|\s*(?:bash|sh|zsh|python[0-9.]*|node|perl|ruby|php)\b  # ... | bash
+    | \$\([^)]*\)                                  # $(...) command substitution
+    | `[^`]+`                                      # backtick substitution
+    | (?:;|\&\&|\|\|)                              # chained operators
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+# MCP server packages with disclosed critical RCE / auth-bypass CVEs.
+# Each entry: package -> (cve_id, first_fixed_version_or_None, description).
+# A None fixed-version means no patched release is recorded, so any reference
+# is flagged. Versions confirmed against NVD (June 2026); re-verify before
+# adding new entries, since naming a package "vulnerable" carries weight.
+_KNOWN_VULNERABLE_PACKAGES: dict[str, tuple[str, str | None, str]] = {
+    "@modelcontextprotocol/inspector": (
+        "CVE-2025-49596",
+        "0.14.1",
+        "Missing authentication between the Inspector client and proxy lets a "
+        "local web page execute MCP commands over stdio (CVSS 9.4)",
+    ),
+    "praisonai": (
+        "CVE-2026-41497",
+        "4.6.9",
+        "Command injection in the MCP command handler allows arbitrary code "
+        "execution via subprocess operations (CVSS 9.8)",
+    ),
+    "aws-mcp-server": (
+        "CVE-2026-5059",
+        None,
+        "OS command injection via unvalidated input passed to the AWS CLI "
+        "allows unauthenticated remote code execution (CVSS 9.8)",
+    ),
+}
+
+
+def _parse_version(value: str) -> tuple[int, ...]:
+    """Parse a dotted version string into a comparable tuple of ints."""
+    parts: list[int] = []
+    for chunk in value.split("."):
+        digits = re.match(r"\d+", chunk)
+        parts.append(int(digits.group(0)) if digits else 0)
+    return tuple(parts)
+
+
+def _pinned_version_for(package: str, command: str) -> str | None:
+    """Return the version pinned to ``package`` in ``command``, if any.
+
+    Handles npm scoped/unscoped ``pkg@1.2.3`` and Python ``pkg==1.2.3``.
+    """
+    match = re.search(
+        re.escape(package) + r"\s*(?:@|==)\s*v?(\d+(?:\.\d+){0,2})",
+        command,
+    )
+    return match.group(1) if match else None
+
 
 # Tool descriptions that attempt to manipulate the LLM
 _TOOL_POISONING_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity]] = [
@@ -311,6 +378,84 @@ class McpScanner(BaseScanner):
                         ],
                     ),
                     owasp_ids=["ASI03"],
+                )
+            )
+
+        # CMCP-005: Shell invocation / command injection in the launch command.
+        # The MCP STDIO transport executes the launch command verbatim, and it
+        # runs even if server startup later fails (OX Security advisory, Apr 2026).
+        # A launch command that spawns a shell, pipes into an interpreter, or
+        # chains operators turns a config edit into arbitrary code execution.
+        injection_hit = _SHELL_INJECTION_PATTERN.search(full_command)
+        if injection_hit:
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.DANGEROUS_PATTERN,
+                    severity=FindingSeverity.HIGH,
+                    title=(
+                        f"MCP server '{server_name}' launch command spawns a shell "
+                        f"or chains commands"
+                    ),
+                    description=(
+                        f"Server '{server_name}' is launched through a shell wrapper, "
+                        f"a pipe into an interpreter, or chained shell operators "
+                        f"(matched '{injection_hit.group(0).strip()}'). The MCP STDIO "
+                        f"transport runs this command verbatim, and it executes even if "
+                        f"the server itself never starts. Anyone able to edit this config "
+                        f"gains arbitrary command execution on the host."
+                    ),
+                    evidence=f"Command: {full_command[:120]}",
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary="Launch the server binary directly, without a shell",
+                        steps=[
+                            "Replace the shell wrapper with a direct executable + args",
+                            "Move any setup logic into the server itself or a vetted script",
+                            "Remove pipes (|), chained operators (; && ||), and "
+                            "command substitution ($(...), backticks) from the command",
+                            "Run the server under a sandbox with least privilege",
+                        ],
+                    ),
+                    owasp_ids=["ASI05", "ASI04"],
+                )
+            )
+
+        # CMCP-006: Reference to an MCP server package with a known critical CVE.
+        for package, (cve, fixed, detail) in _KNOWN_VULNERABLE_PACKAGES.items():
+            if package not in full_command:
+                continue
+            pinned = _pinned_version_for(package, full_command)
+            if fixed and pinned and _parse_version(pinned) >= _parse_version(fixed):
+                continue  # pinned to a patched release
+            version_note = (
+                f"upgrade to {fixed} or later"
+                if fixed
+                else "no patched release is recorded; replace or sandbox it"
+            )
+            findings.append(
+                Finding(
+                    scanner=self.name,
+                    category=FindingCategory.CVE_MATCH,
+                    severity=FindingSeverity.CRITICAL,
+                    title=(f"MCP server '{server_name}' uses '{package}' with known CVE {cve}"),
+                    description=(
+                        f"Server '{server_name}' launches '{package}'"
+                        + (f" (pinned {pinned})" if pinned else "")
+                        + f", which is affected by {cve}: {detail}."
+                    ),
+                    evidence=f"Command: {full_command[:120]}",
+                    file_path=config_path,
+                    remediation=Remediation(
+                        summary=f"Patch or remove '{package}' ({cve})",
+                        steps=[
+                            f"Review {cve} and {version_note}",
+                            "Pin the package to a fixed version with a lock file",
+                            "Run the server under a sandbox with least privilege",
+                            "Remove the server if it is not required",
+                        ],
+                    ),
+                    owasp_ids=["ASI04", "ASI05"],
                 )
             )
 

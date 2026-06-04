@@ -386,7 +386,8 @@ def test_detects_huggingface_token(scanner, tmp_path):
 
 
 def test_detects_google_api_key(scanner, tmp_path):
-    """Google AIza keys should be detected as HIGH."""
+    """Google AIza keys are CRITICAL: since Feb 2026 any project key can grant
+    Gemini API access (Truffle Security)."""
     f = tmp_path / "config.py"
     f.write_text('KEY = "AIzaSyB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX"\n')
 
@@ -394,7 +395,7 @@ def test_detects_google_api_key(scanner, tmp_path):
     findings = scanner.scan(context)
     goog = [f for f in findings if "Google" in f.title]
     assert len(goog) >= 1
-    assert goog[0].severity == FindingSeverity.HIGH
+    assert goog[0].severity == FindingSeverity.CRITICAL
 
 
 def test_detects_groq_api_key(scanner, tmp_path):
@@ -446,6 +447,18 @@ def test_openai_proj_key_detected(scanner, tmp_path):
     findings = scanner.scan(context)
     openai = [f for f in findings if "OpenAI" in f.title]
     assert len(openai) >= 1
+
+
+def test_openai_admin_key_detected(scanner, tmp_path):
+    """OpenAI sk-admin- (org-admin scope) keys should be detected."""
+    f = tmp_path / "config.py"
+    f.write_text('KEY = "sk-admin-aB3cD4eF5gH6iJ7kL8mN9oP0qR"\n')
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+    openai = [f for f in findings if "OpenAI" in f.title]
+    assert len(openai) >= 1
+    assert openai[0].severity == FindingSeverity.CRITICAL
 
 
 # --- Expert review: Placeholder bypass resistance ---
