@@ -159,7 +159,11 @@ _SUSPICIOUS_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = 
             r"(?:execSync|exec|spawnSync|spawn|fork)"
             r"|\b(?:execSync|spawnSync)\s*\(",
         ),
-        FindingSeverity.HIGH,
+        # MEDIUM, not HIGH: spawning a process is a routine, legitimate thing
+        # for many skills (locating binaries, running git). It is a review
+        # signal, not proof of malice; HIGH is reserved for shell:true and
+        # pipe-to-shell patterns detected separately.
+        FindingSeverity.MEDIUM,
         "Spawning OS processes from a JS/TS skill",
     ),
     (

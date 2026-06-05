@@ -451,15 +451,58 @@ _LOW_CONFIDENCE_DIRS: set[str] = {
     "examples",
     "example",
     "fixtures",
+    "__fixtures__",
     "test",
     "tests",
     "__tests__",
     "__mocks__",
     "testdata",
     "test_data",
+    "test-data",
+    "test-fixtures",
+    "snapshot-tests",
+    "snapshots",
+    "__snapshots__",
     "mocks",
     "testutils",
     "test_helpers",
+}
+
+# Loopback hosts in a connection/basic-auth string: dev scaffolding, not a
+# remotely usable credential.
+_LOOPBACK_HOST_RE = re.compile(
+    r"@(?:localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|host\.docker\.internal)\b",
+    re.I,
+)
+
+# Markers that the line sits inside a test function/block (Rust, Python, Go,
+# JS/TS). A secret a few lines under one of these is a test vector.
+_TEST_BLOCK_MARKERS = re.compile(
+    r"#\[test\]|#\[cfg\(test\)\]|\bfn\s+test_|\bdef\s+test_|\bfunc\s+Test"
+    r"|\b(?:describe|it|test)\s*\(",
+    re.I,
+)
+
+
+def _line_in_test_block(lines: list[str], idx: int, window: int = 40) -> bool:
+    """True when a test marker appears within ``window`` lines above ``idx``."""
+    start = max(0, idx - window)
+    end = min(idx + 1, len(lines))
+    return any(_TEST_BLOCK_MARKERS.search(lines[i]) for i in range(start, end))
+
+
+# Files that intentionally contain fake/example secrets: the configs and
+# allowlists of other secret-scanning tools. Any "secret" here is a known
+# test vector, not a live credential.
+_SECRET_SCANNER_CONFIG_FILES: set[str] = {
+    ".gitguardian.yaml",
+    ".gitguardian.yml",
+    ".gitleaks.toml",
+    ".gitleaksignore",
+    ".secrets.baseline",
+    ".trufflehog.yaml",
+    ".trufflehog.yml",
+    ".detect-secrets.yaml",
 }
 
 
@@ -628,9 +671,29 @@ class CredentialScanner(BaseScanner):
 
         for filename in secrets.files:
             file_path = Path(filename)
-            is_low_confidence = self._is_test_or_doc_context(file_path)
+            path_low_confidence = self._is_test_or_doc_context(file_path)
+
+            # Read file lines once for line-level context checks (loopback
+            # hosts, test-block detection, private-key body length).
+            try:
+                file_lines = Path(filename).read_text(errors="replace").splitlines()
+            except OSError:
+                file_lines = []
 
             for secret in secrets[filename]:
+                line_idx = (secret.line_number or 0) - 1
+                line_text = file_lines[line_idx] if 0 <= line_idx < len(file_lines) else ""
+
+                # Loopback basic-auth / connection strings are dev scaffolding.
+                if secret.type == "Basic Auth Credentials" and _LOOPBACK_HOST_RE.search(line_text):
+                    continue
+
+                # A secret inside a test function/block is a test vector even if
+                # the file itself is not test-named (e.g. an inline #[test] in a
+                # production .rs module).
+                is_low_confidence = path_low_confidence or (
+                    bool(file_lines) and _line_in_test_block(file_lines, line_idx)
+                )
                 # Skip well-known example values (AWS EXAMPLE keys, jwt.io, etc.)
                 if secret.secret_value and self._is_known_example_value(
                     secret.secret_value, secret.type
@@ -1242,6 +1305,18 @@ class CredentialScanner(BaseScanner):
             if word in lower and len(word) >= len(stripped) * 0.4:
                 return True
 
+        # Self-describing kebab/snake phrase: a real key is not a run of
+        # lowercase word tokens joined by - or _, e.g.
+        # "very-private-api-key-12345" or "my_fake_secret_token". Require 3+
+        # segments that are all either short alpha words or pure digits, with
+        # at least two word segments. UUIDs and real keys do not fit this shape.
+        segments = re.split(r"[-_]", stripped)
+        if len(segments) >= 3:
+            word_like = [s for s in segments if s.isalpha() and len(s) <= 12]
+            digit_like = [s for s in segments if s.isdigit()]
+            if len(word_like) >= 2 and len(word_like) + len(digit_like) == len(segments):
+                return True
+
         # Check if it's all the same character
         if len(set(value)) <= 2:
             return True
@@ -1266,10 +1341,15 @@ class CredentialScanner(BaseScanner):
     @staticmethod
     def _is_placeholder_connection_string(value: str) -> bool:
         """Check if a connection string contains placeholder credentials."""
-        m = re.match(r"[a-z]+://[^:]+:([^@]+)@", value, re.I)
+        m = re.match(r"[a-z]+://[^:]+:([^@]+)@([^:/?\s]+)", value, re.I)
         if not m:
             return False
         password = m.group(1)
+        host = m.group(2).lower()
+
+        # Loopback hosts are dev scaffolding, not a remotely usable credential.
+        if host in ("localhost", "127.0.0.1", "0.0.0.0", "::1", "host.docker.internal"):
+            return True
 
         # Check for env var reference: ${VAR_NAME} or $VAR_NAME (uppercase+underscore)
         if password.startswith("${") and "}" in password:
@@ -1311,8 +1391,11 @@ class CredentialScanner(BaseScanner):
         # Go test files: *_test.go
         if name_lower.endswith("_test.go"):
             return True
-        # Rust test files: *_tests.rs, *_test.rs
-        if name_lower.endswith(("_tests.rs", "_test.rs")):
+        # Rust test files: *_tests.rs, *_test.rs, and bare tests.rs / test.rs modules
+        if name_lower.endswith(("_tests.rs", "_test.rs")) or name_lower in ("tests.rs", "test.rs"):
+            return True
+        # Secret-scanner config/allowlist files (deliberately hold fake tokens)
+        if name_lower in _SECRET_SCANNER_CONFIG_FILES:
             return True
         # Mock/stub/fixture/dummy/example files
         if "mock" in name_lower or "stub" in name_lower or "fixture" in name_lower:
@@ -1330,8 +1413,12 @@ class CredentialScanner(BaseScanner):
         # Example/template files
         if ".example" in name_lower or ".sample" in name_lower or ".template" in name_lower:
             return True
-        # Documentation/test/example directories
-        return bool(_LOW_CONFIDENCE_DIRS & parts_lower)
+        # Documentation/test/example directories (exact match)
+        if _LOW_CONFIDENCE_DIRS & parts_lower:
+            return True
+        # Any path segment that is clearly a fixture/snapshot/mock dir, e.g.
+        # "__fixtures__", "test-fixtures", "snapshot-tests" under nested trees.
+        return any(("fixture" in p or "snapshot" in p or "__mocks__" in p) for p in parts_lower)
 
     @staticmethod
     def _sanitize_secret(value: str) -> str:

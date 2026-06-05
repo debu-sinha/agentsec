@@ -75,6 +75,9 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 | CMCP-001 | Tool poisoning / dangerous parameter schemas | Critical | ASI01, ASI03, ASI02 | Regex patterns for prompt injection in tool descriptions + dangerous input schema parameter names (shell, exec, eval, command, code) |
 | CMCP-002 | Remote MCP endpoint without authentication | High | ASI03, ASI05 | Detects `https://` MCP servers and URL-based servers missing `auth` or `headers` config |
 | CMCP-003 | Unpinned MCP dependencies / unverified npx | Medium | ASI03 | Flags `npx` invocations not from `@anthropic/` or `@modelcontextprotocol/` namespaces |
+| CMCP-004 | Non-TLS HTTP transport to remote MCP server | High | ASI05 | Flags `http://` MCP server URLs (excluding loopback) that send tool calls and tokens in cleartext |
+| CMCP-005 | Shell invocation / command injection in launch command | High | ASI05, ASI04 | Flags shell wrappers (`bash -c`, `cmd /c`, `powershell -Command`), pipe-to-interpreter, and chained operators (`;`, `&&`, `$(...)`, backticks) in a server launch command |
+| CMCP-006 | Reference to MCP package with known critical CVE | Critical | ASI04, ASI05 | Version-aware match against a denylist of MCP packages with disclosed RCE / auth-bypass CVEs; patched pins are suppressed |
 
 ## Memory Manipulation (CMM)
 
@@ -125,8 +128,8 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 | ASI01 - Prompt Injection | CID-001, CID-002, CTO-001, CSK-001, CSK-003, CSK-005, CMCP-001 |
 | ASI02 - Excessive Agency | CGW-001, CGW-005, CID-001, CID-002, CTO-001, CTO-002, CTO-003, CEX-001, CEX-003, CPL-001, CMCP-001 |
 | ASI03 - Supply Chain | CSK-001, CSK-002, CSK-004, CSK-005, CPL-001, CSF-001, CMCP-001, CMCP-002, CMCP-003 |
-| ASI05 - Insecure Output / Secrets | CGW-001, CGW-002, CGW-003, CGW-004, CGW-005, CFS-001, CFS-002, CSF-002, CMCP-002, credentials |
-| ASI04 - Knowledge Poisoning / Data Integrity | installation (workspace integrity) |
+| ASI05 - Insecure Output / Secrets | CGW-001, CGW-002, CGW-003, CGW-004, CGW-005, CFS-001, CFS-002, CSF-002, CMCP-002, CMCP-004, CMCP-005, CMCP-006, credentials |
+| ASI04 - Knowledge Poisoning / Data Integrity | installation (workspace integrity), CMCP-005, CMCP-006 |
 | ASI06 - Memory & Context Manipulation | CMM-001, CMM-002 |
 | ASI07 - Multi-Agent Exploitation | CID-003, CMA-001, CMA-002 |
 | ASI08 - Uncontrolled Cascading | CEX-001, CEX-002, CEX-003 |
@@ -135,7 +138,8 @@ See [ADR-0002](adr/ADR-0002-owasp-scoring-formula.md) for the full scoring metho
 
 ## Summary
 
-- **33 named checks** across 12 check families
-- **Dynamic credential detection** using detect-secrets (23 plugins) + 16 custom patterns + entropy heuristics
-- **5 known CVE detections** (CVE-2026-25253, CVE-2026-24763, CVE-2026-25157, CVE-2026-25593, CVE-2026-25475)
+- **36 named checks** across 12 check families
+- **Dynamic credential detection** using detect-secrets (23 plugins) + 16 custom patterns + entropy heuristics + base64/hex decode pass
+- **5 known installation CVE detections** (CVE-2026-25253, CVE-2026-24763, CVE-2026-25157, CVE-2026-25593, CVE-2026-25475)
+- **3 known MCP package CVE detections** via CMCP-006 (CVE-2025-49596, CVE-2026-41497, CVE-2026-5059)
 - All findings map to OWASP Agentic Top 10 (ASI01-ASI10)

@@ -1565,7 +1565,10 @@ class InstallationScanner(BaseScanner):
                 "External data fetch instruction",
             ),
             (
-                re.compile(r"\b(?:eval|exec|__import__|subprocess)\b", re.I),
+                # Require call/attribute syntax so real embedded code is caught
+                # but doc mentions and hyphenated command names like
+                # "bat-story-eval" are not.
+                re.compile(r"\b(?:eval|exec|__import__)\s*\(|\bsubprocess\.\w+\s*\(", re.I),
                 "Code execution instruction",
             ),
         ]
