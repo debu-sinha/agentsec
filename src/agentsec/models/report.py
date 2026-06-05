@@ -14,11 +14,11 @@ from agentsec.models.owasp import OwaspMapping
 def _get_version() -> str:
     """Get package version without circular import."""
     try:
-        from importlib.metadata import version
+        from importlib.metadata import PackageNotFoundError, version
 
         return version("agentsec")
-    except Exception:
-        return "0.4.4"
+    except PackageNotFoundError:
+        return "unknown"
 
 
 class ScanSummary(BaseModel):

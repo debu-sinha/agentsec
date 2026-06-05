@@ -126,6 +126,57 @@ _SUSPICIOUS_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = 
         FindingSeverity.HIGH,
         "DNS-based data exfiltration technique",
     ),
+    # --- Agent identity / memory file tampering (OWASP Agentic Skills AST04) ---
+    (
+        "Agent identity file modification",
+        re.compile(
+            # An agent identity / memory file targeted by a write, across the
+            # common orderings: write-verb then file, file then .write_text(),
+            # Node fs writes, open(..., "w"|"a"), or shell redirection.
+            r"(?:write_text|write_bytes|writeFileSync|appendFileSync"
+            r"|fs\.(?:write|append)File|>>?)\s*[^;\n]{0,160}"
+            r"(?:MEMORY|AGENTS|SOUL|CLAUDE|TOOLS)\.md"
+            r"|(?:MEMORY|AGENTS|SOUL|CLAUDE|TOOLS)\.md[\"']?\s*\)?\s*\.\s*"
+            r"(?:write_text|write_bytes)"
+            r"|(?:MEMORY|AGENTS|SOUL|CLAUDE|TOOLS)\.md[\"']?\s*,\s*[\"']?[wa]\b",
+            re.I,
+        ),
+        FindingSeverity.HIGH,
+        "Writing to an agent identity/memory file enables persistent context "
+        "poisoning (OWASP Agentic Skills AST04, ASI06)",
+    ),
+    # --- JavaScript / TypeScript dangerous patterns (skill scanner was Python-only) ---
+    (
+        "JavaScript dynamic code execution",
+        re.compile(r"\beval\s*\(|new\s+Function\s*\(|\bFunction\s*\(\s*[\"']"),
+        FindingSeverity.HIGH,
+        "Dynamic code execution in JS/TS (eval/Function) can run attacker code",
+    ),
+    (
+        "Node child process execution",
+        re.compile(
+            r"(?:child_process|node:child_process)[^;\n]{0,80}"
+            r"(?:execSync|exec|spawnSync|spawn|fork)"
+            r"|\b(?:execSync|spawnSync)\s*\(",
+        ),
+        FindingSeverity.HIGH,
+        "Spawning OS processes from a JS/TS skill",
+    ),
+    (
+        "Node dynamic require",
+        re.compile(r"require\s*\(\s*(?![\"'\s)])"),
+        FindingSeverity.MEDIUM,
+        "Dynamic require() with a non-literal argument can hide imports",
+    ),
+    (
+        "JavaScript environment harvesting",
+        re.compile(
+            r"(?:Object\.(?:keys|entries|values)\s*\(\s*process\.env"
+            r"|JSON\.stringify\s*\(\s*process\.env)",
+        ),
+        FindingSeverity.HIGH,
+        "Enumerating process.env in JS/TS may harvest credentials",
+    ),
 ]
 
 # Prompt injection patterns in skill descriptions/schemas

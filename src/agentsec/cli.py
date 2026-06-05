@@ -547,8 +547,12 @@ def harden(target: str, profile: str, do_apply: bool, verbose: bool) -> None:
         pre_report = run_scan(pre_config)
         scorer = OwaspScorer()
         pre_posture = scorer.compute_posture_score(pre_report.findings)
-    except Exception:
-        logger.debug("Pre-hardening scan failed, skipping preview")
+    except Exception as exc:  # noqa: BLE001
+        logger.warning(
+            "Pre-hardening scan failed (%s: %s); skipping impact preview",
+            type(exc).__name__,
+            exc,
+        )
 
     # Confirmation prompt for destructive --apply (skip in non-interactive)
     if (
@@ -625,7 +629,8 @@ def harden(target: str, profile: str, do_apply: bool, verbose: bool) -> None:
                     f"({post_posture['overall_score']}/100), "
                     f"{len(post_report.findings)} findings\n"
                 )
-        except Exception:
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Post-hardening re-scan failed (%s: %s)", type(exc).__name__, exc)
             console.print("[dim]Re-scan after hardening skipped.[/dim]\n")
 
 

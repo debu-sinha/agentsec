@@ -11,9 +11,12 @@ Also performs:
 
 from __future__ import annotations
 
+import base64
+import binascii
 import logging
 import re
 import subprocess
+from collections.abc import Iterator
 from pathlib import Path
 
 from detect_secrets import SecretsCollection
@@ -219,11 +222,56 @@ _ROTATION_ADVICE: dict[str, str] = {
     "SendGrid API Key": "Rotate at https://app.sendgrid.com/settings/api_keys",
 }
 
+# Candidate base64 / hex blobs to decode and re-scan for hidden secrets.
+_BASE64_BLOB = re.compile(r"[A-Za-z0-9+/]{24,}={0,2}")
+_HEX_BLOB = re.compile(r"(?:0x)?[0-9a-fA-F]{40,}")
+
+
+def _iter_decoded_blobs(content: str) -> Iterator[tuple[str, str, str]]:
+    """Yield (encoding_label, raw_blob, decoded_text) for each decodable blob.
+
+    Only blobs that decode to mostly-printable text are returned, which keeps
+    the downstream provider-pattern match meaningful and avoids binary noise.
+    """
+    for match in _BASE64_BLOB.finditer(content):
+        blob = match.group(0)
+        if len(blob) % 4 != 0:
+            continue
+        try:
+            raw = base64.b64decode(blob, validate=True)
+        except (binascii.Error, ValueError):
+            continue
+        decoded = raw.decode("utf-8", errors="replace")
+        if decoded and _is_mostly_printable(decoded):
+            yield "base64", blob, decoded
+
+    for match in _HEX_BLOB.finditer(content):
+        blob = match.group(0)
+        hex_digits = blob[2:] if blob.lower().startswith("0x") else blob
+        if len(hex_digits) % 2 != 0:
+            continue
+        try:
+            raw = bytes.fromhex(hex_digits)
+        except ValueError:
+            continue
+        decoded = raw.decode("utf-8", errors="replace")
+        if decoded and _is_mostly_printable(decoded):
+            yield "hex", blob, decoded
+
+
+def _is_mostly_printable(text: str, threshold: float = 0.9) -> bool:
+    """True when at least ``threshold`` of characters are printable ASCII."""
+    if not text:
+        return False
+    printable = sum(1 for ch in text if 0x20 <= ord(ch) <= 0x7E)
+    return printable / len(text) >= threshold
+
+
 # Additional provider patterns not covered by detect-secrets
 _EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
     (
         "OpenAI API Key",
-        re.compile(r"sk-(?!ant-)(?:proj-|svcacct-)?[a-zA-Z0-9_\-]{20,200}"),
+        re.compile(r"sk-(?!ant-)(?:proj-|svcacct-|admin-)?[a-zA-Z0-9_\-]{20,200}"),
         FindingSeverity.CRITICAL,
         "Rotate at https://platform.openai.com/api-keys",
     ),
@@ -248,8 +296,12 @@ _EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
     (
         "Google API Key",
         re.compile(r"AIza[0-9A-Za-z_\-]{35}"),
-        FindingSeverity.HIGH,
-        "Restrict or delete in Google Cloud Console",
+        # Elevated to CRITICAL: as of Feb 2026, enabling the Gemini Generative
+        # Language API grants every existing project API key (including Maps and
+        # Firebase keys) access to Gemini, so any leaked AIza key is a live AI
+        # credential (Truffle Security, "Google API keys weren't secrets").
+        FindingSeverity.CRITICAL,
+        "Restrict or delete in Google Cloud Console; check for Gemini API access",
     ),
     (
         "Groq API Key",
@@ -319,9 +371,17 @@ _EXTRA_PATTERNS: list[tuple[str, re.Pattern[str], FindingSeverity, str]] = [
     ),
     (
         "Generic Connection String",
+        # Explicit, non-overlapping character classes keep this linear-time.
+        # Each segment excludes the delimiter that follows it (':' then '@'),
+        # so the engine never backtracks across boundaries (ReDoS-safe).
         re.compile(
             r"(?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?|rediss?|amqps?|mariadb|mssql)"
-            r'://[^\s"\':@]{1,200}:[^\s"\'@]{1,200}@[^\s"\']{1,200}',
+            r"://"
+            r"[A-Za-z0-9._%+\-]{1,128}"  # username (no ':' or '@')
+            r":"
+            r"[^\s\"'@/]{1,128}"  # password (no '@', '/', whitespace, or quotes)
+            r"@"
+            r"[A-Za-z0-9._\-]{1,128}",  # host
             re.I,
         ),
         FindingSeverity.CRITICAL,
@@ -551,8 +611,19 @@ class CredentialScanner(BaseScanner):
             for file_path in files:
                 try:
                     secrets.scan_file(str(file_path))
-                except Exception:  # noqa: BLE001
-                    logger.debug("detect-secrets failed on %s", file_path)
+                except (OSError, UnicodeDecodeError) as exc:
+                    # Unreadable or non-text file: expected, low signal.
+                    logger.debug("detect-secrets skipped %s: %s", file_path, exc)
+                    continue
+                except Exception as exc:  # noqa: BLE001
+                    # Unexpected: a plugin or library bug. Surface it (warning)
+                    # so a silently unscanned file is visible, but keep scanning.
+                    logger.warning(
+                        "detect-secrets failed on %s (%s: %s); file not scanned",
+                        file_path,
+                        type(exc).__name__,
+                        exc,
+                    )
                     continue
 
         for filename in secrets.files:
@@ -705,7 +776,7 @@ class CredentialScanner(BaseScanner):
                 # natural language, not secrets. Strip known prefix before checking.
                 if secret_type not in ("Generic Connection String", "Private Key"):
                     body = re.sub(
-                        r"^(?:sk-(?:ant-|proj-|svcacct-)?|ghp_|gho_|gh[us]_|AKIA"
+                        r"^(?:sk-(?:ant-|proj-|svcacct-|admin-)?|ghp_|gho_|gh[us]_|AKIA"
                         r"|hf_|dapi|gsk_|r8_|pcsk_|co-|vercel_|AIza)",
                         "",
                         matched,
@@ -759,6 +830,84 @@ class CredentialScanner(BaseScanner):
                         ),
                         owasp_ids=["ASI05"],
                         metadata=metadata if metadata else {},
+                    )
+                )
+
+        # Obfuscation pass: base64/hex-encoded secrets hide from plain pattern
+        # matching. Decode embedded blobs and re-run provider patterns on the
+        # plaintext. Every paper on agent-secret scanning (SKILL-INJECT,
+        # MCPSecBench) flags this as the standard gap in static scanners.
+        findings.extend(self._scan_decoded_blobs(content, file_path, is_low_confidence))
+
+        return findings
+
+    def _scan_decoded_blobs(
+        self, content: str, file_path: Path, is_low_confidence: bool
+    ) -> list[Finding]:
+        """Decode base64/hex blobs in ``content`` and re-scan for provider keys.
+
+        Only emits a finding when the decoded plaintext matches a known provider
+        key format, so precision stays high (a random base64 blob that does not
+        decode to a real key shape is ignored).
+        """
+        findings: list[Finding] = []
+        seen: set[str] = set()
+
+        for encoding, blob, decoded in _iter_decoded_blobs(content):
+            for secret_type, pattern, severity, rotation_advice in _EXTRA_PATTERNS:
+                # Connection strings and PEM bodies do not survive a clean
+                # round-trip through base64/hex in a way worth chasing here.
+                if secret_type in ("Generic Connection String", "Private Key"):
+                    continue
+                match = pattern.search(decoded)
+                if not match:
+                    continue
+                matched = match.group(0)
+                if self._is_placeholder(matched) or self._shannon_entropy(matched) < 3.0:
+                    continue
+                if matched in seen:
+                    continue
+                seen.add(matched)
+
+                line_num = content[: content.find(blob)].count("\n") + 1
+                effective_severity = severity
+                confidence = FindingConfidence.HIGH
+                metadata: dict[str, str] = {"encoding": encoding, "obfuscated": "true"}
+                if is_low_confidence:
+                    if severity != FindingSeverity.LOW:
+                        effective_severity = FindingSeverity.LOW
+                    confidence = FindingConfidence.LOW
+                    metadata["context"] = "test_or_doc"
+
+                findings.append(
+                    Finding(
+                        scanner=self.name,
+                        category=FindingCategory.EXPOSED_TOKEN,
+                        severity=effective_severity,
+                        confidence=confidence,
+                        title=f"{encoding}-encoded {secret_type} found in {file_path.name}",
+                        description=(
+                            f"A {secret_type} was found {encoding}-encoded in "
+                            f"'{file_path.name}' near line {line_num}. Encoding a "
+                            f"credential hides it from plain text scanning but it is "
+                            f"still a live secret once decoded at runtime."
+                        ),
+                        evidence=(
+                            f"Decoded: {sanitize_secret(matched)} ({encoding}, line {line_num})"
+                        ),
+                        file_path=file_path,
+                        line_number=line_num,
+                        remediation=Remediation(
+                            summary=f"Rotate and secure the {secret_type}",
+                            steps=[
+                                rotation_advice,
+                                f"Remove the encoded value from {file_path.name}",
+                                "Store in OS keychain or environment variable",
+                                "Encoding is not encryption; do not rely on it",
+                            ],
+                        ),
+                        owasp_ids=["ASI05"],
+                        metadata=metadata,
                     )
                 )
 
@@ -896,7 +1045,7 @@ class CredentialScanner(BaseScanner):
                         continue
                     if secret_type not in ("Generic Connection String", "Private Key"):
                         body = re.sub(
-                            r"^(?:sk-(?:ant-|proj-|svcacct-)?|ghp_|gho_|gh[us]_|AKIA"
+                            r"^(?:sk-(?:ant-|proj-|svcacct-|admin-)?|ghp_|gho_|gh[us]_|AKIA"
                             r"|hf_|dapi|gsk_|r8_|pcsk_|co-|vercel_|AIza)",
                             "",
                             matched,
@@ -1072,7 +1221,7 @@ class CredentialScanner(BaseScanner):
 
         # Strip known prefixes before checking (e.g. "sk-", "ghp_", "AKIA")
         stripped = re.sub(
-            r"^(?:sk-(?:ant-|proj-|svcacct-)?|ghp_|gho_|gh[us]_|AKIA|hf_|dapi"
+            r"^(?:sk-(?:ant-|proj-|svcacct-|admin-)?|ghp_|gho_|gh[us]_|AKIA|hf_|dapi"
             r"|gsk_|r8_|pcsk_|co-|vercel_|AIza|fw_|pplx-)",
             "",
             value,

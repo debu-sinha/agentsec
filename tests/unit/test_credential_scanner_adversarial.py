@@ -436,8 +436,8 @@ class TestFN01_ObfuscatedSecrets:
     def test_base64_encoded_secret(self, scanner, tmp_path):
         """Secret stored ONLY as base64-encoded string (no plaintext anywhere).
 
-        If the plaintext key never appears in the file, only the base64
-        blob is present. The OpenAI regex won't match the encoded form.
+        The obfuscation pass decodes embedded base64 blobs and re-runs provider
+        patterns, so the encoded OpenAI key is now detected.
         """
         f = tmp_path / "config.py"
         # No comments revealing the plaintext -- only the base64 blob
@@ -447,13 +447,9 @@ class TestFN01_ObfuscatedSecrets:
         )
         ctx = ScanContext(target_path=tmp_path)
         findings = scanner.scan(ctx)
-        # Base64HighEntropyString might catch the b64 blob as a generic
-        # high-entropy string, but it won't identify it as an OpenAI key.
         openai = [f for f in findings if "OpenAI" in f.title]
-        assert len(openai) == 0, (
-            "FN-01: Base64-encoded secret evasion -- the key is invisible "
-            "to pattern-based detection when only the encoded form is present"
-        )
+        assert len(openai) >= 1, "base64-encoded OpenAI key should be decoded and flagged"
+        assert any(f.metadata.get("encoding") == "base64" for f in openai)
 
     def test_reversed_secret(self, scanner, tmp_path):
         """Secret stored in reverse order."""
@@ -468,17 +464,16 @@ class TestFN01_ObfuscatedSecrets:
         assert len(openai) == 0, "FN-01: Reversed key evasion"
 
     def test_hex_encoded_secret(self, scanner, tmp_path):
-        """Secret stored as hex-encoded string."""
+        """Secret stored as hex-encoded string is decoded and flagged."""
         f = tmp_path / "config.py"
         real_key = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5a"
         hex_key = real_key.encode().hex()
         f.write_text(f'HEX_KEY = "{hex_key}"\n')
         ctx = ScanContext(target_path=tmp_path)
         findings = scanner.scan(ctx)
-        # The hex string is 86 chars of hex -- HexHighEntropyString might fire
-        # but won't identify it as an OpenAI key
         openai = [f for f in findings if "OpenAI" in f.title]
-        assert len(openai) == 0, "FN-01: Hex-encoded key evasion"
+        assert len(openai) >= 1, "hex-encoded OpenAI key should be decoded and flagged"
+        assert any(f.metadata.get("encoding") == "hex" for f in openai)
 
 
 class TestFN02_UnusualFileTypes:
