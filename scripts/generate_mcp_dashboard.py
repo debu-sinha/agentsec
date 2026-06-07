@@ -561,11 +561,17 @@ def render_dashboard(
     lines.append("")
 
     # -- Footer --
+    try:
+        from agentsec import __version__ as _av
+
+        agentsec_version = f"v{_av}"
+    except Exception:
+        agentsec_version = ""
     lines.append("---")
     lines.append("")
     lines.append(
         f"*Generated on {snapshot_date} by "
-        f"[agentsec](https://github.com/debu-sinha/agentsec) v0.4.5 "
+        f"[agentsec](https://github.com/debu-sinha/agentsec) {agentsec_version} "
         f"| [Install](https://pypi.org/project/agentsec-ai/) "
         f"| [Report an issue](https://github.com/debu-sinha/agentsec/issues)*"
     )
@@ -742,6 +748,20 @@ def run_fresh_scan(date_stamp: str) -> tuple[Path, Path, Path]:
             rem_obj = f.get("remediation")
             rem = rem_obj.get("summary") if isinstance(rem_obj, dict) else None
 
+            # Record a repo-relative location (path:line). The scanner emits an
+            # absolute path inside the temp clone, so strip the clone prefix to
+            # avoid leaking the local filesystem layout; fall back to basename.
+            location = None
+            fp_val = f.get("file_path")
+            if fp_val:
+                try:
+                    rel = Path(fp_val).resolve().relative_to(target_path.resolve())
+                    loc_path = rel.as_posix()
+                except (ValueError, OSError):
+                    loc_path = Path(fp_val).name
+                line_no = f.get("line_number")
+                location = f"{loc_path}:{line_no}" if line_no else loc_path
+
             all_findings.append(
                 {
                     "study_id": f"mcp-weekly-{date_stamp[:4]}-{date_stamp[4:6]}",
@@ -754,7 +774,7 @@ def run_fresh_scan(date_stamp: str) -> tuple[Path, Path, Path]:
                     "category": f.get("category", "other").lower(),
                     "title": f.get("title", "unknown"),
                     "evidence": (f.get("evidence") or "")[:200] or None,
-                    "location": None,
+                    "location": location,
                     "confidence": "needs_review",
                     "remediation": rem,
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(),
@@ -958,7 +978,15 @@ def generate_detail_pages(
     for tid, meta in targets_meta.items():
         stats = targets_findings.get(
             tid,
-            {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0, "total": 0, "categories": {}},
+            {
+                "critical": 0,
+                "high": 0,
+                "medium": 0,
+                "low": 0,
+                "info": 0,
+                "total": 0,
+                "categories": {},
+            },
         )
         safe_name = tid.replace("/", "-")
         page = render_repo_detail(tid, meta, stats, findings, snapshot_date)
@@ -1035,9 +1063,7 @@ def main():
     print(f"Dashboard written to {output_path}")
 
     # Generate per-repo detail pages (#9)
-    detail_count = generate_detail_pages(
-        targets_meta, targets_findings, findings, snapshot_date
-    )
+    detail_count = generate_detail_pages(targets_meta, targets_findings, findings, snapshot_date)
     print(f"Generated {detail_count} per-repo detail pages")
 
 

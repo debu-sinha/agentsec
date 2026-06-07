@@ -94,14 +94,12 @@ class TestFP01_DocumentationExampleKeys:
             f"Got {len(findings)} findings."
         )
 
-    @pytest.mark.xfail(
-        reason="FP-01: 'DO-NOT-USE-IN-PRODUCTION' passes entropy gate (3.39) "
-        "and has no placeholder word matches. KeywordDetector fires on "
-        "'secret:' key and captures the value.",
-        strict=True,
-    )
     def test_do_not_use_in_production_phrase(self, scanner, tmp_path):
-        """Warning phrase 'DO-NOT-USE-IN-PRODUCTION' is not a real secret."""
+        """Warning phrase 'DO-NOT-USE-IN-PRODUCTION' is not a real secret.
+
+        Resolved by the self-describing kebab-phrase placeholder heuristic
+        (a run of hyphenated words is a phrase, not a key).
+        """
         f = tmp_path / "config.yaml"
         f.write_text("secret: DO-NOT-USE-IN-PRODUCTION\n")
         ctx = ScanContext(target_path=tmp_path)
@@ -889,3 +887,103 @@ class TestEdgeCases:
         ctx = ScanContext(target_path=tmp_path)
         small_scanner.scan(ctx)
         assert ctx.files_scanned == 0, "Custom max_file_size bypass"
+
+
+class TestFP_Ecosystem_v050:
+    """Regression tests for false positives found in the 2026-06-05 top-50 MCP
+    ecosystem scan. Each fix is generic (no repo/path/value is hardcoded in the
+    scanner); these tests pin the exact shapes that were misfiring.
+    """
+
+    def test_secret_in_snapshot_fixture_dir_is_low_confidence(self, scanner, tmp_path):
+        """A detected key inside __fixtures__/snapshot-tests is downgraded.
+
+        getsentry/XcodeBuildMCP: IBM-key match inside CLI snapshot JSON fixtures.
+        """
+        d = tmp_path / "src" / "snapshot-tests" / "__fixtures__" / "cli" / "json"
+        d.mkdir(parents=True)
+        f = d / "show-build-settings--success.json"
+        f.write_text('{"key": "AKIAIOSFODNN7EXAMPLE", "tok": "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR"}\n')
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert all(fd.severity == FindingSeverity.LOW for fd in findings), (
+            "secrets in snapshot fixtures must not drive critical/high"
+        )
+
+    def test_bare_tests_rs_is_low_confidence(self, scanner, tmp_path):
+        """agentgateway: TEST_PRIVATE_KEY_PEM in a bare tests.rs module."""
+        d = tmp_path / "crates" / "x" / "oidc"
+        d.mkdir(parents=True)
+        (d / "tests.rs").write_text('const K = "sk-aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV";\n')
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert all(fd.severity == FindingSeverity.LOW for fd in findings)
+
+    def test_gitguardian_allowlist_is_low_confidence(self, scanner, tmp_path):
+        """chopratejas/headroom: fake tokens in a GitGuardian allowlist config."""
+        f = tmp_path / ".gitguardian.yaml"
+        f.write_text(
+            "matches:\n"
+            '  - name: "fixture"\n'
+            '    match: "sk-ant-api03-payg-fixture-aB3cD4eF5gH6iJ7kL8"\n'
+        )
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert all(fd.severity == FindingSeverity.LOW for fd in findings)
+
+    def test_multiword_fake_key_suppressed(self, scanner, tmp_path):
+        """headroom/drift_detector.rs: 'sk-very-private-api-key-12345' stub."""
+        f = tmp_path / "drift_detector.rs"
+        f.write_text('let h = "sk-very-private-api-key-12345";\n')
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        openai = [fd for fd in findings if "OpenAI" in fd.title]
+        assert openai == [], "self-describing kebab-word fake key must not flag"
+
+    def test_localhost_dsn_suppressed(self, scanner, tmp_path):
+        """Gentleman-Programming/engram: localhost dev-default connection string."""
+        f = tmp_path / "config.go"
+        f.write_text('DSN := "postgres://engram:engram_dev@localhost:5433/engram_cloud"\n')
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        conn = [fd for fd in findings if "Connection String" in fd.title]
+        assert conn == [], "loopback DSN is dev scaffolding, not a leaked secret"
+
+    def test_remote_dsn_still_flagged(self, scanner, tmp_path):
+        """Guard against over-suppression: a remote DSN must still flag."""
+        f = tmp_path / "prod.go"
+        f.write_text('DSN := "postgres://admin:Xk9mPq2ssWz7@db.prod.example.com:5432/main"\n')
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert any("Connection String" in fd.title for fd in findings)
+
+    def test_loopback_basic_auth_suppressed(self, scanner, tmp_path):
+        """detect-secrets BasicAuth on a loopback DSN is dev scaffolding."""
+        f = tmp_path / "config.go"
+        f.write_text('DSN := "postgres://engram:engram_dev@localhost:5433/engram_cloud"\n')
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert not any("Basic Auth" in fd.title for fd in findings)
+
+    def test_secret_inside_test_function_downgraded(self, scanner, tmp_path):
+        """A PEM key inside a #[test] fn in a prod-named .rs file is a test
+        vector (agentgateway/agentgateway, 2026-06-05 scan)."""
+        f = tmp_path / "agent.rs"
+        f.write_text(
+            "#[test]\n"
+            "fn test_parse_key_ec_p256() {\n"
+            '    let ec_key = b"-----BEGIN EC PRIVATE KEY-----\n'
+            "MHcCAQEEIGfhD3tZlZOmw7LfyyERnPCyOnzmqiy1VcwiK36ro1H5oAoGCCqGSM49\n"
+            "AwEHoUQDQgAEwWSdCtU7tQGYtpNpJXSB5VN4yT1lRXzHh8UOgWWqiYXX1WYHk8vf\n"
+            '-----END EC PRIVATE KEY-----";\n'
+            "}\n"
+        )
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert all(fd.severity == FindingSeverity.LOW for fd in findings)
+
+    def test_real_private_key_outside_test_still_critical(self, scanner, tmp_path):
+        """Guard: a PEM key in normal source is not downgraded by the test rule."""
+        f = tmp_path / "server.rs"
+        f.write_text(
+            "fn load() {\n"
+            '    let k = b"-----BEGIN EC PRIVATE KEY-----\n'
+            "MHcCAQEEIGfhD3tZlZOmw7LfyyERnPCyOnzmqiy1VcwiK36ro1H5oAoGCCqGSM49\n"
+            "AwEHoUQDQgAEwWSdCtU7tQGYtpNpJXSB5VN4yT1lRXzHh8UOgWWqiYXX1WYHk8vf\n"
+            '-----END EC PRIVATE KEY-----";\n'
+            "}\n"
+        )
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert any(fd.severity == FindingSeverity.CRITICAL for fd in findings)
