@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-99%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [0x4m4/hexstrike-ai](https://github.com/0x4m4/hexstrike-ai)
-**Stars:** 9,310
-**Last scan:** 2026-06-05
+**Stars:** 9,425
+**Last scan:** 2026-06-08
 
 ## Severity Summary
 
@@ -30,4 +30,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-05 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-08 by [agentsec](https://github.com/debu-sinha/agentsec)*
