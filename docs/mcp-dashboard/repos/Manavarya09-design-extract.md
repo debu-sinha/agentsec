@@ -1,30 +1,34 @@
 # Manavarya09/design-extract
 
-![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-98%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [Manavarya09/design-extract](https://github.com/Manavarya09/design-extract)
-**Stars:** 3,093
-**Last scan:** 2026-06-08
+**Stars:** 3,226
+**Last scan:** 2026-06-15
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
+| 🟢 Low | **2** |
 | 🔵 Info | **1** |
-| **Total** | **1** |
+| **Total** | **3** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 2 | 🟢 Low | Exposed Token | Secret Keyword found in smart.test.js | Rotate and secure the Secret Keyword |
+| 3 | 🟢 Low | Exposed Token | Secret Keyword found in smart.test.js | Rotate and secure the Secret Keyword |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
+| Exposed Token | 2 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-08 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-15 by [agentsec](https://github.com/debu-sinha/agentsec)*

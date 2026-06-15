@@ -1,18 +1,19 @@
 # openclaw/Peekaboo
 
-![Grade](https://img.shields.io/badge/Grade-C-yellow?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-70%2F100-yellow?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-50%2F100-red?style=for-the-badge)
 
 **Repository:** [openclaw/Peekaboo](https://github.com/openclaw/Peekaboo)
-**Stars:** 4,668
-**Last scan:** 2026-06-08
+**Stars:** 4,707
+**Last scan:** 2026-06-15
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟡 Medium | **10** |
+| 🟡 Medium | **16** |
+| 🟢 Low | **2** |
 | 🔵 Info | **1** |
-| **Total** | **11** |
+| **Total** | **19** |
 
 ## Findings
 
@@ -29,14 +30,22 @@
 | 9 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 10 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 11 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 12 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 13 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 14 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 15 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 16 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 17 | 🟢 Low | Exposed Token | Secret Keyword found in AgentCommandModelParsingTests.swift | Rotate and secure the Secret Keyword |
+| 18 | 🟢 Low | Exposed Token | Secret Keyword found in AgentCommandModelParsingTests.swift | Rotate and secure the Secret Keyword |
+| 19 | 🟡 Medium | Exposed Token | Secret Keyword found in SettingsServiceTests.swift | Rotate and secure the Secret Keyword |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 10 |
+| Exposed Token | 18 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-08 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-15 by [agentsec](https://github.com/debu-sinha/agentsec)*

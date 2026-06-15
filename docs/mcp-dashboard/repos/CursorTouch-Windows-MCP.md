@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-97%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [CursorTouch/Windows-MCP](https://github.com/CursorTouch/Windows-MCP)
-**Stars:** 5,902
-**Last scan:** 2026-06-08
+**Stars:** 5,986
+**Last scan:** 2026-06-15
 
 ## Severity Summary
 
@@ -30,4 +30,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-08 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-15 by [agentsec](https://github.com/debu-sinha/agentsec)*
