@@ -1031,7 +1031,8 @@ class TestFP_Ecosystem_v050:
         d.mkdir(parents=True)
         (d / "zh-CN.json").write_text(
             '{\n  "accessPasswordTip": "服务端 API 鉴权，避免 API 被外部应用盗用。",\n'
-            '  "apiKeyPlaceholder": "请输入模型 API 密钥"\n}\n'
+            '  "apiKeyPlaceholder": "请输入模型 API 密钥"\n}\n',
+            encoding="utf-8",
         )
         findings = scanner.scan(ScanContext(target_path=tmp_path))
         assert all(fd.severity == FindingSeverity.LOW for fd in findings)
