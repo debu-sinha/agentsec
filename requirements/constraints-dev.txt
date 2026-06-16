@@ -1,7 +1,7 @@
 # Reproducible constraints for CI/dev tools.
 # Update with: python -m pip freeze > requirements/constraints-dev.txt (review before commit)
 
-build==1.4.0
+build==1.4.2
 click==8.3.1
 mypy==1.19.1
 pip-audit==2.10.0
