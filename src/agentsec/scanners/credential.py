@@ -466,6 +466,15 @@ _LOW_CONFIDENCE_DIRS: set[str] = {
     "mocks",
     "testutils",
     "test_helpers",
+    # Localization / i18n: translated UI strings trip keyword detectors but are
+    # not credentials.
+    "locales",
+    "locale",
+    "i18n",
+    "translations",
+    "lang",
+    "langs",
+    "intl",
 }
 
 # Loopback hosts in a connection/basic-auth string: dev scaffolding, not a
@@ -489,6 +498,44 @@ def _line_in_test_block(lines: list[str], idx: int, window: int = 40) -> bool:
     start = max(0, idx - window)
     end = min(idx + 1, len(lines))
     return any(_TEST_BLOCK_MARKERS.search(lines[i]) for i in range(start, end))
+
+
+def _looks_like_identifier_phrase(value: str) -> bool:
+    """True when ``value`` is a descriptive identifier rather than a secret.
+
+    Splits on separators and camelCase boundaries; if the result is two or more
+    real word tokens (each 3-12 alpha chars) plus optional short numbers, it is
+    an enum/const/method name (e.g. "SecurityApiKey", "clientSecretBasic",
+    "password_auth"), not a random credential. Real high-entropy keys decompose
+    into short two-character fragments and are not matched.
+    """
+    if len(value) > 40:
+        return False
+    tokens: list[str] = []
+    for part in re.split(r"[-_.:/\s]", value):
+        if not part:
+            continue
+        camel = re.findall(r"[A-Z]+(?=[A-Z][a-z])|[A-Z]?[a-z]+|[A-Z]+|\d+", part)
+        tokens.extend(camel if camel else [part])
+    if len(tokens) < 2:
+        return False
+    words = [t for t in tokens if t.isalpha() and 3 <= len(t) <= 12]
+    digits = [t for t in tokens if t.isdigit() and len(t) <= 4]
+    return len(words) >= 2 and (len(words) + len(digits)) == len(tokens)
+
+
+def _looks_like_regex_pattern(value: str) -> bool:
+    """True when ``value`` is a regex/validation pattern, not a literal secret.
+
+    Matches values containing a character class plus quantifier (``[..]{n}``),
+    regex escapes (``\\d``/``\\w``/``\\s``), or a non-capturing group (``(?:``).
+    """
+    return bool(
+        re.search(r"\[[^\]]+\]\s*[*+{]", value)
+        or re.search(r"\\[dwsDWS]", value)
+        or "(?:" in value
+        or "(?<" in value
+    )
 
 
 # Files that intentionally contain fake/example secrets: the configs and
@@ -731,6 +778,19 @@ class CredentialScanner(BaseScanner):
                     if not secret.secret_value:
                         continue
                     if self._shannon_entropy(secret.secret_value) < 3.0:
+                        continue
+                    # KeywordDetector captures the value after a `password=`/
+                    # `secret=`/`token=` keyword. Suppress the common non-secret
+                    # shapes it picks up: descriptive enum/const identifiers,
+                    # validation regex patterns, and CI templating expressions.
+                    # These checks are scoped to this detector only so provider
+                    # keys (AWS, Private Key, etc.) are never affected.
+                    sv = secret.secret_value
+                    if (
+                        _looks_like_identifier_phrase(sv)
+                        or _looks_like_regex_pattern(sv)
+                        or "${{" in sv
+                    ):
                         continue
 
                 severity = _SEVERITY_MAP.get(secret.type, FindingSeverity.MEDIUM)
@@ -1396,6 +1456,9 @@ class CredentialScanner(BaseScanner):
             return True
         # Secret-scanner config/allowlist files (deliberately hold fake tokens)
         if name_lower in _SECRET_SCANNER_CONFIG_FILES:
+            return True
+        # Localization message files: en-US.lang.ts, messages.i18n.json, etc.
+        if ".lang." in name_lower or ".i18n." in name_lower or ".messages." in name_lower:
             return True
         # Mock/stub/fixture/dummy/example files
         if "mock" in name_lower or "stub" in name_lower or "fixture" in name_lower:

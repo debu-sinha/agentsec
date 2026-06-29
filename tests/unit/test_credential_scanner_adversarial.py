@@ -987,3 +987,59 @@ class TestFP_Ecosystem_v050:
         )
         findings = scanner.scan(ScanContext(target_path=tmp_path))
         assert any(fd.severity == FindingSeverity.CRITICAL for fd in findings)
+
+    def test_keyword_identifier_values_suppressed(self, scanner, tmp_path):
+        """KeywordDetector captures enum/const/method-name string values that
+        are descriptive identifiers, not secrets (opensumi, webiny, agentgateway
+        in the 2026-06-05 scan)."""
+        f = tmp_path / "constants.ts"
+        f.write_text(
+            'const SECRET_KEY = "CryptoService";\n'
+            'const API_KEY = "SecurityApiKey";\n'
+            'const method = "clientSecretBasic";\n'
+        )
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        kw = [fd for fd in findings if fd.metadata.get("detector") == "Secret Keyword"]
+        assert kw == [], "descriptive identifier values must not flag as secrets"
+
+    def test_keyword_regex_pattern_value_suppressed(self, scanner, tmp_path):
+        """A validation regex used as a value is not a secret
+        (BeehiveInnovations/pal-mcp-server run-server.ps1)."""
+        f = tmp_path / "run-server.ps1"
+        f.write_text(
+            "$patterns = @{\n"
+            '    "GEMINI_API_KEY" = "AIza[0-9A-Za-z-_]{35}"\n'
+            '    "OPENAI_API_KEY" = "sk-[a-zA-Z0-9]{20}"\n'
+            "}\n"
+        )
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert all(fd.severity == FindingSeverity.LOW for fd in findings)
+
+    def test_keyword_ci_expression_suppressed(self, scanner, tmp_path):
+        """GitHub Actions ${{ secrets.* }} expressions are references, not
+        literal secrets (grafana, awslabs workflows)."""
+        f = tmp_path / "ci.yaml"
+        f.write_text("env:\n  token: ${{ secrets.GITHUB_TOKEN }}\n")
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        kw = [fd for fd in findings if fd.metadata.get("detector") == "Secret Keyword"]
+        assert kw == []
+
+    def test_i18n_locale_file_low_confidence(self, scanner, tmp_path):
+        """Translated UI strings in locale files are not credentials
+        (u14app/deep-research, opensumi)."""
+        d = tmp_path / "src" / "locales"
+        d.mkdir(parents=True)
+        (d / "zh-CN.json").write_text(
+            '{\n  "accessPasswordTip": "服务端 API 鉴权，避免 API 被外部应用盗用。",\n'
+            '  "apiKeyPlaceholder": "请输入模型 API 密钥"\n}\n',
+            encoding="utf-8",
+        )
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert all(fd.severity == FindingSeverity.LOW for fd in findings)
+
+    def test_custom_secret_outside_identifier_shape_still_flagged(self, scanner, tmp_path):
+        """Guard: a real high-entropy custom secret after a keyword still flags."""
+        f = tmp_path / "app.py"
+        f.write_text('API_SECRET = "xQ7zP2mK9wL4nR8tV3yB6dH1jF5gC0aW"\n')
+        findings = scanner.scan(ScanContext(target_path=tmp_path))
+        assert any(fd.metadata.get("detector") == "Secret Keyword" for fd in findings)
