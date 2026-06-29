@@ -1,19 +1,19 @@
 # openclaw/Peekaboo
 
-![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-50%2F100-red?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-53%2F100-red?style=for-the-badge)
 
 **Repository:** [openclaw/Peekaboo](https://github.com/openclaw/Peekaboo)
-**Stars:** 4,758
-**Last scan:** 2026-06-22
+**Stars:** 4,808
+**Last scan:** 2026-06-29
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟡 Medium | **16** |
+| 🟡 Medium | **15** |
 | 🟢 Low | **2** |
 | 🔵 Info | **1** |
-| **Total** | **19** |
+| **Total** | **18** |
 
 ## Findings
 
@@ -37,15 +37,14 @@
 | 16 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 17 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 18 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
-| 19 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 18 |
+| Exposed Token | 17 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-22 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-29 by [agentsec](https://github.com/debu-sinha/agentsec)*

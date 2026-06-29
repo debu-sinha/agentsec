@@ -1,9 +1,9 @@
-# webiny/webiny-js
+# xberg-io/xberg
 
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
-**Repository:** [webiny/webiny-js](https://github.com/webiny/webiny-js)
-**Stars:** 7,994
+**Repository:** [xberg-io/xberg](https://github.com/xberg-io/xberg)
+**Stars:** 8,566
 **Last scan:** 2026-06-29
 
 ## Severity Summary

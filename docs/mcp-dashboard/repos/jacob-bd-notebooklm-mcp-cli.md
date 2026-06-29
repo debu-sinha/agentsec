@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-88%2F100-green?style=for-the-badge)
 
 **Repository:** [jacob-bd/notebooklm-mcp-cli](https://github.com/jacob-bd/notebooklm-mcp-cli)
-**Stars:** 5,005
-**Last scan:** 2026-06-22
+**Stars:** 5,101
+**Last scan:** 2026-06-29
 
 ## Severity Summary
 
@@ -33,4 +33,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-22 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-29 by [agentsec](https://github.com/debu-sinha/agentsec)*

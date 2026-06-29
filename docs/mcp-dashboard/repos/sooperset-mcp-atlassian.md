@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-91%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [sooperset/mcp-atlassian](https://github.com/sooperset/mcp-atlassian)
-**Stars:** 5,434
-**Last scan:** 2026-06-22
+**Stars:** 5,477
+**Last scan:** 2026-06-29
 
 ## Severity Summary
 
@@ -38,4 +38,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-22 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-06-29 by [agentsec](https://github.com/debu-sinha/agentsec)*
