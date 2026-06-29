@@ -205,6 +205,7 @@ python scripts/repo_consistency_audit.py
 - [002: Public bot hardening on VPS](https://github.com/debu-sinha/agentsec/blob/main/docs/case-studies/002-public-bot-vps-hardening.md)
 - [003: Pre-install gate blocked malicious package](https://github.com/debu-sinha/agentsec/blob/main/docs/case-studies/003-preinstall-gate-blocked-malicious-package.md)
 - [004: Malicious skill detection and block](https://github.com/debu-sinha/agentsec/blob/main/docs/case-studies/004-malicious-skill-detection-and-block.md)
+- [005: OpenClaw plugin preflight for TweetClaw](docs/case-studies/005-openclaw-plugin-preflight.md)
 
 ## Launch Evidence
 
@@ -237,8 +238,6 @@ Issue intake is template-driven under `.github/ISSUE_TEMPLATE/` to keep triage a
 ## License
 
 Apache-2.0
-
-
 
 
 

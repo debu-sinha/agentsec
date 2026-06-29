@@ -1,0 +1,27 @@
+{
+  "case_study": "005-openclaw-plugin-preflight",
+  "target": "xquik-dev/tweetclaw",
+  "scan_date": "2026-05-16",
+  "agentsec_version": "0.4.5",
+  "command": "agentsec scan . -s skill -o json -f tweetclaw-skill-scan.json --fail-on critical",
+  "summary": {
+    "total_findings": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 0,
+    "scanners_run": [
+      "skill"
+    ],
+    "files_scanned": 1
+  },
+  "posture": {
+    "overall_score": 100.0,
+    "grade": "A"
+  },
+  "sanitization": {
+    "absolute_paths_removed": true,
+    "credentials_included": false
+  }
+}
