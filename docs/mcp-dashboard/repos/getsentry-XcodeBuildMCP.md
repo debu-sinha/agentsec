@@ -1,18 +1,18 @@
 # getsentry/XcodeBuildMCP
 
-![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-98%2F100-brightgreen?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-97%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [getsentry/XcodeBuildMCP](https://github.com/getsentry/XcodeBuildMCP)
-**Stars:** 6,068
-**Last scan:** 2026-07-13
+**Stars:** 6,096
+**Last scan:** 2026-07-20
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟢 Low | **2** |
+| 🟢 Low | **3** |
 | 🔵 Info | **1** |
-| **Total** | **3** |
+| **Total** | **4** |
 
 ## Findings
 
@@ -21,14 +21,15 @@
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
 | 2 | 🟢 Low | Exposed Token | IBM Cloud IAM Key found in show-build-settings--success.json | Rotate and secure the IBM Cloud IAM Key |
 | 3 | 🟢 Low | Exposed Token | IBM Cloud IAM Key found in show-build-settings--success.json | Rotate and secure the IBM Cloud IAM Key |
+| 4 | 🟢 Low | Exposed Token | Base64 High Entropy String found in xcode-state.ts | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 2 |
+| Exposed Token | 3 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-07-13 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-07-20 by [agentsec](https://github.com/debu-sinha/agentsec)*
