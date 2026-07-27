@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-57%2F100-red?style=for-the-badge)
 
 **Repository:** [FlorianBruniaux/claude-code-ultimate-guide](https://github.com/FlorianBruniaux/claude-code-ultimate-guide)
-**Stars:** 5,503
-**Last scan:** 2026-07-20
+**Stars:** 5,567
+**Last scan:** 2026-07-27
 
 ## Severity Summary
 
@@ -20,22 +20,22 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | JSON Web Token found in memory-stack-integration.md | Rotate and secure the JSON Web Token |
-| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in 08-mcp-servers.yaml | Rotate and secure the Secret Keyword |
-| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in 08-mcp-servers.yaml | Rotate and secure the Secret Keyword |
-| 5 | 🟢 Low | Exposed Token | Private Key found in output-secrets-scanner.sh | Rotate and secure the Private Key |
-| 6 | 🟢 Low | Exposed Token | Secret Keyword found in output-secrets-scanner.sh | Rotate and secure the Secret Keyword |
-| 7 | 🟢 Low | Exposed Token | Secret Keyword found in security-checklist.md | Rotate and secure the Secret Keyword |
-| 8 | 🟡 Medium | Exposed Token | Secret Keyword found in 13-security.yaml | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Private Key found in output-secrets-scanner.sh | Rotate and secure the Private Key |
+| 3 | 🟢 Low | Exposed Token | Secret Keyword found in output-secrets-scanner.sh | Rotate and secure the Secret Keyword |
+| 4 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
+| 5 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
+| 6 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
+| 7 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
+| 8 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
 | 9 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
 | 10 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
 | 11 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
-| 12 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
-| 13 | 🟢 Low | Exposed Token | Secret Keyword found in security-auditor.md | Rotate and secure the Secret Keyword |
-| 14 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
-| 15 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
-| 16 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
-| 17 | 🟡 Medium | Exposed Token | Secret Keyword found in reference.yaml | Rotate and secure the Secret Keyword |
+| 12 | 🟢 Low | Exposed Token | Secret Keyword found in security-auditor.md | Rotate and secure the Secret Keyword |
+| 13 | 🟢 Low | Exposed Token | JSON Web Token found in memory-stack-integration.md | Rotate and secure the JSON Web Token |
+| 14 | 🟡 Medium | Exposed Token | Secret Keyword found in 13-security.yaml | Rotate and secure the Secret Keyword |
+| 15 | 🟡 Medium | Exposed Token | Secret Keyword found in 08-mcp-servers.yaml | Rotate and secure the Secret Keyword |
+| 16 | 🟡 Medium | Exposed Token | Secret Keyword found in 08-mcp-servers.yaml | Rotate and secure the Secret Keyword |
+| 17 | 🟢 Low | Exposed Token | Secret Keyword found in security-checklist.md | Rotate and secure the Secret Keyword |
 | 18 | 🟢 Low | Exposed Token | OpenAI API Key found in ultimate-guide.md | Rotate and secure the OpenAI API Key |
 | 19 | 🟢 Low | Exposed Token | OpenAI API Key found in api-gateway.md | Rotate and secure the OpenAI API Key |
 | 20 | 🟢 Low | Exposed Token | OpenAI API Key found in api-gateway.md | Rotate and secure the OpenAI API Key |
@@ -51,4 +51,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-07-20 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-07-27 by [agentsec](https://github.com/debu-sinha/agentsec)*

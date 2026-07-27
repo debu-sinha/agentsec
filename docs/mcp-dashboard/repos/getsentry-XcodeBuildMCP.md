@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-97%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [getsentry/XcodeBuildMCP](https://github.com/getsentry/XcodeBuildMCP)
-**Stars:** 6,096
-**Last scan:** 2026-07-20
+**Stars:** 6,151
+**Last scan:** 2026-07-27
 
 ## Severity Summary
 
@@ -32,4 +32,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-07-20 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-07-27 by [agentsec](https://github.com/debu-sinha/agentsec)*
