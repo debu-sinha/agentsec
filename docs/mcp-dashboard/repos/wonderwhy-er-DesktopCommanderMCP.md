@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-5%2F100-red?style=for-the-badge)
 
 **Repository:** [wonderwhy-er/DesktopCommanderMCP](https://github.com/wonderwhy-er/DesktopCommanderMCP)
-**Stars:** 9,095
-**Last scan:** 2026-08-03
+**Stars:** 9,286
+**Last scan:** 2026-08-10
 
 ## Severity Summary
 
@@ -50,4 +50,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-08-03 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-08-10 by [agentsec](https://github.com/debu-sinha/agentsec)*

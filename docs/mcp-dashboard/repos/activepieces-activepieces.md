@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [activepieces/activepieces](https://github.com/activepieces/activepieces)
-**Stars:** 23,556
-**Last scan:** 2026-08-03
+**Stars:** 23,688
+**Last scan:** 2026-08-10
 
 ## Severity Summary
 
@@ -18,4 +18,4 @@ No findings detected.
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-08-03 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-08-10 by [agentsec](https://github.com/debu-sinha/agentsec)*
