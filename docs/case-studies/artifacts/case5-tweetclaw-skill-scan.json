@@ -1,0 +1,41 @@
+{
+  "agentsec_version": "0.5.0",
+  "case_study": "005-openclaw-plugin-preflight",
+  "command": "agentsec scan . -s skill -o json -f tweetclaw-skill-scan.json --fail-on critical",
+  "notice": "Not affiliated with X Corp.",
+  "posture": {
+    "grade": "A",
+    "overall_score": 100.0
+  },
+  "raw_report": {
+    "committed": false,
+    "sha256": "af0076ed29722a77591db28d08070e89f32a1dc0e0c9ef63879a41c32d3c0285"
+  },
+  "sanitization": {
+    "absolute_paths_removed": true,
+    "credentials_included": false,
+    "duration_removed": true,
+    "timestamp_removed": true
+  },
+  "scan_date": "2026-07-17",
+  "scanned_files": [
+    "skills/tweetclaw/BENCHMARK.md",
+    "skills/tweetclaw/SKILL.md",
+    "skills/tweetclaw/skill-card.md",
+    "skills/tweetclaw/skillspector-report.md"
+  ],
+  "summary": {
+    "critical": 0,
+    "files_scanned": 4,
+    "high": 0,
+    "info": 0,
+    "low": 0,
+    "medium": 0,
+    "scanners_run": [
+      "skill"
+    ],
+    "total_findings": 0
+  },
+  "target": "Xquik-dev/tweetclaw",
+  "target_commit": "3e6f95c63f2d45a84708377446ad314a97aaa1ec"
+}
