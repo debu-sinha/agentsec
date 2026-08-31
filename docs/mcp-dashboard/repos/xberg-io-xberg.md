@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [xberg-io/xberg](https://github.com/xberg-io/xberg)
-**Stars:** 9,199
-**Last scan:** 2026-08-24
+**Stars:** 9,238
+**Last scan:** 2026-08-31
 
 ## Severity Summary
 
@@ -18,4 +18,4 @@ No findings detected.
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-08-24 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-08-31 by [agentsec](https://github.com/debu-sinha/agentsec)*
