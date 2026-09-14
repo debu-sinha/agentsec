@@ -4,7 +4,7 @@
 
 **Repository:** [aipotheosis-labs/aci](https://github.com/aipotheosis-labs/aci)
 **Stars:** 4,889
-**Last scan:** 2026-09-07
+**Last scan:** 2026-09-14
 
 ## Severity Summary
 
@@ -34,4 +34,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-07 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-14 by [agentsec](https://github.com/debu-sinha/agentsec)*

@@ -1,0 +1,15 @@
+{
+  "snapshot_date": "2026-09-14",
+  "targets_scanned": 50,
+  "targets_cloned": 46,
+  "targets_with_critical_or_high": 10,
+  "critical": 38,
+  "high": 18,
+  "medium": 1106,
+  "low": 586,
+  "info": 46,
+  "total_findings": 1794,
+  "avg_findings_per_target": 39.0,
+  "runtime_median_s": 12.78,
+  "runtime_p95_s": 118.03
+}

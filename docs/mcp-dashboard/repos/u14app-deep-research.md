@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-40%2F100-red?style=for-the-badge)
 
 **Repository:** [u14app/deep-research](https://github.com/u14app/deep-research)
-**Stars:** 4,683
-**Last scan:** 2026-09-07
+**Stars:** 4,682
+**Last scan:** 2026-09-14
 
 ## Severity Summary
 
@@ -49,4 +49,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-07 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-14 by [agentsec](https://github.com/debu-sinha/agentsec)*
