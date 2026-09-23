@@ -10,5 +10,5 @@ pydantic==2.12.5
 pytest==9.0.3
 pytest-cov==7.1.0
 rich==13.9.4
-ruff==0.15.2
+ruff==0.15.9
 tomli==2.4.0
