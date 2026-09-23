@@ -2,6 +2,26 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.5.1] - 2026-06-14
+
+False-positive reduction from a deeper pass over the top-50 MCP ecosystem scan,
+focused on the credential scanner's KeywordDetector results. No repo, path, or
+value is hardcoded; each fix is a generic shape rule with a regression test.
+
+### Fixed
+
+- Suppress KeywordDetector matches whose value is a descriptive identifier
+  rather than a secret: enum/const string values and OAuth method names such as
+  `SecurityApiKey`, `clientSecretBasic`, `security.apiKey`, `CryptoService`,
+  `password_auth`. Scoped to KeywordDetector so provider keys (AWS, Private Key,
+  OpenAI, etc.) are never affected.
+- Suppress KeywordDetector values that are validation regex patterns
+  (`AIza[0-9A-Za-z-_]{35}`, `sk-[a-zA-Z0-9]{20}`) or CI templating expressions
+  (`${{ secrets.GITHUB_TOKEN }}`).
+- Treat localization / i18n files (`locales/`, `i18n/`, `*.lang.ts`,
+  `*.i18n.json`) as low-confidence context; translated UI strings were tripping
+  keyword detection.
+
 ## [0.5.0] - 2026-06-04
 
 Threat-coverage refresh aligned with the 2026 MCP and agent-skill disclosure wave.
