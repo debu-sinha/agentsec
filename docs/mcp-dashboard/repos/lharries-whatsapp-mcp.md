@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [lharries/whatsapp-mcp](https://github.com/lharries/whatsapp-mcp)
-**Stars:** 6,295
-**Last scan:** 2026-09-21
+**Stars:** 6,324
+**Last scan:** 2026-09-28
 
 ## Severity Summary
 
@@ -27,4 +27,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-21 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-28 by [agentsec](https://github.com/debu-sinha/agentsec)*

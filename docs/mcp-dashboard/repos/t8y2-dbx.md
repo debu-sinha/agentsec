@@ -1,21 +1,848 @@
 # t8y2/dbx
 
-![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-5%2F100-red?style=for-the-badge)
 
 **Repository:** [t8y2/dbx](https://github.com/t8y2/dbx)
-**Stars:** 20,321
-**Last scan:** 2026-09-21
+**Stars:** 21,406
+**Last scan:** 2026-09-28
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| **Total** | **0** |
+| 🔴 Critical | **20** |
+| 🟠 High | **2** |
+| 🟡 Medium | **675** |
+| 🟢 Low | **115** |
+| 🔵 Info | **1** |
+| **Total** | **813** |
 
 ## Findings
 
-No findings detected.
+| # | Severity | Category | Title | Remediation |
+|--:|:--------:|----------|-------|-------------|
+| 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 2 | 🟠 High | Malicious Skill | Remote script install in skill 'README.md' | Remove skill 'README.md' and investigate |
+| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in connector.go | Rotate and secure the Secret Keyword |
+| 4 | 🟢 Low | Exposed Token | Secret Keyword found in README.md | Rotate and secure the Secret Keyword |
+| 5 | 🟢 Low | Exposed Token | Base64 High Entropy String found in pickle.spec.ts | Rotate and secure the Base64 High Entropy String |
+| 6 | 🟢 Low | Exposed Token | Base64 High Entropy String found in pickle.spec.ts | Rotate and secure the Base64 High Entropy String |
+| 7 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 8 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 9 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 10 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 11 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 12 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 13 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 14 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 15 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 16 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 17 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 18 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 19 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 20 | 🔴 Critical | Exposed Token | Private Key found in ko.ts | Rotate and secure the Private Key |
+| 21 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 22 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 23 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 24 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 25 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 26 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 27 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 28 | 🟡 Medium | Exposed Token | Secret Keyword found in ko.ts | Rotate and secure the Secret Keyword |
+| 29 | 🟢 Low | Exposed Token | Secret Keyword found in connectionDialogProfileSwitch.spec.ts | Rotate and secure the Secret Keyword |
+| 30 | 🟢 Low | Exposed Token | Secret Keyword found in connectionDeepLinkUpdate.spec.ts | Rotate and secure the Secret Keyword |
+| 31 | 🟡 Medium | Exposed Token | Secret Keyword found in settingsStore.ts | Rotate and secure the Secret Keyword |
+| 32 | 🟡 Medium | Exposed Token | Secret Keyword found in settingsStore.ts | Rotate and secure the Secret Keyword |
+| 33 | 🟡 Medium | Exposed Token | Secret Keyword found in settingsStore.ts | Rotate and secure the Secret Keyword |
+| 34 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 35 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 36 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 37 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 38 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 39 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 40 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 41 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 42 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 43 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 44 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 45 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 46 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 47 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 48 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 49 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 50 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 51 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 52 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 53 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 54 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 55 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 56 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 57 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 58 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 59 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 60 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 61 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 62 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 63 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 64 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 65 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 66 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 67 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 68 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 69 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 70 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 71 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 72 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 73 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 74 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 75 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 76 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 77 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 78 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 79 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 80 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 81 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 82 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 83 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 84 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 85 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 86 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 87 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 88 | 🔴 Critical | Exposed Token | Private Key found in es.ts | Rotate and secure the Private Key |
+| 89 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 90 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 91 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 92 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 93 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 94 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 95 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 96 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 97 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 98 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 99 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 100 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 101 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 102 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 103 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 104 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 105 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 106 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 107 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 108 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 109 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 110 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 111 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 112 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 113 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 114 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 115 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 116 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 117 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 118 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 119 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 120 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 121 | 🟡 Medium | Exposed Token | Secret Keyword found in es.ts | Rotate and secure the Secret Keyword |
+| 122 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 123 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 124 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 125 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 126 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 127 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 128 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 129 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 130 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 131 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 132 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 133 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 134 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 135 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 136 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 137 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 138 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 139 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 140 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 141 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 142 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 143 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 144 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 145 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 146 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 147 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 148 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 149 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 150 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 151 | 🔴 Critical | Exposed Token | Private Key found in pt-BR.ts | Rotate and secure the Private Key |
+| 152 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 153 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 154 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 155 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 156 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 157 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 158 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 159 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 160 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 161 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 162 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 163 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 164 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 165 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 166 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 167 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 168 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 169 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 170 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 171 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 172 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 173 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 174 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 175 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 176 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 177 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 178 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 179 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 180 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 181 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 182 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 183 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 184 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 185 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 186 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 187 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 188 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 189 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 190 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 191 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 192 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 193 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 194 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 195 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 196 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 197 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 198 | 🟡 Medium | Exposed Token | Secret Keyword found in pt-BR.ts | Rotate and secure the Secret Keyword |
+| 199 | 🟡 Medium | Exposed Token | Secret Keyword found in connectionStore.ts | Rotate and secure the Secret Keyword |
+| 200 | 🟡 Medium | Exposed Token | Secret Keyword found in connectionStore.ts | Rotate and secure the Secret Keyword |
+| 201 | 🟢 Low | Exposed Token | Secret Keyword found in state_persistence.rs | Rotate and secure the Secret Keyword |
+| 202 | 🟢 Low | Exposed Token | Secret Keyword found in state_persistence.rs | Rotate and secure the Secret Keyword |
+| 203 | 🟡 Medium | Exposed Token | Secret Keyword found in krb5.go | Rotate and secure the Secret Keyword |
+| 204 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 205 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 206 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 207 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 208 | 🟢 Low | Exposed Token | Basic Auth Credentials found in config_test.go | Rotate and secure the Basic Auth Credentials |
+| 209 | 🟢 Low | Exposed Token | Basic Auth Credentials found in config_test.go | Rotate and secure the Basic Auth Credentials |
+| 210 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionUrl.test.ts | Rotate and secure the Basic Auth Credentials |
+| 211 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionUrl.test.ts | Rotate and secure the Basic Auth Credentials |
+| 212 | 🟢 Low | Exposed Token | Secret Keyword found in sql_diagnostics.rs | Rotate and secure the Secret Keyword |
+| 213 | 🟡 Medium | Exposed Token | Secret Keyword found in verify-schema-objects.ts | Rotate and secure the Secret Keyword |
+| 214 | 🟢 Low | Exposed Token | Secret Keyword found in migrationStore.spec.ts | Rotate and secure the Secret Keyword |
+| 215 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 216 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 217 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 218 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 219 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 220 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 221 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 222 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 223 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 224 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 225 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 226 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 227 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 228 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 229 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 230 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 231 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 232 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 233 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 234 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 235 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 236 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 237 | 🔴 Critical | Exposed Token | Private Key found in ru.ts | Rotate and secure the Private Key |
+| 238 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 239 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 240 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 241 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 242 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 243 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 244 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 245 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 246 | 🟡 Medium | Exposed Token | Secret Keyword found in ru.ts | Rotate and secure the Secret Keyword |
+| 247 | 🟡 Medium | Exposed Token | Secret Keyword found in client.go | Rotate and secure the Secret Keyword |
+| 248 | 🟡 Medium | Exposed Token | Secret Keyword found in client.go | Rotate and secure the Secret Keyword |
+| 249 | 🟢 Low | Exposed Token | Secret Keyword found in Ignite3AgentUrlTest.java | Rotate and secure the Secret Keyword |
+| 250 | 🟢 Low | Exposed Token | Secret Keyword found in connection_secrets.rs | Rotate and secure the Secret Keyword |
+| 251 | 🟢 Low | Exposed Token | Secret Keyword found in connection_secrets.rs | Rotate and secure the Secret Keyword |
+| 252 | 🟢 Low | Exposed Token | Secret Keyword found in connection_secrets.rs | Rotate and secure the Secret Keyword |
+| 253 | 🟢 Low | Exposed Token | Secret Keyword found in main_test.go | Rotate and secure the Secret Keyword |
+| 254 | 🟢 Low | Exposed Token | Secret Keyword found in main_test.go | Rotate and secure the Secret Keyword |
+| 255 | 🟢 Low | Exposed Token | Secret Keyword found in config.rs | Rotate and secure the Secret Keyword |
+| 256 | 🟢 Low | Exposed Token | Secret Keyword found in config.rs | Rotate and secure the Secret Keyword |
+| 257 | 🟢 Low | Exposed Token | Secret Keyword found in config.rs | Rotate and secure the Secret Keyword |
+| 258 | 🟡 Medium | Exposed Token | Secret Keyword found in client.go | Rotate and secure the Secret Keyword |
+| 259 | 🟡 Medium | Exposed Token | Secret Keyword found in driver.go | Rotate and secure the Secret Keyword |
+| 260 | 🟡 Medium | Exposed Token | Secret Keyword found in storage.rs | Rotate and secure the Secret Keyword |
+| 261 | 🟡 Medium | Exposed Token | Secret Keyword found in storage.rs | Rotate and secure the Secret Keyword |
+| 262 | 🟡 Medium | Exposed Token | Secret Keyword found in storage.rs | Rotate and secure the Secret Keyword |
+| 263 | 🟡 Medium | Exposed Token | Secret Keyword found in storage.rs | Rotate and secure the Secret Keyword |
+| 264 | 🟡 Medium | Exposed Token | Secret Keyword found in storage.rs | Rotate and secure the Secret Keyword |
+| 265 | 🟢 Low | Exposed Token | Basic Auth Credentials found in local.rs | Rotate and secure the Basic Auth Credentials |
+| 266 | 🟢 Low | Exposed Token | Secret Keyword found in local.rs | Rotate and secure the Secret Keyword |
+| 267 | 🟡 Medium | Exposed Token | Secret Keyword found in config.go | Rotate and secure the Secret Keyword |
+| 268 | 🟡 Medium | Exposed Token | Secret Keyword found in config.go | Rotate and secure the Secret Keyword |
+| 269 | 🟢 Low | Exposed Token | Secret Keyword found in mongo_driver.rs | Rotate and secure the Secret Keyword |
+| 270 | 🟢 Low | Exposed Token | Private Key found in frontendPlugin.spec.ts | Rotate and secure the Private Key |
+| 271 | 🟢 Low | Exposed Token | Secret Keyword found in mongo_shell.rs | Rotate and secure the Secret Keyword |
+| 272 | 🟢 Low | Exposed Token | Secret Keyword found in mongo_shell.rs | Rotate and secure the Secret Keyword |
+| 273 | 🟡 Medium | Exposed Token | Secret Keyword found in connection.rs | Rotate and secure the Secret Keyword |
+| 274 | 🟡 Medium | Exposed Token | Secret Keyword found in connection.rs | Rotate and secure the Secret Keyword |
+| 275 | 🟢 Low | Exposed Token | Secret Keyword found in queryStore.test.ts | Rotate and secure the Secret Keyword |
+| 276 | 🟡 Medium | Exposed Token | Secret Keyword found in Ignite3Agent.java | Rotate and secure the Secret Keyword |
+| 277 | 🟢 Low | Exposed Token | Basic Auth Credentials found in navicatImport.spec.ts | Rotate and secure the Basic Auth Credentials |
+| 278 | 🟢 Low | Exposed Token | Basic Auth Credentials found in navicatImport.spec.ts | Rotate and secure the Basic Auth Credentials |
+| 279 | 🟢 Low | Exposed Token | Basic Auth Credentials found in navicatImport.spec.ts | Rotate and secure the Basic Auth Credentials |
+| 280 | 🟢 Low | Exposed Token | Secret Keyword found in navicatImport.spec.ts | Rotate and secure the Secret Keyword |
+| 281 | 🟢 Low | Exposed Token | Secret Keyword found in salesforce_oauth.rs | Rotate and secure the Secret Keyword |
+| 282 | 🟢 Low | Exposed Token | Secret Keyword found in mq-quick-start.md | Rotate and secure the Secret Keyword |
+| 283 | 🟢 Low | Exposed Token | Secret Keyword found in mq-quick-start.md | Rotate and secure the Secret Keyword |
+| 284 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 285 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 286 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 287 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 288 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 289 | 🔴 Critical | Exposed Token | Private Key found in zh-TW.ts | Rotate and secure the Private Key |
+| 290 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 291 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 292 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 293 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 294 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 295 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 296 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 297 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 298 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 299 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 300 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 301 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 302 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 303 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 304 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 305 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 306 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 307 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 308 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 309 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 310 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-TW.ts | Rotate and secure the Secret Keyword |
+| 311 | 🟢 Low | Exposed Token | Secret Keyword found in sshAuthMethod.spec.ts | Rotate and secure the Secret Keyword |
+| 312 | 🟢 Low | Exposed Token | Basic Auth Credentials found in dbx-etcd-test-bundle.json | Rotate and secure the Basic Auth Credentials |
+| 313 | 🟢 Low | Exposed Token | Basic Auth Credentials found in backend_error.rs | Rotate and secure the Basic Auth Credentials |
+| 314 | 🟢 Low | Exposed Token | Secret Keyword found in backend_error.rs | Rotate and secure the Secret Keyword |
+| 315 | 🟡 Medium | Exposed Token | Secret Keyword found in ai.rs | Rotate and secure the Secret Keyword |
+| 316 | 🟢 Low | Exposed Token | Secret Keyword found in ai.rs | Rotate and secure the Secret Keyword |
+| 317 | 🟢 Low | Exposed Token | Secret Keyword found in passwordInput.spec.ts | Rotate and secure the Secret Keyword |
+| 318 | 🔴 Critical | Exposed Token | Private Key found in token.rs | Rotate and secure the Private Key |
+| 319 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 320 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 321 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 322 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 323 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 324 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 325 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 326 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 327 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 328 | 🟡 Medium | Exposed Token | Secret Keyword found in meilisearchManagement.ts | Rotate and secure the Secret Keyword |
+| 329 | 🟢 Low | Exposed Token | Basic Auth Credentials found in pluginContext.spec.ts | Rotate and secure the Basic Auth Credentials |
+| 330 | 🟢 Low | Exposed Token | Secret Keyword found in influxdb_driver.rs | Rotate and secure the Secret Keyword |
+| 331 | 🟢 Low | Exposed Token | Private Key found in ssh_keys.rs | Rotate and secure the Private Key |
+| 332 | 🟢 Low | Exposed Token | Secret Keyword found in connectionDeepLink.services.spec.ts | Rotate and secure the Secret Keyword |
+| 333 | 🟢 Low | Exposed Token | Secret Keyword found in rocketmq.rs | Rotate and secure the Secret Keyword |
+| 334 | 🟢 Low | Exposed Token | Base64 High Entropy String found in redisValuePresentation.test.ts | Rotate and secure the Base64 High Entropy String |
+| 335 | 🟢 Low | Exposed Token | Secret Keyword found in debugLog.spec.ts | Rotate and secure the Secret Keyword |
+| 336 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connection.rs | Rotate and secure the Basic Auth Credentials |
+| 337 | 🟢 Low | Exposed Token | Secret Keyword found in connection.rs | Rotate and secure the Secret Keyword |
+| 338 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connection.rs | Rotate and secure the Basic Auth Credentials |
+| 339 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connection.rs | Rotate and secure the Basic Auth Credentials |
+| 340 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 341 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 342 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 343 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 344 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 345 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 346 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 347 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 348 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 349 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 350 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 351 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 352 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 353 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 354 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 355 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 356 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 357 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 358 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 359 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 360 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 361 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 362 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 363 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 364 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 365 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 366 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 367 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 368 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 369 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 370 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 371 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 372 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 373 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 374 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 375 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 376 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 377 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 378 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 379 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 380 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 381 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 382 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 383 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 384 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 385 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 386 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 387 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 388 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 389 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 390 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 391 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 392 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 393 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 394 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 395 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 396 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 397 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 398 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 399 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 400 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 401 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 402 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 403 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 404 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 405 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 406 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 407 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 408 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 409 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 410 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 411 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 412 | 🔴 Critical | Exposed Token | Private Key found in az.ts | Rotate and secure the Private Key |
+| 413 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 414 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 415 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 416 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 417 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 418 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 419 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 420 | 🟡 Medium | Exposed Token | Secret Keyword found in az.ts | Rotate and secure the Secret Keyword |
+| 421 | 🟡 Medium | Exposed Token | Secret Keyword found in config.go | Rotate and secure the Secret Keyword |
+| 422 | 🟡 Medium | Exposed Token | Secret Keyword found in config.go | Rotate and secure the Secret Keyword |
+| 423 | 🟢 Low | Exposed Token | Secret Keyword found in cloudSyncWebApi.spec.ts | Rotate and secure the Secret Keyword |
+| 424 | 🟢 Low | Exposed Token | Secret Keyword found in cloudSyncWebApi.spec.ts | Rotate and secure the Secret Keyword |
+| 425 | 🟢 Low | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 426 | 🟡 Medium | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 427 | 🟡 Medium | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 428 | 🟡 Medium | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 429 | 🟡 Medium | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 430 | 🟢 Low | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 431 | 🟡 Medium | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 432 | 🟡 Medium | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 433 | 🟢 Low | Exposed Token | Secret Keyword found in cloud_sync.rs | Rotate and secure the Secret Keyword |
+| 434 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in marketplace.rs | Rotate and secure the Base64 High Entropy String |
+| 435 | 🟢 Low | Exposed Token | Secret Keyword found in influxdb3_driver.rs | Rotate and secure the Secret Keyword |
+| 436 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 437 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 438 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 439 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 440 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 441 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 442 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 443 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 444 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 445 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 446 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 447 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 448 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 449 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 450 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 451 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 452 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 453 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 454 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 455 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 456 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 457 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 458 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 459 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 460 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 461 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 462 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 463 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 464 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 465 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 466 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 467 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 468 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 469 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 470 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 471 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 472 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 473 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 474 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 475 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 476 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 477 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 478 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 479 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 480 | 🔴 Critical | Exposed Token | Private Key found in tr.ts | Rotate and secure the Private Key |
+| 481 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 482 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 483 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 484 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 485 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 486 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 487 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 488 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 489 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 490 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 491 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 492 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 493 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 494 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 495 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 496 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 497 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 498 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 499 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 500 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 501 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 502 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 503 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 504 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 505 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 506 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 507 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 508 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 509 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 510 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 511 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 512 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 513 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 514 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 515 | 🟡 Medium | Exposed Token | Secret Keyword found in tr.ts | Rotate and secure the Secret Keyword |
+| 516 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 517 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 518 | 🟢 Low | Exposed Token | Secret Keyword found in connectionConfigTransfer.spec.ts | Rotate and secure the Secret Keyword |
+| 519 | 🟢 Low | Exposed Token | Secret Keyword found in connectionConfigTransfer.spec.ts | Rotate and secure the Secret Keyword |
+| 520 | 🟢 Low | Exposed Token | Secret Keyword found in connectionConfigTransfer.spec.ts | Rotate and secure the Secret Keyword |
+| 521 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 522 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 523 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 524 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 525 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 526 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 527 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 528 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 529 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 530 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 531 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 532 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 533 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 534 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 535 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 536 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 537 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 538 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 539 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 540 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 541 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 542 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 543 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 544 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 545 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 546 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 547 | 🔴 Critical | Exposed Token | Private Key found in it.ts | Rotate and secure the Private Key |
+| 548 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 549 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 550 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 551 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 552 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 553 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 554 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 555 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 556 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 557 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 558 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 559 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 560 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 561 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 562 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 563 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 564 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 565 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 566 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 567 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 568 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 569 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 570 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 571 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 572 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 573 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 574 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 575 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 576 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 577 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 578 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 579 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 580 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 581 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 582 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 583 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 584 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 585 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 586 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 587 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 588 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 589 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 590 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 591 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 592 | 🟡 Medium | Exposed Token | Secret Keyword found in it.ts | Rotate and secure the Secret Keyword |
+| 593 | 🟢 Low | Exposed Token | Secret Keyword found in credentialSanitizer.test.ts | Rotate and secure the Secret Keyword |
+| 594 | 🟢 Low | Exposed Token | Secret Keyword found in credentialSanitizer.test.ts | Rotate and secure the Secret Keyword |
+| 595 | 🟢 Low | Exposed Token | Private Key found in pluginFieldPicker.spec.ts | Rotate and secure the Private Key |
+| 596 | 🟡 Medium | Exposed Token | Secret Keyword found in error.rs | Rotate and secure the Secret Keyword |
+| 597 | 🟡 Medium | Exposed Token | Secret Keyword found in connection.rs | Rotate and secure the Secret Keyword |
+| 598 | 🟠 High | Exposed Token | Basic Auth Credentials found in backend.rs | Rotate and secure the Basic Auth Credentials |
+| 599 | 🟢 Low | Exposed Token | Base64 High Entropy String found in redisValuePresentation.spec.ts | Rotate and secure the Base64 High Entropy String |
+| 600 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionUrl.solr.spec.ts | Rotate and secure the Basic Auth Credentials |
+| 601 | 🟢 Low | Exposed Token | Secret Keyword found in main_test.go | Rotate and secure the Secret Keyword |
+| 602 | 🟢 Low | Exposed Token | Secret Keyword found in main_test.go | Rotate and secure the Secret Keyword |
+| 603 | 🟢 Low | Exposed Token | Secret Keyword found in main_test.go | Rotate and secure the Secret Keyword |
+| 604 | 🟢 Low | Exposed Token | Secret Keyword found in main_test.go | Rotate and secure the Secret Keyword |
+| 605 | 🟢 Low | Exposed Token | Secret Keyword found in README.zh-CN.md | Rotate and secure the Secret Keyword |
+| 606 | 🟢 Low | Exposed Token | Secret Keyword found in server.rs | Rotate and secure the Secret Keyword |
+| 607 | 🟢 Low | Exposed Token | Secret Keyword found in mongoShellCommand.test.ts | Rotate and secure the Secret Keyword |
+| 608 | 🟢 Low | Exposed Token | Secret Keyword found in mongoShellCommand.test.ts | Rotate and secure the Secret Keyword |
+| 609 | 🟢 Low | Exposed Token | Base64 High Entropy String found in app_settings.rs | Rotate and secure the Base64 High Entropy String |
+| 610 | 🟢 Low | Exposed Token | Secret Keyword found in oracleDatabaseLinks.spec.ts | Rotate and secure the Secret Keyword |
+| 611 | 🟡 Medium | Exposed Token | Secret Keyword found in connection.go | Rotate and secure the Secret Keyword |
+| 612 | 🟢 Low | Exposed Token | Basic Auth Credentials found in DamengAgentUrlTest.java | Rotate and secure the Basic Auth Credentials |
+| 613 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 614 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 615 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 616 | 🟢 Low | Exposed Token | Secret Keyword found in config_test.go | Rotate and secure the Secret Keyword |
+| 617 | 🟢 Low | Exposed Token | Basic Auth Credentials found in config_test.go | Rotate and secure the Basic Auth Credentials |
+| 618 | 🟢 Low | Exposed Token | Basic Auth Credentials found in config_test.go | Rotate and secure the Basic Auth Credentials |
+| 619 | 🟢 Low | Exposed Token | Base64 High Entropy String found in inject_initialization_scripts.rs | Rotate and secure the Base64 High Entropy String |
+| 620 | 🟢 Low | Exposed Token | Secret Keyword found in DbxJdbcPluginTest.java | Rotate and secure the Secret Keyword |
+| 621 | 🟢 Low | Exposed Token | Secret Keyword found in ConnectionDialog.deepLinkEdit.spec.ts | Rotate and secure the Secret Keyword |
+| 622 | 🟢 Low | Exposed Token | Secret Keyword found in ConnectionDialog.deepLinkEdit.spec.ts | Rotate and secure the Secret Keyword |
+| 623 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in tauri.conf.json | Rotate and secure the Base64 High Entropy String |
+| 624 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 625 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 626 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 627 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 628 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 629 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 630 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 631 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 632 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 633 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 634 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 635 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 636 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 637 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 638 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 639 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 640 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 641 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 642 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 643 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 644 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 645 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 646 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 647 | 🟡 Medium | Exposed Token | Secret Keyword found in ja.ts | Rotate and secure the Secret Keyword |
+| 648 | 🔴 Critical | Exposed Token | Private Key found in ja.ts | Rotate and secure the Private Key |
+| 649 | 🔴 Critical | Exposed Token | Private Key found in MongoAgent.java | Rotate and secure the Private Key |
+| 650 | 🟢 Low | Exposed Token | Basic Auth Credentials found in config.rs | Rotate and secure the Basic Auth Credentials |
+| 651 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 652 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 653 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 654 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 655 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 656 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 657 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 658 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 659 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 660 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 661 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 662 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 663 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 664 | 🔴 Critical | Exposed Token | Private Key found in zh-CN.ts | Rotate and secure the Private Key |
+| 665 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 666 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 667 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 668 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 669 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 670 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 671 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 672 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 673 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 674 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 675 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 676 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 677 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 678 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 679 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 680 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 681 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 682 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 683 | 🟡 Medium | Exposed Token | Secret Keyword found in zh-CN.ts | Rotate and secure the Secret Keyword |
+| 684 | 🟢 Low | Exposed Token | Private Key found in PluginConnectionFields.spec.ts | Rotate and secure the Private Key |
+| 685 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 686 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 687 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 688 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 689 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 690 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 691 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 692 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 693 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 694 | 🟡 Medium | Exposed Token | Secret Keyword found in nacosAccessControl.ts | Rotate and secure the Secret Keyword |
+| 695 | 🟡 Medium | Exposed Token | Secret Keyword found in mod.rs | Rotate and secure the Secret Keyword |
+| 696 | 🟢 Low | Exposed Token | Secret Keyword found in mod.rs | Rotate and secure the Secret Keyword |
+| 697 | 🟢 Low | Exposed Token | Secret Keyword found in mod.rs | Rotate and secure the Secret Keyword |
+| 698 | 🟡 Medium | Exposed Token | Secret Keyword found in main.go | Rotate and secure the Secret Keyword |
+| 699 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionUrlBuilder.spec.ts | Rotate and secure the Basic Auth Credentials |
+| 700 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionUrlBuilder.spec.ts | Rotate and secure the Basic Auth Credentials |
+| 701 | 🟢 Low | Exposed Token | Secret Keyword found in connectionErrorHints.spec.ts | Rotate and secure the Secret Keyword |
+| 702 | 🟢 Low | Exposed Token | Secret Keyword found in connectionEditDraftSync.spec.ts | Rotate and secure the Secret Keyword |
+| 703 | 🟢 Low | Exposed Token | Secret Keyword found in config_file_test.go | Rotate and secure the Secret Keyword |
+| 704 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 705 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 706 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 707 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 708 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 709 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 710 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 711 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 712 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 713 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 714 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 715 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 716 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 717 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 718 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 719 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 720 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 721 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 722 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 723 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 724 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 725 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 726 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 727 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 728 | 🔴 Critical | Exposed Token | Private Key found in en.ts | Rotate and secure the Private Key |
+| 729 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 730 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 731 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 732 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 733 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 734 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 735 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 736 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 737 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 738 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 739 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 740 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 741 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 742 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 743 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 744 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 745 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 746 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 747 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 748 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 749 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 750 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 751 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 752 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 753 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 754 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 755 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 756 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 757 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 758 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 759 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 760 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 761 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 762 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 763 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 764 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 765 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 766 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 767 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 768 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 769 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 770 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 771 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 772 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 773 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 774 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 775 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 776 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 777 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 778 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 779 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 780 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 781 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 782 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 783 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 784 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 785 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 786 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 787 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 788 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 789 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 790 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 791 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 792 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 793 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 794 | 🟡 Medium | Exposed Token | Secret Keyword found in en.ts | Rotate and secure the Secret Keyword |
+| 795 | 🟢 Low | Exposed Token | Private Key found in MongoAgentTest.java | Rotate and secure the Private Key |
+| 796 | 🟢 Low | Exposed Token | Basic Auth Credentials found in main_test.go | Rotate and secure the Basic Auth Credentials |
+| 797 | 🟢 Low | Exposed Token | Secret Keyword found in astra_test.go | Rotate and secure the Secret Keyword |
+| 798 | 🟢 Low | Exposed Token | Generic Connection String found in dbx-etcd-test-bundle.json | Rotate and secure the Generic Connection String |
+| 799 | 🟢 Low | Exposed Token | Generic Connection String found in pluginContext.spec.ts | Rotate and secure the Generic Connection String |
+| 800 | 🟢 Low | Exposed Token | Generic Connection String found in connectionUrlBuilder.spec.ts | Rotate and secure the Generic Connection String |
+| 801 | 🟢 Low | Exposed Token | Generic Connection String found in connectionUrlBuilder.spec.ts | Rotate and secure the Generic Connection String |
+| 802 | 🟢 Low | Exposed Token | Generic Connection String found in local.rs | Rotate and secure the Generic Connection String |
+| 803 | 🔴 Critical | Exposed Token | Generic Connection String found in connection.rs | Rotate and secure the Generic Connection String |
+| 804 | 🔴 Critical | Exposed Token | Generic Connection String found in connection.rs | Rotate and secure the Generic Connection String |
+| 805 | 🔴 Critical | Exposed Token | Generic Connection String found in connection.rs | Rotate and secure the Generic Connection String |
+| 806 | 🔴 Critical | Exposed Token | Generic Connection String found in connection.rs | Rotate and secure the Generic Connection String |
+| 807 | 🔴 Critical | Exposed Token | Generic Connection String found in connection.rs | Rotate and secure the Generic Connection String |
+| 808 | 🔴 Critical | Exposed Token | Generic Connection String found in mongo_driver.rs | Rotate and secure the Generic Connection String |
+| 809 | 🔴 Critical | Exposed Token | Generic Connection String found in mongo_driver.rs | Rotate and secure the Generic Connection String |
+| 810 | 🟢 Low | Exposed Token | Generic Connection String found in connectionUrl.test.ts | Rotate and secure the Generic Connection String |
+| 811 | 🟢 Low | Exposed Token | Generic Connection String found in connectionUrl.test.ts | Rotate and secure the Generic Connection String |
+| 812 | 🟢 Low | Exposed Token | Generic Connection String found in connectionUrl.test.ts | Rotate and secure the Generic Connection String |
+| 813 | 🟢 Low | Exposed Token | Generic Connection String found in connectionUrl.test.ts | Rotate and secure the Generic Connection String |
+
+## Categories
+
+| Category | Count |
+|----------|------:|
+| Exposed Token | 811 |
+| Outdated Version | 1 |
+| Malicious Skill | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-21 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-09-28 by [agentsec](https://github.com/debu-sinha/agentsec)*
