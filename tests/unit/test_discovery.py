@@ -21,6 +21,8 @@ def mock_home_with_claude(tmp_path, monkeypatch):
     (fake_home / ".claude" / "settings.json").write_text("{}")
     monkeypatch.setenv("HOME", str(fake_home))
     monkeypatch.setenv("USERPROFILE", str(fake_home))
+    monkeypatch.setenv("APPDATA", str(fake_home / "AppData" / "Roaming"))
+    monkeypatch.setenv("LOCALAPPDATA", str(fake_home / "AppData" / "Local"))
     monkeypatch.setattr("pathlib.Path.home", lambda: fake_home)
     monkeypatch.setattr("os.path.expanduser", lambda p: p.replace("~", str(fake_home)))
     return fake_home
@@ -33,6 +35,8 @@ def mock_home_empty(tmp_path, monkeypatch):
     fake_home.mkdir()
     monkeypatch.setenv("HOME", str(fake_home))
     monkeypatch.setenv("USERPROFILE", str(fake_home))
+    monkeypatch.setenv("APPDATA", str(fake_home / "AppData" / "Roaming"))
+    monkeypatch.setenv("LOCALAPPDATA", str(fake_home / "AppData" / "Local"))
     monkeypatch.setattr("pathlib.Path.home", lambda: fake_home)
     monkeypatch.setattr("os.path.expanduser", lambda p: p.replace("~", str(fake_home)))
     return fake_home
