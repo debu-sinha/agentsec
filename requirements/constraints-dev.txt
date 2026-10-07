@@ -1,14 +1,14 @@
 # Reproducible constraints for CI/dev tools.
 # Update with: python -m pip freeze > requirements/constraints-dev.txt (review before commit)
 
-build==1.4.0
+build==1.6.1
 click==8.5.0
-mypy==1.19.1
-pip-audit==2.10.0
+mypy==1.20.2
+pip-audit==2.10.1
 pre-commit==3.8.0
-pydantic==2.12.5
-pytest==9.0.3
+pydantic==2.13.5
+pytest==9.1.1
 pytest-cov==7.1.0
 rich==13.9.4
-ruff==0.15.2
-tomli==2.4.0
+ruff==0.16.10
+tomli==2.5.0
