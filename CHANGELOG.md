@@ -2,7 +2,7 @@
 
 All notable changes to agentsec are documented here.
 
-## [0.5.1] - 2026-06-14
+## [0.5.1] - 2026-10-07
 
 False-positive reduction from a deeper pass over the top-50 MCP ecosystem scan,
 focused on the credential scanner's KeywordDetector results. No repo, path, or
