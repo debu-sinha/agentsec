@@ -3,29 +3,29 @@
 ![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-5%2F100-red?style=for-the-badge)
 
 **Repository:** [openclaw/Peekaboo](https://github.com/openclaw/Peekaboo)
-**Stars:** 5,243
-**Last scan:** 2026-10-05
+**Stars:** 5,293
+**Last scan:** 2026-10-12
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟡 Medium | **51** |
-| 🟢 Low | **13** |
+| 🟡 Medium | **48** |
+| 🟢 Low | **7** |
 | 🔵 Info | **1** |
-| **Total** | **65** |
+| **Total** | **56** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Secret Keyword found in ConfigurationAccessorsOAuthTests.swift | Rotate and secure the Secret Keyword |
-| 3 | 🟢 Low | Exposed Token | Secret Keyword found in ConfigurationAccessorsOAuthTests.swift | Rotate and secure the Secret Keyword |
-| 4 | 🟢 Low | Exposed Token | Basic Auth Credentials found in PeekabooAgentSessionSafetyTests.swift | Rotate and secure the Basic Auth Credentials |
-| 5 | 🟡 Medium | Exposed Token | Secret Keyword found in PeekabooApp.swift | Rotate and secure the Secret Keyword |
-| 6 | 🟡 Medium | Exposed Token | Secret Keyword found in ProviderCredentialCoordinatorTests.swift | Rotate and secure the Secret Keyword |
-| 7 | 🟡 Medium | Exposed Token | Secret Keyword found in ProviderCredentialCoordinatorTests.swift | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Base64 High Entropy String found in valid-read-only-receipt.json | Rotate and secure the Base64 High Entropy String |
+| 3 | 🟢 Low | Exposed Token | Basic Auth Credentials found in PeekabooAgentServiceModelTests.swift | Rotate and secure the Basic Auth Credentials |
+| 4 | 🟢 Low | Exposed Token | Secret Keyword found in TachikomaCredentialInteropTests.swift | Rotate and secure the Secret Keyword |
+| 5 | 🟢 Low | Exposed Token | Secret Keyword found in ConfigurationManagerConcurrencyTests.swift | Rotate and secure the Secret Keyword |
+| 6 | 🟢 Low | Exposed Token | Basic Auth Credentials found in PeekabooAgentSessionSafetyTests.swift | Rotate and secure the Basic Auth Credentials |
+| 7 | 🟢 Low | Exposed Token | Secret Keyword found in notary-api-server.py | Rotate and secure the Secret Keyword |
 | 8 | 🟢 Low | Exposed Token | Base64 High Entropy String found in other-listener-attestation.json | Rotate and secure the Base64 High Entropy String |
 | 9 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 10 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
@@ -73,25 +73,16 @@
 | 52 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 53 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 54 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
-| 55 | 🟢 Low | Exposed Token | Basic Auth Credentials found in PeekabooAgentServiceModelTests.swift | Rotate and secure the Basic Auth Credentials |
-| 56 | 🟢 Low | Exposed Token | Secret Keyword found in TachikomaCredentialInteropTests.swift | Rotate and secure the Secret Keyword |
-| 57 | 🟢 Low | Exposed Token | Secret Keyword found in TachikomaCredentialInteropTests.swift | Rotate and secure the Secret Keyword |
-| 58 | 🟢 Low | Exposed Token | Secret Keyword found in TachikomaCredentialInteropTests.swift | Rotate and secure the Secret Keyword |
-| 59 | 🟡 Medium | Exposed Token | Secret Keyword found in TachikomaCredentialInteropTests.swift | Rotate and secure the Secret Keyword |
-| 60 | 🟢 Low | Exposed Token | Secret Keyword found in ConfigurationManagerConcurrencyTests.swift | Rotate and secure the Secret Keyword |
-| 61 | 🟡 Medium | Exposed Token | Secret Keyword found in SettingsServiceTests.swift | Rotate and secure the Secret Keyword |
-| 62 | 🟢 Low | Exposed Token | Secret Keyword found in CredentialFileTests.swift | Rotate and secure the Secret Keyword |
-| 63 | 🟢 Low | Exposed Token | Base64 High Entropy String found in valid-read-only-receipt.json | Rotate and secure the Base64 High Entropy String |
-| 64 | 🟢 Low | Exposed Token | Secret Keyword found in AgentCommandModelParsingTests.swift | Rotate and secure the Secret Keyword |
-| 65 | 🟢 Low | Exposed Token | Secret Keyword found in AgentCommandModelParsingTests.swift | Rotate and secure the Secret Keyword |
+| 55 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 56 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 64 |
+| Exposed Token | 55 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-05 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-12 by [agentsec](https://github.com/debu-sinha/agentsec)*

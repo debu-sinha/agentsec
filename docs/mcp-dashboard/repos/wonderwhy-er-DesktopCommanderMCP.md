@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-5%2F100-red?style=for-the-badge)
 
 **Repository:** [wonderwhy-er/DesktopCommanderMCP](https://github.com/wonderwhy-er/DesktopCommanderMCP)
-**Stars:** 9,922
-**Last scan:** 2026-10-05
+**Stars:** 10,002
+**Last scan:** 2026-10-12
 
 ## Severity Summary
 
@@ -12,8 +12,10 @@
 |----------|------:|
 | 🔴 Critical | **12** |
 | 🟠 High | **7** |
+| 🟡 Medium | **1** |
+| 🟢 Low | **1** |
 | 🔵 Info | **1** |
-| **Total** | **20** |
+| **Total** | **22** |
 
 ## Findings
 
@@ -39,15 +41,18 @@
 | 18 | 🟠 High | Malicious Skill | Credential path targeting in skill 'claude' | Remove skill 'claude' and investigate |
 | 19 | 🔴 Critical | Malicious Skill | Remote pipe to shell in skill 'claude' | Remove skill 'claude' and investigate |
 | 20 | 🔴 Critical | Malicious Skill | PowerShell remote execution in skill 'claude' | Remove skill 'claude' and investigate |
+| 21 | 🟡 Medium | Exposed Token | Secret Keyword found in redact.ts | Rotate and secure the Secret Keyword |
+| 22 | 🟢 Low | Exposed Token | JSON Web Token found in test-redact.js | Rotate and secure the JSON Web Token |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
 | Malicious Skill | 18 |
+| Exposed Token | 2 |
 | Insecure Permissions | 1 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-05 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-12 by [agentsec](https://github.com/debu-sinha/agentsec)*

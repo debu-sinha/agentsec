@@ -1,30 +1,33 @@
 # kucherenko/jscpd
 
-![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-85%2F100-green?style=for-the-badge)
 
 **Repository:** [kucherenko/jscpd](https://github.com/kucherenko/jscpd)
-**Stars:** 6,334
-**Last scan:** 2026-10-05
+**Stars:** 6,381
+**Last scan:** 2026-10-12
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
+| 🔴 Critical | **1** |
 | 🔵 Info | **1** |
-| **Total** | **1** |
+| **Total** | **2** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
+| 2 | 🔴 Critical | Exposed Token | OpenAI API Key found in http.rs | Rotate and secure the OpenAI API Key |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
 | Outdated Version | 1 |
+| Exposed Token | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-05 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-12 by [agentsec](https://github.com/debu-sinha/agentsec)*

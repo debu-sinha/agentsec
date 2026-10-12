@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-85%2F100-green?style=for-the-badge)
 
 **Repository:** [apify/apify-mcp-server](https://github.com/apify/apify-mcp-server)
-**Stars:** 9,684
-**Last scan:** 2026-10-05
+**Stars:** 10,744
+**Last scan:** 2026-10-12
 
 ## Severity Summary
 
@@ -39,4 +39,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-05 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-12 by [agentsec](https://github.com/debu-sinha/agentsec)*
