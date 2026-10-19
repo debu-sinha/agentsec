@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-D-orange?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-66%2F100-orange?style=for-the-badge)
 
 **Repository:** [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)
-**Stars:** 7,698
-**Last scan:** 2026-10-12
+**Stars:** 7,851
+**Last scan:** 2026-10-19
 
 ## Severity Summary
 
@@ -20,24 +20,24 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Base64 High Entropy String found in release_security_test.go | Rotate and secure the Base64 High Entropy String |
-| 3 | 🟢 Low | Exposed Token | Secret Keyword found in review_repair_transition_test.go | Rotate and secure the Secret Keyword |
-| 4 | 🟢 Low | Exposed Token | Base64 High Entropy String found in status-v2.fixture.json | Rotate and secure the Base64 High Entropy String |
-| 5 | 🟢 Low | Exposed Token | Base64 High Entropy String found in start-v2.fixture.json | Rotate and secure the Base64 High Entropy String |
-| 6 | 🟡 Medium | Exposed Token | Secret Keyword found in journeys_repository_context.go | Rotate and secure the Secret Keyword |
-| 7 | 🟢 Low | Exposed Token | Secret Keyword found in review_repair_test.go | Rotate and secure the Secret Keyword |
-| 8 | 🟢 Low | Exposed Token | Secret Keyword found in compact_burn_test.go | Rotate and secure the Secret Keyword |
-| 9 | 🟢 Low | Exposed Token | Secret Keyword found in repository_context_test.go | Rotate and secure the Secret Keyword |
-| 10 | 🟢 Low | Exposed Token | Secret Keyword found in repository_context_test.go | Rotate and secure the Secret Keyword |
-| 11 | 🟢 Low | Exposed Token | Base64 High Entropy String found in start.fixture.json | Rotate and secure the Base64 High Entropy String |
-| 12 | 🟢 Low | Exposed Token | Secret Keyword found in compact_terminal_consumption_test.go | Rotate and secure the Secret Keyword |
-| 13 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
-| 14 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
-| 15 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
-| 16 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
-| 17 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
-| 18 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
-| 19 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 2 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 3 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 4 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 5 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 6 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 7 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 8 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in shell-linux-user-install-guest.py | Rotate and secure the Base64 High Entropy String |
+| 9 | 🟢 Low | Exposed Token | Base64 High Entropy String found in status-v2.fixture.json | Rotate and secure the Base64 High Entropy String |
+| 10 | 🟢 Low | Exposed Token | Base64 High Entropy String found in start-v2.fixture.json | Rotate and secure the Base64 High Entropy String |
+| 11 | 🟢 Low | Exposed Token | Base64 High Entropy String found in release_security_test.go | Rotate and secure the Base64 High Entropy String |
+| 12 | 🟢 Low | Exposed Token | Secret Keyword found in review_repair_transition_test.go | Rotate and secure the Secret Keyword |
+| 13 | 🟢 Low | Exposed Token | Secret Keyword found in repository_context_test.go | Rotate and secure the Secret Keyword |
+| 14 | 🟢 Low | Exposed Token | Secret Keyword found in repository_context_test.go | Rotate and secure the Secret Keyword |
+| 15 | 🟡 Medium | Exposed Token | Secret Keyword found in journeys_repository_context.go | Rotate and secure the Secret Keyword |
+| 16 | 🟢 Low | Exposed Token | Secret Keyword found in compact_terminal_consumption_test.go | Rotate and secure the Secret Keyword |
+| 17 | 🟢 Low | Exposed Token | Secret Keyword found in compact_burn_test.go | Rotate and secure the Secret Keyword |
+| 18 | 🟢 Low | Exposed Token | Secret Keyword found in review_repair_test.go | Rotate and secure the Secret Keyword |
+| 19 | 🟢 Low | Exposed Token | Base64 High Entropy String found in start.fixture.json | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 
@@ -48,4 +48,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-12 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-19 by [agentsec](https://github.com/debu-sinha/agentsec)*

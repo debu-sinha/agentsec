@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-B-green?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-85%2F100-green?style=for-the-badge)
 
 **Repository:** [kucherenko/jscpd](https://github.com/kucherenko/jscpd)
-**Stars:** 6,381
-**Last scan:** 2026-10-12
+**Stars:** 6,417
+**Last scan:** 2026-10-19
 
 ## Severity Summary
 
@@ -30,4 +30,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-12 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-10-19 by [agentsec](https://github.com/debu-sinha/agentsec)*
