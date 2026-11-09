@@ -1,38 +1,41 @@
 # PrefectHQ/fastmcp
 
-![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-94%2F100-brightgreen?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-91%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [PrefectHQ/fastmcp](https://github.com/PrefectHQ/fastmcp)
-**Stars:** 28,273
-**Last scan:** 2026-11-02
+**Stars:** 28,362
+**Last scan:** 2026-11-09
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟢 Low | **6** |
+| 🟢 Low | **9** |
 | 🔵 Info | **1** |
-| **Total** | **7** |
+| **Total** | **10** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Secret Keyword found in test_oidc_proxy_token.py | Rotate and secure the Secret Keyword |
-| 3 | 🟢 Low | Exposed Token | Secret Keyword found in test_oauth_proxy.py | Rotate and secure the Secret Keyword |
-| 4 | 🟢 Low | Exposed Token | Secret Keyword found in test_keycloak_provider_integration.py | Rotate and secure the Secret Keyword |
-| 5 | 🟢 Low | Exposed Token | Secret Keyword found in test_oauth_proxy_storage.py | Rotate and secure the Secret Keyword |
-| 6 | 🟢 Low | Exposed Token | Secret Keyword found in test_oidc_proxy.py | Rotate and secure the Secret Keyword |
-| 7 | 🟢 Low | Exposed Token | Secret Keyword found in fastmcp-analytics.js | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Secret Keyword found in test_oauth_proxy_storage.py | Rotate and secure the Secret Keyword |
+| 3 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_tasks.py | Rotate and secure the Basic Auth Credentials |
+| 4 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_tasks.py | Rotate and secure the Basic Auth Credentials |
+| 5 | 🟢 Low | Exposed Token | Secret Keyword found in test_keycloak_provider_integration.py | Rotate and secure the Secret Keyword |
+| 6 | 🟢 Low | Exposed Token | Secret Keyword found in test_oauth_proxy.py | Rotate and secure the Secret Keyword |
+| 7 | 🟢 Low | Exposed Token | Secret Keyword found in test_oidc_proxy.py | Rotate and secure the Secret Keyword |
+| 8 | 🟢 Low | Exposed Token | Secret Keyword found in test_oidc_proxy_token.py | Rotate and secure the Secret Keyword |
+| 9 | 🟢 Low | Exposed Token | Secret Keyword found in fastmcp-analytics.js | Rotate and secure the Secret Keyword |
+| 10 | 🟢 Low | Exposed Token | Generic Connection String found in test_tasks.py | Rotate and secure the Generic Connection String |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 6 |
+| Exposed Token | 9 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-02 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-09 by [agentsec](https://github.com/debu-sinha/agentsec)*

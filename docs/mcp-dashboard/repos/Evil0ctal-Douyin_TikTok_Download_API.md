@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-D-orange?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-61%2F100-orange?style=for-the-badge)
 
 **Repository:** [Evil0ctal/Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API)
-**Stars:** 21,107
-**Last scan:** 2026-11-02
+**Stars:** 21,310
+**Last scan:** 2026-11-09
 
 ## Severity Summary
 
@@ -20,55 +20,55 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Secret Keyword found in test_route_guards.py | Rotate and secure the Secret Keyword |
-| 3 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_worker_ops_proxy_test.py | Rotate and secure the Basic Auth Credentials |
-| 4 | 🟢 Low | Exposed Token | Secret Keyword found in test_worker_parsing.py | Rotate and secure the Secret Keyword |
-| 5 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_worker_parsing.py | Rotate and secure the Basic Auth Credentials |
-| 6 | 🟢 Low | Exposed Token | Secret Keyword found in 14-troubleshooting.md | Rotate and secure the Secret Keyword |
-| 7 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in xbogus.py | Rotate and secure the Base64 High Entropy String |
-| 8 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_api_logs.py | Rotate and secure the Basic Auth Credentials |
-| 9 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_request_proxy.py | Rotate and secure the Basic Auth Credentials |
-| 10 | 🟢 Low | Exposed Token | Secret Keyword found in test_request_proxy.py | Rotate and secure the Secret Keyword |
-| 11 | 🟢 Low | Exposed Token | Secret Keyword found in console.json | Rotate and secure the Secret Keyword |
-| 12 | 🟢 Low | Exposed Token | Secret Keyword found in console.json | Rotate and secure the Secret Keyword |
-| 13 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_cli.py | Rotate and secure the Basic Auth Credentials |
-| 14 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_cli.py | Rotate and secure the Basic Auth Credentials |
-| 15 | 🟢 Low | Exposed Token | Secret Keyword found in test_api_demo.py | Rotate and secure the Secret Keyword |
-| 16 | 🟢 Low | Exposed Token | Secret Keyword found in test_api_demo.py | Rotate and secure the Secret Keyword |
-| 17 | 🟢 Low | Exposed Token | Secret Keyword found in setup.json | Rotate and secure the Secret Keyword |
-| 18 | 🟢 Low | Exposed Token | Secret Keyword found in setup.json | Rotate and secure the Secret Keyword |
-| 19 | 🟢 Low | Exposed Token | Secret Keyword found in test_api_backup.py | Rotate and secure the Secret Keyword |
-| 20 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 21 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 22 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 23 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 24 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 25 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 26 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Secret Keyword found in test_api_backup.py | Rotate and secure the Secret Keyword |
+| 3 | 🟢 Low | Exposed Token | Secret Keyword found in test_fetch_classification.py | Rotate and secure the Secret Keyword |
+| 4 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_console_api_seam.py | Rotate and secure the Basic Auth Credentials |
+| 5 | 🟢 Low | Exposed Token | Secret Keyword found in test_admin_account_rules.py | Rotate and secure the Secret Keyword |
+| 6 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_api_identities_listing.py | Rotate and secure the Basic Auth Credentials |
+| 7 | 🟢 Low | Exposed Token | Secret Keyword found in console.json | Rotate and secure the Secret Keyword |
+| 8 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_ops_masking.py | Rotate and secure the Basic Auth Credentials |
+| 9 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in signingExamples.ts | Rotate and secure the Base64 High Entropy String |
+| 10 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 11 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 12 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 13 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 14 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 15 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 16 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 17 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 18 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 19 | 🟢 Low | Exposed Token | Secret Keyword found in test_api_demo.py | Rotate and secure the Secret Keyword |
+| 20 | 🟢 Low | Exposed Token | Secret Keyword found in test_api_demo.py | Rotate and secure the Secret Keyword |
+| 21 | 🟢 Low | Exposed Token | Secret Keyword found in console.json | Rotate and secure the Secret Keyword |
+| 22 | 🟢 Low | Exposed Token | Secret Keyword found in console.json | Rotate and secure the Secret Keyword |
+| 23 | 🟢 Low | Exposed Token | Secret Keyword found in setup.json | Rotate and secure the Secret Keyword |
+| 24 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_worker_ops_proxy_test.py | Rotate and secure the Basic Auth Credentials |
+| 25 | 🟢 Low | Exposed Token | Secret Keyword found in 14-troubleshooting.md | Rotate and secure the Secret Keyword |
+| 26 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in playgroundCatalog.ts | Rotate and secure the Base64 High Entropy String |
 | 27 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in playgroundCatalog.ts | Rotate and secure the Base64 High Entropy String |
-| 28 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in playgroundCatalog.ts | Rotate and secure the Base64 High Entropy String |
-| 29 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 02-installation.md | Rotate and secure the Basic Auth Credentials |
-| 30 | 🟢 Low | Exposed Token | Secret Keyword found in test_ops_diagnose.py | Rotate and secure the Secret Keyword |
-| 31 | 🟢 Low | Exposed Token | Secret Keyword found in test_admin_account_rules.py | Rotate and secure the Secret Keyword |
-| 32 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in abogus.py | Rotate and secure the Base64 High Entropy String |
-| 33 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in abogus.py | Rotate and secure the Base64 High Entropy String |
-| 34 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 03-configuration.md | Rotate and secure the Basic Auth Credentials |
-| 35 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 36 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 37 | 🟢 Low | Exposed Token | Secret Keyword found in test_fetch_classification.py | Rotate and secure the Secret Keyword |
-| 38 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_api_identities_listing.py | Rotate and secure the Basic Auth Credentials |
-| 39 | 🟢 Low | Exposed Token | Base64 High Entropy String found in abogus_browser.json | Rotate and secure the Base64 High Entropy String |
-| 40 | 🟢 Low | Exposed Token | Base64 High Entropy String found in abogus_browser.json | Rotate and secure the Base64 High Entropy String |
-| 41 | 🟢 Low | Exposed Token | Base64 High Entropy String found in abogus_browser.json | Rotate and secure the Base64 High Entropy String |
-| 42 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 03-configuration.md | Rotate and secure the Basic Auth Credentials |
-| 43 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_ops_masking.py | Rotate and secure the Basic Auth Credentials |
-| 44 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in ids.py | Rotate and secure the Base64 High Entropy String |
-| 45 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_api_admin.py | Rotate and secure the Basic Auth Credentials |
-| 46 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_transport.py | Rotate and secure the Basic Auth Credentials |
-| 47 | 🟢 Low | Exposed Token | Secret Keyword found in console.json | Rotate and secure the Secret Keyword |
-| 48 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in signingExamples.ts | Rotate and secure the Base64 High Entropy String |
-| 49 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_console_api_seam.py | Rotate and secure the Basic Auth Credentials |
-| 50 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 02-installation.md | Rotate and secure the Basic Auth Credentials |
+| 28 | 🟢 Low | Exposed Token | Base64 High Entropy String found in abogus_browser.json | Rotate and secure the Base64 High Entropy String |
+| 29 | 🟢 Low | Exposed Token | Base64 High Entropy String found in abogus_browser.json | Rotate and secure the Base64 High Entropy String |
+| 30 | 🟢 Low | Exposed Token | Base64 High Entropy String found in abogus_browser.json | Rotate and secure the Base64 High Entropy String |
+| 31 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_api_logs.py | Rotate and secure the Basic Auth Credentials |
+| 32 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_api_admin.py | Rotate and secure the Basic Auth Credentials |
+| 33 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in tiktok_sign.py | Rotate and secure the Base64 High Entropy String |
+| 34 | 🟢 Low | Exposed Token | Secret Keyword found in test_ops_diagnose.py | Rotate and secure the Secret Keyword |
+| 35 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 02-installation.md | Rotate and secure the Basic Auth Credentials |
+| 36 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in ids.py | Rotate and secure the Base64 High Entropy String |
+| 37 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_request_proxy.py | Rotate and secure the Basic Auth Credentials |
+| 38 | 🟢 Low | Exposed Token | Secret Keyword found in test_request_proxy.py | Rotate and secure the Secret Keyword |
+| 39 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_worker_parsing.py | Rotate and secure the Basic Auth Credentials |
+| 40 | 🟢 Low | Exposed Token | Secret Keyword found in test_worker_parsing.py | Rotate and secure the Secret Keyword |
+| 41 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_transport.py | Rotate and secure the Basic Auth Credentials |
+| 42 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in abogus.py | Rotate and secure the Base64 High Entropy String |
+| 43 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in abogus.py | Rotate and secure the Base64 High Entropy String |
+| 44 | 🟢 Low | Exposed Token | Secret Keyword found in test_route_guards.py | Rotate and secure the Secret Keyword |
+| 45 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 02-installation.md | Rotate and secure the Basic Auth Credentials |
+| 46 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
+| 47 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
+| 48 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
+| 49 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
+| 50 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
 | 51 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
 | 52 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
 | 53 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
@@ -124,12 +124,12 @@
 | 103 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
 | 104 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
 | 105 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
-| 106 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
-| 107 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
-| 108 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
-| 109 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
-| 110 | 🟢 Low | Exposed Token | Base64 High Entropy String found in test_signing.py | Rotate and secure the Base64 High Entropy String |
-| 111 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in tiktok_sign.py | Rotate and secure the Base64 High Entropy String |
+| 106 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 03-configuration.md | Rotate and secure the Basic Auth Credentials |
+| 107 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_cli.py | Rotate and secure the Basic Auth Credentials |
+| 108 | 🟢 Low | Exposed Token | Basic Auth Credentials found in test_cli.py | Rotate and secure the Basic Auth Credentials |
+| 109 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in xbogus.py | Rotate and secure the Base64 High Entropy String |
+| 110 | 🟢 Low | Exposed Token | Secret Keyword found in setup.json | Rotate and secure the Secret Keyword |
+| 111 | 🟢 Low | Exposed Token | Basic Auth Credentials found in 03-configuration.md | Rotate and secure the Basic Auth Credentials |
 | 112 | 🟢 Low | Exposed Token | Generic Connection String found in test_cli.py | Rotate and secure the Generic Connection String |
 
 ## Categories
@@ -141,4 +141,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-02 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-09 by [agentsec](https://github.com/debu-sinha/agentsec)*
