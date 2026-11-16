@@ -3,28 +3,28 @@
 ![Grade](https://img.shields.io/badge/Grade-F-red?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-5%2F100-red?style=for-the-badge)
 
 **Repository:** [openclaw/Peekaboo](https://github.com/openclaw/Peekaboo)
-**Stars:** 5,457
-**Last scan:** 2026-11-09
+**Stars:** 5,490
+**Last scan:** 2026-11-16
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
-| 🟡 Medium | **55** |
+| 🟡 Medium | **56** |
 | 🟢 Low | **7** |
 | 🔵 Info | **1** |
-| **Total** | **63** |
+| **Total** | **64** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Base64 High Entropy String found in valid-read-only-receipt.json | Rotate and secure the Base64 High Entropy String |
-| 3 | 🟢 Low | Exposed Token | Secret Keyword found in ConfigurationManagerConcurrencyTests.swift | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Secret Keyword found in notary-api-server.py | Rotate and secure the Secret Keyword |
+| 3 | 🟢 Low | Exposed Token | Basic Auth Credentials found in PeekabooAgentSessionSafetyTests.swift | Rotate and secure the Basic Auth Credentials |
 | 4 | 🟢 Low | Exposed Token | Secret Keyword found in TachikomaCredentialInteropTests.swift | Rotate and secure the Secret Keyword |
 | 5 | 🟢 Low | Exposed Token | Basic Auth Credentials found in PeekabooAgentServiceModelTests.swift | Rotate and secure the Basic Auth Credentials |
-| 6 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 6 | 🟢 Low | Exposed Token | Base64 High Entropy String found in valid-read-only-receipt.json | Rotate and secure the Base64 High Entropy String |
 | 7 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 8 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 9 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
@@ -79,17 +79,18 @@
 | 58 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 59 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
 | 60 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
-| 61 | 🟢 Low | Exposed Token | Secret Keyword found in notary-api-server.py | Rotate and secure the Secret Keyword |
-| 62 | 🟢 Low | Exposed Token | Base64 High Entropy String found in other-listener-attestation.json | Rotate and secure the Base64 High Entropy String |
-| 63 | 🟢 Low | Exposed Token | Basic Auth Credentials found in PeekabooAgentSessionSafetyTests.swift | Rotate and secure the Basic Auth Credentials |
+| 61 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 62 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in appcast.xml | Rotate and secure the Base64 High Entropy String |
+| 63 | 🟢 Low | Exposed Token | Secret Keyword found in ConfigurationManagerConcurrencyTests.swift | Rotate and secure the Secret Keyword |
+| 64 | 🟢 Low | Exposed Token | Base64 High Entropy String found in other-listener-attestation.json | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 62 |
+| Exposed Token | 63 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-09 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-16 by [agentsec](https://github.com/debu-sinha/agentsec)*
