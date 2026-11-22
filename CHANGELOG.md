@@ -2,6 +2,19 @@
 
 All notable changes to agentsec are documented here.
 
+## [Unreleased]
+
+### Fixed
+
+- CMCP-004 now parses the MCP endpoint URL instead of matching string
+  prefixes. `ws://` to a remote host is flagged alongside `http://`, scheme
+  and host are compared without case, and hosts such as
+  `localhost.evil.example` or `127.0.0.1.nip.io` no longer pass as loopback.
+  Loopback (`localhost`, `*.localhost`, 127/8, `::1`) is still skipped. The
+  finding carries `check_id` `CMCP-004` and names the TLS scheme to switch to.
+- CMCP-002 and CMCP-004 also read the endpoint from `httpUrl` (Gemini CLI
+  streamable HTTP), not only `url`.
+
 ## [0.5.2] - 2026-11-21
 
 Windows false-positive fix and wider dependency bounds.

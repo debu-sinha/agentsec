@@ -75,9 +75,9 @@ CFS-001, CFS-002 and CMM-001 read POSIX mode bits. On Windows they are skipped, 
 | ID | Check | Default Severity | OWASP | Detection |
 |----|-------|:---:|-------|-----------|
 | CMCP-001 | Tool poisoning / dangerous parameter schemas | Critical | ASI01, ASI03, ASI02 | Regex patterns for prompt injection in tool descriptions + dangerous input schema parameter names (shell, exec, eval, command, code) |
-| CMCP-002 | Remote MCP endpoint without authentication | High | ASI03, ASI05 | Detects `https://` MCP servers and URL-based servers missing `auth` or `headers` config |
+| CMCP-002 | Remote MCP endpoint without authentication | High | ASI03, ASI05 | Detects URL-based servers (`url` or `httpUrl`) missing `auth` or `headers` config |
 | CMCP-003 | Unpinned MCP dependencies / unverified npx | Medium | ASI03 | Flags `npx` invocations not from `@anthropic/` or `@modelcontextprotocol/` namespaces |
-| CMCP-004 | Non-TLS HTTP transport to remote MCP server | High | ASI05 | Flags `http://` MCP server URLs (excluding loopback) that send tool calls and tokens in cleartext |
+| CMCP-004 | Cleartext transport to remote MCP server | High | ASI05 | Parses `url` or `httpUrl` and flags `http://` or `ws://` to any host that is not loopback. Loopback means `localhost`, `*.localhost`, 127/8, `::1` or `0.0.0.0`. A host that merely starts with `localhost` or `127.0.0.1` is treated as remote |
 | CMCP-005 | Shell invocation / command injection in launch command | High | ASI05, ASI04 | Flags shell wrappers (`bash -c`, `cmd /c`, `powershell -Command`), pipe-to-interpreter, and chained operators (`;`, `&&`, `$(...)`, backticks) in a server launch command |
 | CMCP-006 | Reference to MCP package with known critical CVE | Critical | ASI04, ASI05 | Version-aware match against a denylist of MCP packages with disclosed RCE / auth-bypass CVEs; patched pins are suppressed |
 

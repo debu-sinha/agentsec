@@ -8,6 +8,7 @@ Detects:
 - Cross-origin escalation risks
 - Excessive permission grants
 - Prompt injection vectors in tool metadata
+- Cleartext http:// or ws:// transport to a remote MCP endpoint (CMCP-004)
 - Shell invocation / command injection in the server launch command (CMCP-005)
 - References to MCP packages with known critical CVEs (CMCP-006)
 """
@@ -15,11 +16,13 @@ Detects:
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 import logging
 import re
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from agentsec.models.findings import (
     Finding,
@@ -33,6 +36,60 @@ logger = logging.getLogger(__name__)
 
 # Default filename for tool description pins
 _PINS_FILENAME = ".agentsec-pins.json"
+
+# Config keys that hold a remote MCP endpoint: ``url`` (Claude Desktop, Cursor,
+# VS Code, Gemini CLI SSE) and ``httpUrl`` (Gemini CLI streamable HTTP).
+_REMOTE_URL_KEYS = ("url", "httpUrl")
+
+# Cleartext schemes CMCP-004 flags, mapped to the TLS scheme to suggest instead.
+_PLAINTEXT_SCHEMES = {"http": "https", "ws": "wss"}
+
+
+def _server_url(server_config: dict[str, Any]) -> str:
+    """Return the remote endpoint URL of an MCP server config, or an empty string."""
+    for key in _REMOTE_URL_KEYS:
+        value = server_config.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
+
+
+def _is_loopback_host(host: str) -> bool:
+    """Return True for hosts that never leave the machine.
+
+    Covers ``localhost`` and the ``.localhost`` zone (RFC 6761), the IPv4
+    loopback block 127/8, IPv6 ``::1`` and the unspecified addresses, which a
+    client resolves to the local host. A host that merely starts with
+    ``localhost`` or ``127.0.0.1`` (``localhost.evil.example``) is remote.
+    """
+    name = host.lower().rstrip(".")
+    if name == "localhost" or name.endswith(".localhost"):
+        return True
+    try:
+        address = ipaddress.ip_address(name)
+    except ValueError:
+        return False
+    return address.is_loopback or address.is_unspecified
+
+
+def _plaintext_remote_scheme(url: str) -> str | None:
+    """Return ``"http"`` or ``"ws"`` when ``url`` is cleartext to a remote host.
+
+    TLS schemes, loopback targets, and empty or unparsable URLs return None.
+    Scheme and host comparisons ignore case.
+    """
+    try:
+        parts = urlsplit(url)
+        host = parts.hostname
+    except ValueError:
+        return None
+    scheme = parts.scheme.lower()
+    if scheme not in _PLAINTEXT_SCHEMES or not host:
+        return None
+    if _is_loopback_host(host):
+        return None
+    return scheme
+
 
 # Shell invocation, pipe-to-interpreter, and command chaining in an MCP launch
 # command. The STDIO transport runs the command verbatim, so any of these turns
@@ -467,37 +524,36 @@ class McpScanner(BaseScanner):
         server_name: str,
         server_config: dict[str, Any],
     ) -> list[Finding]:
-        """Check for non-TLS HTTP connections to MCP servers (CMCP-004)."""
+        """Flag cleartext http:// or ws:// transport to a remote MCP server (CMCP-004)."""
         findings: list[Finding] = []
-        url = server_config.get("url", "")
-
-        if not url or not url.startswith("http://"):
+        url = _server_url(server_config)
+        scheme = _plaintext_remote_scheme(url)
+        if scheme is None:
             return findings
 
-        # Exclude localhost / loopback — local HTTP is acceptable
-        localhost_patterns = ("http://localhost", "http://127.0.0.1", "http://[::1]")
-        if any(url.startswith(p) for p in localhost_patterns):
-            return findings
-
+        secure_scheme = _PLAINTEXT_SCHEMES[scheme]
+        label = "HTTP" if scheme == "http" else "WebSocket"
         findings.append(
             Finding(
                 scanner=self.name,
                 category=FindingCategory.MCP_CROSS_ORIGIN,
                 severity=FindingSeverity.HIGH,
-                title=f"MCP server '{server_name}' uses unencrypted HTTP",
+                title=f"MCP server '{server_name}' uses unencrypted {label}",
                 description=(
-                    f"MCP server '{server_name}' connects to '{url}' over plain HTTP "
-                    f"without TLS encryption. Credentials, tool calls, and responses "
-                    f"can be intercepted or tampered with by network attackers."
+                    f"MCP server '{server_name}' connects to '{url}' over plain "
+                    f"{scheme}:// with no TLS. Anyone on the network path can read or "
+                    f"alter the credentials, tool calls, and responses on that connection."
                 ),
+                check_id="CMCP-004",
                 evidence=f"url = {url}",
                 file_path=config_path,
                 remediation=Remediation(
-                    summary="Use HTTPS for all remote MCP server connections",
+                    summary=f"Switch this MCP endpoint to {secure_scheme}://",
                     steps=[
-                        "Change the URL scheme from http:// to https://",
-                        "Ensure the MCP server has a valid TLS certificate",
-                        "If the server doesn't support HTTPS, use an SSH tunnel or VPN",
+                        f"Change the URL scheme from {scheme}:// to {secure_scheme}://",
+                        "Make sure the server presents a certificate the client trusts",
+                        "If the server cannot do TLS, reach it through an SSH tunnel or "
+                        "VPN and point the config at the loopback end of the tunnel",
                     ],
                 ),
                 owasp_ids=["ASI05", "ASI03"],
@@ -515,7 +571,7 @@ class McpScanner(BaseScanner):
         findings: list[Finding] = []
 
         # CMCP-002: Check for URL-based servers without auth
-        url = server_config.get("url", "")
+        url = _server_url(server_config)
         if url and not server_config.get("auth") and not server_config.get("headers"):
             findings.append(
                 Finding(
