@@ -255,3 +255,37 @@ def test_harden_dry_run(tmp_path):
 
     assert result.exit_code == 0
     assert config_file.read_text() == original_content
+
+
+# -----------------------------------------------------------------------
+# Committed fixtures
+# -----------------------------------------------------------------------
+
+_FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
+
+
+def test_scan_fixture_flags_plaintext_remote_mcp_once(tmp_path):
+    """Real CLI on the committed MCP fixture: one CMCP-004, for the http:// remote only."""
+    target = _FIXTURES / "mcp_plaintext_transport"
+    data = _scan_to_json(tmp_path, target)
+    hits = [f for f in data["findings"] if f.get("check_id") == "CMCP-004"]
+    assert len(hits) == 1
+    assert hits[0]["severity"] == "high"
+    assert "plain-remote" in hits[0]["title"]
+    assert "http://mcp.example.com/sse" in hits[0]["evidence"]
+
+    out_file = tmp_path / "results.sarif"
+    runner = CliRunner()
+    result = runner.invoke(
+        main, ["scan", str(target), "-o", "sarif", "-f", str(out_file), "--fail-on", "none"]
+    )
+    assert result.exit_code == 0, result.output
+    sarif = json.loads(out_file.read_text())
+    assert sarif["$schema"] == "https://json.schemastore.org/sarif-2.1.0.json"
+    assert sarif["version"] == "2.1.0"
+    transport = [
+        r for r in sarif["runs"][0]["results"] if r["ruleId"].endswith("/mcp_cross_origin")
+    ]
+    assert len(transport) == 1
+    assert transport[0]["level"] == "error"
+    assert "plain-remote" in json.dumps(transport[0])

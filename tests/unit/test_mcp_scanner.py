@@ -6,7 +6,7 @@ import pytest
 
 from agentsec.models.findings import FindingCategory, FindingSeverity
 from agentsec.scanners.base import ScanContext
-from agentsec.scanners.mcp import McpScanner
+from agentsec.scanners.mcp import McpScanner, _plaintext_remote_scheme
 
 
 @pytest.fixture
@@ -446,3 +446,77 @@ def test_finds_gemini_settings(scanner, tmp_path):
 
     # At minimum, the scanner should have scanned the config file
     assert context.files_scanned >= 1
+
+
+# -----------------------------------------------------------------------
+# CMCP-004: cleartext transport to a remote MCP endpoint
+# -----------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("url", "expected"),
+    [
+        ("http://mcp.example.com/sse", "http"),
+        ("HTTP://MCP.EXAMPLE.COM/sse", "http"),
+        ("ws://mcp.example.com/ws", "ws"),
+        ("http://localhost.evil.example/sse", "http"),
+        ("http://127.0.0.1.nip.io/sse", "http"),
+        ("http://10.0.0.5:8080/mcp", "http"),
+        ("https://mcp.example.com/sse", None),
+        ("wss://mcp.example.com/ws", None),
+        ("http://localhost:8080/sse", None),
+        ("http://dev.localhost:8080/sse", None),
+        ("http://127.0.0.1:8080/sse", None),
+        ("http://127.5.6.7/sse", None),
+        ("http://[::1]:8080/sse", None),
+        ("http://0.0.0.0:8080/sse", None),
+        ("", None),
+        ("not a url", None),
+        ("http://", None),
+        ("http://[::1", None),
+    ],
+)
+def test_plaintext_remote_scheme(url, expected):
+    assert _plaintext_remote_scheme(url) == expected
+
+
+def _scan_servers(scanner, tmp_path, servers):
+    (tmp_path / "mcp.json").write_text(json.dumps({"mcpServers": servers}))
+    return scanner.scan(ScanContext(target_path=tmp_path))
+
+
+def _transport_findings(findings):
+    return [f for f in findings if f.check_id == "CMCP-004"]
+
+
+def test_flags_plaintext_remote_transport_per_scheme(scanner, tmp_path):
+    auth = {"headers": {"Authorization": "Bearer placeholder"}}
+    findings = _scan_servers(
+        scanner,
+        tmp_path,
+        {
+            "plain-http": {"url": "http://mcp.example.com/sse", **auth},
+            "plain-ws": {"url": "ws://mcp.example.com/ws", **auth},
+            "secure": {"url": "https://mcp.example.com/sse", **auth},
+            "local": {"url": "http://127.0.0.1:8080/sse", **auth},
+        },
+    )
+    hits = {f.title: f for f in _transport_findings(findings)}
+    assert set(hits) == {
+        "MCP server 'plain-http' uses unencrypted HTTP",
+        "MCP server 'plain-ws' uses unencrypted WebSocket",
+    }
+    for finding in hits.values():
+        assert finding.severity == FindingSeverity.HIGH
+        assert finding.category == FindingCategory.MCP_CROSS_ORIGIN
+        assert "ASI05" in finding.owasp_ids
+    ws_finding = hits["MCP server 'plain-ws' uses unencrypted WebSocket"]
+    assert ws_finding.remediation.steps[0] == "Change the URL scheme from ws:// to wss://"
+
+
+def test_remote_url_read_from_http_url_key(scanner, tmp_path):
+    findings = _scan_servers(
+        scanner, tmp_path, {"gemini-style": {"httpUrl": "http://mcp.example.com/mcp"}}
+    )
+    assert len(_transport_findings(findings)) == 1
+    assert any(f.category == FindingCategory.MCP_NO_AUTH for f in findings)

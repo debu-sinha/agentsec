@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "plain-remote": {
+      "url": "http://mcp.example.com/sse",
+      "headers": {
+        "Authorization": "Bearer placeholder"
+      }
+    },
+    "secure-remote": {
+      "url": "https://mcp.example.com/sse",
+      "headers": {
+        "Authorization": "Bearer placeholder"
+      }
+    },
+    "local-dev": {
+      "url": "http://127.0.0.1:8080/sse",
+      "headers": {
+        "Authorization": "Bearer placeholder"
+      }
+    }
+  }
+}
