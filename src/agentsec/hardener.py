@@ -21,6 +21,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from agentsec.utils import posix_permissions_supported
+
 logger = logging.getLogger(__name__)
 
 
@@ -282,7 +284,7 @@ def harden(
 
     # Tighten file permissions (always safe)
     if not dry_run:
-        _tighten_permissions(target)
+        _tighten_permissions(target, result)
 
     # Warn about issues the hardener cannot fix automatically
     _add_warnings(target, config_data, result)
@@ -327,8 +329,17 @@ def _set_nested(data: dict, dotpath: str, value: object) -> None:
     current[keys[-1]] = value
 
 
-def _tighten_permissions(target: Path) -> None:
+def _tighten_permissions(target: Path, result: HardenResult) -> None:
     """Tighten filesystem permissions on agent config directories and files."""
+    if not posix_permissions_supported():
+        result.warnings.append(
+            "File permissions were left unchanged: this platform does not use POSIX "
+            "modes. Restrict the agent config directory to your own account with "
+            "icacls, for example: icacls <path> /inheritance:r /grant:r %USERNAME%:F"
+        )
+        logger.info("Skipping chmod under %s: no POSIX permission bits on this platform", target)
+        return
+
     for dir_name in [".openclaw", ".clawdbot", ".moltbot"]:
         dir_path = target / dir_name
         if dir_path.is_dir():

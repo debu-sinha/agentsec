@@ -29,9 +29,11 @@ from agentsec.models.findings import (
     Remediation,
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
-from agentsec.utils import sanitize_secret
+from agentsec.utils import posix_permissions_supported, sanitize_secret
 
 logger = logging.getLogger(__name__)
+
+_NO_POSIX_MODES_MSG = "Skipping %s: st_mode carries no permission bits on this platform"
 
 # Patterns that indicate secrets in config files
 _SECRET_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
@@ -246,6 +248,9 @@ class InstallationScanner(BaseScanner):
     def _scan_file_permissions(self, context: ScanContext) -> list[Finding]:
         """Check that sensitive files have restricted permissions."""
         findings: list[Finding] = []
+        if not posix_permissions_supported():
+            logger.debug(_NO_POSIX_MODES_MSG, "CFS-002 file permission check")
+            return findings
 
         for name, path in context.config_files.items():
             if name not in _SENSITIVE_FILE_NAMES:
@@ -318,6 +323,9 @@ class InstallationScanner(BaseScanner):
         """Check that agent config directories have restricted permissions (700)."""
         findings: list[Finding] = []
         target = context.target_path
+        if not posix_permissions_supported():
+            logger.debug(_NO_POSIX_MODES_MSG, "CFS-001 directory permission check")
+            return findings
 
         for dir_name in _SENSITIVE_DIR_NAMES:
             dir_path = target / dir_name
@@ -382,6 +390,9 @@ class InstallationScanner(BaseScanner):
     def _scan_deep_sensitive_paths(self, context: ScanContext) -> list[Finding]:
         """Check deep paths under agent config for insecure permissions."""
         findings: list[Finding] = []
+        if not posix_permissions_supported():
+            logger.debug(_NO_POSIX_MODES_MSG, "CFS-002 deep path permission check")
+            return findings
 
         config_dir = context.metadata.get("agent_config_dir")
         if not config_dir:
@@ -1627,6 +1638,9 @@ class InstallationScanner(BaseScanner):
         # --- CMM-001: Memory files writable by non-owner processes ---
         memory_files = ["memory.md", "memory.json", "conversation_history.json"]
         memory_dirs = [".openclaw", ".clawdbot"]
+        if not posix_permissions_supported():
+            logger.debug(_NO_POSIX_MODES_MSG, "CMM-001 memory file permission check")
+            memory_dirs = []
 
         for dir_name in memory_dirs:
             mem_dir = target / dir_name

@@ -61,6 +61,8 @@ Use these IDs in policy documents, audit reports, and CI/CD configuration.
 | CFS-001 | Agent config directory not 700 | High | ASI05 | Config directories (`.openclaw`, `.config/openclaw`) accessible to other users |
 | CFS-002 | Sensitive files world-readable | High | ASI05 | Auth profiles, session files, or `.env` files readable by group/other |
 
+CFS-001, CFS-002 and CMM-001 read POSIX mode bits. On Windows they are skipped, because NTFS access is governed by ACLs that `st_mode` does not expose and `chmod` does not change who can read a file there. `agentsec harden` reports the same and points to `icacls <path> /inheritance:r /grant:r %USERNAME%:F` instead.
+
 ## Built-in Safety Scanner (CSF)
 
 | ID | Check | Default Severity | OWASP | Detection |

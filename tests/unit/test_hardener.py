@@ -1,6 +1,7 @@
 """Tests for the hardener module."""
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -133,3 +134,48 @@ def test_all_profiles_have_valid_actions(profile):
         assert isinstance(action, HardenAction)
         assert action.key
         assert action.reason
+
+
+def _layout_with_sensitive_files(tmp_path):
+    (tmp_path / "openclaw.json").write_text(json.dumps({"version": "2026.2.12"}))
+    (tmp_path / ".env").write_text("SECRET=test123")
+    (tmp_path / ".openclaw").mkdir()
+    return tmp_path
+
+
+def _record_chmod(monkeypatch):
+    calls = []
+
+    def fake_chmod(path, mode, *args, **kwargs):
+        calls.append(Path(path).name)
+
+    monkeypatch.setattr("agentsec.hardener.os.chmod", fake_chmod)
+    return calls
+
+
+def test_harden_apply_skips_chmod_without_posix_modes(tmp_path, monkeypatch):
+    """Without POSIX mode bits the hardener leaves permissions alone and says so."""
+    monkeypatch.setattr("agentsec.hardener.posix_permissions_supported", lambda: False)
+    calls = _record_chmod(monkeypatch)
+    _layout_with_sensitive_files(tmp_path)
+
+    result = harden(tmp_path, "workstation", dry_run=False)
+
+    assert ".env" not in calls
+    assert ".openclaw" not in calls
+    assert "openclaw.json" not in calls
+    assert any("icacls" in w for w in result.warnings)
+
+
+def test_harden_apply_tightens_with_posix_modes(tmp_path, monkeypatch):
+    """With POSIX mode bits the hardener chmods the sensitive paths and adds no icacls note."""
+    monkeypatch.setattr("agentsec.hardener.posix_permissions_supported", lambda: True)
+    calls = _record_chmod(monkeypatch)
+    _layout_with_sensitive_files(tmp_path)
+
+    result = harden(tmp_path, "workstation", dry_run=False)
+
+    assert ".env" in calls
+    assert ".openclaw" in calls
+    assert "openclaw.json" in calls
+    assert not any("icacls" in w for w in result.warnings)
