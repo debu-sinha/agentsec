@@ -343,7 +343,8 @@ def test_agents_md_tampering(scanner, tmp_path):
 # -----------------------------------------------------------------------
 
 
-def test_openclaw_dir_world_accessible(scanner, tmp_path):
+def test_openclaw_dir_world_accessible(scanner, tmp_path, monkeypatch):
+    monkeypatch.setattr("agentsec.scanners.installation.posix_permissions_supported", lambda: True)
     openclaw_dir = tmp_path / ".openclaw"
     openclaw_dir.mkdir()
     os.chmod(openclaw_dir, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)

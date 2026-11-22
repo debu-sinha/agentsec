@@ -112,8 +112,9 @@ def test_registers_config_files(scanner, temp_agent_dir):
     assert "SOUL.md" in context.config_files
 
 
-def test_file_permissions_check(scanner, tmp_path):
+def test_file_permissions_check(scanner, tmp_path, monkeypatch):
     """Test detection of world-readable sensitive files."""
+    monkeypatch.setattr("agentsec.scanners.installation.posix_permissions_supported", lambda: True)
     config_path = tmp_path / ".env"
     config_path.write_text("SECRET=test123")
     os.chmod(config_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
@@ -276,8 +277,9 @@ def test_version_gte():
 # -----------------------------------------------------------------------
 
 
-def test_detects_world_writable_memory_file(scanner, tmp_path):
+def test_detects_world_writable_memory_file(scanner, tmp_path, monkeypatch):
     """CMM-001: Memory files writable by non-owner should flag."""
+    monkeypatch.setattr("agentsec.scanners.installation.posix_permissions_supported", lambda: True)
     oc_dir = tmp_path / ".openclaw"
     oc_dir.mkdir()
     mem_file = oc_dir / "memory.md"
@@ -494,3 +496,48 @@ def test_agents_md_real_code_execution_still_flagged(scanner, tmp_path):
     )
     findings = scanner.scan(ScanContext(target_path=tmp_path))
     assert any("Code execution instruction" in f.title for f in findings)
+
+
+# -----------------------------------------------------------------------
+# Platforms without POSIX permission bits (Windows)
+# -----------------------------------------------------------------------
+
+
+def test_permission_checks_skipped_without_posix_modes(scanner, tmp_path, monkeypatch):
+    """CFS-001, CFS-002 and CMM-001 stay silent when st_mode carries no permission bits."""
+    monkeypatch.setattr("agentsec.scanners.installation.posix_permissions_supported", lambda: False)
+    oc_dir = tmp_path / ".openclaw"
+    oc_dir.mkdir()
+    (tmp_path / "openclaw.json").write_text(json.dumps({"version": "2026.2.12"}))
+    env_file = tmp_path / ".env"
+    env_file.write_text("SECRET=test123")
+    mem_file = oc_dir / "memory.md"
+    mem_file.write_text("Agent memory content")
+    world_open = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IWOTH
+    os.chmod(oc_dir, world_open | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    os.chmod(env_file, world_open)
+    os.chmod(mem_file, world_open)
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    perm_findings = [f for f in findings if f.category == FindingCategory.INSECURE_PERMISSIONS]
+    assert perm_findings == []
+    assert not any((f.check_id or "") == "CMM-001" for f in findings)
+
+
+def test_permission_checks_run_with_posix_modes(scanner, tmp_path, monkeypatch):
+    """The same layout produces permission findings once mode bits are trusted."""
+    monkeypatch.setattr("agentsec.scanners.installation.posix_permissions_supported", lambda: True)
+    oc_dir = tmp_path / ".openclaw"
+    oc_dir.mkdir()
+    (tmp_path / "openclaw.json").write_text(json.dumps({"version": "2026.2.12"}))
+    env_file = tmp_path / ".env"
+    env_file.write_text("SECRET=test123")
+    os.chmod(env_file, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
+
+    context = ScanContext(target_path=tmp_path)
+    findings = scanner.scan(context)
+
+    perm_findings = [f for f in findings if f.category == FindingCategory.INSECURE_PERMISSIONS]
+    assert any(".env" in f.title for f in perm_findings)
