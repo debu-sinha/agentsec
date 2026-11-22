@@ -2,6 +2,24 @@
 
 All notable changes to agentsec are documented here.
 
+## [0.5.2] - 2026-11-21
+
+Windows false-positive fix and wider dependency bounds.
+
+### Fixed
+
+- Skip the POSIX permission checks (CFS-001, CFS-002, CMM-001) on Windows.
+  CPython builds `st_mode` there from the read-only attribute and mirrors the
+  owner bits to group and other, so every writable file looked world-readable
+  and `agentsec harden` logged chmod changes that changed nothing. The hardener
+  now leaves permissions alone on Windows and points at `icacls` instead.
+  Scanning the hardened demo fixture on Windows drops from 3 findings to 1.
+
+### Changed
+
+- Allow rich 14 and 15 (`rich>=13.0,<16`). CLI output is unchanged under
+  rich 13.9.4 and 15.0.0. Dev bounds widened to mypy 2.x and pre-commit 4.x.
+
 ## [0.5.1] - 2026-10-07
 
 False-positive reduction from a deeper pass over the top-50 MCP ecosystem scan,
