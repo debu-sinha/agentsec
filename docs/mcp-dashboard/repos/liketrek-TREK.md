@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-100%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [liketrek/TREK](https://github.com/liketrek/TREK)
-**Stars:** 15,589
-**Last scan:** 2026-11-16
+**Stars:** 15,895
+**Last scan:** 2026-11-23
 
 ## Severity Summary
 
@@ -18,4 +18,4 @@ No findings detected.
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-16 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-23 by [agentsec](https://github.com/debu-sinha/agentsec)*

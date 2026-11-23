@@ -1,29 +1,30 @@
 # TabularisDB/tabularis
 
-![Grade](https://img.shields.io/badge/Grade-C-yellow?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-79%2F100-yellow?style=for-the-badge)
+![Grade](https://img.shields.io/badge/Grade-D-orange?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-64%2F100-orange?style=for-the-badge)
 
 **Repository:** [TabularisDB/tabularis](https://github.com/TabularisDB/tabularis)
-**Stars:** 5,413
-**Last scan:** 2026-11-09
+**Stars:** 5,526
+**Last scan:** 2026-11-23
 
 ## Severity Summary
 
 | Severity | Count |
 |----------|------:|
+| 🔴 Critical | **1** |
 | 🟡 Medium | **2** |
-| 🟢 Low | **226** |
+| 🟢 Low | **236** |
 | 🔵 Info | **1** |
-| **Total** | **229** |
+| **Total** | **240** |
 
 ## Findings
 
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in ci.yml | Rotate and secure the Secret Keyword |
-| 3 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
-| 4 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
-| 5 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
+| 2 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionStringParser.test.ts | Rotate and secure the Basic Auth Credentials |
+| 3 | 🟢 Low | Exposed Token | Secret Keyword found in rpc_tests.rs | Rotate and secure the Secret Keyword |
+| 4 | 🟢 Low | Exposed Token | Secret Keyword found in rpc_tests.rs | Rotate and secure the Secret Keyword |
+| 5 | 🟢 Low | Exposed Token | Basic Auth Credentials found in provisioning_tests.rs | Rotate and secure the Basic Auth Credentials |
 | 6 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
 | 7 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
 | 8 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
@@ -50,17 +51,17 @@
 | 29 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
 | 30 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
 | 31 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
-| 32 | 🟢 Low | Exposed Token | Basic Auth Credentials found in commands.rs | Rotate and secure the Basic Auth Credentials |
-| 33 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 34 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 35 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 36 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 37 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 38 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 39 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 40 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 41 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 42 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 32 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
+| 33 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
+| 34 | 🟢 Low | Exposed Token | Secret Keyword found in es.json | Rotate and secure the Secret Keyword |
+| 35 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
+| 36 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
+| 37 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
+| 38 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
+| 39 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
+| 40 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
+| 41 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
+| 42 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
 | 43 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
 | 44 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
 | 45 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
@@ -73,45 +74,45 @@
 | 52 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
 | 53 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
 | 54 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
-| 55 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 56 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 57 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 58 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 59 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 60 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 61 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 62 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 63 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 64 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 65 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 66 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 67 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 68 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 69 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 70 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 71 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 72 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 73 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
-| 74 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionStringParser.test.ts | Rotate and secure the Basic Auth Credentials |
-| 75 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionErrors.test.ts | Rotate and secure the Basic Auth Credentials |
-| 76 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 77 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 78 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 79 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 80 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 81 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 82 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 83 | 🟢 Low | Exposed Token | Secret Keyword found in ko.json | Rotate and secure the Secret Keyword |
-| 84 | 🟢 Low | Exposed Token | Secret Keyword found in rpc_tests.rs | Rotate and secure the Secret Keyword |
-| 85 | 🟢 Low | Exposed Token | Secret Keyword found in rpc_tests.rs | Rotate and secure the Secret Keyword |
-| 86 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 87 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 88 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 89 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 90 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 91 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 92 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 93 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 55 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 56 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 57 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 58 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 59 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 60 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 61 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 62 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 63 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 64 | 🟢 Low | Exposed Token | Secret Keyword found in pt-BR.json | Rotate and secure the Secret Keyword |
+| 65 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in tauri.conf.json | Rotate and secure the Base64 High Entropy String |
+| 66 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
+| 67 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
+| 68 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
+| 69 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
+| 70 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
+| 71 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
+| 72 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
+| 73 | 🟢 Low | Exposed Token | Basic Auth Credentials found in connectionErrors.test.ts | Rotate and secure the Basic Auth Credentials |
+| 74 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 75 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 76 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 77 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 78 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 79 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 80 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 81 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 82 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 83 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 84 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 85 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 86 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 87 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 88 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 89 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 90 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 91 | 🟢 Low | Exposed Token | Basic Auth Credentials found in tests.rs | Rotate and secure the Basic Auth Credentials |
+| 92 | 🟢 Low | Exposed Token | Basic Auth Credentials found in managed_mode_tests.rs | Rotate and secure the Basic Auth Credentials |
+| 93 | 🔴 Critical | Exposed Token | Private Key found in mod.rs | Rotate and secure the Private Key |
 | 94 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
 | 95 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
 | 96 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
@@ -134,19 +135,19 @@
 | 113 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
 | 114 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
 | 115 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
-| 116 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
-| 117 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
-| 118 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
-| 119 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
-| 120 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
-| 121 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
-| 122 | 🟢 Low | Exposed Token | Secret Keyword found in ru.json | Rotate and secure the Secret Keyword |
-| 123 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
-| 124 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
-| 125 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
-| 126 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
-| 127 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
-| 128 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
+| 116 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 117 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 118 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 119 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 120 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 121 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 122 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 123 | 🟢 Low | Exposed Token | Secret Keyword found in vi.json | Rotate and secure the Secret Keyword |
+| 124 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
+| 125 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
+| 126 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
+| 127 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
+| 128 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
 | 129 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
 | 130 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
 | 131 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
@@ -161,36 +162,36 @@
 | 140 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
 | 141 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
 | 142 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
-| 143 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
-| 144 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
-| 145 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
-| 146 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
-| 147 | 🟢 Low | Exposed Token | Secret Keyword found in de.json | Rotate and secure the Secret Keyword |
-| 148 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 149 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 150 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 151 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 152 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 153 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 154 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
-| 155 | 🟢 Low | Exposed Token | Secret Keyword found in docker-compose.yml | Rotate and secure the Secret Keyword |
-| 156 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 157 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 158 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 159 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 160 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 161 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 162 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 163 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 164 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 165 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 166 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 167 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 168 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 169 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 170 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 171 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
-| 172 | 🟢 Low | Exposed Token | Secret Keyword found in tl.json | Rotate and secure the Secret Keyword |
+| 143 | 🟡 Medium | Exposed Token | Secret Keyword found in ci.yml | Rotate and secure the Secret Keyword |
+| 144 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 145 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 146 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 147 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 148 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 149 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 150 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 151 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 152 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 153 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 154 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 155 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 156 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 157 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 158 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 159 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
+| 160 | 🟢 Low | Exposed Token | Secret Keyword found in docker-compose.yml | Rotate and secure the Secret Keyword |
+| 161 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
+| 162 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
+| 163 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
+| 164 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
+| 165 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
+| 166 | 🟢 Low | Exposed Token | Secret Keyword found in zh-TW.json | Rotate and secure the Secret Keyword |
+| 167 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
+| 168 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
+| 169 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
+| 170 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
+| 171 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
+| 172 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
 | 173 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
 | 174 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
 | 175 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
@@ -212,50 +213,61 @@
 | 191 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
 | 192 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
 | 193 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
-| 194 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
-| 195 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
-| 196 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
-| 197 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
-| 198 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
-| 199 | 🟢 Low | Exposed Token | Secret Keyword found in fr.json | Rotate and secure the Secret Keyword |
+| 194 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
+| 195 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
+| 196 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
+| 197 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
+| 198 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
+| 199 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
 | 200 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
 | 201 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
 | 202 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
-| 203 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
-| 204 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
-| 205 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
-| 206 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
-| 207 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
-| 208 | 🟢 Low | Exposed Token | Secret Keyword found in ja.json | Rotate and secure the Secret Keyword |
-| 209 | 🟡 Medium | Exposed Token | Base64 High Entropy String found in tauri.conf.json | Rotate and secure the Base64 High Entropy String |
-| 210 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 211 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 212 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 213 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 214 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 215 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 216 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 217 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 218 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 219 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 220 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 221 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 222 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 223 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 224 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 225 | 🟢 Low | Exposed Token | Secret Keyword found in en.json | Rotate and secure the Secret Keyword |
-| 226 | 🟢 Low | Exposed Token | Generic Connection String found in connectionErrors.test.ts | Rotate and secure the Generic Connection String |
-| 227 | 🟢 Low | Exposed Token | Generic Connection String found in connectionStringParser.test.ts | Rotate and secure the Generic Connection String |
-| 228 | 🟢 Low | Exposed Token | Generic Connection String found in connectionStringParser.test.ts | Rotate and secure the Generic Connection String |
-| 229 | 🟢 Low | Exposed Token | Generic Connection String found in connectionStringParser.test.ts | Rotate and secure the Generic Connection String |
+| 203 | 🟢 Low | Exposed Token | Basic Auth Credentials found in commands.rs | Rotate and secure the Basic Auth Credentials |
+| 204 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 205 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 206 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 207 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 208 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 209 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 210 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 211 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 212 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 213 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 214 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 215 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 216 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 217 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 218 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 219 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 220 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 221 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 222 | 🟢 Low | Exposed Token | Secret Keyword found in it.json | Rotate and secure the Secret Keyword |
+| 223 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 224 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 225 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 226 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 227 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 228 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 229 | 🟢 Low | Exposed Token | Secret Keyword found in zh.json | Rotate and secure the Secret Keyword |
+| 230 | 🟢 Low | Exposed Token | Basic Auth Credentials found in rpc_managed_tests.rs | Rotate and secure the Basic Auth Credentials |
+| 231 | 🟢 Low | Exposed Token | Generic Connection String found in tunnels_tests.rs | Rotate and secure the Generic Connection String |
+| 232 | 🟢 Low | Exposed Token | Generic Connection String found in tunnels_tests.rs | Rotate and secure the Generic Connection String |
+| 233 | 🟢 Low | Exposed Token | Generic Connection String found in importer_tests.rs | Rotate and secure the Generic Connection String |
+| 234 | 🟢 Low | Exposed Token | Generic Connection String found in managed_mode_tests.rs | Rotate and secure the Generic Connection String |
+| 235 | 🟢 Low | Exposed Token | Generic Connection String found in tests.rs | Rotate and secure the Generic Connection String |
+| 236 | 🟢 Low | Exposed Token | Generic Connection String found in tests.rs | Rotate and secure the Generic Connection String |
+| 237 | 🟢 Low | Exposed Token | Generic Connection String found in connectionErrors.test.ts | Rotate and secure the Generic Connection String |
+| 238 | 🟢 Low | Exposed Token | Generic Connection String found in connectionStringParser.test.ts | Rotate and secure the Generic Connection String |
+| 239 | 🟢 Low | Exposed Token | Generic Connection String found in connectionStringParser.test.ts | Rotate and secure the Generic Connection String |
+| 240 | 🟢 Low | Exposed Token | Generic Connection String found in connectionStringParser.test.ts | Rotate and secure the Generic Connection String |
 
 ## Categories
 
 | Category | Count |
 |----------|------:|
-| Exposed Token | 228 |
+| Exposed Token | 239 |
 | Outdated Version | 1 |
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-09 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-23 by [agentsec](https://github.com/debu-sinha/agentsec)*

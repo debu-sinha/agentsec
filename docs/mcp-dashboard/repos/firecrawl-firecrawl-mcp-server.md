@@ -3,8 +3,8 @@
 ![Grade](https://img.shields.io/badge/Grade-A-brightgreen?style=for-the-badge) ![Score](https://img.shields.io/badge/Score-96%2F100-brightgreen?style=for-the-badge)
 
 **Repository:** [firecrawl/firecrawl-mcp-server](https://github.com/firecrawl/firecrawl-mcp-server)
-**Stars:** 7,835
-**Last scan:** 2026-11-16
+**Stars:** 7,890
+**Last scan:** 2026-11-23
 
 ## Severity Summary
 
@@ -20,8 +20,8 @@
 | # | Severity | Category | Title | Remediation |
 |--:|:--------:|----------|-------|-------------|
 | 1 | 🔵 Info | Outdated Version | Could not determine agent version | Ensure agent is updated to latest version |
-| 2 | 🟢 Low | Exposed Token | Base64 High Entropy String found in jobs-auto-shapes.json | Rotate and secure the Base64 High Entropy String |
-| 3 | 🟡 Medium | Exposed Token | Secret Keyword found in smithery.yaml | Rotate and secure the Secret Keyword |
+| 2 | 🟡 Medium | Exposed Token | Secret Keyword found in smithery.yaml | Rotate and secure the Secret Keyword |
+| 3 | 🟢 Low | Exposed Token | Base64 High Entropy String found in jobs-auto-shapes.json | Rotate and secure the Base64 High Entropy String |
 
 ## Categories
 
@@ -32,4 +32,4 @@
 
 ---
 
-[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-16 by [agentsec](https://github.com/debu-sinha/agentsec)*
+[Back to Dashboard](../mcp-security-grades.md) | *Scanned on 2026-11-23 by [agentsec](https://github.com/debu-sinha/agentsec)*
