@@ -31,6 +31,7 @@ from agentsec.models.findings import (
     Remediation,
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
+from agentsec.utils.textio import read_text_lossy
 
 logger = logging.getLogger(__name__)
 
@@ -289,7 +290,7 @@ class McpScanner(BaseScanner):
             main_config = context.config_files.get(config_name)
             if main_config and main_config.exists():
                 try:
-                    data = json.loads(main_config.read_text())
+                    data = json.loads(read_text_lossy(main_config))
                     mcp_section = (
                         data.get("mcpServers")
                         or data.get("mcp_servers")
@@ -304,7 +305,7 @@ class McpScanner(BaseScanner):
         for candidate in candidates:
             if candidate.exists():
                 try:
-                    data = json.loads(candidate.read_text())
+                    data = json.loads(read_text_lossy(candidate))
                     configs.append((candidate, data))
                 except (json.JSONDecodeError, OSError):
                     logger.debug("Could not parse MCP config: %s", candidate)
@@ -701,7 +702,7 @@ class McpScanner(BaseScanner):
             return findings
 
         try:
-            pins_data = json.loads(pins_path.read_text())
+            pins_data = json.loads(read_text_lossy(pins_path))
         except (json.JSONDecodeError, OSError):
             logger.debug("Could not read pins file: %s", pins_path)
             return findings
@@ -787,7 +788,7 @@ class McpScanner(BaseScanner):
         for tool_key, digest in sorted(tool_hashes.items()):
             pins_data["tools"][tool_key] = {"hash": digest}
 
-        pins_path.write_text(json.dumps(pins_data, indent=2) + "\n")
+        pins_path.write_text(json.dumps(pins_data, indent=2) + "\n", encoding="utf-8")
         return pins_path
 
     def _check_tool_definition(

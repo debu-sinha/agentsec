@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from agentsec.models.findings import Finding
+from agentsec.utils.textio import read_text_lossy
 
 DEFAULT_BASELINE_PATH = ".agentsec-baseline.json"
 _BASELINE_VERSION = 1
@@ -41,7 +42,7 @@ def create_baseline(findings: list[Finding], path: Path | None = None) -> Path:
         "findings": entries,
     }
 
-    path.write_text(json.dumps(baseline, indent=2) + "\n")
+    path.write_text(json.dumps(baseline, indent=2) + "\n", encoding="utf-8")
     return path
 
 
@@ -54,7 +55,7 @@ def load_baseline(path: Path) -> dict[str, dict[str, str]]:
         return {}
 
     try:
-        data = json.loads(path.read_text())
+        data = json.loads(read_text_lossy(path))
         if not isinstance(data, dict):
             return {}
         result: dict[str, dict[str, str]] = data.get("findings", {})

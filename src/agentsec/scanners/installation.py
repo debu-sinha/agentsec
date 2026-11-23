@@ -30,6 +30,7 @@ from agentsec.models.findings import (
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
 from agentsec.utils import posix_permissions_supported, sanitize_secret
+from agentsec.utils.textio import read_text_lossy
 
 logger = logging.getLogger(__name__)
 
@@ -448,7 +449,7 @@ class InstallationScanner(BaseScanner):
                 if file_size > self.config.extra.get("max_file_size", 10_000_000):
                     continue
 
-                content = path.read_text(errors="replace")
+                content = read_text_lossy(path)
                 context.files_scanned += 1
 
                 # Determine if this is a documentation/example file
@@ -1100,7 +1101,7 @@ class InstallationScanner(BaseScanner):
         findings: list[Finding] = []
 
         try:
-            data = json.loads(exec_path.read_text())
+            data = json.loads(read_text_lossy(exec_path))
         except (json.JSONDecodeError, OSError):
             return findings
 
@@ -1590,7 +1591,7 @@ class InstallationScanner(BaseScanner):
                 continue
 
             try:
-                content = file_path.read_text()
+                content = read_text_lossy(file_path)
             except OSError:
                 continue
 
@@ -1956,7 +1957,7 @@ class InstallationScanner(BaseScanner):
                 logger.warning("Config file too large, skipping: %s", config_path)
                 context.metadata[cache_key] = None
                 return None
-            data: dict = json.loads(config_path.read_text())
+            data: dict = json.loads(read_text_lossy(config_path))
             context.metadata[cache_key] = data
             return data
         except json.JSONDecodeError:
@@ -2007,7 +2008,7 @@ class InstallationScanner(BaseScanner):
             config_path = context.config_files.get(config_name)
             if config_path and config_path.exists():
                 try:
-                    data = json.loads(config_path.read_text())
+                    data = json.loads(read_text_lossy(config_path))
                     version = data.get("version")
                     if version:
                         return str(version)
@@ -2020,7 +2021,7 @@ class InstallationScanner(BaseScanner):
 
         if pkg_json.exists():
             try:
-                data = json.loads(pkg_json.read_text())
+                data = json.loads(read_text_lossy(pkg_json))
                 ver = data.get("version")
                 return str(ver) if ver is not None else None
             except (json.JSONDecodeError, OSError):
@@ -2106,7 +2107,7 @@ class InstallationScanner(BaseScanner):
                 continue
 
             try:
-                data = json.loads(settings_path.read_text())
+                data = json.loads(read_text_lossy(settings_path))
             except (json.JSONDecodeError, OSError):
                 continue
 
@@ -2147,7 +2148,7 @@ class InstallationScanner(BaseScanner):
             for hook_file in hooks_dir.iterdir():
                 if hook_file.is_file() and not hook_file.name.startswith("."):
                     try:
-                        content = hook_file.read_text(errors="replace")
+                        content = read_text_lossy(hook_file)
                         if len(content) > 100_000:
                             continue
                         findings.extend(
@@ -2172,7 +2173,7 @@ class InstallationScanner(BaseScanner):
         ]
         if project_settings.exists():
             try:
-                data = json.loads(project_settings.read_text())
+                data = json.loads(read_text_lossy(project_settings))
                 perms = data.get("permissions", {})
                 for override in user_overrides:
                     if override in str(data):

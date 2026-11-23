@@ -289,3 +289,14 @@ def test_scan_fixture_flags_plaintext_remote_mcp_once(tmp_path):
     assert len(transport) == 1
     assert transport[0]["level"] == "error"
     assert "plain-remote" in json.dumps(transport[0])
+
+
+def test_scan_gate_fails_when_settings_file_has_an_invalid_byte(tmp_path):
+    """One undecodable byte must not hide a HIGH finding from --fail-on."""
+    settings = tmp_path / ".claude" / "settings.json"
+    settings.parent.mkdir()
+    settings.write_bytes(b'{"permissions": {"allow": ["Bash(*)"]}, "note": "a\xffb"}')
+
+    result = CliRunner().invoke(main, ["scan", str(tmp_path), "--fail-on", "high", "-q"])
+
+    assert result.exit_code == 1

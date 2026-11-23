@@ -249,9 +249,11 @@ def harden(
     result.config_path = config_path
 
     # Load current config
+    # Decode strictly. This file is rewritten below, so a byte that cannot be
+    # decoded is a reason to stop, not something to replace.
     try:
-        config_data = json.loads(config_path.read_text())
-    except (json.JSONDecodeError, OSError) as e:
+        config_data = json.loads(config_path.read_text(encoding="utf-8-sig"))
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError) as e:
         result.errors.append(f"Failed to read config: {e}")
         return result
 
@@ -277,7 +279,7 @@ def harden(
                 os.chmod(backup, stat.S_IRUSR | stat.S_IWUSR)
             except OSError:
                 logger.debug("Could not restrict backup permissions: %s", backup)
-            config_path.write_text(json.dumps(config_data, indent=2) + "\n")
+            config_path.write_text(json.dumps(config_data, indent=2) + "\n", encoding="utf-8")
             logger.info("Config updated: %s (backup: %s)", config_path, backup)
         except OSError as e:
             result.errors.append(f"Failed to write config: {e}")

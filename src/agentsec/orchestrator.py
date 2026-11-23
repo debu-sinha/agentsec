@@ -20,6 +20,7 @@ from agentsec.models.report import ScanReport, ScanSummary
 from agentsec.scanners.base import ScanContext
 from agentsec.scanners.registry import get_all_scanners
 from agentsec.utils.detection import detect_agent_type
+from agentsec.utils.textio import read_text_lossy
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ def _filter_inline_suppressed(findings: list) -> list:
             fpath = Path(finding.file_path)
             if fpath not in file_cache:
                 try:
-                    file_cache[fpath] = fpath.read_text(errors="replace").splitlines()
+                    file_cache[fpath] = read_text_lossy(fpath).splitlines()
                 except OSError:
                     file_cache[fpath] = []
             lines = file_cache[fpath]

@@ -22,6 +22,7 @@ from agentsec.models.findings import (
     FindingSeverity,
     Remediation,
 )
+from agentsec.utils.textio import read_text_lossy
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,7 @@ def _load_ignore_patterns(target: Path) -> list[str]:
     if not ignore_file.exists():
         return []
     try:
-        lines = ignore_file.read_text().splitlines()
+        lines = read_text_lossy(ignore_file).splitlines()
     except OSError:
         return []
     patterns: list[str] = []

@@ -24,6 +24,7 @@ from agentsec.models.findings import (
     FindingSeverity,
     Remediation,
 )
+from agentsec.utils.textio import read_text_lossy
 
 logger = logging.getLogger(__name__)
 
@@ -451,7 +452,7 @@ def _check_npm_install_hooks(extract_dir: Path, package_name: str) -> list[Findi
 
     for pkg_json in extract_dir.rglob("package.json"):
         try:
-            data = json.loads(pkg_json.read_text(encoding="utf-8", errors="replace"))
+            data = json.loads(read_text_lossy(pkg_json))
         except (json.JSONDecodeError, OSError):
             continue
 

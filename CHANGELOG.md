@@ -18,6 +18,21 @@ All notable changes to agentsec are documented here.
   probe raises an unexpected error. The HTTP client can quote the request
   header in the error text, and that header carries the credential. The log
   now names the probe and the exception type only.
+- A scanned file with bytes that don't decode can't take a whole scanner out
+  of the run anymore. agentsec read configs in the platform encoding, so one
+  invalid byte in `.claude/settings.json` or an MCP config raised inside the
+  scanner, the scanner was reported as skipped at LOW severity, and
+  `--fail-on high` passed with the real findings missing. On Windows a curly
+  quote or any non-Latin text in a UTF-8 file had the same effect. Scanned
+  files are now read as UTF-8, undecodable bytes are replaced, and a byte
+  order mark is dropped, so a config that starts with one is scanned instead
+  of ignored.
+- `agentsec harden --apply` on Windows keeps non-ASCII values in
+  `openclaw.json` intact. It used to read the UTF-8 file in the legacy code
+  page and write the mangled text back. The hardener now reads and writes
+  UTF-8, and it refuses a config it can't decode instead of rewriting it.
+- Reports, baselines, tool pins and policy files are read and written as
+  UTF-8 on every platform.
 
 ## [0.5.2] - 2026-11-21
 

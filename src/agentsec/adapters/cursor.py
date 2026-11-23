@@ -18,6 +18,7 @@ from agentsec.adapters.base import (
     McpServerConfig,
     RuleConfig,
 )
+from agentsec.utils.textio import read_text_lossy
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ _PROJECT_TASKS = [
 def _read_json(path: Path) -> dict[str, Any] | None:
     """Read and parse a JSON file, returning None on any error."""
     try:
-        data: dict[str, Any] = json.loads(path.read_text())
+        data: dict[str, Any] = json.loads(read_text_lossy(path))
         return data
     except json.JSONDecodeError:
         logger.debug("Malformed JSON in %s", path)
@@ -63,7 +64,7 @@ def _read_json(path: Path) -> dict[str, Any] | None:
 def _read_text(path: Path) -> str | None:
     """Read a text file, returning None on any error."""
     try:
-        return path.read_text(errors="replace")
+        return read_text_lossy(path)
     except OSError as e:
         logger.debug("Could not read %s: %s", path, e)
         return None

@@ -30,6 +30,6 @@ class JsonReporter:
         json_str = json.dumps(data, indent=2, default=str)
 
         if output_path:
-            output_path.write_text(json_str)
+            output_path.write_text(json_str, encoding="utf-8")
 
         return json_str
