@@ -2230,6 +2230,8 @@ class InstallationScanner(BaseScanner):
                         )
                     )
             except (json.JSONDecodeError, OSError):
+                # A project settings file that cannot be read or parsed has
+                # no overrides to report.
                 pass
 
         return findings

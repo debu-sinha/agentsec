@@ -1,9 +1,14 @@
 """Tests for framework adapters (Claude Code, Cursor, Windsurf, VS Code Copilot)."""
 
 import json
+from pathlib import Path
 
 import pytest
 
+from agentsec.adapters import claude_code as claude_code_module
+from agentsec.adapters import cursor as cursor_module
+from agentsec.adapters import vscode_copilot as vscode_copilot_module
+from agentsec.adapters import windsurf as windsurf_module
 from agentsec.adapters.base import (
     FrameworkConfig,
     PermissionsConfig,
@@ -1036,3 +1041,26 @@ def test_mcp_server_filters_non_string_env(claude_adapter, tmp_path, monkeypatch
 
     config = claude_adapter.parse(tmp_path)
     assert config.mcp_servers[0].env == {"GOOD": "value"}
+
+
+# ---------------------------------------------------------------------------
+# File read helpers: a permission error is reported as "no data"
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "module",
+    [claude_code_module, cursor_module, vscode_copilot_module, windsurf_module],
+    ids=["claude_code", "cursor", "vscode_copilot", "windsurf"],
+)
+@pytest.mark.parametrize("reader", ["_read_json", "_read_text"])
+def test_read_helpers_return_none_on_permission_error(module, reader, tmp_path, monkeypatch):
+    target = tmp_path / "settings.json"
+    target.write_text("{}")
+
+    def deny(self, *args, **kwargs):
+        raise PermissionError(13, "Permission denied", str(self))
+
+    monkeypatch.setattr(Path, "read_text", deny)
+
+    assert getattr(module, reader)(target) is None

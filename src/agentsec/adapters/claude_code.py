@@ -73,9 +73,6 @@ def _read_json(path: Path) -> dict[str, Any] | None:
     except OSError as e:
         logger.debug("Could not read %s: %s", path, e)
         return None
-    except PermissionError:
-        logger.debug("Permission denied reading %s", path)
-        return None
 
 
 def _read_text(path: Path) -> str | None:
@@ -84,9 +81,6 @@ def _read_text(path: Path) -> str | None:
         return path.read_text(errors="replace")
     except OSError as e:
         logger.debug("Could not read %s: %s", path, e)
-        return None
-    except PermissionError:
-        logger.debug("Permission denied reading %s", path)
         return None
 
 
