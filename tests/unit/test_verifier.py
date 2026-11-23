@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import time
 from unittest.mock import patch
 
@@ -150,6 +151,20 @@ def test_verify_network_error(mock_urlopen):
     result = verify_secret("GitHub Token", "ghp_test123")
     assert result["verified"] == "error"
     assert "network_error" in result["verify_method"]
+
+
+def test_verify_keeps_secret_out_of_log_when_probe_raises(caplog):
+    """An exception raised by a probe must not put the credential in the log."""
+    secret = "ghp_" + "a" * 36
+
+    # A newline makes http.client refuse the header before it opens a
+    # connection, and the ValueError text carries the whole header value.
+    with caplog.at_level(logging.DEBUG, logger="agentsec.utils.verifier"):
+        result = verify_secret("GitHub Token", f"{secret}\nX-Injected: 1")
+
+    assert result == {"verified": "error", "verify_method": "exception:ValueError"}
+    assert secret not in caplog.text
+    assert "_verify_github raised ValueError" in caplog.text
 
 
 # ---------------------------------------------------------------------------

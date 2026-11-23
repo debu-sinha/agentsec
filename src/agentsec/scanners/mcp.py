@@ -469,8 +469,10 @@ class McpScanner(BaseScanner):
                         steps=[
                             "Replace the shell wrapper with a direct executable + args",
                             "Move any setup logic into the server itself or a vetted script",
-                            "Remove pipes (|), chained operators (; && ||), and "
-                            "command substitution ($(...), backticks) from the command",
+                            (
+                                "Remove pipes (|), chained operators (; && ||), and "
+                                "command substitution ($(...), backticks) from the command"
+                            ),
                             "Run the server under a sandbox with least privilege",
                         ],
                     ),
@@ -552,8 +554,10 @@ class McpScanner(BaseScanner):
                     steps=[
                         f"Change the URL scheme from {scheme}:// to {secure_scheme}://",
                         "Make sure the server presents a certificate the client trusts",
-                        "If the server cannot do TLS, reach it through an SSH tunnel or "
-                        "VPN and point the config at the loopback end of the tunnel",
+                        (
+                            "If the server cannot do TLS, reach it through an SSH tunnel or "
+                            "VPN and point the config at the loopback end of the tunnel"
+                        ),
                     ],
                 ),
                 owasp_ids=["ASI05", "ASI03"],

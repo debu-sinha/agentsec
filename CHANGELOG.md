@@ -14,6 +14,10 @@ All notable changes to agentsec are documented here.
   finding carries `check_id` `CMCP-004` and names the TLS scheme to switch to.
 - CMCP-002 and CMCP-004 also read the endpoint from `httpUrl` (Gemini CLI
   streamable HTTP), not only `url`.
+- `agentsec scan --verify` keeps the credential out of the debug log when a
+  probe raises an unexpected error. The HTTP client can quote the request
+  header in the error text, and that header carries the credential. The log
+  now names the probe and the exception type only.
 
 ## [0.5.2] - 2026-11-21
 

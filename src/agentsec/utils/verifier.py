@@ -74,6 +74,7 @@ def compute_passive_hints(
         else:
             hints["hint_file_age"] = "moderate"
     except OSError:
+        # The file age is only a hint. Leave it out when stat fails.
         pass
 
     # --- File type context ---
@@ -99,6 +100,7 @@ def compute_passive_hints(
                     hints["hint_context"] = f"near_revocation_word:{word}"
                     break
         except OSError:
+            # The nearby lines are only a hint. Skip them when the read fails.
             pass
 
     # --- Overall risk level ---
@@ -149,7 +151,9 @@ def verify_secret(secret_type: str, secret_value: str) -> dict[str, str]:
         result: dict[str, str] = fn(secret_value)
         return result
     except Exception as e:
-        logger.debug("Verification failed for %s: %s", secret_type, e)
+        # Log the exception type only. Its text can quote the request header
+        # that carried the credential.
+        logger.debug("%s raised %s", verifier_name, type(e).__name__)
         return {"verified": "error", "verify_method": f"exception:{type(e).__name__}"}
 
 
