@@ -78,7 +78,7 @@ class SarifReporter:
         json_str = json.dumps(sarif, indent=2, default=str)
 
         if output_path:
-            output_path.write_text(json_str)
+            output_path.write_text(json_str, encoding="utf-8")
 
         return json_str
 

@@ -24,6 +24,7 @@ from agentsec.models.findings import (
     Remediation,
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
+from agentsec.utils.textio import read_text_lossy
 
 logger = logging.getLogger(__name__)
 
@@ -358,7 +359,7 @@ class SkillAnalyzer(BaseScanner):
             if not config_path.exists():
                 continue
             try:
-                data = json.loads(config_path.read_text())
+                data = json.loads(read_text_lossy(config_path))
                 skills_config = data.get("skills", {})
                 load_config = skills_config.get("load", {})
                 extra = load_config.get("extraDirs", [])
@@ -423,7 +424,7 @@ class SkillAnalyzer(BaseScanner):
             context.files_scanned += 1
             # Read file once and pass content to both analysis methods
             try:
-                content = source_file.read_text(errors="replace")
+                content = read_text_lossy(source_file)
             except OSError:
                 continue
             if source_file.suffix == ".py":
@@ -474,7 +475,7 @@ class SkillAnalyzer(BaseScanner):
                 continue
 
             try:
-                data = json.loads(manifest_path.read_text())
+                data = json.loads(read_text_lossy(manifest_path))
             except (json.JSONDecodeError, OSError):
                 continue
 
@@ -556,7 +557,7 @@ class SkillAnalyzer(BaseScanner):
         findings: list[Finding] = []
 
         try:
-            source = content if content is not None else file_path.read_text(errors="replace")
+            source = content if content is not None else read_text_lossy(file_path)
             tree = ast.parse(source, filename=str(file_path))
         except (SyntaxError, OSError):
             return findings
@@ -635,7 +636,7 @@ class SkillAnalyzer(BaseScanner):
 
         if content is None:
             try:
-                content = file_path.read_text(errors="replace")
+                content = read_text_lossy(file_path)
             except OSError:
                 return findings
 
@@ -732,7 +733,7 @@ class SkillAnalyzer(BaseScanner):
         findings: list[Finding] = []
 
         try:
-            lines = req_path.read_text().strip().splitlines()
+            lines = read_text_lossy(req_path).strip().splitlines()
         except OSError:
             return findings
 
@@ -775,7 +776,7 @@ class SkillAnalyzer(BaseScanner):
         findings: list[Finding] = []
 
         try:
-            data = json.loads(pkg_path.read_text())
+            data = json.loads(read_text_lossy(pkg_path))
         except (json.JSONDecodeError, OSError):
             return findings
 
@@ -817,7 +818,7 @@ class SkillAnalyzer(BaseScanner):
         findings: list[Finding] = []
 
         try:
-            content = file_path.read_text(errors="replace")
+            content = read_text_lossy(file_path)
         except OSError:
             return findings
 
@@ -897,7 +898,7 @@ class SkillAnalyzer(BaseScanner):
 
         for md_file in md_files:
             try:
-                content = md_file.read_text(errors="replace")
+                content = read_text_lossy(md_file)
             except OSError:
                 continue
 

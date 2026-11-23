@@ -31,6 +31,7 @@ from agentsec.models.findings import (
 )
 from agentsec.scanners.base import BaseScanner, ScanContext
 from agentsec.utils import sanitize_secret
+from agentsec.utils.textio import read_text_lossy
 from agentsec.utils.verifier import compute_passive_hints, verify_secret
 
 logger = logging.getLogger(__name__)
@@ -723,7 +724,7 @@ class CredentialScanner(BaseScanner):
             # Read file lines once for line-level context checks (loopback
             # hosts, test-block detection, private-key body length).
             try:
-                file_lines = Path(filename).read_text(errors="replace").splitlines()
+                file_lines = read_text_lossy(Path(filename)).splitlines()
             except OSError:
                 file_lines = []
 
@@ -757,7 +758,7 @@ class CredentialScanner(BaseScanner):
                 # chars like "test" or "fake" are clearly not real.
                 if secret.type == "Private Key" and secret.line_number:
                     try:
-                        lines = Path(filename).read_text(errors="replace").splitlines()
+                        lines = read_text_lossy(Path(filename)).splitlines()
                         start_idx = secret.line_number - 1  # 1-indexed
                         body_lines = []
                         for i in range(start_idx + 1, min(start_idx + 100, len(lines))):
@@ -859,7 +860,7 @@ class CredentialScanner(BaseScanner):
         findings: list[Finding] = []
 
         try:
-            content = file_path.read_text(errors="replace")
+            content = read_text_lossy(file_path)
         except OSError:
             return findings
 
@@ -1041,7 +1042,7 @@ class CredentialScanner(BaseScanner):
         findings: list[Finding] = []
 
         try:
-            content = git_config.read_text()
+            content = read_text_lossy(git_config)
         except OSError:
             return findings
 
@@ -1271,7 +1272,7 @@ class CredentialScanner(BaseScanner):
                 file_path = Path(f.file_path)
                 if not file_path.is_absolute():
                     file_path = target / file_path
-                content = file_path.read_text(errors="replace")
+                content = read_text_lossy(file_path)
                 lines = content.splitlines()
                 if f.line_number - 1 < len(lines):
                     line = lines[f.line_number - 1]

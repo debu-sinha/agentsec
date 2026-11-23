@@ -16,6 +16,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from agentsec.utils.textio import read_text_lossy
+
 logger = logging.getLogger(__name__)
 
 # Words near a credential that suggest it is no longer active
@@ -91,7 +93,7 @@ def compute_passive_hints(
     # --- Context proximity: check lines near the finding for revocation words ---
     if line_number and file_path.exists():
         try:
-            lines = file_path.read_text(errors="replace").splitlines()
+            lines = read_text_lossy(file_path).splitlines()
             start = max(0, line_number - 3)
             end = min(len(lines), line_number + 2)
             context_text = " ".join(lines[start:end]).lower()

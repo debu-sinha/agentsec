@@ -195,7 +195,7 @@ class PolicyEvaluator:
     @staticmethod
     def load(path: Path) -> PolicyEvaluator:
         """Load a policy from a YAML file."""
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             policy_dict = yaml.safe_load(f)
         if not isinstance(policy_dict, dict):
             raise ValueError(f"Policy file {path} must contain a YAML mapping")
